@@ -58,8 +58,6 @@ if __name__ == "__main__":
         train_total = 0
 
         for i, (x, y) in enumerate(train_loader):
-            if (i % 10 == 0):
-                print(f"Batch {i} starting...")
             x = x.to(device)
             y = y.to(device)
 
@@ -74,8 +72,8 @@ if __name__ == "__main__":
             train_total += y.size(0)
             train_correct += y_.eq(y).sum().item()
 
-        print(f"Total train loss for epoch{epoch}: {total_train_loss}")
-        print(f"Train train accuracy for epoch{epoch}: {100 * train_correct/train_total}")
+        print(f"Total train loss for epoch {epoch+1}: {total_train_loss}")
+        print(f"Train train accuracy for epoch {epoch+1}: {100 * train_correct/train_total}")
 
         #Test
         model.eval()
@@ -97,7 +95,7 @@ if __name__ == "__main__":
                 test_total += y.size(0)
                 test_correct += y_.eq(y).sum().item()
 
-        print(f"Total test loss for epoch{epoch}: {total_test_loss}")
-        print(f"Train test accuracy for epoch{epoch}: {100 * test_correct/test_total}")
+        print(f"Total test loss for epoch {epoch+1}: {total_test_loss}")
+        print(f"Train test accuracy for epoch {epoch+1}: {100 * test_correct/test_total}")
 
     torch.save(model, './models/resnet18.txt')
