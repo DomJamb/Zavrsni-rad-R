@@ -47,7 +47,7 @@ if __name__ == "__main__":
     loss_calc = nn.CrossEntropyLoss()
     optimizer = optim.SGD(model.parameters(), lr=0.1)
 
-    for epoch in range(200):
+    for epoch in range(10):
         print(f"Starting epoch: {epoch}")
 
         #Train 
@@ -73,7 +73,7 @@ if __name__ == "__main__":
             train_correct += y_.eq(y).sum().item()
 
         print(f"Total train loss for epoch {epoch+1}: {total_train_loss}")
-        print(f"Train train accuracy for epoch {epoch+1}: {100 * train_correct/train_total}")
+        print(f"Total train accuracy for epoch {epoch+1}: {100 * train_correct/train_total}")
 
         #Test
         model.eval()
@@ -96,6 +96,6 @@ if __name__ == "__main__":
                 test_correct += y_.eq(y).sum().item()
 
         print(f"Total test loss for epoch {epoch+1}: {total_test_loss}")
-        print(f"Train test accuracy for epoch {epoch+1}: {100 * test_correct/test_total}")
+        print(f"Total test accuracy for epoch {epoch+1}: {100 * test_correct/test_total}")
 
     torch.save(model, './models/resnet18.txt')
