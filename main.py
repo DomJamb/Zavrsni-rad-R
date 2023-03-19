@@ -48,7 +48,7 @@ if __name__ == "__main__":
     optimizer = optim.SGD(model.parameters(), lr=0.1)
 
     for epoch in range(10):
-        print(f"Starting epoch: {epoch}")
+        print(f"Starting epoch: {epoch + 1}")
 
         #Train 
         model.train()
