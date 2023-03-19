@@ -1,0 +1,50 @@
+Starting epoch: 1
+Total train loss for epoch 1: 373.5541076660156
+Total train accuracy for epoch 1: 28.66
+Total test loss for epoch 1: 166.7893524169922
+Total test accuracy for epoch 1: 36.8
+Starting epoch: 2
+Total train loss for epoch 2: 286.31146240234375
+Total train accuracy for epoch 2: 45.368
+Total test loss for epoch 2: 164.5854949951172
+Total test accuracy for epoch 2: 45.31
+Starting epoch: 3
+Total train loss for epoch 3: 244.16819763183594
+Total train accuracy for epoch 3: 54.43
+Total test loss for epoch 3: 141.62286376953125
+Total test accuracy for epoch 3: 53.76
+Starting epoch: 4
+Total train loss for epoch 4: 208.45492553710938
+Total train accuracy for epoch 4: 61.468
+Total test loss for epoch 4: 147.19456481933594
+Total test accuracy for epoch 4: 53.71
+Starting epoch: 5
+Total train loss for epoch 5: 183.43556213378906
+Total train accuracy for epoch 5: 66.012
+Total test loss for epoch 5: 171.6067657470703
+Total test accuracy for epoch 5: 53.38
+Starting epoch: 6
+Total train loss for epoch 6: 161.3422088623047
+Total train accuracy for epoch 6: 70.598
+Total test loss for epoch 6: 125.91194915771484
+Total test accuracy for epoch 6: 65.11
+Starting epoch: 7
+Total train loss for epoch 7: 145.22201538085938
+Total train accuracy for epoch 7: 73.766
+Total test loss for epoch 7: 108.07474517822266
+Total test accuracy for epoch 7: 64.2
+Starting epoch: 8
+Total train loss for epoch 8: 130.8500213623047
+Total train accuracy for epoch 8: 76.31
+Total test loss for epoch 8: 163.07403564453125
+Total test accuracy for epoch 8: 55.62
+Starting epoch: 9
+Total train loss for epoch 9: 120.73912048339844
+Total train accuracy for epoch 9: 78.382
+Total test loss for epoch 9: 251.87184143066406
+Total test accuracy for epoch 9: 51.53
+Starting epoch: 10
+Total train loss for epoch 10: 111.9236068725586
+Total train accuracy for epoch 10: 80.02
+Total test loss for epoch 10: 111.77899932861328
+Total test accuracy for epoch 10: 65.7
