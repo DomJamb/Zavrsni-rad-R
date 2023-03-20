@@ -85,7 +85,6 @@ def test_robustness():
 
     print(f"Accuracy on adversarial examples generated using PGD attack: {100 * adv_correct/adv_total}")
 
-
 if __name__ == "__main__":
 
     transform_train = transforms.Compose([
@@ -119,13 +118,13 @@ if __name__ == "__main__":
         9: "truck",
     }
 
-    model = ResidualNetwork18().to(device)
+    #model = ResidualNetwork18().to(device)
 
-    loss_calc = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.1)
+    # loss_calc = nn.CrossEntropyLoss()
+    # optimizer = optim.SGD(model.parameters(), lr=0.1)
 
     #train()
     #torch.save(model, './models/resnet18.txt')
-
-    torch.load(model, './models/resnet18.txt')
+    
+    model = torch.load('./models/resnet18.txt')
     test_robustness()
