@@ -1,5 +1,7 @@
 import torch
 import torch.nn as nn
+import torch.optim as optim
+import numpy as np
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -19,6 +21,7 @@ def attack_pgd(model, images, labels, eps=0.3, koef_it=0.05, steps=7):
     model.eval()
 
     loss_calc = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.1)
 
     images = images.clone().detach().to(device)
     labels = labels.clone().detach().to(device)
@@ -30,10 +33,10 @@ def attack_pgd(model, images, labels, eps=0.3, koef_it=0.05, steps=7):
         adv_examples.requires_grad = True
 
         # Calculate loss for given data
+        optimizer.zero_grad()
         probs = model(adv_examples)
         loss = loss_calc(probs, labels)
 
-        model.zero_grad()
         loss.backward()
 
         # Calculate gradient for given data
