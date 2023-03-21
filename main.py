@@ -120,11 +120,13 @@ if __name__ == "__main__":
 
     #model = ResidualNetwork18().to(device)
 
-    # loss_calc = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(model.parameters(), lr=0.1)
-
     #train()
     #torch.save(model, './models/resnet18.txt')
     
     model = torch.load('./models/resnet18.txt')
+
+    loss_calc = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.1)
+
+    test(100)
     test_robustness()
