@@ -63,7 +63,7 @@ def train(num_of_epochs, name):
     with open(path, "w") as file:
         json.dump(train_stats, file)
 
-def test(curr_epoch):
+def test(curr_epoch=0):
     model.eval()
 
     total_test_loss = 0
@@ -96,16 +96,15 @@ def test_robustness():
     adv_total = 0
     adv_correct = 0
 
-    with torch.no_grad():
-        for (x, y) in test_loader:
-            x = x.to(device)
-            y = y.to(device)
-            adversarial = attack_pgd(model, x, y, eps=0.3, koef_it=0.05, steps=5)
+    for (x, y) in test_loader:
+        x = x.to(device)
+        y = y.to(device)
+        adversarial = attack_pgd(model, x, y, eps=0.3, koef_it=0.05, steps=5, device=device)
 
-            y_ = model(adversarial)
-            _, y_ = y_.max(1)
-            adv_total += y.size(0)
-            adv_correct += y_.eq(y).sum().item()
+        y_ = model(adversarial)
+        _, y_ = y_.max(1)
+        adv_total += y.size(0)
+        adv_correct += y_.eq(y).sum().item()
 
     total_adv_acc = 100 * adv_correct/adv_total
 
@@ -168,5 +167,4 @@ if __name__ == "__main__":
     loss_calc = nn.CrossEntropyLoss()
     optimizer = optim.SGD(model.parameters(), lr=0.15, weight_decay=5e-4)
 
-    test(100)
     test_robustness()
