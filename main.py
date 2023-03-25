@@ -60,7 +60,7 @@ def train(num_of_epochs, name):
     total_time = time.time() - start_time
     train_stats.update({"train_time": total_time})
 
-    path = f"./stats/{name}.json"
+    path = f"./stats/{name}/stats.json"
     with open(path, "w") as file:
         json.dump(train_stats, file)
 
@@ -170,5 +170,5 @@ if __name__ == "__main__":
 
     # test_robustness()
 
-    show_loss('./stats/resnet18_first.txt', 'resnet18_first_loss', save=True, show=False)
-    show_accuracies('./stats/resnet18_first.txt', 'resnet18_first_accs', save=True, show=False)
+    # show_loss('resnet18_first', save=True, show=False)
+    # show_accuracies('resnet18_first', save=True, show=False)

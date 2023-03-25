@@ -2,14 +2,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 import json
 
-def show_loss(path, name, save=False, show=True):
+def show_loss(name, save=False, show=True):
     """
     Function for showcasing the loss over epochs
     Params:
-        path: path to the needed statistics file
+        name: name of the model
+        save: option to save the image
+        show: option to show the image
     """
 
     fig = plt.figure(figsize=(16, 10))
+
+    path = f'./stats/{name}/stats.json'
 
     with open(path, "r") as file:
         data = json.load(file)
@@ -30,20 +34,24 @@ def show_loss(path, name, save=False, show=True):
     plt.legend(fontsize=12)
 
     if save:
-        save_path = f"./stats/{name}.png"
+        save_path = f"./stats/{name}/loss.png"
         plt.savefig(save_path)
 
     if show:
         plt.show()
 
-def show_accuracies(path, name, save=False, show=True):
+def show_accuracies(name, save=False, show=True):
     """
     Function for showcasing the train and test accuracy of a model over epochs
     Params:
-        path: path to the needed statistics file
+        name: name of the model
+        save: option to save the image
+        show: option to show the image
     """
 
-    fig = plt.figure(figsize=(16,5))
+    fig = plt.figure(figsize=(16, 10))
+
+    path = f'./stats/{name}/stats.json'
     
     with open(path, "r") as file:
         data = json.load(file)
@@ -65,7 +73,7 @@ def show_accuracies(path, name, save=False, show=True):
     plt.legend(fontsize=12)
 
     if save:
-        save_path = f"./stats/{name}.png"
+        save_path = f"./stats/{name}/accuracies.png"
         plt.savefig(save_path)
 
     if show:
