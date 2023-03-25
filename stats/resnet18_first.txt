@@ -1,0 +1,1 @@
+{"epoch1": {"train_loss": 398.1414794921875, "train_accuracy": 26.828, "test_loss": 179.98931884765625, "test_acc": 33.39}}

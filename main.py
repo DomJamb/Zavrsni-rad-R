@@ -1,4 +1,5 @@
 import os
+import json
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -11,8 +12,9 @@ from ResidualNetwork18 import ResidualNetwork18
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-def train():
-    for epoch in range(10):
+def train(num_of_epochs, name):
+    train_stats = dict()
+    for epoch in range(num_of_epochs):
         print(f"Starting epoch: {epoch + 1}")
 
         #Train 
@@ -37,11 +39,25 @@ def train():
             train_total += y.size(0)
             train_correct += y_.eq(y).sum().item()
 
+        total_train_acc = 100 * train_correct/train_total
+
         print(f"Total train loss for epoch {epoch+1}: {total_train_loss}")
-        print(f"Total train accuracy for epoch {epoch+1}: {100 * train_correct/train_total}")
+        print(f"Total train accuracy for epoch {epoch+1}: {total_train_acc}")
 
-        test(epoch)
+        test_loss, test_acc = test(epoch)
 
+        curr_epoch = f"epoch{epoch+1}"
+        curr_dict = dict()
+        curr_dict.update({"train_loss": total_train_loss.item(), 
+                          "train_accuracy": total_train_acc,
+                          "test_loss": test_loss.item(),
+                          "test_acc": test_acc})
+        
+        train_stats.update({curr_epoch: curr_dict})
+
+    path = f"./stats/{name}.txt"
+    with open(path, "w") as file:
+        json.dump(train_stats, file)
 
 def test(curr_epoch):
     model.eval()
@@ -63,8 +79,12 @@ def test(curr_epoch):
             test_total += y.size(0)
             test_correct += y_.eq(y).sum().item()
 
+    total_test_acc = 100 * test_correct/test_total
+
     print(f"Total test loss for epoch {curr_epoch+1}: {total_test_loss}")
-    print(f"Total test accuracy for epoch {curr_epoch+1}: {100 * test_correct/test_total}")
+    print(f"Total test accuracy for epoch {curr_epoch+1}: {total_test_acc}")
+
+    return (total_test_loss, total_test_acc)
 
 def test_robustness():
     model.eval()
@@ -87,6 +107,8 @@ def test_robustness():
 
 if __name__ == "__main__":
 
+    print(f"Current device: {device}")
+
     transform_train = transforms.Compose([
         transforms.RandomCrop(32, padding=4),
         transforms.RandomHorizontalFlip(),
@@ -102,7 +124,7 @@ if __name__ == "__main__":
     train_data = torchvision.datasets.CIFAR10(root='./data', train=True, download=False, transform=transform_train)
     test_data = torchvision.datasets.CIFAR10(root='./data', train=False, download=False, transform=transform_test)
 
-    train_loader = torch.utils.data.DataLoader(train_data, batch_size=256, shuffle=True)
+    train_loader = torch.utils.data.DataLoader(train_data, batch_size=128, shuffle=True)
     test_loader = torch.utils.data.DataLoader(test_data, batch_size=100, shuffle=False)
 
     classes_map = {
@@ -118,15 +140,25 @@ if __name__ == "__main__":
         9: "truck",
     }
 
-    #model = ResidualNetwork18().to(device)
+    ##################################################
+    # Train model and save it
 
-    #train()
-    #torch.save(model, './models/resnet18.txt')
+    model = ResidualNetwork18().to(device)
     
-    model = torch.load('./models/resnet18.txt')
-
     loss_calc = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.1)
+    optimizer = optim.SGD(model.parameters(), lr=0.15, weight_decay=5e-4)
 
-    test(100)
-    test_robustness()
+    train(10, "resnet18_first")
+    torch.save(model.state_dict(), './models/resnet18_first.pt')
+
+    ##################################################
+    # Load model and evaluate it
+    
+    # model = ResidualNetwork18().to(device)
+    # model.load_state_dict(torch.load('./models/resnet18_first.pt'))
+
+    # loss_calc = nn.CrossEntropyLoss()
+    # optimizer = optim.SGD(model.parameters(), lr=0.15, weight_decay=5e-4)
+
+    # test(100)
+    # test_robustness()
