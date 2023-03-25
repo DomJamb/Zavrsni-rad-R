@@ -6,15 +6,13 @@ from ResidualBlock import ResidualBlock
 class ResidualNetwork18(nn.Module):
     """
     Class modeling the ResNet18 (1 convolutional layer, 4 residual layers, 1 linear layer)
-    """   
-          
+    """         
     def __init__(self, no_of_classes=10):
         """
         Init function for a ResNet18 net
         Params:
             no_of_classes: number of output classes
-        """
-                
+        """      
         super(ResidualNetwork18, self).__init__()
 
         # First convolutional layer with batch normalization
@@ -46,7 +44,6 @@ class ResidualNetwork18(nn.Module):
         Function for creating a residual layer using multiple residual blocks 
         (default is 2 blocks for ResNet18)
         """
-
         # Strides per layer
         stride_per_layer = [1 for x in range(no_of_blocks)]
         stride_per_layer[0] = stride

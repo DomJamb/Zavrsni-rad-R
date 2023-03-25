@@ -6,7 +6,6 @@ def get_train_time(name):
     Params:
         name: name of the model
     """
-
     # Get the train time from the specified input file
     path = f'./stats/{name}/stats.json'
 

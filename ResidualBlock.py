@@ -5,7 +5,6 @@ class ResidualBlock(nn.Module):
     """
     Class representing a residual block (has 1 skip connection)
     """
-    
     def __init__(self, in_channels, out_channels, stride=1):
         """
         Init function for residual blocks
@@ -14,7 +13,6 @@ class ResidualBlock(nn.Module):
             out_channels: number of output channels
             stride: stride for first convolutional layer kernel
         """
-
         super(ResidualBlock, self).__init__()
 
         # First convolutional layer with batch normalization

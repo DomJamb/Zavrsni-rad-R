@@ -10,7 +10,6 @@ def show_loss(name, save=False, show=True):
         save: option to save the image
         show: option to show the image
     """
-
     fig = plt.figure(figsize=(16, 10))
 
     # Get the loss from the specified input file
@@ -53,7 +52,6 @@ def show_accuracies(name, save=False, show=True):
         save: option to save the image
         show: option to show the image
     """
-
     fig = plt.figure(figsize=(16, 10))
 
     path = f'./stats/{name}/stats.json'
