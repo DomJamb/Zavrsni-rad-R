@@ -1,5 +1,5 @@
-import os
 import json
+import time
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -13,6 +13,7 @@ from ResidualNetwork18 import ResidualNetwork18
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 def train(num_of_epochs, name):
+    start_time = time.time()
     train_stats = dict()
     for epoch in range(num_of_epochs):
         print(f"Starting epoch: {epoch + 1}")
@@ -55,7 +56,10 @@ def train(num_of_epochs, name):
         
         train_stats.update({curr_epoch: curr_dict})
 
-    path = f"./stats/{name}.txt"
+    total_time = time.time() - start_time
+    train_stats.update({"train_time": total_time})
+
+    path = f"./stats/{name}.json"
     with open(path, "w") as file:
         json.dump(train_stats, file)
 
