@@ -9,6 +9,7 @@ import torchvision.transforms as transforms
 
 from attack_funcs import attack_pgd
 from ResidualNetwork18 import ResidualNetwork18
+from graphing_funcs import show_loss, show_accuracies
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -52,7 +53,7 @@ def train(num_of_epochs, name):
         curr_dict.update({"train_loss": total_train_loss.item(), 
                           "train_accuracy": total_train_acc,
                           "test_loss": test_loss.item(),
-                          "test_acc": test_acc})
+                          "test_accuracy": test_acc})
         
         train_stats.update({curr_epoch: curr_dict})
 
@@ -114,7 +115,7 @@ def test_robustness():
 
 if __name__ == "__main__":
 
-    print(f"Current device: {device}")
+    #print(f"Current device: {device}")
 
     transform_train = transforms.Compose([
         transforms.RandomCrop(32, padding=4),
@@ -161,10 +162,13 @@ if __name__ == "__main__":
     ##################################################
     # Load model and evaluate it
     
-    model = ResidualNetwork18().to(device)
-    model.load_state_dict(torch.load('./models/resnet18_first.pt'))
+    # model = ResidualNetwork18().to(device)
+    # model.load_state_dict(torch.load('./models/resnet18_first.pt'))
 
-    loss_calc = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.15, weight_decay=5e-4)
+    # loss_calc = nn.CrossEntropyLoss()
+    # optimizer = optim.SGD(model.parameters(), lr=0.15, weight_decay=5e-4)
 
-    test_robustness()
+    # test_robustness()
+
+    show_loss('./stats/resnet18_first.txt', 'resnet18_first_loss', save=True, show=False)
+    show_accuracies('./stats/resnet18_first.txt', 'resnet18_first_accs', save=True, show=False)
