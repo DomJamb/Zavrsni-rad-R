@@ -38,13 +38,14 @@ def train(num_of_epochs, name):
             x = x.to(device)
             y = y.to(device)
 
-            optimizer.zero_grad()
             y_ = model(x)
             loss = loss_calc(y_, y)
+
+            optimizer.zero_grad()
             loss.backward()
             optimizer.step()
 
-            total_train_loss += loss
+            total_train_loss += loss.item()
             _, y_ = y_.max(1)
             train_total += y.size(0)
             train_correct += y_.eq(y).sum().item()
@@ -58,9 +59,9 @@ def train(num_of_epochs, name):
 
         curr_epoch = f"epoch{epoch+1}"
         curr_dict = dict()
-        curr_dict.update({"train_loss": total_train_loss.item(), 
+        curr_dict.update({"train_loss": total_train_loss, 
                           "train_accuracy": total_train_acc,
-                          "test_loss": test_loss.item(),
+                          "test_loss": test_loss,
                           "test_accuracy": test_acc})
         
         train_stats.update({curr_epoch: curr_dict})
@@ -105,14 +106,18 @@ def train_free(num_of_epochs, name, replay=8):
             x = x.to(device)
             y = y.to(device)
 
+            temp_loss = 0
+            temp_correct = 0
+
             for j in range(replay):
                 noise = Variable(perturbation[0:x.size(0)], requires_grad=True).to(device)
                 input = x + noise
-                input.clamp(0, 1.0)
-                #dodaj temp loss i acc
-                optimizer.zero_grad()
+                #input.clamp(0, 1.0)
+
                 y_ = model(input)
                 loss = loss_calc(y_, y)
+
+                optimizer.zero_grad()
                 loss.backward()
                 data_grad = noise.grad.data
 
@@ -121,12 +126,14 @@ def train_free(num_of_epochs, name, replay=8):
 
                 optimizer.step()
 
-                if (j == replay - 1):
-                    total_train_loss += loss
-                    _, y_ = y_.max(1)
+                temp_loss += loss.item()
+                _, y_ = y_.max(1)
+                temp_correct += y_.eq(y).sum().item()
 
+                if (j == replay - 1):
                     train_total += y.size(0)
-                    train_correct += y_.eq(y).sum().item()
+                    total_train_loss += temp_loss / replay
+                    train_correct += temp_correct / replay
 
         total_train_acc = 100 * train_correct/train_total
 
@@ -137,9 +144,9 @@ def train_free(num_of_epochs, name, replay=8):
 
         curr_epoch = f"epoch{epoch+1}"
         curr_dict = dict()
-        curr_dict.update({"train_loss": total_train_loss.item(), 
+        curr_dict.update({"train_loss": total_train_loss, 
                           "train_accuracy": total_train_acc,
-                          "test_loss": test_loss.item(),
+                          "test_loss": test_loss,
                           "test_accuracy": test_acc})
         
         train_stats.update({curr_epoch: curr_dict})
@@ -175,7 +182,7 @@ def test(curr_epoch=0):
             y_ = model(x)
             loss = loss_calc(y_, y)
 
-            total_test_loss += loss
+            total_test_loss += loss.item()
             _, y_ = y_.max(1)
             test_total += y.size(0)
             test_correct += y_.eq(y).sum().item()
