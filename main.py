@@ -103,7 +103,11 @@ def test_robustness():
             adv_total += y.size(0)
             adv_correct += y_.eq(y).sum().item()
 
-    print(f"Accuracy on adversarial examples generated using PGD attack: {100 * adv_correct/adv_total}")
+    total_adv_acc = 100 * adv_correct/adv_total
+
+    print(f"Accuracy on adversarial examples generated using PGD attack: {total_adv_acc}")
+
+    return total_adv_acc
 
 if __name__ == "__main__":
 
@@ -143,22 +147,22 @@ if __name__ == "__main__":
     ##################################################
     # Train model and save it
 
-    model = ResidualNetwork18().to(device)
+    # model = ResidualNetwork18().to(device)
     
-    loss_calc = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.15, weight_decay=5e-4)
+    # loss_calc = nn.CrossEntropyLoss()
+    # optimizer = optim.SGD(model.parameters(), lr=0.15, weight_decay=5e-4)
 
-    train(10, "resnet18_first")
-    torch.save(model.state_dict(), './models/resnet18_first.pt')
+    # train(10, "resnet18_first")
+    # torch.save(model.state_dict(), './models/resnet18_first.pt')
 
     ##################################################
     # Load model and evaluate it
     
-    # model = ResidualNetwork18().to(device)
-    # model.load_state_dict(torch.load('./models/resnet18_first.pt'))
+    model = ResidualNetwork18().to(device)
+    model.load_state_dict(torch.load('./models/resnet18_first.pt'))
 
-    # loss_calc = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(model.parameters(), lr=0.15, weight_decay=5e-4)
+    loss_calc = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.15, weight_decay=5e-4)
 
-    # test(100)
-    # test_robustness()
+    test(100)
+    test_robustness()
