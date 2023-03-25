@@ -69,6 +69,61 @@ def train(num_of_epochs, name):
     with open(path, "w") as file:
         json.dump(train_stats, file)
 
+def train_free(num_of_epochs, name):
+    """
+    Train function for the model initialized in the main function (implements Free Adversarial Training)
+    Params:
+        name: desired name for the model (used for saving the model parameters in a JSON file)
+    """
+    start_time = time.time()
+    train_stats = dict()
+    for epoch in range(num_of_epochs):
+        print(f"Starting epoch: {epoch + 1}")
+
+        model.train()
+
+        total_train_loss = 0
+        train_correct = 0
+        train_total = 0
+
+        for i, (x, y) in enumerate(train_loader):
+            x = x.to(device)
+            y = y.to(device)
+
+            optimizer.zero_grad()
+            y_ = model(x)
+            loss = loss_calc(y_, y)
+            loss.backward()
+            optimizer.step()
+
+            total_train_loss += loss
+            _, y_ = y_.max(1)
+            train_total += y.size(0)
+            train_correct += y_.eq(y).sum().item()
+
+        total_train_acc = 100 * train_correct/train_total
+
+        print(f"Total train loss for epoch {epoch+1}: {total_train_loss}")
+        print(f"Total train accuracy for epoch {epoch+1}: {total_train_acc}")
+
+        test_loss, test_acc = test(epoch)
+
+        curr_epoch = f"epoch{epoch+1}"
+        curr_dict = dict()
+        curr_dict.update({"train_loss": total_train_loss.item(), 
+                          "train_accuracy": total_train_acc,
+                          "test_loss": test_loss.item(),
+                          "test_accuracy": test_acc})
+        
+        train_stats.update({curr_epoch: curr_dict})
+
+    total_time = time.time() - start_time
+    train_stats.update({"train_time": total_time})
+
+    path = f"./stats/{name}/stats.json"
+    with open(path, "w") as file:
+        json.dump(train_stats, file)
+
 def test(curr_epoch=0):
     """
     Test function for the model initialized in the main function
@@ -161,28 +216,63 @@ if __name__ == "__main__":
         9: "truck",
     }
 
+    ###################################################################################################
+
     ##################################################
     # Train model and save it
 
-    model = ResidualNetwork18().to(device)
+    # model = ResidualNetwork18().to(device)
+    # model_name = "resnet18_first"
+    # model_save_path = f"./models/{model_name}.pt"
     
-    loss_calc = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.2, weight_decay=5e-4)
+    # loss_calc = nn.CrossEntropyLoss()
+    # optimizer = optim.SGD(model.parameters(), lr=0.25, weight_decay=5e-4)
 
-    train(10, "resnet18_first")
-    torch.save(model.state_dict(), './models/resnet18_first.pt')
+    # train(15, model_name)
+    # torch.save(model.state_dict(), model_save_path)
 
     ##################################################
     # Load model and evaluate it
     
     # model = ResidualNetwork18().to(device)
-    # model.load_state_dict(torch.load('./models/resnet18_first.pt'))
+    # model.load_state_dict(torch.load(model_save_path))
 
     # loss_calc = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(model.parameters(), lr=0.2, weight_decay=5e-4)
+    # optimizer = optim.SGD(model.parameters(), lr=0.25, weight_decay=5e-4)
 
     # test_robustness()
 
-    # show_loss('resnet18_first', save=True, show=False)
-    # show_accuracies('resnet18_first', save=True, show=False)
-    # get_train_time('resnet18_first')
+    # show_loss(model_name, save=True, show=False)
+    # show_accuracies(model_name, save=True, show=False)
+    # get_train_time(model_name)
+
+    ####################################################################################################
+
+    ##################################################
+
+    # Train model using free adversarial training and save it
+
+    model = ResidualNetwork18().to(device)
+    model_name = "resnet18_first_free"
+    model_save_path= f"./models/{model_name}.pt"
+    
+    loss_calc = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.25, weight_decay=5e-4)
+
+    train_free(15, model_name)
+    torch.save(model.state_dict(), model_save_path)
+
+    ##################################################
+    # Load model and evaluate it
+    
+    model = ResidualNetwork18().to(device)
+    model.load_state_dict(torch.load(model_save_path))
+
+    loss_calc = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.25, weight_decay=5e-4)
+
+    test_robustness()
+
+    show_loss(model_name, save=True, show=False)
+    show_accuracies(model_name, save=True, show=False)
+    get_train_time(model_name)
