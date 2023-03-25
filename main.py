@@ -1,8 +1,11 @@
+import os
 import json
 import time
+import math
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from torch.autograd import Variable
 
 import torchvision
 import torchvision.transforms as transforms
@@ -65,11 +68,15 @@ def train(num_of_epochs, name):
     total_time = time.time() - start_time
     train_stats.update({"train_time": total_time})
 
-    path = f"./stats/{name}/stats.json"
-    with open(path, "w") as file:
+    file_path = f"./stats/{name}/stats.json"
+
+    if (not os.path.exists(f"./stats/{name}")):
+        os.mkdir(f"./stats/{name}")
+
+    with open(file_path, "w") as file:
         json.dump(train_stats, file)
 
-def train_free(num_of_epochs, name):
+def train_free(num_of_epochs, name, replay=8):
     """
     Train function for the model initialized in the main function (implements Free Adversarial Training)
     Params:
@@ -77,6 +84,14 @@ def train_free(num_of_epochs, name):
     """
     start_time = time.time()
     train_stats = dict()
+
+    tensor_size = [train_loader.batch_size, 3, 32, 32]
+    perturbation = torch.zeros(*tensor_size).to(device)
+
+    num_of_epochs = math.ceil(num_of_epochs/replay)
+    koef_it = 0.05
+    eps = 0.3
+
     for epoch in range(num_of_epochs):
         print(f"Starting epoch: {epoch + 1}")
 
@@ -90,16 +105,28 @@ def train_free(num_of_epochs, name):
             x = x.to(device)
             y = y.to(device)
 
-            optimizer.zero_grad()
-            y_ = model(x)
-            loss = loss_calc(y_, y)
-            loss.backward()
-            optimizer.step()
+            for j in range(replay):
+                noise = Variable(perturbation[0:x.size(0)], requires_grad=True).to(device)
+                input = x + noise
+                input.clamp(0, 1.0)
+                #dodaj temp loss i acc
+                optimizer.zero_grad()
+                y_ = model(input)
+                loss = loss_calc(y_, y)
+                loss.backward()
+                data_grad = noise.grad.data
 
-            total_train_loss += loss
-            _, y_ = y_.max(1)
-            train_total += y.size(0)
-            train_correct += y_.eq(y).sum().item()
+                perturbation[0:x.size(0)] += koef_it * data_grad.sign()
+                perturbation.clamp(min=-eps, max=eps)
+
+                optimizer.step()
+
+                if (j == replay - 1):
+                    total_train_loss += loss
+                    _, y_ = y_.max(1)
+
+                    train_total += y.size(0)
+                    train_correct += y_.eq(y).sum().item()
 
         total_train_acc = 100 * train_correct/train_total
 
@@ -120,8 +147,12 @@ def train_free(num_of_epochs, name):
     total_time = time.time() - start_time
     train_stats.update({"train_time": total_time})
 
-    path = f"./stats/{name}/stats.json"
-    with open(path, "w") as file:
+    file_path = f"./stats/{name}/stats.json"
+
+    if (not os.path.exists(f"./stats/{name}")):
+        os.mkdir(f"./stats/{name}")
+
+    with open(file_path, "w") as file:
         json.dump(train_stats, file)
 
 def test(curr_epoch=0):
