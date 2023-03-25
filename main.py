@@ -10,16 +10,21 @@ import torchvision.transforms as transforms
 from attack_funcs import attack_pgd
 from ResidualNetwork18 import ResidualNetwork18
 from graphing_funcs import show_loss, show_accuracies
+from util import get_train_time
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 def train(num_of_epochs, name):
+    """
+    Train function for the model initialized in the main function
+    Params:
+        name: desired name for the model (used for saving the model parameters in a JSON file)
+    """
     start_time = time.time()
     train_stats = dict()
     for epoch in range(num_of_epochs):
         print(f"Starting epoch: {epoch + 1}")
 
-        #Train 
         model.train()
 
         total_train_loss = 0
@@ -65,6 +70,11 @@ def train(num_of_epochs, name):
         json.dump(train_stats, file)
 
 def test(curr_epoch=0):
+    """
+    Test function for the model initialized in the main function
+    Params:
+        curr_epoch: number of the current epoch (used for output)
+    """
     model.eval()
 
     total_test_loss = 0
@@ -92,6 +102,9 @@ def test(curr_epoch=0):
     return (total_test_loss, total_test_acc)
 
 def test_robustness():
+    """
+    Function for testing the robustness of the model initialized in the main function using adversarial images generated using PGD attack
+    """
     model.eval()
 
     adv_total = 0
@@ -109,7 +122,7 @@ def test_robustness():
 
     total_adv_acc = 100 * adv_correct/adv_total
 
-    print(f"Accuracy on adversarial examples generated using PGD attack: {total_adv_acc}")
+    print(f"Accuracy on adversarial examples generated using PGD attack: {total_adv_acc}%")
 
     return total_adv_acc
 
@@ -154,7 +167,7 @@ if __name__ == "__main__":
     # model = ResidualNetwork18().to(device)
     
     # loss_calc = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(model.parameters(), lr=0.15, weight_decay=5e-4)
+    # optimizer = optim.SGD(model.parameters(), lr=0.175, weight_decay=5e-4)
 
     # train(10, "resnet18_first")
     # torch.save(model.state_dict(), './models/resnet18_first.pt')
@@ -162,13 +175,14 @@ if __name__ == "__main__":
     ##################################################
     # Load model and evaluate it
     
-    # model = ResidualNetwork18().to(device)
-    # model.load_state_dict(torch.load('./models/resnet18_first.pt'))
+    model = ResidualNetwork18().to(device)
+    model.load_state_dict(torch.load('./models/resnet18_first.pt'))
 
-    # loss_calc = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(model.parameters(), lr=0.15, weight_decay=5e-4)
+    loss_calc = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.175, weight_decay=5e-4)
 
     # test_robustness()
 
-    # show_loss('resnet18_first', save=True, show=False)
-    # show_accuracies('resnet18_first', save=True, show=False)
+    show_loss('resnet18_first', save=True, show=False)
+    show_accuracies('resnet18_first', save=True, show=False)
+    # get_train_time('resnet18_first')
