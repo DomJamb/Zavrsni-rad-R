@@ -77,11 +77,12 @@ def train(num_of_epochs, name):
     with open(file_path, "w") as file:
         json.dump(train_stats, file)
 
-def train_free(num_of_epochs, name, replay=8):
+def train_free(num_of_epochs, name, replay=4):
     """
     Train function for the model initialized in the main function (implements Free Adversarial Training)
     Params:
         name: desired name for the model (used for saving the model parameters in a JSON file)
+        replay: number of replays for each batch during 1 epoch
     """
     start_time = time.time()
     train_stats = dict()
@@ -112,7 +113,7 @@ def train_free(num_of_epochs, name, replay=8):
             for j in range(replay):
                 noise = Variable(perturbation[0:x.size(0)], requires_grad=True).to(device)
                 input = x + noise
-                #input.clamp(0, 1.0)
+                input.clamp(0, 1.0)
 
                 y_ = model(input)
                 loss = loss_calc(y_, y)
@@ -238,7 +239,7 @@ if __name__ == "__main__":
     train_data = torchvision.datasets.CIFAR10(root='./data', train=True, download=False, transform=transform_train)
     test_data = torchvision.datasets.CIFAR10(root='./data', train=False, download=False, transform=transform_test)
 
-    train_loader = torch.utils.data.DataLoader(train_data, batch_size=128, shuffle=True)
+    train_loader = torch.utils.data.DataLoader(train_data, batch_size=256, shuffle=True)
     test_loader = torch.utils.data.DataLoader(test_data, batch_size=100, shuffle=False)
 
     classes_map = {
@@ -266,7 +267,7 @@ if __name__ == "__main__":
     # loss_calc = nn.CrossEntropyLoss()
     # optimizer = optim.SGD(model.parameters(), lr=0.25, weight_decay=5e-4)
 
-    # train(15, model_name)
+    # train(16, model_name)
     # torch.save(model.state_dict(), model_save_path)
 
     ##################################################
@@ -297,7 +298,7 @@ if __name__ == "__main__":
     loss_calc = nn.CrossEntropyLoss()
     optimizer = optim.SGD(model.parameters(), lr=0.25, weight_decay=5e-4)
 
-    train_free(15, model_name)
+    train_free(16, model_name)
     torch.save(model.state_dict(), model_save_path)
 
     ##################################################
