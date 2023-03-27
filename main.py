@@ -263,7 +263,7 @@ if __name__ == "__main__":
     model_save_path = f"./models/{model_name}.pt"
     
     loss_calc = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.03, momentum=0.9, weight_decay=5e-4)
+    optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
 
     train(16, model_name)
     torch.save(model.state_dict(), model_save_path)
@@ -277,7 +277,7 @@ if __name__ == "__main__":
     # model.load_state_dict(torch.load(model_save_path))
 
     # loss_calc = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(model.parameters(), lr=0.3, weight_decay=5e-4)
+    # optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
 
     # test()
     # test_robustness()
@@ -297,7 +297,7 @@ if __name__ == "__main__":
     # model_save_path= f"./models/{model_name}.pt"
     
     # loss_calc = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(model.parameters(), lr=0.3, weight_decay=5e-4)
+    # optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
 
     # train_free(16, model_name)
     # torch.save(model.state_dict(), model_save_path)
@@ -311,7 +311,7 @@ if __name__ == "__main__":
     # model.load_state_dict(torch.load(model_save_path))
 
     # loss_calc = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(model.parameters(), lr=0.3, weight_decay=5e-4)
+    # optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
 
     # test()
     # test_robustness()
