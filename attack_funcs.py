@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 
-def attack_pgd(model, images, labels, eps=0.3, koef_it=0.05, steps=7, device='cpu'):
+def attack_pgd(model, images, labels, eps=8/255, koef_it=1/255, steps=7, device='cpu'):
     """
     Function for generating adversarial examples using the PGD attack
     Params:

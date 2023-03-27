@@ -207,7 +207,7 @@ def test_robustness():
     for (x, y) in test_loader:
         x = x.to(device)
         y = y.to(device)
-        adversarial = attack_pgd(model, x, y, eps=0.3, koef_it=0.05, steps=5, device=device)
+        adversarial = attack_pgd(model, x, y, eps=8/255, koef_it=1/255, steps=5, device=device)
 
         y_ = model(adversarial)
         _, y_ = y_.max(1)
@@ -227,13 +227,11 @@ if __name__ == "__main__":
     transform_train = transforms.Compose([
         transforms.RandomCrop(32, padding=4),
         transforms.RandomHorizontalFlip(),
-        transforms.ToTensor(),
-        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
+        transforms.ToTensor()
     ])
 
     transform_test = transforms.Compose([
-        transforms.ToTensor(),
-        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
+        transforms.ToTensor()
     ])
 
     train_data = torchvision.datasets.CIFAR10(root='./data', train=True, download=False, transform=transform_train)
@@ -273,13 +271,16 @@ if __name__ == "__main__":
     ##################################################
     # Load model and evaluate it
     
-    # model = ResidualNetwork18().to(device)
-    # model.load_state_dict(torch.load(model_save_path))
+    model = ResidualNetwork18().to(device)
+    model_name = "resnet18_first"
+    model_save_path = f"./models/{model_name}.pt"
+    model.load_state_dict(torch.load(model_save_path))
 
-    # loss_calc = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(model.parameters(), lr=0.25, weight_decay=5e-4)
+    loss_calc = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.25, weight_decay=5e-4)
 
-    # test_robustness()
+    test()
+    test_robustness()
 
     # show_loss(model_name, save=True, show=False)
     # show_accuracies(model_name, save=True, show=False)
@@ -291,27 +292,30 @@ if __name__ == "__main__":
 
     # Train model using free adversarial training and save it
 
-    model = ResidualNetwork18().to(device)
-    model_name = "resnet18_first_free"
-    model_save_path= f"./models/{model_name}.pt"
+    # model = ResidualNetwork18().to(device)
+    # model_name = "resnet18_first_free"
+    # model_save_path= f"./models/{model_name}.pt"
     
-    loss_calc = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.25, weight_decay=5e-4)
+    # loss_calc = nn.CrossEntropyLoss()
+    # optimizer = optim.SGD(model.parameters(), lr=0.25, weight_decay=5e-4)
 
-    train_free(16, model_name)
-    torch.save(model.state_dict(), model_save_path)
+    # train_free(16, model_name)
+    # torch.save(model.state_dict(), model_save_path)
 
-    ##################################################
-    # Load model and evaluate it
+    # ##################################################
+    # # Load model and evaluate it
     
-    model = ResidualNetwork18().to(device)
-    model.load_state_dict(torch.load(model_save_path))
+    # model = ResidualNetwork18().to(device)
+    # model_name = "resnet18_first_free"
+    # model_save_path= f"./models/{model_name}.pt"
+    # model.load_state_dict(torch.load(model_save_path))
 
-    loss_calc = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.25, weight_decay=5e-4)
+    # loss_calc = nn.CrossEntropyLoss()
+    # optimizer = optim.SGD(model.parameters(), lr=0.25, weight_decay=5e-4)
 
-    test_robustness()
+    # test()
+    # test_robustness()
 
-    show_loss(model_name, save=True, show=False)
-    show_accuracies(model_name, save=True, show=False)
-    get_train_time(model_name)
+    # show_loss(model_name, save=True, show=False)
+    # show_accuracies(model_name, save=True, show=False)
+    # get_train_time(model_name)
