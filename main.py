@@ -57,6 +57,8 @@ def train(num_of_epochs, name):
 
         test_loss, test_acc = test(epoch)
 
+        scheduler.step()
+
         curr_epoch = f"epoch{epoch+1}"
         curr_dict = dict()
         curr_dict.update({"train_loss": total_train_loss, 
@@ -264,6 +266,7 @@ if __name__ == "__main__":
     
     loss_calc = nn.CrossEntropyLoss()
     optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=16)
 
     train(16, model_name)
     torch.save(model.state_dict(), model_save_path)
