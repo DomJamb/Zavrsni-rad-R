@@ -145,6 +145,8 @@ def train_free(num_of_epochs, name, replay=4):
 
         test_loss, test_acc = test(epoch)
 
+        scheduler.step()
+
         curr_epoch = f"epoch{epoch+1}"
         curr_dict = dict()
         curr_dict.update({"train_loss": total_train_loss, 
@@ -260,16 +262,16 @@ if __name__ == "__main__":
     ##################################################
     # Train model and save it
 
-    model = ResidualNetwork18().to(device)
-    model_name = "resnet18_first"
-    model_save_path = f"./models/{model_name}.pt"
+    # model = ResidualNetwork18().to(device)
+    # model_name = "resnet18_first"
+    # model_save_path = f"./models/{model_name}.pt"
     
-    loss_calc = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=16)
+    # loss_calc = nn.CrossEntropyLoss()
+    # optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
+    # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=16)
 
-    train(16, model_name)
-    torch.save(model.state_dict(), model_save_path)
+    # train(16, model_name)
+    # torch.save(model.state_dict(), model_save_path)
 
     ##################################################
     # Load model and evaluate it
@@ -285,9 +287,9 @@ if __name__ == "__main__":
     # test()
     # test_robustness()
 
-    show_loss(model_name, save=True, show=False)
-    show_accuracies(model_name, save=True, show=False)
-    get_train_time(model_name)
+    # show_loss(model_name, save=True, show=False)
+    # show_accuracies(model_name, save=True, show=False)
+    # get_train_time(model_name)
 
     ####################################################################################################
 
@@ -295,15 +297,16 @@ if __name__ == "__main__":
 
     # Train model using free adversarial training and save it
 
-    # model = ResidualNetwork18().to(device)
-    # model_name = "resnet18_first_free"
-    # model_save_path= f"./models/{model_name}.pt"
+    model = ResidualNetwork18().to(device)
+    model_name = "resnet18_first_free"
+    model_save_path= f"./models/{model_name}.pt"
     
-    # loss_calc = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
+    loss_calc = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=16)
 
-    # train_free(16, model_name)
-    # torch.save(model.state_dict(), model_save_path)
+    train_free(16, model_name)
+    torch.save(model.state_dict(), model_save_path)
 
     # ##################################################
     # # Load model and evaluate it
