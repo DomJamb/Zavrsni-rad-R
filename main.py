@@ -258,33 +258,33 @@ if __name__ == "__main__":
     ##################################################
     # Train model and save it
 
-    # model = ResidualNetwork18().to(device)
-    # model_name = "resnet18_first"
-    # model_save_path = f"./models/{model_name}.pt"
+    model = ResidualNetwork18().to(device)
+    model_name = "resnet18_first"
+    model_save_path = f"./models/{model_name}.pt"
     
-    # loss_calc = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(model.parameters(), lr=0.25, weight_decay=5e-4)
+    loss_calc = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.01, weight_decay=5e-4)
 
-    # train(16, model_name)
-    # torch.save(model.state_dict(), model_save_path)
+    train(16, model_name)
+    torch.save(model.state_dict(), model_save_path)
 
     ##################################################
     # Load model and evaluate it
     
-    model = ResidualNetwork18().to(device)
-    model_name = "resnet18_first"
-    model_save_path = f"./models/{model_name}.pt"
-    model.load_state_dict(torch.load(model_save_path))
+    # model = ResidualNetwork18().to(device)
+    # model_name = "resnet18_first"
+    # model_save_path = f"./models/{model_name}.pt"
+    # model.load_state_dict(torch.load(model_save_path))
 
-    loss_calc = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.25, weight_decay=5e-4)
+    # loss_calc = nn.CrossEntropyLoss()
+    # optimizer = optim.SGD(model.parameters(), lr=0.3, weight_decay=5e-4)
 
-    test()
-    test_robustness()
+    # test()
+    # test_robustness()
 
-    # show_loss(model_name, save=True, show=False)
-    # show_accuracies(model_name, save=True, show=False)
-    # get_train_time(model_name)
+    show_loss(model_name, save=True, show=False)
+    show_accuracies(model_name, save=True, show=False)
+    get_train_time(model_name)
 
     ####################################################################################################
 
@@ -297,7 +297,7 @@ if __name__ == "__main__":
     # model_save_path= f"./models/{model_name}.pt"
     
     # loss_calc = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(model.parameters(), lr=0.25, weight_decay=5e-4)
+    # optimizer = optim.SGD(model.parameters(), lr=0.3, weight_decay=5e-4)
 
     # train_free(16, model_name)
     # torch.save(model.state_dict(), model_save_path)
@@ -311,7 +311,7 @@ if __name__ == "__main__":
     # model.load_state_dict(torch.load(model_save_path))
 
     # loss_calc = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(model.parameters(), lr=0.25, weight_decay=5e-4)
+    # optimizer = optim.SGD(model.parameters(), lr=0.3, weight_decay=5e-4)
 
     # test()
     # test_robustness()
