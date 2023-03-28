@@ -335,7 +335,7 @@ if __name__ == "__main__":
     }
 
     ###################################################################################################
-
+    # ResNet18
     ##################################################
     # Train model and save it
 
@@ -368,20 +368,20 @@ if __name__ == "__main__":
     # get_train_time(model_name)
 
     ####################################################################################################
-
+    # ResNet18 Replay
     ##################################################
 
-    # Train model using free adversarial training and save it
+    # Train model using training with replay and save it
 
     model = ResidualNetwork18().to(device)
-    model_name = "resnet18_first_free"
+    model_name = "resnet18_first_replay"
     model_save_path= f"./models/{model_name}.pt"
     
     loss_calc = nn.CrossEntropyLoss()
     optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=(math.ceil(epochs/replay)))
 
-    train_free(epochs, model_name)
+    train_replay(epochs, model_name, replay)
     torch.save(model.state_dict(), model_save_path)
 
     # ##################################################
@@ -400,3 +400,37 @@ if __name__ == "__main__":
     show_loss(model_name, save=True, show=False)
     show_accuracies(model_name, save=True, show=False)
     get_train_time(model_name)
+
+    ####################################################################################################
+    # ResNet18 Free
+    ##################################################
+
+    # Train model using free adversarial training and save it
+
+    # model = ResidualNetwork18().to(device)
+    # model_name = "resnet18_first_free"
+    # model_save_path= f"./models/{model_name}.pt"
+    
+    # loss_calc = nn.CrossEntropyLoss()
+    # optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
+    # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=(math.ceil(epochs/replay)))
+
+    # train_free(epochs, model_name, replay)
+    # torch.save(model.state_dict(), model_save_path)
+
+    # ##################################################
+    # # Load model and evaluate it
+    
+    # model = ResidualNetwork18().to(device)
+    # model_name = "resnet18_first_free"
+    # model_save_path= f"./models/{model_name}.pt"
+    # model.load_state_dict(torch.load(model_save_path))
+
+    # loss_calc = nn.CrossEntropyLoss()
+
+    # test()
+    # test_robustness()
+
+    # show_loss(model_name, save=True, show=False)
+    # show_accuracies(model_name, save=True, show=False)
+    # get_train_time(model_name)
