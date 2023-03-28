@@ -79,7 +79,7 @@ def train(num_of_epochs, name):
     with open(file_path, "w") as file:
         json.dump(train_stats, file)
 
-def train_free(num_of_epochs, name, replay=4):
+def train_free(num_of_epochs, name, replay=4, eps=8/255, koef_it=1/255):
     """
     Train function for the model initialized in the main function (implements Free Adversarial Training)
     Params:
@@ -93,8 +93,6 @@ def train_free(num_of_epochs, name, replay=4):
     perturbation = torch.zeros(*tensor_size).to(device)
 
     num_of_epochs = math.ceil(num_of_epochs/replay)
-    koef_it = 0.05
-    eps = 0.3
 
     for epoch in range(num_of_epochs):
         print(f"Starting epoch: {epoch + 1}")
@@ -319,9 +317,9 @@ if __name__ == "__main__":
     # loss_calc = nn.CrossEntropyLoss()
     # optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
 
-    # test()
-    # test_robustness()
+    test()
+    test_robustness()
 
-    # show_loss(model_name, save=True, show=False)
-    # show_accuracies(model_name, save=True, show=False)
-    # get_train_time(model_name)
+    show_loss(model_name, save=True, show=False)
+    show_accuracies(model_name, save=True, show=False)
+    get_train_time(model_name)
