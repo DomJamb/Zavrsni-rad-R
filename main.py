@@ -85,6 +85,8 @@ def train_free(num_of_epochs, name, replay=4, eps=8/255, koef_it=1/255):
     Params:
         name: desired name for the model (used for saving the model parameters in a JSON file)
         replay: number of replays for each batch during 1 epoch
+        eps: maximum total perturbation
+        koef_it: increment perturbation 
     """
     start_time = time.time()
     train_stats = dict()
@@ -125,6 +127,80 @@ def train_free(num_of_epochs, name, replay=4, eps=8/255, koef_it=1/255):
                 perturbation[0:x.size(0)] += koef_it * data_grad.sign()
                 perturbation.clamp(min=-eps, max=eps)
 
+                optimizer.step()
+
+                temp_loss += loss.item()
+                _, y_ = y_.max(1)
+                temp_correct += y_.eq(y).sum().item()
+
+                if (j == replay - 1):
+                    train_total += y.size(0)
+                    total_train_loss += temp_loss / replay
+                    train_correct += temp_correct / replay
+
+        total_train_acc = 100 * train_correct/train_total
+
+        print(f"Total train loss for epoch {epoch+1}: {total_train_loss}")
+        print(f"Total train accuracy for epoch {epoch+1}: {total_train_acc}")
+
+        test_loss, test_acc = test(epoch)
+
+        scheduler.step()
+
+        curr_epoch = f"epoch{epoch+1}"
+        curr_dict = dict()
+        curr_dict.update({"train_loss": total_train_loss, 
+                          "train_accuracy": total_train_acc,
+                          "test_loss": test_loss,
+                          "test_accuracy": test_acc})
+        
+        train_stats.update({curr_epoch: curr_dict})
+
+    total_time = time.time() - start_time
+    train_stats.update({"train_time": total_time})
+
+    file_path = f"./stats/{name}/stats.json"
+
+    if (not os.path.exists(f"./stats/{name}")):
+        os.mkdir(f"./stats/{name}")
+
+    with open(file_path, "w") as file:
+        json.dump(train_stats, file)
+
+def train_replay(num_of_epochs, name, replay=4):
+    """
+    Train function for the model initialized in the main function (replays same batch n times)
+    Params:
+        name: desired name for the model (used for saving the model parameters in a JSON file)
+        replay: number of replays for each batch during 1 epoch
+    """
+    start_time = time.time()
+    train_stats = dict()
+
+    num_of_epochs = math.ceil(num_of_epochs/replay)
+
+    for epoch in range(num_of_epochs):
+        print(f"Starting epoch: {epoch + 1}")
+
+        model.train()
+
+        total_train_loss = 0
+        train_correct = 0
+        train_total = 0
+
+        for i, (x, y) in enumerate(train_loader):
+            x = x.to(device)
+            y = y.to(device)
+
+            temp_loss = 0
+            temp_correct = 0
+
+            for j in range(replay):
+                y_ = model(x)
+                loss = loss_calc(y_, y)
+
+                optimizer.zero_grad()
+                loss.backward()
                 optimizer.step()
 
                 temp_loss += loss.item()
@@ -242,6 +318,9 @@ if __name__ == "__main__":
     train_loader = torch.utils.data.DataLoader(train_data, batch_size=256, shuffle=True)
     test_loader = torch.utils.data.DataLoader(test_data, batch_size=100, shuffle=False)
 
+    epochs = 16
+    replay = 4
+
     classes_map = {
         0: "airplane",
         1: "automobile",
@@ -266,9 +345,9 @@ if __name__ == "__main__":
     
     # loss_calc = nn.CrossEntropyLoss()
     # optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
-    # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=16)
+    # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs)
 
-    # train(16, model_name)
+    # train(epochs, model_name)
     # torch.save(model.state_dict(), model_save_path)
 
     ##################################################
@@ -280,7 +359,6 @@ if __name__ == "__main__":
     # model.load_state_dict(torch.load(model_save_path))
 
     # loss_calc = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
 
     # test()
     # test_robustness()
@@ -301,9 +379,9 @@ if __name__ == "__main__":
     
     loss_calc = nn.CrossEntropyLoss()
     optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=16)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=(math.ceil(epochs/replay)))
 
-    train_free(16, model_name)
+    train_free(epochs, model_name)
     torch.save(model.state_dict(), model_save_path)
 
     # ##################################################
@@ -315,7 +393,6 @@ if __name__ == "__main__":
     # model.load_state_dict(torch.load(model_save_path))
 
     # loss_calc = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
 
     test()
     test_robustness()
