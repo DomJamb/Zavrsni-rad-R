@@ -407,30 +407,44 @@ if __name__ == "__main__":
 
     # Train model using free adversarial training and save it
 
-    # model = ResidualNetwork18().to(device)
-    # model_name = "resnet18_first_free"
-    # model_save_path= f"./models/{model_name}.pt"
-    
-    # loss_calc = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
-    # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=(math.ceil(epochs/replay)))
+    lrs = [0.1, 0.02, 0.01, 0.005, 0.001]
+    replays = [1, 2, 4]
+    eps_list = [4, 8]
 
-    # train_free(epochs, model_name, replay)
-    # torch.save(model.state_dict(), model_save_path)
+    for lr in lrs:
+        for replay in replays:
+            for eps in eps_list:
+                model = ResidualNetwork18().to(device)
+                model_name = f"resnet18_free_lr{lr}_replay{replay}_eps{eps}"
+                model_save_path= f"./models/{model_name}.pt"
+                
+                loss_calc = nn.CrossEntropyLoss()
+                optimizer = optim.SGD(model.parameters(), lr, momentum=0.9, weight_decay=5e-4)
+                scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=(math.ceil(epochs/replay)))
+
+                train_free(epochs, model_name, replay, eps)
+                torch.save(model.state_dict(), model_save_path)
+
+                test()
+                test_robustness()
+
+                show_loss(model_name, save=True, show=False)
+                show_accuracies(model_name, save=True, show=False)
+                get_train_time(model_name)
 
     # ##################################################
     # # Load model and evaluate it
     
-    model = ResidualNetwork18().to(device)
-    model_name = "resnet18_first_free"
-    model_save_path= f"./models/{model_name}.pt"
-    model.load_state_dict(torch.load(model_save_path))
+    # model = ResidualNetwork18().to(device)
+    # model_name = "resnet18_first_free"
+    # model_save_path= f"./models/{model_name}.pt"
+    # model.load_state_dict(torch.load(model_save_path))
 
-    loss_calc = nn.CrossEntropyLoss()
+    # loss_calc = nn.CrossEntropyLoss()
 
-    test()
-    test_robustness()
+    # test()
+    # test_robustness()
 
-    show_loss(model_name, save=True, show=False)
-    show_accuracies(model_name, save=True, show=False)
-    get_train_time(model_name)
+    # show_loss(model_name, save=True, show=False)
+    # show_accuracies(model_name, save=True, show=False)
+    # get_train_time(model_name)
