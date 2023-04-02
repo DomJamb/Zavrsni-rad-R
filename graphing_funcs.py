@@ -86,6 +86,45 @@ def show_accuracies(name, save=False, show=True):
     if show:
         plt.show()
 
+def show_adversarial_accuracies(name, save=False, show=True):
+    """
+    Function for showcasing the adversarial accuracy of a model over epochs
+    Params:
+        name: name of the model
+        save: option to save the image
+        show: option to show the image
+    """
+    fig = plt.figure(figsize=(16, 10))
+
+    path = f'./stats/{name}/stats.json'
+    
+    # Get the adversarial accuracies from the specified input file
+    with open(path, "r") as file:
+        data = json.load(file)
+    
+    num_of_epochs = len(data)-1
+    adv_acc = list()
+
+    for key in data.keys():
+        if key != "train_time":
+            adv_acc.append(data[key]["adv_accuracy"])
+
+    # Plot the train and test accuracies over epochs
+    plt.plot(range(num_of_epochs), np.array(adv_acc), "g-", label="Adversarial accuracy")
+
+    plt.xlabel("Epochs", fontsize=12)
+    plt.ylabel("Accuracy on adversarial examples", fontsize=12)
+
+    plt.title("Accuracy on adversarial examples over the epochs")
+    plt.legend(fontsize=12)
+
+    if save:
+        save_path = f"./stats/{name}/adv_accuracies.png"
+        plt.savefig(save_path)
+
+    if show:
+        plt.show()
+
 def graph_adv_examples(adv_dict, name, save=False, show=True):
     """
     Function for showcasing the adversarial examples of a given model
