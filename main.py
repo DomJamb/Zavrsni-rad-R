@@ -12,7 +12,8 @@ import torchvision.transforms as transforms
 
 from attack_funcs import attack_pgd
 from ResidualNetwork18 import ResidualNetwork18
-from graphing_funcs import show_loss, show_accuracies
+from graphing_funcs import show_loss, show_accuracies, graph_adv_examples
+from AdvExample import AdvExample
 from util import get_train_time
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -96,6 +97,8 @@ def train_free(num_of_epochs, name, replay=4, eps=8/255, koef_it=1/255):
 
     num_of_epochs = math.ceil(num_of_epochs/replay)
 
+    adv_examples = dict()
+
     for epoch in range(num_of_epochs):
         print(f"Starting epoch: {epoch + 1}")
 
@@ -108,6 +111,13 @@ def train_free(num_of_epochs, name, replay=4, eps=8/255, koef_it=1/255):
         for i, (x, y) in enumerate(train_loader):
             x = x.to(device)
             y = y.to(device)
+
+            if (((epoch + 1) % (4 / replay) == 0) and i == 0):
+                adv_list = list()
+                for j in range(4):
+                    adv_example = AdvExample(classes_map[y[j].item()], (x[j] + perturbation[j]).clamp(0, 1.0).detach().cpu().numpy())
+                    adv_list.append(adv_example)
+                adv_examples.update({epoch+1: adv_list})
 
             temp_loss = 0
             temp_correct = 0
@@ -166,6 +176,8 @@ def train_free(num_of_epochs, name, replay=4, eps=8/255, koef_it=1/255):
 
     with open(file_path, "w") as file:
         json.dump(train_stats, file)
+
+    graph_adv_examples(adv_examples, name, save=True, show=False)
 
 def train_replay(num_of_epochs, name, replay=4):
     """
