@@ -124,7 +124,7 @@ def train_free(num_of_epochs, name, replay=4, eps=8/255, koef_it=1/255):
 
             for j in range(replay):
                 noise = Variable(perturbation[0:x.size(0)], requires_grad=True).to(device)
-                with torch.no_grad:
+                with torch.no_grad():
                     noise.add_(x).clamp_(0, 1).sub_(x)
                 input = x + noise
                 input.clamp(0, 1.0)
@@ -137,7 +137,7 @@ def train_free(num_of_epochs, name, replay=4, eps=8/255, koef_it=1/255):
                 data_grad = noise.grad.data
 
                 perturbation[0:x.size(0)] += koef_it * data_grad.sign()
-                with torch.no_grad:
+                with torch.no_grad():
                     perturbation.clamp_(min=-eps, max=eps)
 
                 optimizer.step()
