@@ -275,7 +275,7 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
     adv_examples = dict()
     # prev_acc = 0
 
-    # scaler = GradScaler()
+    scaler = GradScaler()
 
     for epoch in range(num_of_epochs):
         print(f"Starting epoch: {epoch + 1}")
@@ -301,13 +301,13 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
 
             input = x + noise
 
-            # with autocast():
-            y_ = model(input)
-            loss = loss_calc(y_, y)
+            with autocast():
+                y_ = model(input)
+                loss = loss_calc(y_, y)
 
-            # scaler.scale(loss).backward()
+            scaler.scale(loss).backward()
 
-            loss.backward()
+            #loss.backward()
             data_grad = noise.grad.data
 
             noise = noise + alpha * data_grad.sign()
@@ -318,19 +318,19 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
             noise = noise.detach()
             input = x + noise
 
-            # with autocast():
-            y_ = model(input)
-            loss = loss_calc(y_, y)
+            with autocast():
+                y_ = model(input)
+                loss = loss_calc(y_, y)
 
             optimizer.zero_grad()
 
-            loss.backward()
-            optimizer.step()
+            # loss.backward()
+            # optimizer.step()
 
-            # scaler.scale(loss).backward()
+            scaler.scale(loss).backward()
 
-            # scaler.step(optimizer)
-            # scaler.update()
+            scaler.step(optimizer)
+            scaler.update()
 
             total_train_loss += loss.item()
             _, y_ = y_.max(1)
