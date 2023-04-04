@@ -273,7 +273,7 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
     train_stats = dict()
 
     adv_examples = dict()
-    prev_acc = 0
+    # prev_acc = 0
 
     scaler = GradScaler()
 
@@ -290,9 +290,9 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
             x = x.to(device)
             y = y.to(device)
 
-            if (i == 0):
-                adv_x = x
-                adv_y = y
+            # if (i == 0):
+            #     adv_x = x
+            #     adv_y = y
 
             noise = torch.zeros_like(x).uniform_(-eps, eps).to(device)
             with torch.no_grad():
@@ -332,6 +332,13 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
             train_correct += y_.eq(y).sum().item()
 
             scheduler.step()
+            
+            if (((epoch + 1) % 4 == 0) and (i == 0)):
+                adv_list = list()
+                for i in range(4):
+                    adv_example = AdvExample(classes_map[y[i].item()], (input[i]).detach().cpu().numpy())
+                    adv_list.append(adv_example)
+                adv_examples.update({epoch+1: adv_list})
 
         total_train_acc = 100 * train_correct/train_total
 
@@ -340,38 +347,31 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
 
         test_loss, test_acc = test(epoch)
 
-        adv_x = attack_pgd(model, adv_x, adv_y, eps=8/255, koef_it=1/255, steps=5, device=device).to(device)
+        # adv_x = attack_pgd(model, adv_x, adv_y, eps=8/255, koef_it=1/255, steps=5, device=device).to(device)
         
-        with autocast():
-            adv_y_ = model(adv_x)
+        # with autocast():
+        #     adv_y_ = model(adv_x)
             
-        _, adv_y_ = adv_y_.max(1)
-        adv_total = adv_y.size(0)
-        adv_correct = adv_y_.eq(adv_y).sum().item()
-        adv_accuracy = 100 * adv_correct / adv_total
+        # _, adv_y_ = adv_y_.max(1)
+        # adv_total = adv_y.size(0)
+        # adv_correct = adv_y_.eq(adv_y).sum().item()
+        # adv_accuracy = 100 * adv_correct / adv_total
 
         curr_epoch = f"epoch{epoch+1}"
         curr_dict = dict()
         curr_dict.update({"train_loss": total_train_loss, 
                           "train_accuracy": total_train_acc,
                           "test_loss": test_loss,
-                          "test_accuracy": test_acc,
-                          "adv_accuracy": adv_accuracy})
+                          "test_accuracy": test_acc})
+                        #   "adv_accuracy": adv_accuracy})
         
         train_stats.update({curr_epoch: curr_dict})
 
-        if ((epoch + 1) % 4 == 0):
-            adv_list = list()
-            for i in range(4):
-                adv_example = AdvExample(classes_map[adv_y[i].item()], (adv_x[i]).detach().cpu().numpy())
-                adv_list.append(adv_example)
-            adv_examples.update({epoch+1: adv_list})
+        # # early stop
+        # if (adv_accuracy < prev_acc - 0.2):
+        #     break
 
-        # early stop
-        if (adv_accuracy < prev_acc - 0.2):
-            break
-
-        prev_acc = adv_accuracy
+        # prev_acc = adv_accuracy
 
     total_time = time.time() - start_time
     train_stats.update({"train_time": total_time})
