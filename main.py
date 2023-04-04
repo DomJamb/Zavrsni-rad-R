@@ -275,7 +275,7 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
     adv_examples = dict()
     # prev_acc = 0
 
-    scaler = GradScaler()
+    # scaler = GradScaler()
 
     for epoch in range(num_of_epochs):
         print(f"Starting epoch: {epoch + 1}")
@@ -301,9 +301,9 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
 
             input = x + noise
 
-            with autocast():
-                y_ = model(input)
-                loss = loss_calc(y_, y)
+            # with autocast():
+            y_ = model(input)
+            loss = loss_calc(y_, y)
 
             loss.backward()
             data_grad = noise.grad.data
@@ -316,15 +316,19 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
             noise = noise.detach()
             input = x + noise
 
-            with autocast():
-                y_ = model(input)
-                loss = loss_calc(y_, y)
+            # with autocast():
+            y_ = model(input)
+            loss = loss_calc(y_, y)
 
             optimizer.zero_grad()
-            scaler.scale(loss).backward()
 
-            scaler.step(optimizer)
-            scaler.update()
+            loss.backward()
+            optimizer.step()
+
+            # scaler.scale(loss).backward()
+
+            # scaler.step(optimizer)
+            # scaler.update()
 
             total_train_loss += loss.item()
             _, y_ = y_.max(1)
@@ -591,7 +595,7 @@ if __name__ == "__main__":
     model_save_path= f"./models/{model_name}.pt"
     
     loss_calc = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
+    optimizer = optim.SGD(model.parameters(), lr=0.2, momentum=0.9, weight_decay=5e-4)
 
     total_steps = epochs * len(train_loader)
     scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0, max_lr=0.2, step_size_up=(total_steps / 2), step_size_down=(total_steps / 2))
