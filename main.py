@@ -12,7 +12,7 @@ from torch.cuda.amp.grad_scaler import GradScaler
 import torchvision
 import torchvision.transforms as transforms
 
-from attack_funcs import attack_pgd
+from attack_funcs import attack_pgd, attack_pgd_directed
 from ResidualNetwork18 import ResidualNetwork18
 from graphing_funcs import show_loss, show_accuracies, graph_adv_examples
 from AdvExample import AdvExample
@@ -296,11 +296,8 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
 
             noise = torch.zeros_like(x).uniform_(-eps, eps).to(device)
             with torch.no_grad():
-                noise.add_(x).clamp_(0, 1).sub_(x)
-                
+                noise.add_(x).clamp_(0, 1).sub_(x) 
             noise.requires_grad = True
-
-            #noise = Variable(perturbation[0:x.size(0)], requires_grad=True).to(device)
 
             input = x + noise
 
@@ -317,7 +314,6 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
                 noise.add_(x).clamp_(0, 1).sub_(x)
 
             noise = noise.detach()
-
             input = x + noise
 
             with autocast():
@@ -345,7 +341,10 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
         test_loss, test_acc = test(epoch)
 
         adv_x = attack_pgd(model, adv_x, adv_y, eps=8/255, koef_it=1/255, steps=5, device=device).to(device)
-        adv_y_ = model(adv_x)
+        
+        with autocast():
+            adv_y_ = model(adv_x)
+            
         _, adv_y_ = adv_y_.max(1)
         adv_total = adv_y.size(0)
         adv_correct = adv_y_.eq(adv_y).sum().item()
