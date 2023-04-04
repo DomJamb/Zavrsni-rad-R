@@ -305,6 +305,8 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
             y_ = model(input)
             loss = loss_calc(y_, y)
 
+            # scaler.scale(loss).backward()
+
             loss.backward()
             data_grad = noise.grad.data
 
@@ -351,10 +353,8 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
 
         test_loss, test_acc = test(epoch)
 
-        # adv_x = attack_pgd(model, adv_x, adv_y, eps=8/255, koef_it=1/255, steps=5, device=device).to(device)
-        
-        # with autocast():
-        #     adv_y_ = model(adv_x)
+        # adv_x = attack_pgd(model, adv_x, adv_y, eps=8/255, koef_it=1/255, steps=5, device=device).to(device) 
+        # adv_y_ = model(adv_x)
             
         # _, adv_y_ = adv_y_.max(1)
         # adv_total = adv_y.size(0)
