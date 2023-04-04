@@ -304,14 +304,14 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
 
             input = x + noise
 
-            with autocast(device_type=device, dtype=torch.float16):
+            with autocast():
                 y_ = model(input)
                 loss = loss_calc(y_, y)
 
             loss.backward()
             data_grad = noise.grad.data
 
-            noise += alpha * data_grad.sign()
+            noise = noise + alpha * data_grad.sign()
             with torch.no_grad():
                 noise.clamp_(min=-eps, max=eps)
                 noise.add_(x).clamp_(0, 1).sub_(x)
@@ -320,7 +320,7 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
 
             input = x + noise
 
-            with autocast(device_type=device, dtype=torch.float16):
+            with autocast():
                 y_ = model(input)
                 loss = loss_calc(y_, y)
 
@@ -595,7 +595,7 @@ if __name__ == "__main__":
     optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
 
     total_steps = epochs * len(train_loader)
-    scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0, max_lr=0.2, tep_size_up=(total_steps / 2), step_size_down=(total_steps / 2))
+    scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0, max_lr=0.2, step_size_up=(total_steps / 2), step_size_down=(total_steps / 2))
 
     train_fast(epochs, model_name)
     torch.save(model.state_dict(), model_save_path)
