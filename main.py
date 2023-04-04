@@ -6,6 +6,8 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.autograd import Variable
+from torch.cuda.amp import autocast
+from torch.cuda.amp.grad_scaler import GradScaler
 
 import torchvision
 import torchvision.transforms as transforms
@@ -22,6 +24,7 @@ def train(num_of_epochs, name):
     """
     Train function for the model initialized in the main function
     Params:
+        num_of_epochs: total number of train epochs
         name: desired name for the model (used for saving the model parameters in a JSON file)
     """
     start_time = time.time()
@@ -84,6 +87,7 @@ def train_free(num_of_epochs, name, replay=4, eps=8/255, koef_it=1/255):
     """
     Train function for the model initialized in the main function (implements Free Adversarial Training)
     Params:
+        num_of_epochs: total number of train epochs
         name: desired name for the model (used for saving the model parameters in a JSON file)
         replay: number of replays for each batch during 1 epoch
         eps: maximum total perturbation
@@ -127,7 +131,6 @@ def train_free(num_of_epochs, name, replay=4, eps=8/255, koef_it=1/255):
                 with torch.no_grad():
                     noise.add_(x).clamp_(0, 1).sub_(x)
                 input = x + noise
-                input.clamp(0, 1.0)
 
                 y_ = model(input)
                 loss = loss_calc(y_, y)
@@ -186,6 +189,7 @@ def train_replay(num_of_epochs, name, replay=4):
     """
     Train function for the model initialized in the main function (replays same batch n times)
     Params:
+        num_of_epochs: total number of train epochs
         name: desired name for the model (used for saving the model parameters in a JSON file)
         replay: number of replays for each batch during 1 epoch
     """
@@ -255,6 +259,133 @@ def train_replay(num_of_epochs, name, replay=4):
 
     with open(file_path, "w") as file:
         json.dump(train_stats, file)
+
+def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
+    """
+    Train function for the model initialized in the main function (implements Fast Adversarial Training)
+    Params:
+        num_of_epochs: total number of train epochs
+        name: desired name for the model (used for saving the model parameters in a JSON file)
+        eps: maximum total perturbation
+        alpha: perturbation koefficient
+    """
+    start_time = time.time()
+    train_stats = dict()
+
+    adv_examples = dict()
+    prev_acc = 0
+
+    scaler = GradScaler()
+
+    for epoch in range(num_of_epochs):
+        print(f"Starting epoch: {epoch + 1}")
+
+        model.train()
+
+        total_train_loss = 0
+        train_correct = 0
+        train_total = 0
+
+        for i, (x, y) in enumerate(train_loader):
+            x = x.to(device)
+            y = y.to(device)
+
+            if (i == 0):
+                adv_x = x
+                adv_y = y
+
+            noise = torch.zeros_like(x).uniform_(-eps, eps).to(device)
+            with torch.no_grad():
+                noise.add_(x).clamp_(0, 1).sub_(x)
+                
+            noise.requires_grad = True
+
+            #noise = Variable(perturbation[0:x.size(0)], requires_grad=True).to(device)
+
+            input = x + noise
+
+            with autocast(device_type=device, dtype=torch.float16):
+                y_ = model(input)
+                loss = loss_calc(y_, y)
+
+            loss.backward()
+            data_grad = noise.grad.data
+
+            noise += alpha * data_grad.sign()
+            with torch.no_grad():
+                noise.clamp_(min=-eps, max=eps)
+                noise.add_(x).clamp_(0, 1).sub_(x)
+
+            noise = noise.detach()
+
+            input = x + noise
+
+            with autocast(device_type=device, dtype=torch.float16):
+                y_ = model(input)
+                loss = loss_calc(y_, y)
+
+            optimizer.zero_grad()
+            scaler.scale(loss).backward()
+
+            scaler.step(optimizer)
+            scaler.update()
+
+            total_train_loss += loss.item()
+            _, y_ = y_.max(1)
+            train_total += y.size(0)
+            train_correct += y_.eq(y).sum().item()
+
+            scheduler.step()
+
+        total_train_acc = 100 * train_correct/train_total
+
+        print(f"Total train loss for epoch {epoch+1}: {total_train_loss}")
+        print(f"Total train accuracy for epoch {epoch+1}: {total_train_acc}")
+
+        test_loss, test_acc = test(epoch)
+
+        adv_x = attack_pgd(model, adv_x, adv_y, eps=8/255, koef_it=1/255, steps=5, device=device).to(device)
+        adv_y_ = model(adv_x)
+        _, adv_y_ = adv_y_.max(1)
+        adv_total = adv_y.size(0)
+        adv_correct = adv_y_.eq(adv_y).sum().item()
+        adv_accuracy = 100 * adv_correct / adv_total
+
+        curr_epoch = f"epoch{epoch+1}"
+        curr_dict = dict()
+        curr_dict.update({"train_loss": total_train_loss, 
+                          "train_accuracy": total_train_acc,
+                          "test_loss": test_loss,
+                          "test_accuracy": test_acc,
+                          "adv_accuracy": adv_accuracy})
+        
+        train_stats.update({curr_epoch: curr_dict})
+
+        if ((epoch + 1) % 4 == 0):
+            adv_list = list()
+            for i in range(4):
+                adv_example = AdvExample(classes_map[adv_y[i].item()], (adv_x[i]).detach().cpu().numpy())
+                adv_list.append(adv_example)
+            adv_examples.update({epoch+1: adv_list})
+
+        # early stop
+        if (adv_accuracy < prev_acc - 0.2):
+            break
+
+        prev_acc = adv_accuracy
+
+    total_time = time.time() - start_time
+    train_stats.update({"train_time": total_time})
+
+    file_path = f"./stats/{name}/stats.json"
+
+    if (not os.path.exists(f"./stats/{name}")):
+        os.mkdir(f"./stats/{name}")
+
+    with open(file_path, "w") as file:
+        json.dump(train_stats, file)
+
+    graph_adv_examples(adv_examples, name, save=True, show=False)
 
 def test(curr_epoch=0):
     """
@@ -422,22 +553,58 @@ if __name__ == "__main__":
 
     # Train model using free adversarial training and save it
 
-    model = ResidualNetwork18().to(device)
-    model_name = f"resnet18_first_free"
-    model_save_path= f"./models/{model_name}.pt"
+    # model = ResidualNetwork18().to(device)
+    # model_name = f"resnet18_first_free"
+    # model_save_path= f"./models/{model_name}.pt"
     
-    loss_calc = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=(math.ceil(epochs/replay)))
+    # loss_calc = nn.CrossEntropyLoss()
+    # optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
+    # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=(math.ceil(epochs/replay)))
 
-    train_free(epochs, model_name, replay)
-    torch.save(model.state_dict(), model_save_path)
+    # train_free(epochs, model_name, replay)
+    # torch.save(model.state_dict(), model_save_path)
 
     # ##################################################
     # # Load model and evaluate it
     
     # model = ResidualNetwork18().to(device)
     # model_name = "resnet18_first_free"
+    # model_save_path= f"./models/{model_name}.pt"
+    # model.load_state_dict(torch.load(model_save_path))
+
+    # loss_calc = nn.CrossEntropyLoss()
+
+    # test()
+    # test_robustness()
+
+    # show_loss(model_name, save=True, show=False)
+    # show_accuracies(model_name, save=True, show=False)
+    # get_train_time(model_name)
+
+    ####################################################################################################
+    # ResNet18 Fast
+    ##################################################
+
+    # Train model using fast adversarial training and save it
+
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_first_fast"
+    model_save_path= f"./models/{model_name}.pt"
+    
+    loss_calc = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
+
+    total_steps = epochs * len(train_loader)
+    scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0, max_lr=0.2, tep_size_up=(total_steps / 2), step_size_down=(total_steps / 2))
+
+    train_fast(epochs, model_name)
+    torch.save(model.state_dict(), model_save_path)
+
+    ##################################################
+    # Load model and evaluate it
+    
+    # model = ResidualNetwork18().to(device)
+    # model_name = "resnet18_first_fast"
     # model_save_path= f"./models/{model_name}.pt"
     # model.load_state_dict(torch.load(model_save_path))
 
