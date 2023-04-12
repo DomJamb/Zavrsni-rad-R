@@ -112,7 +112,7 @@ def train_mixed(num_of_epochs, name):
             with autocast(enabled=True):
                 y_ = model(x)
                 if (torch.any(torch.isnan(y_))):
-                    print("NaNs in output detecte.")
+                    print("NaNs in output detected.")
                 loss = loss_calc(y_, y)
 
             optimizer.zero_grad()
@@ -375,11 +375,13 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
 
             with autocast():
                 y_ = model(input)
+                if (torch.any(torch.isnan(y_))):
+                    print("NaNs in output detected.")
                 loss = loss_calc(y_, y)
 
+            optimizer.zero_grad()
             scaler.scale(loss).backward()
 
-            #loss.backward()
             data_grad = noise.grad.data
 
             noise = noise + alpha * data_grad.sign()
@@ -392,12 +394,11 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
 
             with autocast():
                 y_ = model(input)
+                if (torch.any(torch.isnan(y_))):
+                    print("NaNs in output detected.")
                 loss = loss_calc(y_, y)
 
             optimizer.zero_grad()
-
-            # loss.backward()
-            # optimizer.step()
 
             scaler.scale(loss).backward()
 
