@@ -38,8 +38,11 @@ class ResidualBlock(nn.Module):
         Params:
             x: input tensor
         """
-        y = F.relu(self.norm1(self.conv1(x)))
-        y = self.norm2(self.conv2(y))
+        y = self.conv1(x)
+        y = self.norm1(y)
+        y = F.relu(y)
+        y = self.conv2(y)
+        y = self.norm2(y)
         y += self.skip(x)
         y = F.relu(y)
         return y

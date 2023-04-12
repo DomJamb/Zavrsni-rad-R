@@ -11,6 +11,7 @@ from torch.cuda.amp.grad_scaler import GradScaler
 
 import torchvision
 import torchvision.transforms as transforms
+from torchvision.models import resnet18
 
 from attack_funcs import attack_pgd, attack_pgd_directed
 from ResidualNetwork18 import ResidualNetwork18
@@ -62,6 +63,77 @@ def train(num_of_epochs, name):
         test_loss, test_acc = test(epoch)
 
         scheduler.step()
+
+        curr_epoch = f"epoch{epoch+1}"
+        curr_dict = dict()
+        curr_dict.update({"train_loss": total_train_loss, 
+                          "train_accuracy": total_train_acc,
+                          "test_loss": test_loss,
+                          "test_accuracy": test_acc})
+        
+        train_stats.update({curr_epoch: curr_dict})
+
+    total_time = time.time() - start_time
+    train_stats.update({"train_time": total_time})
+
+    file_path = f"./stats/{name}/stats.json"
+
+    if (not os.path.exists(f"./stats/{name}")):
+        os.mkdir(f"./stats/{name}")
+
+    with open(file_path, "w") as file:
+        json.dump(train_stats, file)
+
+def train_mixed(num_of_epochs, name):
+    """
+    Train function (using mixed precision arithmetic) for the model initialized in the main function
+    Params:
+        num_of_epochs: total number of train epochs
+        name: desired name for the model (used for saving the model parameters in a JSON file)
+    """
+    start_time = time.time()
+    train_stats = dict()
+
+    scaler = GradScaler()
+
+    for epoch in range(num_of_epochs):
+        print(f"Starting epoch: {epoch + 1}")
+
+        model.eval()
+
+        total_train_loss = 0
+        train_correct = 0
+        train_total = 0
+
+        for i, (x, y) in enumerate(train_loader):
+            x = x.to(device)
+            y = y.to(device)
+
+            with autocast(enabled=True):
+                y_ = model(x)
+                if (torch.any(torch.isnan(y_))):
+                    print("NaNs in output detecte.")
+                loss = loss_calc(y_, y)
+
+            optimizer.zero_grad()
+            scaler.scale(loss).backward()
+            scaler.unscale_(optimizer)
+            torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+
+            scaler.step(optimizer)
+            scaler.update()
+
+            total_train_loss += loss.item()
+            _, y_ = y_.max(1)
+            train_total += y.size(0)
+            train_correct += y_.eq(y).sum().item()
+
+        total_train_acc = 100 * train_correct/train_total
+
+        print(f"Total train loss for epoch {epoch+1}: {total_train_loss}")
+        print(f"Total train accuracy for epoch {epoch+1}: {total_train_acc}")
+
+        test_loss, test_acc = test(epoch)
 
         curr_epoch = f"epoch{epoch+1}"
         curr_dict = dict()
@@ -502,16 +574,16 @@ if __name__ == "__main__":
     ##################################################
     # Load model and evaluate it
     
-    model = ResidualNetwork18().to(device)
-    model_name = "resnet18_first"
-    model_save_path = f"./models/{model_name}.pt"
-    model.load_state_dict(torch.load(model_save_path))
+    # model = ResidualNetwork18().to(device)
+    # model_name = "resnet18_first"
+    # model_save_path = f"./models/{model_name}.pt"
+    # model.load_state_dict(torch.load(model_save_path))
 
-    loss_calc = nn.CrossEntropyLoss()
+    # loss_calc = nn.CrossEntropyLoss()
 
-    print("Resnet18")
-    test()
-    test_robustness()
+    # print("Resnet18")
+    # test()
+    # test_robustness()
 
     # show_loss(model_name, save=True, show=False)
     # show_accuracies(model_name, save=True, show=False)
@@ -537,16 +609,16 @@ if __name__ == "__main__":
     # ##################################################
     # # Load model and evaluate it
     
-    model = ResidualNetwork18().to(device)
-    model_name = "resnet18_first_replay"
-    model_save_path= f"./models/{model_name}.pt"
-    model.load_state_dict(torch.load(model_save_path))
+    # model = ResidualNetwork18().to(device)
+    # model_name = "resnet18_first_replay"
+    # model_save_path= f"./models/{model_name}.pt"
+    # model.load_state_dict(torch.load(model_save_path))
 
-    loss_calc = nn.CrossEntropyLoss()
+    # loss_calc = nn.CrossEntropyLoss()
 
-    print("Resnet18 Replay")
-    test()
-    test_robustness()
+    # print("Resnet18 Replay")
+    # test()
+    # test_robustness()
 
     # show_loss(model_name, save=True, show=False)
     # show_accuracies(model_name, save=True, show=False)
@@ -572,16 +644,16 @@ if __name__ == "__main__":
     # ##################################################
     # # Load model and evaluate it
     
-    model = ResidualNetwork18().to(device)
-    model_name = "resnet18_first_free"
-    model_save_path= f"./models/{model_name}.pt"
-    model.load_state_dict(torch.load(model_save_path))
+    # model = ResidualNetwork18().to(device)
+    # model_name = "resnet18_first_free"
+    # model_save_path= f"./models/{model_name}.pt"
+    # model.load_state_dict(torch.load(model_save_path))
 
-    loss_calc = nn.CrossEntropyLoss()
+    # loss_calc = nn.CrossEntropyLoss()
 
-    print("Resnet18 Free")
-    test()
-    test_robustness()
+    # print("Resnet18 Free")
+    # test()
+    # test_robustness()
 
     # show_loss(model_name, save=True, show=False)
     # show_accuracies(model_name, save=True, show=False)
@@ -609,16 +681,51 @@ if __name__ == "__main__":
     ##################################################
     # Load model and evaluate it
     
-    model = ResidualNetwork18().to(device)
-    model_name = "resnet18_first_fast"
+    # model = ResidualNetwork18().to(device)
+    # model_name = "resnet18_first_fast"
+    # model_save_path= f"./models/{model_name}.pt"
+    # model.load_state_dict(torch.load(model_save_path))
+
+    # loss_calc = nn.CrossEntropyLoss()
+
+    # print("Resnet18 Fast")
+    # test()
+    # test_robustness()
+
+    # show_loss(model_name, save=True, show=False)
+    # show_accuracies(model_name, save=True, show=False)
+    # get_train_time(model_name)
+
+    ####################################################################################################
+    # ResNet18 Mixed precision
+    ##################################################
+
+    # Train model using mixed precision training and save it
+
+    # model = ResidualNetwork18().to(device)
+    model = resnet18().to(device)
+    model_name = f"resnet18_first_mixed"
     model_save_path= f"./models/{model_name}.pt"
-    model.load_state_dict(torch.load(model_save_path))
-
+    
     loss_calc = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.2, momentum=0.9, weight_decay=5e-4)
 
-    print("Resnet18 Fast")
-    test()
-    test_robustness()
+    train_mixed(epochs, model_name)
+    # torch.save(model.state_dict(), model_save_path)
+
+    ##################################################
+    # Load model and evaluate it
+    
+    # model = ResidualNetwork18().to(device)
+    # model_name = f"resnet18_first_mixed"
+    # model_save_path= f"./models/{model_name}.pt"
+    # model.load_state_dict(torch.load(model_save_path))
+
+    # loss_calc = nn.CrossEntropyLoss()
+
+    # print("Resnet18 Fast")
+    # test()
+    # test_robustness()
 
     # show_loss(model_name, save=True, show=False)
     # show_accuracies(model_name, save=True, show=False)

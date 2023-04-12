@@ -62,7 +62,9 @@ class ResidualNetwork18(nn.Module):
         Params:
             x: input tensor
         """
-        y = F.relu(self.norm1(self.conv1(x)))
+        y = self.conv1(x)
+        y = self.norm1(y)
+        y = F.relu(y)
         y = self.res1(y)
         y = self.res2(y)
         y = self.res3(y)
