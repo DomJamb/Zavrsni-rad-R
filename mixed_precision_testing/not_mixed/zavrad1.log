@@ -1,0 +1,117 @@
+[{"stream_name":"stdout","time":16.95105751,"data":"Downloading https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz to ./data/cifar-10-python.tar.gz\n"}
+,{"stream_name":"stdout","time":20.972794921,"data":"Extracting ./data/cifar-10-python.tar.gz to ./data\n"}
+,{"stream_name":"stdout","time":23.377855384,"data":"Files already downloaded and verified\n"}
+,{"stream_name":"stdout","time":26.959168183,"data":"Starting epoch: 1\n"}
+,{"stream_name":"stdout","time":116.900702104,"data":"Total train loss for epoch 1: 447.9213707447052\n"}
+,{"stream_name":"stdout","time":116.900743105,"data":"Total train accuracy for epoch 1: 12.154\n"}
+,{"stream_name":"stdout","time":120.406423018,"data":"Total test loss for epoch 1: 203.96780359745026\n"}
+,{"stream_name":"stdout","time":120.406448647,"data":"Total test accuracy for epoch 1: 21.81\n"}
+,{"stream_name":"stdout","time":120.406454079,"data":"Total time: 93.44875288009644\n"}
+,{"stream_name":"stdout","time":120.406623103,"data":"Starting epoch: 2\n"}
+,{"stream_name":"stdout","time":205.706313967,"data":"Total train loss for epoch 2: 413.67946004867554\n"}
+,{"stream_name":"stdout","time":205.706349025,"data":"Total train accuracy for epoch 2: 20.612\n"}
+,{"stream_name":"stdout","time":209.04313168,"data":"Total test loss for epoch 2: 178.3822113275528\n"}
+,{"stream_name":"stdout","time":209.043158671,"data":"Total test accuracy for epoch 2: 33.25\n"}
+,{"stream_name":"stdout","time":209.043164375,"data":"Total time: 88.63663935661316\n"}
+,{"stream_name":"stdout","time":209.043169632,"data":"Starting epoch: 3\n"}
+,{"stream_name":"stdout","time":294.488903519,"data":"Total train loss for epoch 3: 390.52088689804077\n"}
+,{"stream_name":"stdout","time":294.488950225,"data":"Total train accuracy for epoch 3: 24.848\n"}
+,{"stream_name":"stdout","time":297.77759775,"data":"Total test loss for epoch 3: 165.67316913604736\n"}
+,{"stream_name":"stdout","time":297.777637904,"data":"Total test accuracy for epoch 3: 39.19\n"}
+,{"stream_name":"stdout","time":297.777643375,"data":"Total time: 88.73431134223938\n"}
+,{"stream_name":"stdout","time":297.777648387,"data":"Starting epoch: 4\n"}
+,{"stream_name":"stdout","time":383.16565893,"data":"Total train loss for epoch 4: 376.3663512468338\n"}
+,{"stream_name":"stdout","time":383.165706762,"data":"Total train accuracy for epoch 4: 27.164\n"}
+,{"stream_name":"stdout","time":386.469166992,"data":"Total test loss for epoch 4: 159.59661734104156\n"}
+,{"stream_name":"stdout","time":386.469200359,"data":"Total test accuracy for epoch 4: 39.23\n"}
+,{"stream_name":"stdout","time":386.469205669,"data":"Total time: 88.69175505638123\n"}
+,{"stream_name":"stdout","time":386.469210217,"data":"Starting epoch: 5\n"}
+,{"stream_name":"stdout","time":471.857461873,"data":"Total train loss for epoch 5: 364.5746463537216\n"}
+,{"stream_name":"stdout","time":471.857509243,"data":"Total train accuracy for epoch 5: 29.12\n"}
+,{"stream_name":"stdout","time":475.213550188,"data":"Total test loss for epoch 5: 149.25044989585876\n"}
+,{"stream_name":"stdout","time":475.213585462,"data":"Total test accuracy for epoch 5: 45.88\n"}
+,{"stream_name":"stdout","time":475.213590754,"data":"Total time: 88.74365210533142\n"}
+,{"stream_name":"stdout","time":475.213595329,"data":"Starting epoch: 6\n"}
+,{"stream_name":"stdout","time":560.91777808,"data":"Total train loss for epoch 6: 352.42497885227203\n"}
+,{"stream_name":"stdout","time":560.917811378,"data":"Total train accuracy for epoch 6: 31.786\n"}
+,{"stream_name":"stdout","time":564.308013814,"data":"Total test loss for epoch 6: 143.79739260673523\n"}
+,{"stream_name":"stdout","time":564.308039647,"data":"Total test accuracy for epoch 6: 46.97\n"}
+,{"stream_name":"stdout","time":564.308062917,"data":"Total time: 89.09430241584778\n"}
+,{"stream_name":"stdout","time":564.308067675,"data":"Starting epoch: 7\n"}
+,{"stream_name":"stdout","time":649.77017703,"data":"Total train loss for epoch 7: 341.18711626529694\n"}
+,{"stream_name":"stdout","time":649.770209335,"data":"Total train accuracy for epoch 7: 33.618\n"}
+,{"stream_name":"stdout","time":653.338197813,"data":"Total test loss for epoch 7: 136.03466486930847\n"}
+,{"stream_name":"stdout","time":653.338220829,"data":"Total test accuracy for epoch 7: 51.06\n"}
+,{"stream_name":"stdout","time":653.338233507,"data":"Total time: 89.03090310096741\n"}
+,{"stream_name":"stdout","time":653.338238584,"data":"Starting epoch: 8\n"}
+,{"stream_name":"stdout","time":738.870140939,"data":"Total train loss for epoch 8: 331.94274604320526\n"}
+,{"stream_name":"stdout","time":738.870199537,"data":"Total train accuracy for epoch 8: 35.686\n"}
+,{"stream_name":"stdout","time":742.217896733,"data":"Total test loss for epoch 8: 129.2652666568756\n"}
+,{"stream_name":"stdout","time":742.217926066,"data":"Total test accuracy for epoch 8: 53.89\n"}
+,{"stream_name":"stdout","time":742.217935541,"data":"Total time: 88.87954115867615\n"}
+,{"stream_name":"stdout","time":742.217945323,"data":"Starting epoch: 9\n"}
+,{"stream_name":"stdout","time":827.490082339,"data":"Total train loss for epoch 9: 319.8976254463196\n"}
+,{"stream_name":"stdout","time":827.490179588,"data":"Total train accuracy for epoch 9: 37.838\n"}
+,{"stream_name":"stdout","time":830.809077197,"data":"Total test loss for epoch 9: 125.0292512178421\n"}
+,{"stream_name":"stdout","time":830.809109345,"data":"Total test accuracy for epoch 9: 55.9\n"}
+,{"stream_name":"stdout","time":830.809124784,"data":"Total time: 88.59134531021118\n"}
+,{"stream_name":"stdout","time":830.80912979,"data":"Starting epoch: 10\n"}
+,{"stream_name":"stdout","time":916.218084329,"data":"Total train loss for epoch 10: 308.66056394577026\n"}
+,{"stream_name":"stdout","time":916.218155781,"data":"Total train accuracy for epoch 10: 40.042\n"}
+,{"stream_name":"stdout","time":919.518674757,"data":"Total test loss for epoch 10: 113.26737976074219\n"}
+,{"stream_name":"stdout","time":919.518723095,"data":"Total test accuracy for epoch 10: 64.23\n"}
+,{"stream_name":"stdout","time":919.518730323,"data":"Total time: 88.70943975448608\n"}
+,{"stream_name":"stdout","time":919.518735308,"data":"Starting epoch: 11\n"}
+,{"stream_name":"stdout","time":1005.011340646,"data":"Total train loss for epoch 11: 298.48232674598694\n"}
+,{"stream_name":"stdout","time":1005.011372306,"data":"Total train accuracy for epoch 11: 41.516\n"}
+,{"stream_name":"stdout","time":1008.313302787,"data":"Total test loss for epoch 11: 113.6985729932785\n"}
+,{"stream_name":"stdout","time":1008.313329207,"data":"Total test accuracy for epoch 11: 63.37\n"}
+,{"stream_name":"stdout","time":1008.313334919,"data":"Total time: 88.79467749595642\n"}
+,{"stream_name":"stdout","time":1008.313339953,"data":"Starting epoch: 12\n"}
+,{"stream_name":"stdout","time":1093.74704765,"data":"Total train loss for epoch 12: 287.66294944286346\n"}
+,{"stream_name":"stdout","time":1093.747095361,"data":"Total train accuracy for epoch 12: 43.63\n"}
+,{"stream_name":"stdout","time":1097.040096325,"data":"Total test loss for epoch 12: 101.47285896539688\n"}
+,{"stream_name":"stdout","time":1097.040133553,"data":"Total test accuracy for epoch 12: 66.4\n"}
+,{"stream_name":"stdout","time":1097.040140381,"data":"Total time: 88.72674942016602\n"}
+,{"stream_name":"stdout","time":1097.040145264,"data":"Starting epoch: 13\n"}
+,{"stream_name":"stdout","time":1182.462620333,"data":"Total train loss for epoch 13: 279.1362121105194\n"}
+,{"stream_name":"stdout","time":1182.462664526,"data":"Total train accuracy for epoch 13: 45.304\n"}
+,{"stream_name":"stdout","time":1185.769569636,"data":"Total test loss for epoch 13: 93.044946372509\n"}
+,{"stream_name":"stdout","time":1185.769596659,"data":"Total test accuracy for epoch 13: 69.05\n"}
+,{"stream_name":"stdout","time":1185.769602158,"data":"Total time: 88.72924089431763\n"}
+,{"stream_name":"stdout","time":1185.769746835,"data":"Starting epoch: 14\n"}
+,{"stream_name":"stdout","time":1271.31754751,"data":"Total train loss for epoch 14: 268.4448239803314\n"}
+,{"stream_name":"stdout","time":1271.317591669,"data":"Total train accuracy for epoch 14: 47.012\n"}
+,{"stream_name":"stdout","time":1274.618132438,"data":"Total test loss for epoch 14: 90.72133022546768\n"}
+,{"stream_name":"stdout","time":1274.618177158,"data":"Total test accuracy for epoch 14: 71.36\n"}
+,{"stream_name":"stdout","time":1274.618187605,"data":"Total time: 88.84784126281738\n"}
+,{"stream_name":"stdout","time":1274.618194405,"data":"Starting epoch: 15\n"}
+,{"stream_name":"stdout","time":1360.274951574,"data":"Total train loss for epoch 15: 256.67655777931213\n"}
+,{"stream_name":"stdout","time":1360.27500476,"data":"Total train accuracy for epoch 15: 49.386\n"}
+,{"stream_name":"stdout","time":1363.607137685,"data":"Total test loss for epoch 15: 85.36065274477005\n"}
+,{"stream_name":"stdout","time":1363.607172799,"data":"Total test accuracy for epoch 15: 72.84\n"}
+,{"stream_name":"stdout","time":1363.607179354,"data":"Total time: 88.9891004562378\n"}
+,{"stream_name":"stdout","time":1363.607184168,"data":"Starting epoch: 16\n"}
+,{"stream_name":"stdout","time":1449.148737749,"data":"Total train loss for epoch 16: 243.14033377170563\n"}
+,{"stream_name":"stdout","time":1449.148795544,"data":"Total train accuracy for epoch 16: 51.596\n"}
+,{"stream_name":"stdout","time":1452.55318639,"data":"Total test loss for epoch 16: 80.3371052145958\n"}
+,{"stream_name":"stdout","time":1452.553214392,"data":"Total test accuracy for epoch 16: 75.01\n"}
+,{"stream_name":"stdout","time":1452.553220985,"data":"Total time: 88.82658338546753\n"}
+,{"stream_name":"stdout","time":1453.091419224,"data":"Resnet18 Fast\n"}
+,{"stream_name":"stdout","time":1456.455414829,"data":"Total test loss for epoch 1: 80.3371052145958\n"}
+,{"stream_name":"stdout","time":1456.455474675,"data":"Total test accuracy for epoch 1: 75.01\n"}
+,{"stream_name":"stdout","time":1551.772323205,"data":"Accuracy on adversarial examples generated using PGD attack: 42.76%\n"}
+,{"stream_name":"stdout","time":1552.328815297,"data":"Total train time for model resnet18_first_fast is 23 minutes, 45 seconds.\n"}
+,{"stream_name":"stderr","time":1556.084358525,"data":"/opt/conda/lib/python3.7/site-packages/traitlets/traitlets.py:2935: FutureWarning: --Exporter.preprocessors=[\"remove_papermill_header.RemovePapermillHeader\"] for containers is deprecated in traitlets 5.0. You can pass `--Exporter.preprocessors item` ... multiple times to add items to a list.\n"}
+,{"stream_name":"stderr","time":1556.084416211,"data":"  FutureWarning,\n"}
+,{"stream_name":"stderr","time":1556.084423893,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to notebook\n"}
+,{"stream_name":"stderr","time":1556.414827192,"data":"[NbConvertApp] Writing 336085 bytes to __notebook__.ipynb\n"}
+,{"stream_name":"stderr","time":1557.677553647,"data":"/opt/conda/lib/python3.7/site-packages/traitlets/traitlets.py:2935: FutureWarning: --Exporter.preprocessors=[\"nbconvert.preprocessors.ExtractOutputPreprocessor\"] for containers is deprecated in traitlets 5.0. You can pass `--Exporter.preprocessors item` ... multiple times to add items to a list.\n"}
+,{"stream_name":"stderr","time":1557.677618845,"data":"  FutureWarning,\n"}
+,{"stream_name":"stderr","time":1557.677628547,"data":"[NbConvertApp] Converting notebook __notebook__.ipynb to html\n"}
+,{"stream_name":"stderr","time":1558.551318051,"data":"[NbConvertApp] Support files will be in __results___files/\n"}
+,{"stream_name":"stderr","time":1558.551486024,"data":"[NbConvertApp] Making directory __results___files\n"}
+,{"stream_name":"stderr","time":1558.552042032,"data":"[NbConvertApp] Making directory __results___files\n"}
+,{"stream_name":"stderr","time":1558.552333025,"data":"[NbConvertApp] Making directory __results___files\n"}
+,{"stream_name":"stderr","time":1558.552678477,"data":"[NbConvertApp] Writing 438200 bytes to __results__.html\n"}
+]
