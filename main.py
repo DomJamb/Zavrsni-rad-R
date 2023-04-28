@@ -332,7 +332,7 @@ def train_replay(num_of_epochs, name, replay=4):
     with open(file_path, "w") as file:
         json.dump(train_stats, file)
 
-def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
+def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255, mixed_prec=True):
     """
     Train function for the model initialized in the main function (implements Fast Adversarial Training)
     Params:
@@ -340,6 +340,7 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
         name: desired name for the model (used for saving the model parameters in a JSON file)
         eps: maximum total perturbation
         alpha: perturbation koefficient
+        mixed_prec: toggle for mixed precision training
     """
     start_time = time.time()
     train_stats = dict()
@@ -347,7 +348,8 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
     adv_examples = dict()
     # prev_acc = 0
 
-    scaler = GradScaler()
+    if mixed_prec:
+        scaler = GradScaler()
 
     for epoch in range(num_of_epochs):
         print(f"Starting epoch: {epoch + 1}")
@@ -373,14 +375,18 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
 
             input = x + noise
 
-            with autocast():
+            with autocast(enabled=mixed_prec):
                 y_ = model(input)
                 if (torch.any(torch.isnan(y_))):
                     print("NaNs in output detected.")
                 loss = loss_calc(y_, y)
 
             optimizer.zero_grad()
-            scaler.scale(loss).backward()
+
+            if mixed_prec:
+                scaler.scale(loss).backward()
+            else:
+                loss.backward()
 
             data_grad = noise.grad.data
 
@@ -392,7 +398,7 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
             noise = noise.detach()
             input = x + noise
 
-            with autocast():
+            with autocast(enabled=mixed_prec):
                 y_ = model(input)
                 if (torch.any(torch.isnan(y_))):
                     print("NaNs in output detected.")
@@ -400,10 +406,13 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
 
             optimizer.zero_grad()
 
-            scaler.scale(loss).backward()
-
-            scaler.step(optimizer)
-            scaler.update()
+            if mixed_prec:
+                scaler.scale(loss).backward()
+                scaler.step(optimizer)
+                scaler.update()
+            else:
+                loss.backward()
+                optimizer.step()
 
             total_train_loss += loss.item()
             _, y_ = y_.max(1)
@@ -639,7 +648,7 @@ def test_robustness():
 
 if __name__ == "__main__":
 
-    #print(f"Current device: {device}")
+    print(f"Current device: {device}")
 
     transform_train = transforms.Compose([
         transforms.RandomCrop(32, padding=4),
@@ -651,8 +660,8 @@ if __name__ == "__main__":
         transforms.ToTensor()
     ])
 
-    train_data = torchvision.datasets.CIFAR10(root='./data', train=True, download=False, transform=transform_train)
-    test_data = torchvision.datasets.CIFAR10(root='./data', train=False, download=False, transform=transform_test)
+    train_data = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform_train)
+    test_data = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform_test)
 
     train_loader = torch.utils.data.DataLoader(train_data, batch_size=256, shuffle=True)
     test_loader = torch.utils.data.DataLoader(test_data, batch_size=100, shuffle=False)
