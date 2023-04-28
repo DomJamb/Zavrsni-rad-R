@@ -84,22 +84,24 @@ def train(num_of_epochs, name):
     with open(file_path, "w") as file:
         json.dump(train_stats, file)
 
-def train_mixed(num_of_epochs, name):
+def train_mixed(num_of_epochs, name, mixed_prec=True):
     """
     Train function (using mixed precision arithmetic) for the model initialized in the main function
     Params:
         num_of_epochs: total number of train epochs
         name: desired name for the model (used for saving the model parameters in a JSON file)
+        mixed_prec: toggle for mixed precision training
     """
     start_time = time.time()
     train_stats = dict()
 
-    scaler = GradScaler()
+    if mixed_prec:
+        scaler = GradScaler()
 
     for epoch in range(num_of_epochs):
         print(f"Starting epoch: {epoch + 1}")
 
-        model.eval()
+        model.train()
 
         total_train_loss = 0
         train_correct = 0
@@ -109,19 +111,21 @@ def train_mixed(num_of_epochs, name):
             x = x.to(device)
             y = y.to(device)
 
-            with autocast(enabled=True):
+            with autocast(enabled=mixed_prec):
                 y_ = model(x)
                 if (torch.any(torch.isnan(y_))):
                     print("NaNs in output detected.")
                 loss = loss_calc(y_, y)
 
             optimizer.zero_grad()
-            scaler.scale(loss).backward()
-            scaler.unscale_(optimizer)
-            torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
 
-            scaler.step(optimizer)
-            scaler.update()
+            if mixed_prec:
+                scaler.scale(loss).backward()
+                scaler.step(optimizer)
+                scaler.update()            
+            else:
+                loss.backward()
+                optimizer.step()
 
             total_train_loss += loss.item()
             _, y_ = y_.max(1)
