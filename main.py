@@ -15,7 +15,7 @@ from torchvision.models import resnet18
 
 from attack_funcs import attack_pgd, attack_pgd_directed
 from ResidualNetwork18 import ResidualNetwork18
-from graphing_funcs import show_loss, show_accuracies, graph_adv_examples
+from graphing_funcs import show_loss, show_accuracies, graph_adv_examples, show_train_loss, show_train_accs
 from AdvExample import AdvExample
 from util import get_train_time
 
@@ -840,6 +840,8 @@ if __name__ == "__main__":
 
     # show_loss(model_name, save=True, show=False)
     # show_accuracies(model_name, save=True, show=False)
+    # show_train_loss(model_name, save=True, show=False)
+    # show_train_accs(model_name, save=True, show=False)
     # get_train_time(model_name)
 
     ####################################################################################################
@@ -875,6 +877,8 @@ if __name__ == "__main__":
 
     # show_loss(model_name, save=True, show=False)
     # show_accuracies(model_name, save=True, show=False)
+    # show_train_loss(model_name, save=True, show=False)
+    # show_train_accs(model_name, save=True, show=False)
     # get_train_time(model_name)
 
     ####################################################################################################
@@ -910,6 +914,8 @@ if __name__ == "__main__":
 
     # show_loss(model_name, save=True, show=False)
     # show_accuracies(model_name, save=True, show=False)
+    # show_train_loss(model_name, save=True, show=False)
+    # show_train_accs(model_name, save=True, show=False)
     # get_train_time(model_name)
 
     ####################################################################################################
@@ -945,6 +951,8 @@ if __name__ == "__main__":
 
     # show_loss(model_name, save=True, show=False)
     # show_accuracies(model_name, save=True, show=False)
+    # show_train_loss(model_name, save=True, show=False)
+    # show_train_accs(model_name, save=True, show=False)
     # get_train_time(model_name)
 
     ####################################################################################################
@@ -980,6 +988,8 @@ if __name__ == "__main__":
 
     show_loss(model_name, save=True, show=False)
     show_accuracies(model_name, save=True, show=False)
+    show_train_loss(model_name, save=True, show=False)
+    show_train_accs(model_name, save=True, show=False)
     get_train_time(model_name)
 
     ####################################################################################################
@@ -1017,6 +1027,8 @@ if __name__ == "__main__":
 
     show_loss(model_name, save=True, show=False)
     show_accuracies(model_name, save=True, show=False)
+    show_train_loss(model_name, save=True, show=False)
+    show_train_accs(model_name, save=True, show=False)
     get_train_time(model_name)
 
     ####################################################################################################
@@ -1054,4 +1066,6 @@ if __name__ == "__main__":
 
     show_loss(model_name, save=True, show=False)
     show_accuracies(model_name, save=True, show=False)
+    show_train_loss(model_name, save=True, show=False)
+    show_train_accs(model_name, save=True, show=False)
     get_train_time(model_name)

@@ -44,6 +44,70 @@ def show_loss(name, save=False, show=True):
     if show:
         plt.show()
 
+def show_train_loss(name, save=False, show=True):
+    """
+    Function for showcasing the train loss over batches
+    Params:
+        name: name of the model
+        save: option to save the image
+        show: option to show the image
+    """
+    fig = plt.figure(figsize=(16, 10))
+
+    # Get the loss from the specified input file
+    path = f'./stats/{name}/train_loss.json'
+
+    with open(path, "r") as file:
+        data = json.load(file)
+
+    # Plot the train loss over batches
+    plt.plot(range(len(data)), np.array(data), "g-", label="Train loss")
+
+    plt.xlabel("Batches", labelpad=10, fontsize=12)
+    plt.ylabel("Loss", labelpad=10, fontsize=12)
+
+    plt.title("Train loss over batches")
+    plt.legend(fontsize=12)
+
+    if save:
+        save_path = f"./stats/{name}/train_loss_batches.png"
+        plt.savefig(save_path)
+
+    if show:
+        plt.show()
+
+def show_train_accs(name, save=False, show=True):
+    """
+    Function for showcasing the train accuracies over batches
+    Params:
+        name: name of the model
+        save: option to save the image
+        show: option to show the image
+    """
+    fig = plt.figure(figsize=(16, 10))
+
+    # Get the accuracies from the specified input file
+    path = f'./stats/{name}/train_accs.json'
+
+    with open(path, "r") as file:
+        data = json.load(file)
+
+    # Plot the train accuracy over batches
+    plt.plot(range(len(data)), np.array(data), "g-", label="Train accuracy")
+
+    plt.xlabel("Batches", labelpad=10, fontsize=12)
+    plt.ylabel("Accuracy", labelpad=10, fontsize=12)
+
+    plt.title("Train accuracy over batches")
+    plt.legend(fontsize=12)
+
+    if save:
+        save_path = f"./stats/{name}/train_acc_batches.png"
+        plt.savefig(save_path)
+
+    if show:
+        plt.show()
+
 def show_accuracies(name, save=False, show=True):
     """
     Function for showcasing the train and test accuracy of a model over epochs
