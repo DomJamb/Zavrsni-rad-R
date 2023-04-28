@@ -353,7 +353,7 @@ def train_pgd(num_of_epochs, name, eps=8/255, koef_it=1/255, steps=7, mixed_prec
 
     graph_adv_examples(adv_examples, name, save=True, show=False)
 
-def train_free(num_of_epochs, name, replay=4, eps=8/255, koef_it=1/255):
+def train_free(num_of_epochs, name, replay=4, eps=8/255, koef_it=1/255, mixed_prec=True):
     """
     Train function for the model initialized in the main function (implements Free Adversarial Training)
     Params:
@@ -362,6 +362,7 @@ def train_free(num_of_epochs, name, replay=4, eps=8/255, koef_it=1/255):
         replay: number of replays for each batch during 1 epoch
         eps: maximum total perturbation
         koef_it: increment perturbation 
+        mixed_prec: toggle for mixed precision training
     """
     start_time = time.time()
     train_stats = dict()
@@ -372,6 +373,9 @@ def train_free(num_of_epochs, name, replay=4, eps=8/255, koef_it=1/255):
     num_of_epochs = math.ceil(num_of_epochs/replay)
 
     adv_examples = dict()
+
+    if mixed_prec:
+        scaler = GradScaler()
 
     for epoch in range(num_of_epochs):
         print(f"Starting epoch: {epoch + 1}")
@@ -402,18 +406,30 @@ def train_free(num_of_epochs, name, replay=4, eps=8/255, koef_it=1/255):
                     noise.add_(x).clamp_(0, 1).sub_(x)
                 input = x + noise
 
-                y_ = model(input)
-                loss = loss_calc(y_, y)
+                with autocast(enabled=mixed_prec):
+                    y_ = model(input)
+                    if (torch.any(torch.isnan(y_))):
+                        print("NaNs in output detected.")
+                    loss = loss_calc(y_, y)
 
                 optimizer.zero_grad()
-                loss.backward()
+
+                if mixed_prec:
+                    scaler.scale(loss).backward()
+                else:
+                    loss.backward()
+
                 data_grad = noise.grad.data
 
                 perturbation[0:x.size(0)] += koef_it * data_grad.sign()
                 with torch.no_grad():
                     perturbation.clamp_(min=-eps, max=eps)
 
-                optimizer.step()
+                if mixed_prec:
+                    scaler.step(optimizer)
+                    scaler.update()
+                else:
+                    optimizer.step()
 
                 temp_loss += loss.item()
                 _, y_ = y_.max(1)
@@ -809,34 +825,34 @@ if __name__ == "__main__":
 
     # Train model using PGD training and save it
 
-    model = ResidualNetwork18().to(device)
-    model_name = f"resnet18_first_pgd"
-    model_save_path= f"./models/{model_name}.pt"
+    # model = ResidualNetwork18().to(device)
+    # model_name = f"resnet18_first_pgd"
+    # model_save_path= f"./models/{model_name}.pt"
     
-    loss_calc = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.2, momentum=0.9, weight_decay=5e-4)
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs)
+    # loss_calc = nn.CrossEntropyLoss()
+    # optimizer = optim.SGD(model.parameters(), lr=0.2, momentum=0.9, weight_decay=5e-4)
+    # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs)
 
-    train_pgd(epochs, model_name)
-    torch.save(model.state_dict(), model_save_path)
+    # train_pgd(epochs, model_name)
+    # torch.save(model.state_dict(), model_save_path)
 
     ##################################################
     # Load model and evaluate it
     
-    model = ResidualNetwork18().to(device)
-    model_name = f"resnet18_first_pgd"
-    model_save_path= f"./models/{model_name}.pt"
-    model.load_state_dict(torch.load(model_save_path))
+    # model = ResidualNetwork18().to(device)
+    # model_name = f"resnet18_first_pgd"
+    # model_save_path= f"./models/{model_name}.pt"
+    # model.load_state_dict(torch.load(model_save_path))
 
-    loss_calc = nn.CrossEntropyLoss()
+    # loss_calc = nn.CrossEntropyLoss()
 
-    print("Resnet18 PGD")
-    test()
-    test_robustness()
+    # print("Resnet18 PGD")
+    # test()
+    # test_robustness()
 
-    show_loss(model_name, save=True, show=False)
-    show_accuracies(model_name, save=True, show=False)
-    get_train_time(model_name)
+    # show_loss(model_name, save=True, show=False)
+    # show_accuracies(model_name, save=True, show=False)
+    # get_train_time(model_name)
 
     ####################################################################################################
     # ResNet18 Free
@@ -844,34 +860,34 @@ if __name__ == "__main__":
 
     # Train model using free adversarial training and save it
 
-    # model = ResidualNetwork18().to(device)
-    # model_name = f"resnet18_first_free"
-    # model_save_path= f"./models/{model_name}.pt"
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_first_free"
+    model_save_path= f"./models/{model_name}.pt"
     
-    # loss_calc = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
-    # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=(math.ceil(epochs/replay)))
+    loss_calc = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=(math.ceil(epochs/replay)))
 
-    # train_free(epochs, model_name, replay)
-    # torch.save(model.state_dict(), model_save_path)
+    train_free(epochs, model_name, replay)
+    torch.save(model.state_dict(), model_save_path)
 
     # ##################################################
     # # Load model and evaluate it
     
-    # model = ResidualNetwork18().to(device)
-    # model_name = "resnet18_first_free"
-    # model_save_path= f"./models/{model_name}.pt"
-    # model.load_state_dict(torch.load(model_save_path))
+    model = ResidualNetwork18().to(device)
+    model_name = "resnet18_first_free"
+    model_save_path= f"./models/{model_name}.pt"
+    model.load_state_dict(torch.load(model_save_path))
 
-    # loss_calc = nn.CrossEntropyLoss()
+    loss_calc = nn.CrossEntropyLoss()
 
-    # print("Resnet18 Free")
-    # test()
-    # test_robustness()
+    print("Resnet18 Free")
+    test()
+    test_robustness()
 
-    # show_loss(model_name, save=True, show=False)
-    # show_accuracies(model_name, save=True, show=False)
-    # get_train_time(model_name)
+    show_loss(model_name, save=True, show=False)
+    show_accuracies(model_name, save=True, show=False)
+    get_train_time(model_name)
 
     ####################################################################################################
     # ResNet18 Fast
