@@ -455,7 +455,7 @@ def train_free(num_of_epochs, name, replay=4, eps=8/255, koef_it=1/255):
 
     graph_adv_examples(adv_examples, name, save=True, show=False)
 
-def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255, mixed_prec=True):
+def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255, mixed_prec=True, early_stop=False):
     """
     Train function for the model initialized in the main function (implements Fast Adversarial Training)
     Params:
@@ -464,12 +464,15 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255, mixed_prec=True):
         eps: maximum total perturbation
         alpha: perturbation koefficient
         mixed_prec: toggle for mixed precision training
+        early_stop: toggle for early stop evaluation
     """
     start_time = time.time()
     train_stats = dict()
 
     adv_examples = dict()
-    # prev_acc = 0
+
+    if early_stop:
+        prev_acc = 0
 
     if mixed_prec:
         scaler = GradScaler()
@@ -487,9 +490,9 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255, mixed_prec=True):
             x = x.to(device)
             y = y.to(device)
 
-            # if (i == 0):
-            #     adv_x = x
-            #     adv_y = y
+            if early_stop and (i == 0):
+                adv_x = x
+                adv_y = y
 
             noise = torch.zeros_like(x).uniform_(-eps, eps).to(device)
             with torch.no_grad():
@@ -558,29 +561,37 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255, mixed_prec=True):
 
         test_loss, test_acc = test(epoch)
 
-        # adv_x = attack_pgd(model, adv_x, adv_y, eps=8/255, koef_it=1/255, steps=5, device=device).to(device) 
-        # adv_y_ = model(adv_x)
-            
-        # _, adv_y_ = adv_y_.max(1)
-        # adv_total = adv_y.size(0)
-        # adv_correct = adv_y_.eq(adv_y).sum().item()
-        # adv_accuracy = 100 * adv_correct / adv_total
+        if early_stop:
+            adv_x = attack_pgd(model, adv_x, adv_y, eps=8/255, koef_it=1/255, steps=5, device=device).to(device) 
+            adv_y_ = model(adv_x)
+                
+            _, adv_y_ = adv_y_.max(1)
+            adv_total = adv_y.size(0)
+            adv_correct = adv_y_.eq(adv_y).sum().item()
+            adv_accuracy = 100 * adv_correct / adv_total
 
         curr_epoch = f"epoch{epoch+1}"
         curr_dict = dict()
-        curr_dict.update({"train_loss": total_train_loss, 
-                          "train_accuracy": total_train_acc,
-                          "test_loss": test_loss,
-                          "test_accuracy": test_acc})
-                        #   "adv_accuracy": adv_accuracy})
+
+        if early_stop:
+            curr_dict.update({"train_loss": total_train_loss, 
+                            "train_accuracy": total_train_acc,
+                            "test_loss": test_loss,
+                            "test_accuracy": test_acc,
+                            "adv_accuracy": adv_accuracy})
+        else:
+            curr_dict.update({"train_loss": total_train_loss, 
+                "train_accuracy": total_train_acc,
+                "test_loss": test_loss,
+                "test_accuracy": test_acc})
         
         train_stats.update({curr_epoch: curr_dict})
 
-        # # early stop
-        # if (adv_accuracy < prev_acc - 0.2):
-        #     break
+        if early_stop and (adv_accuracy < prev_acc - 0.2):
+            break
 
-        # prev_acc = adv_accuracy
+        if early_stop:
+            prev_acc = adv_accuracy
 
     total_time = time.time() - start_time
     train_stats.update({"train_time": total_time})
