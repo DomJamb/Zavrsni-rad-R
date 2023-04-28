@@ -30,6 +30,10 @@ def train(num_of_epochs, name):
     """
     start_time = time.time()
     train_stats = dict()
+
+    train_losses = list()
+    train_accuracies = list()
+
     for epoch in range(num_of_epochs):
         print(f"Starting epoch: {epoch + 1}")
 
@@ -55,6 +59,9 @@ def train(num_of_epochs, name):
             train_total += y.size(0)
             train_correct += y_.eq(y).sum().item()
 
+            train_losses.append(loss.item())
+            train_accuracies.append(100 * (y_.eq(y).sum().item() / y.size(0)))
+
         total_train_acc = 100 * train_correct/train_total
 
         print(f"Total train loss for epoch {epoch+1}: {total_train_loss}")
@@ -77,12 +84,20 @@ def train(num_of_epochs, name):
     train_stats.update({"train_time": total_time})
 
     file_path = f"./stats/{name}/stats.json"
+    loss_fp = f"./stats/{name}/train_loss.json"
+    accs_fp = f"./stats/{name}/train_accs.json"
 
     if (not os.path.exists(f"./stats/{name}")):
         os.mkdir(f"./stats/{name}")
 
     with open(file_path, "w") as file:
         json.dump(train_stats, file)
+
+    with open(loss_fp, "w") as file:
+        json.dump(train_losses, file)
+
+    with open(accs_fp, "w") as file:
+        json.dump(train_accuracies, file)
 
 def train_mixed(num_of_epochs, name, mixed_prec=True):
     """
@@ -94,6 +109,9 @@ def train_mixed(num_of_epochs, name, mixed_prec=True):
     """
     start_time = time.time()
     train_stats = dict()
+
+    train_losses = list()
+    train_accuracies = list()
 
     if mixed_prec:
         scaler = GradScaler()
@@ -132,6 +150,9 @@ def train_mixed(num_of_epochs, name, mixed_prec=True):
             train_total += y.size(0)
             train_correct += y_.eq(y).sum().item()
 
+            train_losses.append(loss.item())
+            train_accuracies.append(100 * (y_.eq(y).sum().item() / y.size(0)))
+
         total_train_acc = 100 * train_correct/train_total
 
         print(f"Total train loss for epoch {epoch+1}: {total_train_loss}")
@@ -154,12 +175,20 @@ def train_mixed(num_of_epochs, name, mixed_prec=True):
     train_stats.update({"train_time": total_time})
 
     file_path = f"./stats/{name}/stats.json"
+    loss_fp = f"./stats/{name}/train_loss.json"
+    accs_fp = f"./stats/{name}/train_accs.json"
 
     if (not os.path.exists(f"./stats/{name}")):
         os.mkdir(f"./stats/{name}")
 
     with open(file_path, "w") as file:
         json.dump(train_stats, file)
+
+    with open(loss_fp, "w") as file:
+        json.dump(train_losses, file)
+
+    with open(accs_fp, "w") as file:
+        json.dump(train_accuracies, file)
 
 def train_replay(num_of_epochs, name, replay=4):
     """
@@ -171,6 +200,9 @@ def train_replay(num_of_epochs, name, replay=4):
     """
     start_time = time.time()
     train_stats = dict()
+
+    train_losses = list()
+    train_accuracies = list()
 
     num_of_epochs = math.ceil(num_of_epochs/replay)
 
@@ -207,6 +239,9 @@ def train_replay(num_of_epochs, name, replay=4):
                     total_train_loss += temp_loss / replay
                     train_correct += temp_correct / replay
 
+                    train_losses.append(temp_loss / replay)
+                    train_accuracies.append(100 * ((temp_correct / replay) / y.size(0)))
+
         total_train_acc = 100 * train_correct/train_total
 
         print(f"Total train loss for epoch {epoch+1}: {total_train_loss}")
@@ -229,12 +264,20 @@ def train_replay(num_of_epochs, name, replay=4):
     train_stats.update({"train_time": total_time})
 
     file_path = f"./stats/{name}/stats.json"
+    loss_fp = f"./stats/{name}/train_loss.json"
+    accs_fp = f"./stats/{name}/train_accs.json"
 
     if (not os.path.exists(f"./stats/{name}")):
         os.mkdir(f"./stats/{name}")
 
     with open(file_path, "w") as file:
         json.dump(train_stats, file)
+
+    with open(loss_fp, "w") as file:
+        json.dump(train_losses, file)
+
+    with open(accs_fp, "w") as file:
+        json.dump(train_accuracies, file)
 
 def train_pgd(num_of_epochs, name, eps=8/255, koef_it=1/255, steps=7, mixed_prec=True):
     """
@@ -251,6 +294,9 @@ def train_pgd(num_of_epochs, name, eps=8/255, koef_it=1/255, steps=7, mixed_prec
     train_stats = dict()
 
     adv_examples = dict()
+
+    train_losses = list()
+    train_accuracies = list()
 
     if mixed_prec:
         scaler = GradScaler()
@@ -315,6 +361,9 @@ def train_pgd(num_of_epochs, name, eps=8/255, koef_it=1/255, steps=7, mixed_prec
             train_total += y.size(0)
             train_correct += y_.eq(y).sum().item()
 
+            train_losses.append(loss.item())
+            train_accuracies.append(100 * (y_.eq(y).sum().item() / y.size(0)))
+
             scheduler.step()
             
             if (((epoch + 1) % 4 == 0) and (i == 0)):
@@ -344,12 +393,20 @@ def train_pgd(num_of_epochs, name, eps=8/255, koef_it=1/255, steps=7, mixed_prec
     train_stats.update({"train_time": total_time})
 
     file_path = f"./stats/{name}/stats.json"
+    loss_fp = f"./stats/{name}/train_loss.json"
+    accs_fp = f"./stats/{name}/train_accs.json"
 
     if (not os.path.exists(f"./stats/{name}")):
         os.mkdir(f"./stats/{name}")
 
     with open(file_path, "w") as file:
         json.dump(train_stats, file)
+
+    with open(loss_fp, "w") as file:
+        json.dump(train_losses, file)
+
+    with open(accs_fp, "w") as file:
+        json.dump(train_accuracies, file)
 
     graph_adv_examples(adv_examples, name, save=True, show=False)
 
@@ -373,6 +430,9 @@ def train_free(num_of_epochs, name, replay=4, eps=8/255, koef_it=1/255, mixed_pr
     num_of_epochs = math.ceil(num_of_epochs/replay)
 
     adv_examples = dict()
+
+    train_losses = list()
+    train_accuracies = list()
 
     if mixed_prec:
         scaler = GradScaler()
@@ -440,6 +500,9 @@ def train_free(num_of_epochs, name, replay=4, eps=8/255, koef_it=1/255, mixed_pr
                     total_train_loss += temp_loss / replay
                     train_correct += temp_correct / replay
 
+                    train_losses.append(temp_loss / replay)
+                    train_accuracies.append(100 * ((temp_correct / replay) / y.size(0)))
+
         total_train_acc = 100 * train_correct/train_total
 
         print(f"Total train loss for epoch {epoch+1}: {total_train_loss}")
@@ -462,12 +525,20 @@ def train_free(num_of_epochs, name, replay=4, eps=8/255, koef_it=1/255, mixed_pr
     train_stats.update({"train_time": total_time})
 
     file_path = f"./stats/{name}/stats.json"
+    loss_fp = f"./stats/{name}/train_loss.json"
+    accs_fp = f"./stats/{name}/train_accs.json"
 
     if (not os.path.exists(f"./stats/{name}")):
         os.mkdir(f"./stats/{name}")
 
     with open(file_path, "w") as file:
         json.dump(train_stats, file)
+
+    with open(loss_fp, "w") as file:
+        json.dump(train_losses, file)
+
+    with open(accs_fp, "w") as file:
+        json.dump(train_accuracies, file)
 
     graph_adv_examples(adv_examples, name, save=True, show=False)
 
@@ -486,6 +557,9 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255, mixed_prec=True, ea
     train_stats = dict()
 
     adv_examples = dict()
+
+    train_losses = list()
+    train_accuracies = list()
 
     if early_stop:
         prev_acc = 0
@@ -561,6 +635,9 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255, mixed_prec=True, ea
             train_total += y.size(0)
             train_correct += y_.eq(y).sum().item()
 
+            train_losses.append(loss.item())
+            train_accuracies.append(100 * (y_.eq(y).sum().item() / y.size(0)))
+
             scheduler.step()
             
             if (((epoch + 1) % 4 == 0) and (i == 0)):
@@ -613,12 +690,20 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255, mixed_prec=True, ea
     train_stats.update({"train_time": total_time})
 
     file_path = f"./stats/{name}/stats.json"
+    loss_fp = f"./stats/{name}/train_loss.json"
+    accs_fp = f"./stats/{name}/train_accs.json"
 
     if (not os.path.exists(f"./stats/{name}")):
         os.mkdir(f"./stats/{name}")
 
     with open(file_path, "w") as file:
         json.dump(train_stats, file)
+
+    with open(loss_fp, "w") as file:
+        json.dump(train_losses, file)
+
+    with open(accs_fp, "w") as file:
+        json.dump(train_accuracies, file)
 
     graph_adv_examples(adv_examples, name, save=True, show=False)
 
@@ -682,6 +767,14 @@ def test_robustness():
 if __name__ == "__main__":
 
     print(f"Current device: {device}")
+
+    if (not os.path.exists(f"./models")):
+        os.mkdir(f"./models")
+        print("Models dir created.")
+
+    if (not os.path.exists(f"./stats")):
+        os.mkdir(f"./stats")
+        print("Stats dir created.")
 
     transform_train = transforms.Compose([
         transforms.RandomCrop(32, padding=4),
