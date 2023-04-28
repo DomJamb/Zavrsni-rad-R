@@ -463,6 +463,123 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255):
 
     graph_adv_examples(adv_examples, name, save=True, show=False)
 
+def train_pgd(num_of_epochs, name, eps=8/255, koef_it=1/255, steps=7, mixed_prec=True):
+    """
+    Train function for the model initialized in the main function (implements training with PGD)
+    Params:
+        num_of_epochs: total number of train epochs
+        name: desired name for the model (used for saving the model parameters in a JSON file)
+        eps: maximum total perturbation
+        koef_it: maximum change threshold of individual pixels in given data for each iteration
+        steps: number of iterations
+        mixed_prec: toggle for mixed precision training
+    """
+    start_time = time.time()
+    train_stats = dict()
+
+    adv_examples = dict()
+
+    if mixed_prec:
+        scaler = GradScaler()
+
+    for epoch in range(num_of_epochs):
+        print(f"Starting epoch: {epoch + 1}")
+
+        model.train()
+
+        total_train_loss = 0
+        train_correct = 0
+        train_total = 0
+
+        for i, (x, y) in enumerate(train_loader):
+            x = x.to(device)
+            y = y.to(device)
+
+            adv_imgs = x.clone().detach()
+
+            for _ in range(steps):
+                adv_imgs = adv_imgs.to(device)
+                adv_imgs.requires_grad = True
+
+                with autocast(enabled=mixed_prec):
+                    y_ = model(adv_imgs)
+                    if (torch.any(torch.isnan(y_))):
+                        print("NaNs in output detected.")
+                    loss = loss_calc(y_, y)
+
+                optimizer.zero_grad()
+
+                if mixed_prec:
+                    scaler.scale(loss).backward()
+                else:
+                    loss.backward()
+
+                data_grad = adv_imgs.grad.data
+
+                with torch.no_grad():
+                    adv_imgs = adv_imgs.detach() + koef_it * data_grad.sign()
+                    delta = torch.clamp(adv_imgs - x, min=-eps, max=eps)
+                    adv_imgs = torch.clamp(x + delta, min=0, max=1).detach()
+
+            with autocast(enabled=mixed_prec):
+                y_ = model(adv_imgs)
+                if (torch.any(torch.isnan(y_))):
+                    print("NaNs in output detected.")
+                loss = loss_calc(y_, y)
+
+            optimizer.zero_grad()
+
+            if mixed_prec:
+                scaler.scale(loss).backward()
+                scaler.step(optimizer)
+                scaler.update()
+            else:
+                loss.backward()
+                optimizer.step()
+
+            total_train_loss += loss.item()
+            _, y_ = y_.max(1)
+            train_total += y.size(0)
+            train_correct += y_.eq(y).sum().item()
+
+            scheduler.step()
+            
+            if (((epoch + 1) % 4 == 0) and (i == 0)):
+                adv_list = list()
+                for i in range(4):
+                    adv_example = AdvExample(classes_map[y[i].item()], (input[i]).detach().cpu().numpy())
+                    adv_list.append(adv_example)
+                adv_examples.update({epoch+1: adv_list})
+
+        total_train_acc = 100 * train_correct/train_total
+
+        print(f"Total train loss for epoch {epoch+1}: {total_train_loss}")
+        print(f"Total train accuracy for epoch {epoch+1}: {total_train_acc}")
+
+        test_loss, test_acc = test(epoch)
+
+        curr_epoch = f"epoch{epoch+1}"
+        curr_dict = dict()
+        curr_dict.update({"train_loss": total_train_loss, 
+                          "train_accuracy": total_train_acc,
+                          "test_loss": test_loss,
+                          "test_accuracy": test_acc})
+        
+        train_stats.update({curr_epoch: curr_dict})
+
+    total_time = time.time() - start_time
+    train_stats.update({"train_time": total_time})
+
+    file_path = f"./stats/{name}/stats.json"
+
+    if (not os.path.exists(f"./stats/{name}")):
+        os.mkdir(f"./stats/{name}")
+
+    with open(file_path, "w") as file:
+        json.dump(train_stats, file)
+
+    graph_adv_examples(adv_examples, name, save=True, show=False)
+
 def test(curr_epoch=0):
     """
     Test function for the model initialized in the main function
@@ -666,18 +783,18 @@ if __name__ == "__main__":
 
     # Train model using fast adversarial training and save it
 
-    model = ResidualNetwork18().to(device)
-    model_name = f"resnet18_first_fast"
-    model_save_path= f"./models/{model_name}.pt"
+    # model = ResidualNetwork18().to(device)
+    # model_name = f"resnet18_first_fast"
+    # model_save_path= f"./models/{model_name}.pt"
     
-    loss_calc = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.2, momentum=0.9, weight_decay=5e-4)
+    # loss_calc = nn.CrossEntropyLoss()
+    # optimizer = optim.SGD(model.parameters(), lr=0.2, momentum=0.9, weight_decay=5e-4)
 
-    total_steps = epochs * len(train_loader)
-    scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0, max_lr=0.2, step_size_up=(total_steps / 2), step_size_down=(total_steps / 2))
+    # total_steps = epochs * len(train_loader)
+    # scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0, max_lr=0.2, step_size_up=(total_steps / 2), step_size_down=(total_steps / 2))
 
-    train_fast(epochs, model_name)
-    torch.save(model.state_dict(), model_save_path)
+    # train_fast(epochs, model_name)
+    # torch.save(model.state_dict(), model_save_path)
 
     ##################################################
     # Load model and evaluate it
@@ -689,13 +806,13 @@ if __name__ == "__main__":
 
     # loss_calc = nn.CrossEntropyLoss()
 
-    print("Resnet18 Fast")
-    test()
-    test_robustness()
+    # print("Resnet18 Fast")
+    # test()
+    # test_robustness()
 
-    show_loss(model_name, save=True, show=False)
-    show_accuracies(model_name, save=True, show=False)
-    get_train_time(model_name)
+    # show_loss(model_name, save=True, show=False)
+    # show_accuracies(model_name, save=True, show=False)
+    # get_train_time(model_name)
 
     ####################################################################################################
     # ResNet18 Mixed precision
@@ -731,3 +848,38 @@ if __name__ == "__main__":
     # show_loss(model_name, save=True, show=False)
     # show_accuracies(model_name, save=True, show=False)
     # get_train_time(model_name)
+
+    ####################################################################################################
+    # ResNet18 PGD
+    ##################################################
+
+    # Train model using PGD training and save it
+
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_first_pgd"
+    model_save_path= f"./models/{model_name}.pt"
+    
+    loss_calc = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.2, momentum=0.9, weight_decay=5e-4)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs)
+
+    train_pgd(epochs, model_name)
+    torch.save(model.state_dict(), model_save_path)
+
+    ##################################################
+    # Load model and evaluate it
+    
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_first_pgd"
+    model_save_path= f"./models/{model_name}.pt"
+    model.load_state_dict(torch.load(model_save_path))
+
+    loss_calc = nn.CrossEntropyLoss()
+
+    print("Resnet18 PGD")
+    test()
+    test_robustness()
+
+    show_loss(model_name, save=True, show=False)
+    show_accuracies(model_name, save=True, show=False)
+    get_train_time(model_name)
