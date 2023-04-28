@@ -155,6 +155,198 @@ def train_mixed(num_of_epochs, name):
     with open(file_path, "w") as file:
         json.dump(train_stats, file)
 
+def train_replay(num_of_epochs, name, replay=4):
+    """
+    Train function for the model initialized in the main function (replays same batch n times)
+    Params:
+        num_of_epochs: total number of train epochs
+        name: desired name for the model (used for saving the model parameters in a JSON file)
+        replay: number of replays for each batch during 1 epoch
+    """
+    start_time = time.time()
+    train_stats = dict()
+
+    num_of_epochs = math.ceil(num_of_epochs/replay)
+
+    for epoch in range(num_of_epochs):
+        print(f"Starting epoch: {epoch + 1}")
+
+        model.train()
+
+        total_train_loss = 0
+        train_correct = 0
+        train_total = 0
+
+        for i, (x, y) in enumerate(train_loader):
+            x = x.to(device)
+            y = y.to(device)
+
+            temp_loss = 0
+            temp_correct = 0
+
+            for j in range(replay):
+                y_ = model(x)
+                loss = loss_calc(y_, y)
+
+                optimizer.zero_grad()
+                loss.backward()
+                optimizer.step()
+
+                temp_loss += loss.item()
+                _, y_ = y_.max(1)
+                temp_correct += y_.eq(y).sum().item()
+
+                if (j == replay - 1):
+                    train_total += y.size(0)
+                    total_train_loss += temp_loss / replay
+                    train_correct += temp_correct / replay
+
+        total_train_acc = 100 * train_correct/train_total
+
+        print(f"Total train loss for epoch {epoch+1}: {total_train_loss}")
+        print(f"Total train accuracy for epoch {epoch+1}: {total_train_acc}")
+
+        test_loss, test_acc = test(epoch)
+
+        scheduler.step()
+
+        curr_epoch = f"epoch{epoch+1}"
+        curr_dict = dict()
+        curr_dict.update({"train_loss": total_train_loss, 
+                          "train_accuracy": total_train_acc,
+                          "test_loss": test_loss,
+                          "test_accuracy": test_acc})
+        
+        train_stats.update({curr_epoch: curr_dict})
+
+    total_time = time.time() - start_time
+    train_stats.update({"train_time": total_time})
+
+    file_path = f"./stats/{name}/stats.json"
+
+    if (not os.path.exists(f"./stats/{name}")):
+        os.mkdir(f"./stats/{name}")
+
+    with open(file_path, "w") as file:
+        json.dump(train_stats, file)
+
+def train_pgd(num_of_epochs, name, eps=8/255, koef_it=1/255, steps=7, mixed_prec=True):
+    """
+    Train function for the model initialized in the main function (implements training with PGD)
+    Params:
+        num_of_epochs: total number of train epochs
+        name: desired name for the model (used for saving the model parameters in a JSON file)
+        eps: maximum total perturbation
+        koef_it: maximum change threshold of individual pixels in given data for each iteration
+        steps: number of iterations
+        mixed_prec: toggle for mixed precision training
+    """
+    start_time = time.time()
+    train_stats = dict()
+
+    adv_examples = dict()
+
+    if mixed_prec:
+        scaler = GradScaler()
+
+    for epoch in range(num_of_epochs):
+        print(f"Starting epoch: {epoch + 1}")
+
+        model.train()
+
+        total_train_loss = 0
+        train_correct = 0
+        train_total = 0
+
+        for i, (x, y) in enumerate(train_loader):
+            x = x.to(device)
+            y = y.to(device)
+
+            adv_imgs = x.clone().detach()
+
+            for _ in range(steps):
+                adv_imgs = adv_imgs.to(device)
+                adv_imgs.requires_grad = True
+
+                with autocast(enabled=mixed_prec):
+                    y_ = model(adv_imgs)
+                    if (torch.any(torch.isnan(y_))):
+                        print("NaNs in output detected.")
+                    loss = loss_calc(y_, y)
+
+                optimizer.zero_grad()
+
+                if mixed_prec:
+                    scaler.scale(loss).backward()
+                else:
+                    loss.backward()
+
+                data_grad = adv_imgs.grad.data
+
+                with torch.no_grad():
+                    adv_imgs = adv_imgs.detach() + koef_it * data_grad.sign()
+                    delta = torch.clamp(adv_imgs - x, min=-eps, max=eps)
+                    adv_imgs = torch.clamp(x + delta, min=0, max=1).detach()
+
+            with autocast(enabled=mixed_prec):
+                y_ = model(adv_imgs)
+                if (torch.any(torch.isnan(y_))):
+                    print("NaNs in output detected.")
+                loss = loss_calc(y_, y)
+
+            optimizer.zero_grad()
+
+            if mixed_prec:
+                scaler.scale(loss).backward()
+                scaler.step(optimizer)
+                scaler.update()
+            else:
+                loss.backward()
+                optimizer.step()
+
+            total_train_loss += loss.item()
+            _, y_ = y_.max(1)
+            train_total += y.size(0)
+            train_correct += y_.eq(y).sum().item()
+
+            scheduler.step()
+            
+            if (((epoch + 1) % 4 == 0) and (i == 0)):
+                adv_list = list()
+                for i in range(4):
+                    adv_example = AdvExample(classes_map[y[i].item()], (input[i]).detach().cpu().numpy())
+                    adv_list.append(adv_example)
+                adv_examples.update({epoch+1: adv_list})
+
+        total_train_acc = 100 * train_correct/train_total
+
+        print(f"Total train loss for epoch {epoch+1}: {total_train_loss}")
+        print(f"Total train accuracy for epoch {epoch+1}: {total_train_acc}")
+
+        test_loss, test_acc = test(epoch)
+
+        curr_epoch = f"epoch{epoch+1}"
+        curr_dict = dict()
+        curr_dict.update({"train_loss": total_train_loss, 
+                          "train_accuracy": total_train_acc,
+                          "test_loss": test_loss,
+                          "test_accuracy": test_acc})
+        
+        train_stats.update({curr_epoch: curr_dict})
+
+    total_time = time.time() - start_time
+    train_stats.update({"train_time": total_time})
+
+    file_path = f"./stats/{name}/stats.json"
+
+    if (not os.path.exists(f"./stats/{name}")):
+        os.mkdir(f"./stats/{name}")
+
+    with open(file_path, "w") as file:
+        json.dump(train_stats, file)
+
+    graph_adv_examples(adv_examples, name, save=True, show=False)
+
 def train_free(num_of_epochs, name, replay=4, eps=8/255, koef_it=1/255):
     """
     Train function for the model initialized in the main function (implements Free Adversarial Training)
@@ -256,81 +448,6 @@ def train_free(num_of_epochs, name, replay=4, eps=8/255, koef_it=1/255):
         json.dump(train_stats, file)
 
     graph_adv_examples(adv_examples, name, save=True, show=False)
-
-def train_replay(num_of_epochs, name, replay=4):
-    """
-    Train function for the model initialized in the main function (replays same batch n times)
-    Params:
-        num_of_epochs: total number of train epochs
-        name: desired name for the model (used for saving the model parameters in a JSON file)
-        replay: number of replays for each batch during 1 epoch
-    """
-    start_time = time.time()
-    train_stats = dict()
-
-    num_of_epochs = math.ceil(num_of_epochs/replay)
-
-    for epoch in range(num_of_epochs):
-        print(f"Starting epoch: {epoch + 1}")
-
-        model.train()
-
-        total_train_loss = 0
-        train_correct = 0
-        train_total = 0
-
-        for i, (x, y) in enumerate(train_loader):
-            x = x.to(device)
-            y = y.to(device)
-
-            temp_loss = 0
-            temp_correct = 0
-
-            for j in range(replay):
-                y_ = model(x)
-                loss = loss_calc(y_, y)
-
-                optimizer.zero_grad()
-                loss.backward()
-                optimizer.step()
-
-                temp_loss += loss.item()
-                _, y_ = y_.max(1)
-                temp_correct += y_.eq(y).sum().item()
-
-                if (j == replay - 1):
-                    train_total += y.size(0)
-                    total_train_loss += temp_loss / replay
-                    train_correct += temp_correct / replay
-
-        total_train_acc = 100 * train_correct/train_total
-
-        print(f"Total train loss for epoch {epoch+1}: {total_train_loss}")
-        print(f"Total train accuracy for epoch {epoch+1}: {total_train_acc}")
-
-        test_loss, test_acc = test(epoch)
-
-        scheduler.step()
-
-        curr_epoch = f"epoch{epoch+1}"
-        curr_dict = dict()
-        curr_dict.update({"train_loss": total_train_loss, 
-                          "train_accuracy": total_train_acc,
-                          "test_loss": test_loss,
-                          "test_accuracy": test_acc})
-        
-        train_stats.update({curr_epoch: curr_dict})
-
-    total_time = time.time() - start_time
-    train_stats.update({"train_time": total_time})
-
-    file_path = f"./stats/{name}/stats.json"
-
-    if (not os.path.exists(f"./stats/{name}")):
-        os.mkdir(f"./stats/{name}")
-
-    with open(file_path, "w") as file:
-        json.dump(train_stats, file)
 
 def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255, mixed_prec=True):
     """
@@ -458,123 +575,6 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255, mixed_prec=True):
         #     break
 
         # prev_acc = adv_accuracy
-
-    total_time = time.time() - start_time
-    train_stats.update({"train_time": total_time})
-
-    file_path = f"./stats/{name}/stats.json"
-
-    if (not os.path.exists(f"./stats/{name}")):
-        os.mkdir(f"./stats/{name}")
-
-    with open(file_path, "w") as file:
-        json.dump(train_stats, file)
-
-    graph_adv_examples(adv_examples, name, save=True, show=False)
-
-def train_pgd(num_of_epochs, name, eps=8/255, koef_it=1/255, steps=7, mixed_prec=True):
-    """
-    Train function for the model initialized in the main function (implements training with PGD)
-    Params:
-        num_of_epochs: total number of train epochs
-        name: desired name for the model (used for saving the model parameters in a JSON file)
-        eps: maximum total perturbation
-        koef_it: maximum change threshold of individual pixels in given data for each iteration
-        steps: number of iterations
-        mixed_prec: toggle for mixed precision training
-    """
-    start_time = time.time()
-    train_stats = dict()
-
-    adv_examples = dict()
-
-    if mixed_prec:
-        scaler = GradScaler()
-
-    for epoch in range(num_of_epochs):
-        print(f"Starting epoch: {epoch + 1}")
-
-        model.train()
-
-        total_train_loss = 0
-        train_correct = 0
-        train_total = 0
-
-        for i, (x, y) in enumerate(train_loader):
-            x = x.to(device)
-            y = y.to(device)
-
-            adv_imgs = x.clone().detach()
-
-            for _ in range(steps):
-                adv_imgs = adv_imgs.to(device)
-                adv_imgs.requires_grad = True
-
-                with autocast(enabled=mixed_prec):
-                    y_ = model(adv_imgs)
-                    if (torch.any(torch.isnan(y_))):
-                        print("NaNs in output detected.")
-                    loss = loss_calc(y_, y)
-
-                optimizer.zero_grad()
-
-                if mixed_prec:
-                    scaler.scale(loss).backward()
-                else:
-                    loss.backward()
-
-                data_grad = adv_imgs.grad.data
-
-                with torch.no_grad():
-                    adv_imgs = adv_imgs.detach() + koef_it * data_grad.sign()
-                    delta = torch.clamp(adv_imgs - x, min=-eps, max=eps)
-                    adv_imgs = torch.clamp(x + delta, min=0, max=1).detach()
-
-            with autocast(enabled=mixed_prec):
-                y_ = model(adv_imgs)
-                if (torch.any(torch.isnan(y_))):
-                    print("NaNs in output detected.")
-                loss = loss_calc(y_, y)
-
-            optimizer.zero_grad()
-
-            if mixed_prec:
-                scaler.scale(loss).backward()
-                scaler.step(optimizer)
-                scaler.update()
-            else:
-                loss.backward()
-                optimizer.step()
-
-            total_train_loss += loss.item()
-            _, y_ = y_.max(1)
-            train_total += y.size(0)
-            train_correct += y_.eq(y).sum().item()
-
-            scheduler.step()
-            
-            if (((epoch + 1) % 4 == 0) and (i == 0)):
-                adv_list = list()
-                for i in range(4):
-                    adv_example = AdvExample(classes_map[y[i].item()], (input[i]).detach().cpu().numpy())
-                    adv_list.append(adv_example)
-                adv_examples.update({epoch+1: adv_list})
-
-        total_train_acc = 100 * train_correct/train_total
-
-        print(f"Total train loss for epoch {epoch+1}: {total_train_loss}")
-        print(f"Total train accuracy for epoch {epoch+1}: {total_train_acc}")
-
-        test_loss, test_acc = test(epoch)
-
-        curr_epoch = f"epoch{epoch+1}"
-        curr_dict = dict()
-        curr_dict.update({"train_loss": total_train_loss, 
-                          "train_accuracy": total_train_acc,
-                          "test_loss": test_loss,
-                          "test_accuracy": test_acc})
-        
-        train_stats.update({curr_epoch: curr_dict})
 
     total_time = time.time() - start_time
     train_stats.update({"train_time": total_time})
@@ -830,7 +830,6 @@ if __name__ == "__main__":
     # Train model using mixed precision training and save it
 
     # model = ResidualNetwork18().to(device)
-    # model = resnet18().to(device)
     # model_name = f"resnet18_first_mixed"
     # model_save_path= f"./models/{model_name}.pt"
     
