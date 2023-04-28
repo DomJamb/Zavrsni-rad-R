@@ -318,7 +318,7 @@ def train_pgd(num_of_epochs, name, eps=8/255, koef_it=1/255, steps=7, mixed_prec
             if (((epoch + 1) % 4 == 0) and (i == 0)):
                 adv_list = list()
                 for i in range(4):
-                    adv_example = AdvExample(classes_map[y[i].item()], (input[i]).detach().cpu().numpy())
+                    adv_example = AdvExample(classes_map[y[i].item()], (adv_imgs[i]).detach().cpu().numpy())
                     adv_list.append(adv_example)
                 adv_examples.update({epoch+1: adv_list})
 
