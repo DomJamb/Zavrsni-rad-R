@@ -280,14 +280,14 @@ def train_replay(num_of_epochs, name, replay=4):
     with open(accs_fp, "w") as file:
         json.dump(train_accuracies, file)
 
-def train_pgd(num_of_epochs, name, eps=8/255, koef_it=1/255, steps=7, mixed_prec=True):
+def train_pgd(num_of_epochs, name, eps=8/255, alpha=2/255, steps=7, mixed_prec=True):
     """
     Train function for the model initialized in the main function (implements training with PGD)
     Params:
         num_of_epochs: total number of train epochs
         name: desired name for the model (used for saving the model parameters in a JSON file)
         eps: maximum total perturbation
-        koef_it: maximum change threshold of individual pixels in given data for each iteration
+        alpha: maximum change threshold of individual pixels in given data for each iteration
         steps: number of iterations
         mixed_prec: toggle for mixed precision training
     """
@@ -320,6 +320,7 @@ def train_pgd(num_of_epochs, name, eps=8/255, koef_it=1/255, steps=7, mixed_prec
                 adv_y = y
 
             adv_imgs = x.clone().detach()
+            adv_imgs = torch.clamp(adv_imgs + torch.zeros_like(adv_imgs).uniform_(-eps, eps), min=0, max=1)
 
             for _ in range(steps):
                 adv_imgs = adv_imgs.to(device)
@@ -341,7 +342,7 @@ def train_pgd(num_of_epochs, name, eps=8/255, koef_it=1/255, steps=7, mixed_prec
                 data_grad = adv_imgs.grad.data
 
                 with torch.no_grad():
-                    adv_imgs = adv_imgs.detach() + koef_it * data_grad.sign()
+                    adv_imgs = adv_imgs.detach() + alpha * data_grad.sign()
                     delta = torch.clamp(adv_imgs - x, min=-eps, max=eps)
                     adv_imgs = torch.clamp(x + delta, min=0, max=1).detach()
 
@@ -953,7 +954,7 @@ if __name__ == "__main__":
     # model_save_path= f"./models/{model_name}.pt"
     
     # loss_calc = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(model.parameters(), lr=0.2, momentum=0.9, weight_decay=5e-4)
+    # optimizer = optim.SGD(model.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
     # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs)
 
     # train_pgd(epochs, model_name)
