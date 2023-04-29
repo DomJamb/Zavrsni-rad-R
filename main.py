@@ -315,6 +315,10 @@ def train_pgd(num_of_epochs, name, eps=8/255, koef_it=1/255, steps=7, mixed_prec
             x = x.to(device)
             y = y.to(device)
 
+            if (i == 0):
+                adv_x = x
+                adv_y = y
+
             adv_imgs = x.clone().detach()
 
             for _ in range(steps):
@@ -381,12 +385,22 @@ def train_pgd(num_of_epochs, name, eps=8/255, koef_it=1/255, steps=7, mixed_prec
 
         test_loss, test_acc = test(epoch)
 
+        adv_x = attack_pgd(model, adv_x, adv_y, eps=8/255, koef_it=1/255, steps=5, device=device).to(device) 
+        adv_y_ = model(adv_x)
+            
+        _, adv_y_ = adv_y_.max(1)
+        adv_total = adv_y.size(0)
+        adv_correct = adv_y_.eq(adv_y).sum().item()
+        adv_accuracy = 100 * adv_correct / adv_total
+
         curr_epoch = f"epoch{epoch+1}"
         curr_dict = dict()
+
         curr_dict.update({"train_loss": total_train_loss, 
-                          "train_accuracy": total_train_acc,
-                          "test_loss": test_loss,
-                          "test_accuracy": test_acc})
+                        "train_accuracy": total_train_acc,
+                        "test_loss": test_loss,
+                        "test_accuracy": test_acc,
+                        "adv_accuracy": adv_accuracy})
         
         train_stats.update({curr_epoch: curr_dict})
 
@@ -961,6 +975,7 @@ if __name__ == "__main__":
 
     # show_loss(model_name, save=True, show=False)
     # show_accuracies(model_name, save=True, show=False)
+    # show_adversarial_accuracies(model_name, save=True, show=False)
     # show_train_loss(model_name, save=True, show=False)
     # show_train_accs(model_name, save=True, show=False)
     # get_train_time(model_name)
