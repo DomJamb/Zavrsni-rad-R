@@ -1015,26 +1015,26 @@ if __name__ == "__main__":
     # ##################################################
     # # Load model and evaluate it
     
-    # model = ResidualNetwork18().to(device)
-    # model_name = f"resnet18_free_epochs_{math.ceil(epochs/replay)}_replay_{replay}_lr_0.02"
-    # model_save_path= f"./models/{model_name}.pt"
-    # model.load_state_dict(torch.load(model_save_path))
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_free_epochs_{math.ceil(epochs/replay)}_replay_{replay}_lr_0.02"
+    model_save_path= f"./models/{model_name}.pt"
+    model.load_state_dict(torch.load(model_save_path))
 
-    # loss_calc = nn.CrossEntropyLoss()
+    loss_calc = nn.CrossEntropyLoss()
 
-    # print("Resnet18 Free")
-    # test()
-    # test_robustness()
+    print("Resnet18 Free")
+    test()
+    test_robustness()
 
-    # robustness_over_steps = test_robustness_multiple_steps()
+    robustness_over_steps = test_robustness_multiple_steps()
 
-    # show_loss(model_name, save=True, show=False)
-    # show_accuracies(model_name, save=True, show=False)
-    # show_adversarial_accuracies(model_name, save=True, show=False)
-    # show_adversarial_accuracies_varying_steps(robustness_over_steps, model_name, save=True, show=False)
-    # show_train_loss(model_name, save=True, show=False)
-    # show_train_accs(model_name, save=True, show=False)
-    # get_train_time(model_name)
+    show_loss(model_name, save=True, show=False)
+    show_accuracies(model_name, save=True, show=False)
+    show_adversarial_accuracies(model_name, save=True, show=False)
+    show_adversarial_accuracies_varying_steps(robustness_over_steps, model_name, save=True, show=False)
+    show_train_loss(model_name, save=True, show=False)
+    show_train_accs(model_name, save=True, show=False)
+    get_train_time(model_name)
 
     ####################################################################################################
     # ResNet18 Fast without Early Stop
@@ -1058,26 +1058,26 @@ if __name__ == "__main__":
     ##################################################
     # Load model and evaluate it
     
-    # model = ResidualNetwork18().to(device)
-    # model_name = f"resnet18_fast_epochs_{epochs}_lr_0.2_no_early"
-    # model_save_path= f"./models/{model_name}.pt"
-    # model.load_state_dict(torch.load(model_save_path))
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_fast_epochs_{epochs}_lr_0.2_no_early"
+    model_save_path= f"./models/{model_name}.pt"
+    model.load_state_dict(torch.load(model_save_path))
 
-    # loss_calc = nn.CrossEntropyLoss()
+    loss_calc = nn.CrossEntropyLoss()
 
-    # print("Resnet18 Fast, no early stop")
-    # test()
-    # test_robustness()
+    print("Resnet18 Fast, no early stop")
+    test()
+    test_robustness()
 
-    # robustness_over_steps = test_robustness_multiple_steps()
+    robustness_over_steps = test_robustness_multiple_steps()
 
-    # show_loss(model_name, save=True, show=False)
-    # show_accuracies(model_name, save=True, show=False)
-    # show_adversarial_accuracies(model_name, save=True, show=False)
-    # show_adversarial_accuracies_varying_steps(robustness_over_steps, model_name, save=True, show=False)
-    # show_train_loss(model_name, save=True, show=False)
-    # show_train_accs(model_name, save=True, show=False)
-    # get_train_time(model_name)
+    show_loss(model_name, save=True, show=False)
+    show_accuracies(model_name, save=True, show=False)
+    show_adversarial_accuracies(model_name, save=True, show=False)
+    show_adversarial_accuracies_varying_steps(robustness_over_steps, model_name, save=True, show=False)
+    show_train_loss(model_name, save=True, show=False)
+    show_train_accs(model_name, save=True, show=False)
+    get_train_time(model_name)
 
     ####################################################################################################
     # ResNet18 Fast with Early Stop
@@ -1101,23 +1101,23 @@ if __name__ == "__main__":
     ##################################################
     # Load model and evaluate it
     
-    # model = ResidualNetwork18().to(device)
-    # model_name = f"resnet18_fast_epochs_{epochs}_lr_0.2_early"
-    # model_save_path= f"./models/{model_name}.pt"
-    # model.load_state_dict(torch.load(model_save_path))
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_fast_epochs_{epochs}_lr_0.2_early"
+    model_save_path= f"./models/{model_name}.pt"
+    model.load_state_dict(torch.load(model_save_path))
 
-    # loss_calc = nn.CrossEntropyLoss()
+    loss_calc = nn.CrossEntropyLoss()
 
-    # print("Resnet18 Fast, early stop")
-    # test()
-    # test_robustness()
+    print("Resnet18 Fast, early stop")
+    test()
+    test_robustness()
 
-    # robustness_over_steps = test_robustness_multiple_steps()
+    robustness_over_steps = test_robustness_multiple_steps()
 
-    # show_loss(model_name, save=True, show=False)
-    # show_accuracies(model_name, save=True, show=False)
-    # show_adversarial_accuracies(model_name, save=True, show=False)
-    # show_adversarial_accuracies_varying_steps(robustness_over_steps, model_name, save=True, show=False)
-    # show_train_loss(model_name, save=True, show=False)
-    # show_train_accs(model_name, save=True, show=False)
-    # get_train_time(model_name)
+    show_loss(model_name, save=True, show=False)
+    show_accuracies(model_name, save=True, show=False)
+    show_adversarial_accuracies(model_name, save=True, show=False)
+    show_adversarial_accuracies_varying_steps(robustness_over_steps, model_name, save=True, show=False)
+    show_train_loss(model_name, save=True, show=False)
+    show_train_accs(model_name, save=True, show=False)
+    get_train_time(model_name)
