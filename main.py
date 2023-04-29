@@ -370,7 +370,7 @@ def train_pgd(num_of_epochs, name, eps=8/255, alpha=2/255, steps=7, mixed_prec=T
             train_losses.append(loss.item())
             train_accuracies.append(100 * (y_.eq(y).sum().item() / y.size(0)))
             
-            if (((epoch + 1) % 4 == 0) and (i == 0)):
+            if (((epoch + 1) % 16 == 0) and (i == 0)):
                 adv_list = list()
                 for i in range(4):
                     adv_example = AdvExample(classes_map[y[i].item()], (adv_imgs[i]).detach().cpu().numpy())
@@ -470,7 +470,7 @@ def train_free(num_of_epochs, name, replay=4, eps=8/255, koef_it=1/255, mixed_pr
                 adv_x = x
                 adv_y = y
 
-            if (((epoch + 1) % (4 / replay) == 0) and i == 0):
+            if (((epoch + 1) % (16 / replay) == 0) and i == 0):
                 adv_list = list()
                 for j in range(4):
                     adv_example = AdvExample(classes_map[y[j].item()], (x[j] + perturbation[j]).clamp(0, 1.0).detach().cpu().numpy())
@@ -669,7 +669,7 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255, mixed_prec=True, ea
 
             scheduler.step()
             
-            if (((epoch + 1) % 4 == 0) and (i == 0)):
+            if (((epoch + 1) % 16 == 0) and (i == 0)):
                 adv_list = list()
                 for i in range(4):
                     adv_example = AdvExample(classes_map[y[i].item()], (input[i]).detach().cpu().numpy())
@@ -888,36 +888,36 @@ if __name__ == "__main__":
 
     # Train model using mixed precision training and save it
 
-    # model = ResidualNetwork18().to(device)
-    # model_name = f"resnet18_first_mixed"
-    # model_save_path= f"./models/{model_name}.pt"
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_mixed_epochs_{epochs}_lr_0.01"
+    model_save_path= f"./models/{model_name}.pt"
     
-    # loss_calc = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(model.parameters(), lr=0.2, momentum=0.9, weight_decay=5e-4)
-    # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs)
+    loss_calc = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.01, momentum=0.9, weight_decay=5e-4)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs)
 
-    # train_mixed(epochs, model_name)
-    # torch.save(model.state_dict(), model_save_path)
+    train_mixed(epochs, model_name)
+    torch.save(model.state_dict(), model_save_path)
 
     ##################################################
     # Load model and evaluate it
     
-    # model = ResidualNetwork18().to(device)
-    # model_name = f"resnet18_first_mixed"
-    # model_save_path= f"./models/{model_name}.pt"
-    # model.load_state_dict(torch.load(model_save_path))
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_mixed_epochs_{epochs}_lr_0.01"
+    model_save_path= f"./models/{model_name}.pt"
+    model.load_state_dict(torch.load(model_save_path))
 
-    # loss_calc = nn.CrossEntropyLoss()
+    loss_calc = nn.CrossEntropyLoss()
 
-    # print("Resnet18 Fast")
-    # test()
-    # test_robustness()
+    print("Resnet18 Fast")
+    test()
+    test_robustness()
 
-    # show_loss(model_name, save=True, show=False)
-    # show_accuracies(model_name, save=True, show=False)
-    # show_train_loss(model_name, save=True, show=False)
-    # show_train_accs(model_name, save=True, show=False)
-    # get_train_time(model_name)
+    show_loss(model_name, save=True, show=False)
+    show_accuracies(model_name, save=True, show=False)
+    show_train_loss(model_name, save=True, show=False)
+    show_train_accs(model_name, save=True, show=False)
+    get_train_time(model_name)
 
     ####################################################################################################
     # ResNet18 Replay
