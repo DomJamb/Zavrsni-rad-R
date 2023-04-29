@@ -909,7 +909,7 @@ if __name__ == "__main__":
 
     loss_calc = nn.CrossEntropyLoss()
 
-    print("Resnet18 Fast")
+    print("Resnet18 Mixed Precision")
     test()
     test_robustness()
 
