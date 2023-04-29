@@ -154,15 +154,18 @@ def show_adversarial_accuracies_varying_steps(accs, name, save=False, show=True)
     """
     Function for showcasing the adversarial accuracy of a model over varying steps
     Params:
-        accs: list of accuracies over steps
+        accs: dict of accuracies over steps
         name: name of the model
         save: option to save the image
         show: option to show the image
     """
     fig = plt.figure(figsize=(16, 10))
 
+    steps = list(accs.keys())
+    vals = list(accs.values())
+
     # Plot the adversarial accuracies over varying number of PGD steps
-    plt.plot(range(1, len(accs)+1), np.array(accs), "g-", label="Adversarial accuracy")
+    plt.plot(np.array(steps), np.array(vals), "g-", label="Adversarial accuracy")
 
     plt.xlabel("Number of PGD steps", fontsize=12)
     plt.ylabel("Accuracy on adversarial examples", fontsize=12)
