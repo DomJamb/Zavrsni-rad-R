@@ -369,8 +369,6 @@ def train_pgd(num_of_epochs, name, eps=8/255, alpha=2/255, steps=7, mixed_prec=T
 
             train_losses.append(loss.item())
             train_accuracies.append(100 * (y_.eq(y).sum().item() / y.size(0)))
-
-            scheduler.step()
             
             if (((epoch + 1) % 4 == 0) and (i == 0)):
                 adv_list = list()
@@ -385,6 +383,8 @@ def train_pgd(num_of_epochs, name, eps=8/255, alpha=2/255, steps=7, mixed_prec=T
         print(f"Total train accuracy for epoch {epoch+1}: {total_train_acc}")
 
         test_loss, test_acc = test(epoch)
+
+        scheduler.step()
 
         adv_x = attack_pgd(model, adv_x, adv_y, eps=8/255, koef_it=1/255, steps=5, device=device).to(device) 
         adv_y_ = model(adv_x)
@@ -962,28 +962,69 @@ if __name__ == "__main__":
 
     # Train model using PGD training and save it
 
-    # model = ResidualNetwork18().to(device)
-    # model_name = f"resnet18_pgd_epochs_{epochs}_lr_0.1"
-    # model_save_path= f"./models/{model_name}.pt"
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_pgd_epochs_{epochs}_lr_0.1"
+    model_save_path= f"./models/{model_name}.pt"
     
-    # loss_calc = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(model.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
-    # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs)
+    loss_calc = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs)
 
-    # train_pgd(epochs, model_name)
-    # torch.save(model.state_dict(), model_save_path)
+    train_pgd(epochs, model_name)
+    torch.save(model.state_dict(), model_save_path)
 
     ##################################################
     # Load model and evaluate it
     
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_pgd_epochs_{epochs}_lr_0.1"
+    model_save_path= f"./models/{model_name}.pt"
+    model.load_state_dict(torch.load(model_save_path))
+
+    loss_calc = nn.CrossEntropyLoss()
+
+    print("Resnet18 PGD")
+    test()
+    test_robustness()
+
+    robustness_over_steps = test_robustness_multiple_steps()
+
+    show_loss(model_name, save=True, show=False)
+    show_accuracies(model_name, save=True, show=False)
+    show_adversarial_accuracies(model_name, save=True, show=False)
+    show_adversarial_accuracies_varying_steps(robustness_over_steps, model_name, save=True, show=False)
+    show_train_loss(model_name, save=True, show=False)
+    show_train_accs(model_name, save=True, show=False)
+    get_train_time(model_name)
+
+    ####################################################################################################
+    # ResNet18 Free
+    ##################################################
+
+    # Train model using free adversarial training and save it
+
     # model = ResidualNetwork18().to(device)
-    # model_name = f"resnet18_pgd_epochs_{epochs}_lr_0.1"
+    # model_name = f"resnet18_free_epochs_{math.ceil(epochs/replay)}_replay_{replay}_lr_0.02"
+    # model_save_path= f"./models/{model_name}.pt"
+    
+    # loss_calc = nn.CrossEntropyLoss()
+    # optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
+    # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=(math.ceil(epochs/replay)))
+
+    # train_free(epochs, model_name, replay)
+    # torch.save(model.state_dict(), model_save_path)
+
+    # ##################################################
+    # # Load model and evaluate it
+    
+    # model = ResidualNetwork18().to(device)
+    # model_name = f"resnet18_free_epochs_{math.ceil(epochs/replay)}_replay_{replay}_lr_0.02"
     # model_save_path= f"./models/{model_name}.pt"
     # model.load_state_dict(torch.load(model_save_path))
 
     # loss_calc = nn.CrossEntropyLoss()
 
-    # print("Resnet18 PGD")
+    # print("Resnet18 Free")
     # test()
     # test_robustness()
 
@@ -998,88 +1039,47 @@ if __name__ == "__main__":
     # get_train_time(model_name)
 
     ####################################################################################################
-    # ResNet18 Free
-    ##################################################
-
-    # Train model using free adversarial training and save it
-
-    model = ResidualNetwork18().to(device)
-    model_name = f"resnet18_free_epochs_{math.ceil(epochs/replay)}_replay_{replay}_lr_0.02"
-    model_save_path= f"./models/{model_name}.pt"
-    
-    loss_calc = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=(math.ceil(epochs/replay)))
-
-    train_free(epochs, model_name, replay)
-    torch.save(model.state_dict(), model_save_path)
-
-    # ##################################################
-    # # Load model and evaluate it
-    
-    model = ResidualNetwork18().to(device)
-    model_name = f"resnet18_free_epochs_{math.ceil(epochs/replay)}_replay_{replay}_lr_0.02"
-    model_save_path= f"./models/{model_name}.pt"
-    model.load_state_dict(torch.load(model_save_path))
-
-    loss_calc = nn.CrossEntropyLoss()
-
-    print("Resnet18 Free")
-    test()
-    test_robustness()
-
-    robustness_over_steps = test_robustness_multiple_steps()
-
-    show_loss(model_name, save=True, show=False)
-    show_accuracies(model_name, save=True, show=False)
-    show_adversarial_accuracies(model_name, save=True, show=False)
-    show_adversarial_accuracies_varying_steps(robustness_over_steps, model_name, save=True, show=False)
-    show_train_loss(model_name, save=True, show=False)
-    show_train_accs(model_name, save=True, show=False)
-    get_train_time(model_name)
-
-    ####################################################################################################
     # ResNet18 Fast without Early Stop
     ##################################################
 
     # Train model using fast adversarial training and save it
 
-    model = ResidualNetwork18().to(device)
-    model_name = f"resnet18_fast_epochs_{epochs}_lr_0.2_no_early"
-    model_save_path= f"./models/{model_name}.pt"
+    # model = ResidualNetwork18().to(device)
+    # model_name = f"resnet18_fast_epochs_{epochs}_lr_0.2_no_early"
+    # model_save_path= f"./models/{model_name}.pt"
     
-    loss_calc = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.2, momentum=0.9, weight_decay=5e-4)
+    # loss_calc = nn.CrossEntropyLoss()
+    # optimizer = optim.SGD(model.parameters(), lr=0.2, momentum=0.9, weight_decay=5e-4)
 
-    total_steps = epochs * len(train_loader)
-    scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0, max_lr=0.2, step_size_up=(total_steps / 2), step_size_down=(total_steps / 2))
+    # total_steps = epochs * len(train_loader)
+    # scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0, max_lr=0.2, step_size_up=(total_steps / 2), step_size_down=(total_steps / 2))
 
-    train_fast(epochs, model_name)
-    torch.save(model.state_dict(), model_save_path)
+    # train_fast(epochs, model_name)
+    # torch.save(model.state_dict(), model_save_path)
 
     ##################################################
     # Load model and evaluate it
     
-    model = ResidualNetwork18().to(device)
-    model_name = f"resnet18_fast_epochs_{epochs}_lr_0.2_no_early"
-    model_save_path= f"./models/{model_name}.pt"
-    model.load_state_dict(torch.load(model_save_path))
+    # model = ResidualNetwork18().to(device)
+    # model_name = f"resnet18_fast_epochs_{epochs}_lr_0.2_no_early"
+    # model_save_path= f"./models/{model_name}.pt"
+    # model.load_state_dict(torch.load(model_save_path))
 
-    loss_calc = nn.CrossEntropyLoss()
+    # loss_calc = nn.CrossEntropyLoss()
 
-    print("Resnet18 Fast, no early stop")
-    test()
-    test_robustness()
+    # print("Resnet18 Fast, no early stop")
+    # test()
+    # test_robustness()
 
-    robustness_over_steps = test_robustness_multiple_steps()
+    # robustness_over_steps = test_robustness_multiple_steps()
 
-    show_loss(model_name, save=True, show=False)
-    show_accuracies(model_name, save=True, show=False)
-    show_adversarial_accuracies(model_name, save=True, show=False)
-    show_adversarial_accuracies_varying_steps(robustness_over_steps, model_name, save=True, show=False)
-    show_train_loss(model_name, save=True, show=False)
-    show_train_accs(model_name, save=True, show=False)
-    get_train_time(model_name)
+    # show_loss(model_name, save=True, show=False)
+    # show_accuracies(model_name, save=True, show=False)
+    # show_adversarial_accuracies(model_name, save=True, show=False)
+    # show_adversarial_accuracies_varying_steps(robustness_over_steps, model_name, save=True, show=False)
+    # show_train_loss(model_name, save=True, show=False)
+    # show_train_accs(model_name, save=True, show=False)
+    # get_train_time(model_name)
 
     ####################################################################################################
     # ResNet18 Fast with Early Stop
@@ -1087,39 +1087,39 @@ if __name__ == "__main__":
 
     # Train model using fast adversarial training and save it
 
-    model = ResidualNetwork18().to(device)
-    model_name = f"resnet18_fast_epochs_{epochs}_lr_0.2_early"
-    model_save_path= f"./models/{model_name}.pt"
+    # model = ResidualNetwork18().to(device)
+    # model_name = f"resnet18_fast_epochs_{epochs}_lr_0.2_early"
+    # model_save_path= f"./models/{model_name}.pt"
     
-    loss_calc = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.2, momentum=0.9, weight_decay=5e-4)
+    # loss_calc = nn.CrossEntropyLoss()
+    # optimizer = optim.SGD(model.parameters(), lr=0.2, momentum=0.9, weight_decay=5e-4)
 
-    total_steps = epochs * len(train_loader)
-    scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0, max_lr=0.2, step_size_up=(total_steps / 2), step_size_down=(total_steps / 2))
+    # total_steps = epochs * len(train_loader)
+    # scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0, max_lr=0.2, step_size_up=(total_steps / 2), step_size_down=(total_steps / 2))
 
-    train_fast(epochs, model_name, early_stop=True)
-    torch.save(model.state_dict(), model_save_path)
+    # train_fast(epochs, model_name, early_stop=True)
+    # torch.save(model.state_dict(), model_save_path)
 
     ##################################################
     # Load model and evaluate it
     
-    model = ResidualNetwork18().to(device)
-    model_name = f"resnet18_fast_epochs_{epochs}_lr_0.2_early"
-    model_save_path= f"./models/{model_name}.pt"
-    model.load_state_dict(torch.load(model_save_path))
+    # model = ResidualNetwork18().to(device)
+    # model_name = f"resnet18_fast_epochs_{epochs}_lr_0.2_early"
+    # model_save_path= f"./models/{model_name}.pt"
+    # model.load_state_dict(torch.load(model_save_path))
 
-    loss_calc = nn.CrossEntropyLoss()
+    # loss_calc = nn.CrossEntropyLoss()
 
-    print("Resnet18 Fast, early stop")
-    test()
-    test_robustness()
+    # print("Resnet18 Fast, early stop")
+    # test()
+    # test_robustness()
 
-    robustness_over_steps = test_robustness_multiple_steps()
+    # robustness_over_steps = test_robustness_multiple_steps()
 
-    show_loss(model_name, save=True, show=False)
-    show_accuracies(model_name, save=True, show=False)
-    show_adversarial_accuracies(model_name, save=True, show=False)
-    show_adversarial_accuracies_varying_steps(robustness_over_steps, model_name, save=True, show=False)
-    show_train_loss(model_name, save=True, show=False)
-    show_train_accs(model_name, save=True, show=False)
-    get_train_time(model_name)
+    # show_loss(model_name, save=True, show=False)
+    # show_accuracies(model_name, save=True, show=False)
+    # show_adversarial_accuracies(model_name, save=True, show=False)
+    # show_adversarial_accuracies_varying_steps(robustness_over_steps, model_name, save=True, show=False)
+    # show_train_loss(model_name, save=True, show=False)
+    # show_train_accs(model_name, save=True, show=False)
+    # get_train_time(model_name)
