@@ -2,6 +2,7 @@ import os
 import json
 import time
 import math
+import copy
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -561,8 +562,7 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255, mixed_prec=True, ea
     train_losses = list()
     train_accuracies = list()
 
-    if early_stop:
-        prev_acc = 0
+    prev_acc = 0
 
     if mixed_prec:
         scaler = GradScaler()
@@ -580,7 +580,7 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255, mixed_prec=True, ea
             x = x.to(device)
             y = y.to(device)
 
-            if early_stop and (i == 0):
+            if (i == 0):
                 adv_x = x
                 adv_y = y
 
@@ -654,37 +654,31 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255, mixed_prec=True, ea
 
         test_loss, test_acc = test(epoch)
 
-        if early_stop:
-            adv_x = attack_pgd(model, adv_x, adv_y, eps=8/255, koef_it=1/255, steps=5, device=device).to(device) 
-            adv_y_ = model(adv_x)
-                
-            _, adv_y_ = adv_y_.max(1)
-            adv_total = adv_y.size(0)
-            adv_correct = adv_y_.eq(adv_y).sum().item()
-            adv_accuracy = 100 * adv_correct / adv_total
+        adv_x = attack_pgd(model, adv_x, adv_y, eps=8/255, koef_it=1/255, steps=5, device=device).to(device) 
+        adv_y_ = model(adv_x)
+            
+        _, adv_y_ = adv_y_.max(1)
+        adv_total = adv_y.size(0)
+        adv_correct = adv_y_.eq(adv_y).sum().item()
+        adv_accuracy = 100 * adv_correct / adv_total
 
         curr_epoch = f"epoch{epoch+1}"
         curr_dict = dict()
 
-        if early_stop:
-            curr_dict.update({"train_loss": total_train_loss, 
-                            "train_accuracy": total_train_acc,
-                            "test_loss": test_loss,
-                            "test_accuracy": test_acc,
-                            "adv_accuracy": adv_accuracy})
-        else:
-            curr_dict.update({"train_loss": total_train_loss, 
-                "train_accuracy": total_train_acc,
-                "test_loss": test_loss,
-                "test_accuracy": test_acc})
+        curr_dict.update({"train_loss": total_train_loss, 
+                        "train_accuracy": total_train_acc,
+                        "test_loss": test_loss,
+                        "test_accuracy": test_acc,
+                        "adv_accuracy": adv_accuracy})
         
         train_stats.update({curr_epoch: curr_dict})
 
-        if early_stop and (adv_accuracy < prev_acc - 0.2):
+        if early_stop and (adv_accuracy < prev_acc - 20):
             break
 
-        if early_stop:
-            prev_acc = adv_accuracy
+        prev_acc = adv_accuracy
+
+        best_model_states = copy.deepcopy(model.state_dict())
 
     total_time = time.time() - start_time
     train_stats.update({"train_time": total_time})
@@ -704,6 +698,8 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255, mixed_prec=True, ea
 
     with open(accs_fp, "w") as file:
         json.dump(train_accuracies, file)
+
+    model.load_state_dict(best_model_states)
 
     graph_adv_examples(adv_examples, name, save=True, show=False)
 
