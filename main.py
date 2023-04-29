@@ -797,7 +797,7 @@ def test_robustness_multiple_steps(max_steps=20):
     """
     adv_accs = list()
 
-    for i in range(1, max_steps+1):
+    for i in range(5, max_steps+1, 5):
         adv_accs.append(test_robustness(i))
 
     return adv_accs
