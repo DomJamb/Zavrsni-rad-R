@@ -960,40 +960,40 @@ if __name__ == "__main__":
 
     # Train model using PGD training and save it
 
-    model = ResidualNetwork18().to(device)
-    model_name = f"resnet18_pgd_epochs_{epochs}_lr_0.1"
-    model_save_path= f"./models/{model_name}.pt"
+    # model = ResidualNetwork18().to(device)
+    # model_name = f"resnet18_pgd_epochs_{epochs}_lr_0.1"
+    # model_save_path= f"./models/{model_name}.pt"
     
-    loss_calc = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
-    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs)
+    # loss_calc = nn.CrossEntropyLoss()
+    # optimizer = optim.SGD(model.parameters(), lr=0.1, momentum=0.9, weight_decay=5e-4)
+    # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs)
 
-    train_pgd(epochs, model_name)
-    torch.save(model.state_dict(), model_save_path)
+    # train_pgd(epochs, model_name)
+    # torch.save(model.state_dict(), model_save_path)
 
     ##################################################
     # Load model and evaluate it
     
-    model = ResidualNetwork18().to(device)
-    model_name = f"resnet18_pgd_epochs_{epochs}_lr_0.1"
-    model_save_path= f"./models/{model_name}.pt"
-    model.load_state_dict(torch.load(model_save_path))
+    # model = ResidualNetwork18().to(device)
+    # model_name = f"resnet18_pgd_epochs_{epochs}_lr_0.1"
+    # model_save_path= f"./models/{model_name}.pt"
+    # model.load_state_dict(torch.load(model_save_path))
 
-    loss_calc = nn.CrossEntropyLoss()
+    # loss_calc = nn.CrossEntropyLoss()
 
-    print("Resnet18 PGD")
-    test()
-    test_robustness()
+    # print("Resnet18 PGD")
+    # test()
+    # test_robustness()
 
-    robustness_over_steps = test_robustness_multiple_steps()
+    # robustness_over_steps = test_robustness_multiple_steps()
 
-    show_loss(model_name, save=True, show=False)
-    show_accuracies(model_name, save=True, show=False)
-    show_adversarial_accuracies(model_name, save=True, show=False)
-    show_adversarial_accuracies_varying_steps(robustness_over_steps, model_name, save=True, show=False)
-    show_train_loss(model_name, save=True, show=False)
-    show_train_accs(model_name, save=True, show=False)
-    get_train_time(model_name)
+    # show_loss(model_name, save=True, show=False)
+    # show_accuracies(model_name, save=True, show=False)
+    # show_adversarial_accuracies(model_name, save=True, show=False)
+    # show_adversarial_accuracies_varying_steps(robustness_over_steps, model_name, save=True, show=False)
+    # show_train_loss(model_name, save=True, show=False)
+    # show_train_accs(model_name, save=True, show=False)
+    # get_train_time(model_name)
 
     ####################################################################################################
     # ResNet18 Free
