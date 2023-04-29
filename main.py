@@ -831,7 +831,7 @@ if __name__ == "__main__":
     test_loader = torch.utils.data.DataLoader(test_data, batch_size=100, shuffle=False)
 
     epochs = 80
-    replay = 4
+    replay = 8
 
     classes_map = {
         0: "airplane",
