@@ -28,8 +28,8 @@ def show_loss(name, save=False, show=True):
             test_loss.append(data[key]["test_loss"])
 
     # Plot the train and test loss over epochs
-    plt.plot(range(num_of_epochs), np.array(train_loss), "g-", label="Train loss")
-    plt.plot(range(num_of_epochs), np.array(test_loss), "b-", label="Test loss")
+    plt.plot(range(1, num_of_epochs+1), np.array(train_loss), "g-", label="Train loss")
+    plt.plot(range(1, num_of_epochs+1), np.array(test_loss), "b-", label="Test loss")
 
     plt.xlabel("Epochs", labelpad=10, fontsize=12)
     plt.ylabel("Loss", labelpad=10, fontsize=12)
@@ -61,7 +61,7 @@ def show_train_loss(name, save=False, show=True):
         data = json.load(file)
 
     # Plot the train loss over batches
-    plt.plot(range(len(data)), np.array(data), "g-", label="Train loss")
+    plt.plot(range(1, len(data)+1), np.array(data), "g-", label="Train loss")
 
     plt.xlabel("Batches", labelpad=10, fontsize=12)
     plt.ylabel("Loss", labelpad=10, fontsize=12)
@@ -93,7 +93,7 @@ def show_train_accs(name, save=False, show=True):
         data = json.load(file)
 
     # Plot the train accuracy over batches
-    plt.plot(range(len(data)), np.array(data), "g-", label="Train accuracy")
+    plt.plot(range(1, len(data)+1), np.array(data), "g-", label="Train accuracy")
 
     plt.xlabel("Batches", labelpad=10, fontsize=12)
     plt.ylabel("Accuracy", labelpad=10, fontsize=12)
@@ -134,8 +134,8 @@ def show_accuracies(name, save=False, show=True):
             test_acc.append(data[key]["test_accuracy"])
 
     # Plot the train and test accuracies over epochs
-    plt.plot(range(num_of_epochs), np.array(train_acc), "g-", label="Train accuracy")
-    plt.plot(range(num_of_epochs), np.array(test_acc), "b-", label="Test accuracy")
+    plt.plot(range(1, num_of_epochs+1), np.array(train_acc), "g-", label="Train accuracy")
+    plt.plot(range(1, num_of_epochs+1), np.array(test_acc), "b-", label="Test accuracy")
 
     plt.xlabel("Epochs", fontsize=12)
     plt.ylabel("Accuracy", fontsize=12)
@@ -145,6 +145,33 @@ def show_accuracies(name, save=False, show=True):
 
     if save:
         save_path = f"./stats/{name}/accuracies.png"
+        plt.savefig(save_path)
+
+    if show:
+        plt.show()
+
+def show_adversarial_accuracies_varying_steps(accs, name, save=False, show=True):
+    """
+    Function for showcasing the adversarial accuracy of a model over varying steps
+    Params:
+        accs: list of accuracies over steps
+        name: name of the model
+        save: option to save the image
+        show: option to show the image
+    """
+    fig = plt.figure(figsize=(16, 10))
+
+    # Plot the adversarial accuracies over varying number of PGD steps
+    plt.plot(range(1, len(accs)+1), np.array(accs), "g-", label="Adversarial accuracy")
+
+    plt.xlabel("Number of PGD steps", fontsize=12)
+    plt.ylabel("Accuracy on adversarial examples", fontsize=12)
+
+    plt.title("Accuracy on adversarial examples over varying number of PGD steps")
+    plt.legend(fontsize=12)
+
+    if save:
+        save_path = f"./stats/{name}/adv_accuracies_varying_steps.png"
         plt.savefig(save_path)
 
     if show:
@@ -174,7 +201,7 @@ def show_adversarial_accuracies(name, save=False, show=True):
             adv_acc.append(data[key]["adv_accuracy"])
 
     # Plot the train and test accuracies over epochs
-    plt.plot(range(num_of_epochs), np.array(adv_acc), "g-", label="Adversarial accuracy")
+    plt.plot(range(1, num_of_epochs+1), np.array(adv_acc), "g-", label="Adversarial accuracy")
 
     plt.xlabel("Epochs", fontsize=12)
     plt.ylabel("Accuracy on adversarial examples", fontsize=12)

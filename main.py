@@ -16,7 +16,7 @@ from torchvision.models import resnet18
 
 from attack_funcs import attack_pgd, attack_pgd_directed
 from ResidualNetwork18 import ResidualNetwork18
-from graphing_funcs import show_loss, show_accuracies, graph_adv_examples, show_train_loss, show_train_accs, show_adversarial_accuracies
+from graphing_funcs import show_loss, show_accuracies, graph_adv_examples, show_train_loss, show_train_accs, show_adversarial_accuracies, show_adversarial_accuracies_varying_steps
 from AdvExample import AdvExample
 from util import get_train_time
 
@@ -764,7 +764,7 @@ def test(curr_epoch=0):
 
     return (total_test_loss, total_test_acc)
 
-def test_robustness():
+def test_robustness(num_steps=20):
     """
     Function for testing the robustness of the model initialized in the main function using adversarial images generated using PGD attack
     """
@@ -776,7 +776,7 @@ def test_robustness():
     for (x, y) in test_loader:
         x = x.to(device)
         y = y.to(device)
-        adversarial = attack_pgd(model, x, y, eps=8/255, koef_it=1/255, steps=20, device=device)
+        adversarial = attack_pgd(model, x, y, eps=8/255, koef_it=1/255, steps=num_steps, device=device)
 
         y_ = model(adversarial)
         _, y_ = y_.max(1)
@@ -785,9 +785,20 @@ def test_robustness():
 
     total_adv_acc = 100 * adv_correct/adv_total
 
-    print(f"Accuracy on adversarial examples generated using PGD attack: {total_adv_acc}%")
+    print(f"Accuracy on adversarial examples generated using PGD attack with {num_steps} steps: {total_adv_acc}%")
 
     return total_adv_acc
+
+def test_robustness_multiple_steps(max_steps=20):
+    """
+    Function for testing the robustness of the model initialized in the main function using adversarial images generated using PGD attack with varying number of steps
+    """
+    adv_accs = list()
+
+    for i in range(1, max_steps+1):
+        adv_accs.append(test_robustness(i))
+
+    return adv_accs
 
 if __name__ == "__main__":
 
@@ -950,7 +961,7 @@ if __name__ == "__main__":
     # Train model using PGD training and save it
 
     model = ResidualNetwork18().to(device)
-    model_name = f"resnet18_first_pgd"
+    model_name = f"resnet18_pgd_epochs_{epochs}_lr_0.1"
     model_save_path= f"./models/{model_name}.pt"
     
     loss_calc = nn.CrossEntropyLoss()
@@ -964,7 +975,7 @@ if __name__ == "__main__":
     # Load model and evaluate it
     
     model = ResidualNetwork18().to(device)
-    model_name = f"resnet18_first_pgd"
+    model_name = f"resnet18_pgd_epochs_{epochs}_lr_0.1"
     model_save_path= f"./models/{model_name}.pt"
     model.load_state_dict(torch.load(model_save_path))
 
@@ -974,9 +985,12 @@ if __name__ == "__main__":
     test()
     test_robustness()
 
+    robustness_over_steps = test_robustness_multiple_steps()
+
     show_loss(model_name, save=True, show=False)
     show_accuracies(model_name, save=True, show=False)
     show_adversarial_accuracies(model_name, save=True, show=False)
+    show_adversarial_accuracies_varying_steps(robustness_over_steps, model_name, save=True, show=False)
     show_train_loss(model_name, save=True, show=False)
     show_train_accs(model_name, save=True, show=False)
     get_train_time(model_name)
@@ -1012,9 +1026,12 @@ if __name__ == "__main__":
     # test()
     # test_robustness()
 
+    # robustness_over_steps = test_robustness_multiple_steps()
+
     # show_loss(model_name, save=True, show=False)
     # show_accuracies(model_name, save=True, show=False)
     # show_adversarial_accuracies(model_name, save=True, show=False)
+    # show_adversarial_accuracies_varying_steps(robustness_over_steps, model_name, save=True, show=False)
     # show_train_loss(model_name, save=True, show=False)
     # show_train_accs(model_name, save=True, show=False)
     # get_train_time(model_name)
@@ -1052,9 +1069,12 @@ if __name__ == "__main__":
     # test()
     # test_robustness()
 
+    # robustness_over_steps = test_robustness_multiple_steps()
+
     # show_loss(model_name, save=True, show=False)
     # show_accuracies(model_name, save=True, show=False)
     # show_adversarial_accuracies(model_name, save=True, show=False)
+    # show_adversarial_accuracies_varying_steps(robustness_over_steps, model_name, save=True, show=False)
     # show_train_loss(model_name, save=True, show=False)
     # show_train_accs(model_name, save=True, show=False)
     # get_train_time(model_name)
@@ -1092,9 +1112,12 @@ if __name__ == "__main__":
     # test()
     # test_robustness()
 
+    # robustness_over_steps = test_robustness_multiple_steps()
+
     # show_loss(model_name, save=True, show=False)
     # show_accuracies(model_name, save=True, show=False)
     # show_adversarial_accuracies(model_name, save=True, show=False)
+    # show_adversarial_accuracies_varying_steps(robustness_over_steps, model_name, save=True, show=False)
     # show_train_loss(model_name, save=True, show=False)
     # show_train_accs(model_name, save=True, show=False)
     # get_train_time(model_name)
