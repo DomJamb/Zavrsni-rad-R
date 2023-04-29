@@ -817,7 +817,7 @@ if __name__ == "__main__":
     train_loader = torch.utils.data.DataLoader(train_data, batch_size=256, shuffle=True)
     test_loader = torch.utils.data.DataLoader(test_data, batch_size=100, shuffle=False)
 
-    epochs = 16
+    epochs = 80
     replay = 4
 
     classes_map = {

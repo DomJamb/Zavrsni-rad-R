@@ -1,0 +1,32 @@
+epochs - 80
+replay - 4
+batch size - 256
+CrossEntropyLoss
+SGD: momentum - 0.9, weight decay - 5e-4
+==============================================
+Free: 0.02 lr, CosineAnnealingLR
+----------------------------------------------
+Total test loss for epoch 1: 32.81830149888992
+Total test accuracy for epoch 1: 88.68
+Accuracy on adversarial examples generated using PGD attack: 16.47%
+Total train time for model resnet18_free_epochs_20_replay_4_lr_0.02 is 28 minutes, 1 seconds.
+
+Accuracy on adversarial examples generated using PGD attack with 5 steps: 55.46875%
+
+Fast, no early stop: 0.2 lr, CyclicLR
+----------------------------------------------
+Total test loss for epoch 1: 57.31811964511871
+Total test accuracy for epoch 1: 84.22
+Accuracy on adversarial examples generated using PGD attack: 0.03%
+Total train time for model resnet18_fast_epochs_80_lr_0.2_no_early is 65 minutes, 25 seconds.
+
+Accuracy on adversarial examples generated using PGD attack with 5 steps: 1.171875%
+
+Fast, early stop: 0.2 lr, CyclicLR
+----------------------------------------------
+Total test loss for epoch 1: 66.32993996143341
+Total test accuracy for epoch 1: 78.06
+Accuracy on adversarial examples generated using PGD attack: 40.23%
+Total train time for model resnet18_fast_epochs_80_lr_0.2_early is 45 minutes, 31 seconds.
+
+Accuracy on adversarial examples generated using PGD attack with 5 steps: 61.71875%
