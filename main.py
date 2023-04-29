@@ -694,6 +694,11 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255, mixed_prec=True, ea
         curr_epoch = f"epoch{epoch+1}"
         curr_dict = dict()
 
+        if early_stop and (adv_accuracy < prev_acc - 20):
+            train_losses = train_losses[:len(train_losses) - len(train_loader)]
+            train_accuracies = train_accuracies[:len(train_accuracies) - len(train_loader)]
+            break
+
         curr_dict.update({"train_loss": total_train_loss, 
                         "train_accuracy": total_train_acc,
                         "test_loss": test_loss,
@@ -701,9 +706,6 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255, mixed_prec=True, ea
                         "adv_accuracy": adv_accuracy})
         
         train_stats.update({curr_epoch: curr_dict})
-
-        if early_stop and (adv_accuracy < prev_acc - 20):
-            break
 
         prev_acc = adv_accuracy
 
@@ -1001,16 +1003,16 @@ if __name__ == "__main__":
 
     # Train model using free adversarial training and save it
 
-    # model = ResidualNetwork18().to(device)
-    # model_name = f"resnet18_free_epochs_{math.ceil(epochs/replay)}_replay_{replay}_lr_0.02"
-    # model_save_path= f"./models/{model_name}.pt"
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_free_epochs_{math.ceil(epochs/replay)}_replay_{replay}_lr_0.02"
+    model_save_path= f"./models/{model_name}.pt"
     
-    # loss_calc = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
-    # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=(math.ceil(epochs/replay)))
+    loss_calc = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.02, momentum=0.9, weight_decay=5e-4)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=(math.ceil(epochs/replay)))
 
-    # train_free(epochs, model_name, replay)
-    # torch.save(model.state_dict(), model_save_path)
+    train_free(epochs, model_name, replay)
+    torch.save(model.state_dict(), model_save_path)
 
     # ##################################################
     # # Load model and evaluate it
@@ -1042,18 +1044,18 @@ if __name__ == "__main__":
 
     # Train model using fast adversarial training and save it
 
-    # model = ResidualNetwork18().to(device)
-    # model_name = f"resnet18_fast_epochs_{epochs}_lr_0.2_no_early"
-    # model_save_path= f"./models/{model_name}.pt"
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_fast_epochs_{epochs}_lr_0.2_no_early"
+    model_save_path= f"./models/{model_name}.pt"
     
-    # loss_calc = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(model.parameters(), lr=0.2, momentum=0.9, weight_decay=5e-4)
+    loss_calc = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.2, momentum=0.9, weight_decay=5e-4)
 
-    # total_steps = epochs * len(train_loader)
-    # scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0, max_lr=0.2, step_size_up=(total_steps / 2), step_size_down=(total_steps / 2))
+    total_steps = epochs * len(train_loader)
+    scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0, max_lr=0.2, step_size_up=(total_steps / 2), step_size_down=(total_steps / 2))
 
-    # train_fast(epochs, model_name)
-    # torch.save(model.state_dict(), model_save_path)
+    train_fast(epochs, model_name)
+    torch.save(model.state_dict(), model_save_path)
 
     ##################################################
     # Load model and evaluate it
@@ -1085,18 +1087,18 @@ if __name__ == "__main__":
 
     # Train model using fast adversarial training and save it
 
-    # model = ResidualNetwork18().to(device)
-    # model_name = f"resnet18_fast_epochs_{epochs}_lr_0.2_early"
-    # model_save_path= f"./models/{model_name}.pt"
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_fast_epochs_{epochs}_lr_0.2_early"
+    model_save_path= f"./models/{model_name}.pt"
     
-    # loss_calc = nn.CrossEntropyLoss()
-    # optimizer = optim.SGD(model.parameters(), lr=0.2, momentum=0.9, weight_decay=5e-4)
+    loss_calc = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.2, momentum=0.9, weight_decay=5e-4)
 
-    # total_steps = epochs * len(train_loader)
-    # scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0, max_lr=0.2, step_size_up=(total_steps / 2), step_size_down=(total_steps / 2))
+    total_steps = epochs * len(train_loader)
+    scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0, max_lr=0.2, step_size_up=(total_steps / 2), step_size_down=(total_steps / 2))
 
-    # train_fast(epochs, model_name, early_stop=True)
-    # torch.save(model.state_dict(), model_save_path)
+    train_fast(epochs, model_name, early_stop=True)
+    torch.save(model.state_dict(), model_save_path)
 
     ##################################################
     # Load model and evaluate it
