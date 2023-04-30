@@ -1,0 +1,1699 @@
+16.7s 1 Current device: cuda
+16.7s 2 Models dir created.
+16.7s 3 Stats dir created.
+16.7s 4 Downloading https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz to ./data/cifar-10-python.tar.gz
+19.5s 5 Extracting ./data/cifar-10-python.tar.gz to ./data
+22.0s 6 Files already downloaded and verified
+25.2s 7 Starting epoch: 1
+59.7s 8 Total train loss for epoch 1: 347.07161486148834
+59.7s 9 Total train accuracy for epoch 1: 32.47
+63.2s 10 Total test loss for epoch 1: 151.333886384964
+63.2s 11 Total test accuracy for epoch 1: 43.39
+63.2s 12 Starting epoch: 2
+92.0s 13 Total train loss for epoch 2: 255.95308470726013
+92.0s 14 Total train accuracy for epoch 2: 52.172
+95.3s 15 Total test loss for epoch 2: 143.51420319080353
+95.3s 16 Total test accuracy for epoch 2: 50.77
+95.3s 17 Starting epoch: 3
+124.0s 18 Total train loss for epoch 3: 210.32856041193008
+124.0s 19 Total train accuracy for epoch 3: 61.126
+127.4s 20 Total test loss for epoch 3: 102.92084616422653
+127.4s 21 Total test accuracy for epoch 3: 64.05
+127.4s 22 Starting epoch: 4
+156.1s 23 Total train loss for epoch 4: 179.93890392780304
+156.1s 24 Total train accuracy for epoch 4: 66.85
+159.5s 25 Total test loss for epoch 4: 134.16073083877563
+159.5s 26 Total test accuracy for epoch 4: 56.51
+159.5s 27 Starting epoch: 5
+188.3s 28 Total train loss for epoch 5: 158.06086719036102
+188.3s 29 Total train accuracy for epoch 5: 71.502
+191.8s 30 Total test loss for epoch 5: 123.06014657020569
+191.8s 31 Total test accuracy for epoch 5: 60.38
+191.8s 32 Starting epoch: 6
+220.8s 33 Total train loss for epoch 6: 142.6173084974289
+220.8s 34 Total train accuracy for epoch 6: 74.132
+224.2s 35 Total test loss for epoch 6: 90.40717887878418
+224.2s 36 Total test accuracy for epoch 6: 69.65
+224.2s 37 Starting epoch: 7
+253.0s 38 Total train loss for epoch 7: 127.57845449447632
+253.0s 39 Total train accuracy for epoch 7: 77.242
+256.4s 40 Total test loss for epoch 7: 77.33548310399055
+256.4s 41 Total test accuracy for epoch 7: 73.89
+256.4s 42 Starting epoch: 8
+285.3s 43 Total train loss for epoch 8: 117.5978856086731
+285.3s 44 Total train accuracy for epoch 8: 78.974
+288.7s 45 Total test loss for epoch 8: 77.43828135728836
+288.7s 46 Total test accuracy for epoch 8: 74.36
+288.7s 47 Starting epoch: 9
+317.4s 48 Total train loss for epoch 9: 107.99452564120293
+317.4s 49 Total train accuracy for epoch 9: 80.966
+320.8s 50 Total test loss for epoch 9: 143.2357121706009
+320.8s 51 Total test accuracy for epoch 9: 58.58
+320.8s 52 Starting epoch: 10
+349.7s 53 Total train loss for epoch 10: 100.22972798347473
+349.7s 54 Total train accuracy for epoch 10: 82.044
+353.1s 55 Total test loss for epoch 10: 66.30374953150749
+353.1s 56 Total test accuracy for epoch 10: 77.69
+353.1s 57 Starting epoch: 11
+381.9s 58 Total train loss for epoch 11: 93.88623610138893
+381.9s 59 Total train accuracy for epoch 11: 83.352
+385.3s 60 Total test loss for epoch 11: 72.10810276865959
+385.3s 61 Total test accuracy for epoch 11: 76.24
+385.3s 62 Starting epoch: 12
+414.4s 63 Total train loss for epoch 12: 88.80624821782112
+414.4s 64 Total train accuracy for epoch 12: 84.202
+417.8s 65 Total test loss for epoch 12: 74.47766906023026
+417.8s 66 Total test accuracy for epoch 12: 75.71
+417.8s 67 Starting epoch: 13
+446.8s 68 Total train loss for epoch 13: 82.2756589949131
+446.8s 69 Total train accuracy for epoch 13: 85.348
+450.1s 70 Total test loss for epoch 13: 52.6852275878191
+450.1s 71 Total test accuracy for epoch 13: 82.74
+450.1s 72 Starting epoch: 14
+479.2s 73 Total train loss for epoch 14: 77.46155209839344
+479.2s 74 Total train accuracy for epoch 14: 86.16
+482.6s 75 Total test loss for epoch 14: 60.35151958465576
+482.6s 76 Total test accuracy for epoch 14: 79.91
+482.6s 77 Starting epoch: 15
+511.5s 78 Total train loss for epoch 15: 72.82622772455215
+511.5s 79 Total train accuracy for epoch 15: 87.088
+514.9s 80 Total test loss for epoch 15: 56.826344311237335
+514.9s 81 Total test accuracy for epoch 15: 81.57
+514.9s 82 Starting epoch: 16
+544.0s 83 Total train loss for epoch 16: 69.5763119906187
+544.0s 84 Total train accuracy for epoch 16: 87.612
+547.3s 85 Total test loss for epoch 16: 60.3443001806736
+547.3s 86 Total test accuracy for epoch 16: 80.93
+547.3s 87 Starting epoch: 17
+576.5s 88 Total train loss for epoch 17: 65.73511871695518
+576.5s 89 Total train accuracy for epoch 17: 88.282
+580.1s 90 Total test loss for epoch 17: 55.375711753964424
+580.1s 91 Total test accuracy for epoch 17: 82.07
+580.1s 92 Starting epoch: 18
+609.0s 93 Total train loss for epoch 18: 61.61261995136738
+609.0s 94 Total train accuracy for epoch 18: 89.038
+612.6s 95 Total test loss for epoch 18: 49.19963623583317
+612.6s 96 Total test accuracy for epoch 18: 84.49
+612.6s 97 Starting epoch: 19
+641.5s 98 Total train loss for epoch 19: 59.32124741375446
+641.5s 99 Total train accuracy for epoch 19: 89.534
+645.1s 100 Total test loss for epoch 19: 69.9695397913456
+645.1s 101 Total test accuracy for epoch 19: 79.42
+645.1s 102 Starting epoch: 20
+674.1s 103 Total train loss for epoch 20: 55.899894684553146
+674.1s 104 Total train accuracy for epoch 20: 90.088
+677.5s 105 Total test loss for epoch 20: 50.46426708996296
+677.5s 106 Total test accuracy for epoch 20: 84.2
+677.5s 107 Starting epoch: 21
+706.7s 108 Total train loss for epoch 21: 53.04704087972641
+706.7s 109 Total train accuracy for epoch 21: 90.544
+710.1s 110 Total test loss for epoch 21: 54.293655186891556
+710.1s 111 Total test accuracy for epoch 21: 83.36
+710.1s 112 Starting epoch: 22
+739.1s 113 Total train loss for epoch 22: 50.588789120316505
+739.1s 114 Total train accuracy for epoch 22: 90.884
+742.5s 115 Total test loss for epoch 22: 44.31442640721798
+742.5s 116 Total test accuracy for epoch 22: 85.86
+742.5s 117 Starting epoch: 23
+771.6s 118 Total train loss for epoch 23: 48.61224119365215
+771.6s 119 Total train accuracy for epoch 23: 91.254
+775.1s 120 Total test loss for epoch 23: 62.693939715623856
+775.1s 121 Total test accuracy for epoch 23: 81.77
+775.1s 122 Starting epoch: 24
+804.0s 123 Total train loss for epoch 24: 45.334509029984474
+804.0s 124 Total train accuracy for epoch 24: 91.928
+807.5s 125 Total test loss for epoch 24: 48.77243438363075
+807.5s 126 Total test accuracy for epoch 24: 85.3
+807.5s 127 Starting epoch: 25
+836.5s 128 Total train loss for epoch 25: 42.131884932518005
+836.5s 129 Total train accuracy for epoch 25: 92.524
+840.0s 130 Total test loss for epoch 25: 45.2160212919116
+840.0s 131 Total test accuracy for epoch 25: 85.71
+840.0s 132 Starting epoch: 26
+868.8s 133 Total train loss for epoch 26: 41.644968412816525
+868.8s 134 Total train accuracy for epoch 26: 92.48
+872.3s 135 Total test loss for epoch 26: 44.111225344240665
+872.3s 136 Total test accuracy for epoch 26: 86.89
+872.3s 137 Starting epoch: 27
+901.2s 138 Total train loss for epoch 27: 38.90751197934151
+901.2s 139 Total train accuracy for epoch 27: 93.084
+904.7s 140 Total test loss for epoch 27: 67.70772817730904
+904.7s 141 Total test accuracy for epoch 27: 81.11
+904.7s 142 Starting epoch: 28
+933.5s 143 Total train loss for epoch 28: 36.97155258059502
+933.5s 144 Total train accuracy for epoch 28: 93.43
+936.9s 145 Total test loss for epoch 28: 47.062465235590935
+936.9s 146 Total test accuracy for epoch 28: 86.19
+936.9s 147 Starting epoch: 29
+965.9s 148 Total train loss for epoch 29: 34.481255896389484
+965.9s 149 Total train accuracy for epoch 29: 93.756
+969.3s 150 Total test loss for epoch 29: 49.27270236611366
+969.3s 151 Total test accuracy for epoch 29: 85.06
+969.3s 152 Starting epoch: 30
+998.3s 153 Total train loss for epoch 30: 32.781832896173
+998.3s 154 Total train accuracy for epoch 30: 94.256
+1001.6s 155 Total test loss for epoch 30: 49.191985964775085
+1001.6s 156 Total test accuracy for epoch 30: 85.85
+1001.6s 157 Starting epoch: 31
+1030.6s 158 Total train loss for epoch 31: 30.682346992194653
+1030.6s 159 Total train accuracy for epoch 31: 94.616
+1034.0s 160 Total test loss for epoch 31: 44.40867653489113
+1034.0s 161 Total test accuracy for epoch 31: 87.38
+1034.0s 162 Starting epoch: 32
+1063.0s 163 Total train loss for epoch 32: 28.913523480296135
+1063.0s 164 Total train accuracy for epoch 32: 94.902
+1066.4s 165 Total test loss for epoch 32: 46.716049179434776
+1066.4s 166 Total test accuracy for epoch 32: 86.44
+1066.4s 167 Starting epoch: 33
+1095.3s 168 Total train loss for epoch 33: 28.208123791962862
+1095.3s 169 Total train accuracy for epoch 33: 94.944
+1098.7s 170 Total test loss for epoch 33: 49.784141182899475
+1098.7s 171 Total test accuracy for epoch 33: 86.01
+1098.7s 172 Starting epoch: 34
+1127.7s 173 Total train loss for epoch 34: 26.446324460208416
+1127.7s 174 Total train accuracy for epoch 34: 95.286
+1131.1s 175 Total test loss for epoch 34: 49.977202996611595
+1131.1s 176 Total test accuracy for epoch 34: 86.08
+1131.1s 177 Starting epoch: 35
+1160.1s 178 Total train loss for epoch 35: 25.02083208411932
+1160.1s 179 Total train accuracy for epoch 35: 95.522
+1163.5s 180 Total test loss for epoch 35: 45.03256331384182
+1163.5s 181 Total test accuracy for epoch 35: 87.32
+1163.5s 182 Starting epoch: 36
+1192.5s 183 Total train loss for epoch 36: 22.248348616063595
+1192.5s 184 Total train accuracy for epoch 36: 96.096
+1195.9s 185 Total test loss for epoch 36: 43.34883405268192
+1195.9s 186 Total test accuracy for epoch 36: 87.9
+1195.9s 187 Starting epoch: 37
+1225.0s 188 Total train loss for epoch 37: 20.875547770410776
+1225.0s 189 Total train accuracy for epoch 37: 96.296
+1228.4s 190 Total test loss for epoch 37: 45.601822420954704
+1228.4s 191 Total test accuracy for epoch 37: 88.05
+1228.4s 192 Starting epoch: 38
+1257.5s 193 Total train loss for epoch 38: 20.221577014774084
+1257.5s 194 Total train accuracy for epoch 38: 96.384
+1261.0s 195 Total test loss for epoch 38: 44.06589497625828
+1261.0s 196 Total test accuracy for epoch 38: 87.82
+1261.0s 197 Starting epoch: 39
+1290.1s 198 Total train loss for epoch 39: 19.055802673101425
+1290.1s 199 Total train accuracy for epoch 39: 96.628
+1293.5s 200 Total test loss for epoch 39: 47.521075159311295
+1293.5s 201 Total test accuracy for epoch 39: 87.09
+1293.5s 202 Starting epoch: 40
+1322.6s 203 Total train loss for epoch 40: 18.388021368533373
+1322.6s 204 Total train accuracy for epoch 40: 96.756
+1326.0s 205 Total test loss for epoch 40: 48.10058609396219
+1326.0s 206 Total test accuracy for epoch 40: 87.6
+1326.0s 207 Starting epoch: 41
+1355.1s 208 Total train loss for epoch 41: 16.723843403160572
+1355.1s 209 Total train accuracy for epoch 41: 97.002
+1358.6s 210 Total test loss for epoch 41: 54.300318390131
+1358.6s 211 Total test accuracy for epoch 41: 86.25
+1358.6s 212 Starting epoch: 42
+1387.6s 213 Total train loss for epoch 42: 16.618592657148838
+1387.6s 214 Total train accuracy for epoch 42: 97.052
+1391.1s 215 Total test loss for epoch 42: 44.6643552929163
+1391.1s 216 Total test accuracy for epoch 42: 88.2
+1391.1s 217 Starting epoch: 43
+1419.9s 218 Total train loss for epoch 43: 14.769050946459174
+1419.9s 219 Total train accuracy for epoch 43: 97.466
+1423.4s 220 Total test loss for epoch 43: 52.639997348189354
+1423.4s 221 Total test accuracy for epoch 43: 86.93
+1423.4s 222 Starting epoch: 44
+1452.6s 223 Total train loss for epoch 44: 13.640637235715985
+1452.6s 224 Total train accuracy for epoch 44: 97.628
+1456.0s 225 Total test loss for epoch 44: 44.08182433247566
+1456.0s 226 Total test accuracy for epoch 44: 88.85
+1456.0s 227 Starting epoch: 45
+1485.2s 228 Total train loss for epoch 45: 12.724174754694104
+1485.2s 229 Total train accuracy for epoch 45: 97.82
+1488.8s 230 Total test loss for epoch 45: 41.40145994722843
+1488.8s 231 Total test accuracy for epoch 45: 89.05
+1488.8s 232 Starting epoch: 46
+1517.6s 233 Total train loss for epoch 46: 11.242549315094948
+1517.6s 234 Total train accuracy for epoch 46: 98.106
+1521.4s 235 Total test loss for epoch 46: 40.74617509543896
+1521.4s 236 Total test accuracy for epoch 46: 89.38
+1521.4s 237 Starting epoch: 47
+1550.0s 238 Total train loss for epoch 47: 10.40203189663589
+1550.0s 239 Total train accuracy for epoch 47: 98.25
+1553.7s 240 Total test loss for epoch 47: 44.46946835517883
+1553.7s 241 Total test accuracy for epoch 47: 88.56
+1553.7s 242 Starting epoch: 48
+1582.7s 243 Total train loss for epoch 48: 10.121128862723708
+1582.7s 244 Total train accuracy for epoch 48: 98.282
+1586.3s 245 Total test loss for epoch 48: 39.753250792622566
+1586.3s 246 Total test accuracy for epoch 48: 89.79
+1586.3s 247 Starting epoch: 49
+1615.3s 248 Total train loss for epoch 49: 8.671320519410074
+1615.3s 249 Total train accuracy for epoch 49: 98.63
+1618.7s 250 Total test loss for epoch 49: 43.88037525117397
+1618.7s 251 Total test accuracy for epoch 49: 89.41
+1618.7s 252 Starting epoch: 50
+1647.8s 253 Total train loss for epoch 50: 8.095452765002847
+1647.8s 254 Total train accuracy for epoch 50: 98.698
+1651.2s 255 Total test loss for epoch 50: 43.57695093750954
+1651.2s 256 Total test accuracy for epoch 50: 89.47
+1651.2s 257 Starting epoch: 51
+1680.3s 258 Total train loss for epoch 51: 7.490979315713048
+1680.3s 259 Total train accuracy for epoch 51: 98.806
+1683.7s 260 Total test loss for epoch 51: 45.86916719377041
+1683.7s 261 Total test accuracy for epoch 51: 88.8
+1683.7s 262 Starting epoch: 52
+1712.9s 263 Total train loss for epoch 52: 6.972807155922055
+1712.9s 264 Total train accuracy for epoch 52: 98.914
+1716.3s 265 Total test loss for epoch 52: 40.121434569358826
+1716.3s 266 Total test accuracy for epoch 52: 90.27
+1716.3s 267 Starting epoch: 53
+1745.4s 268 Total train loss for epoch 53: 6.189442949835211
+1745.4s 269 Total train accuracy for epoch 53: 99.062
+1748.8s 270 Total test loss for epoch 53: 41.44908693432808
+1748.8s 271 Total test accuracy for epoch 53: 89.72
+1748.8s 272 Starting epoch: 54
+1778.1s 273 Total train loss for epoch 54: 5.661666743457317
+1778.1s 274 Total train accuracy for epoch 54: 99.2
+1781.5s 275 Total test loss for epoch 54: 42.08282470703125
+1781.5s 276 Total test accuracy for epoch 54: 89.98
+1781.5s 277 Starting epoch: 55
+1810.5s 278 Total train loss for epoch 55: 5.456807924434543
+1810.5s 279 Total train accuracy for epoch 55: 99.234
+1813.9s 280 Total test loss for epoch 55: 42.458821300417185
+1813.9s 281 Total test accuracy for epoch 55: 89.97
+1813.9s 282 Starting epoch: 56
+1842.9s 283 Total train loss for epoch 56: 5.138472612947226
+1842.9s 284 Total train accuracy for epoch 56: 99.27
+1846.3s 285 Total test loss for epoch 56: 43.12423674762249
+1846.3s 286 Total test accuracy for epoch 56: 89.81
+1846.3s 287 Starting epoch: 57
+1875.4s 288 Total train loss for epoch 57: 4.773438162636012
+1875.4s 289 Total train accuracy for epoch 57: 99.314
+1878.8s 290 Total test loss for epoch 57: 42.72150355577469
+1878.8s 291 Total test accuracy for epoch 57: 90.16
+1878.8s 292 Starting epoch: 58
+1907.8s 293 Total train loss for epoch 58: 4.268010371364653
+1907.8s 294 Total train accuracy for epoch 58: 99.452
+1911.2s 295 Total test loss for epoch 58: 41.87649718672037
+1911.2s 296 Total test accuracy for epoch 58: 90.08
+1911.2s 297 Starting epoch: 59
+1940.2s 298 Total train loss for epoch 59: 4.084848084487021
+1940.2s 299 Total train accuracy for epoch 59: 99.458
+1943.5s 300 Total test loss for epoch 59: 42.534138441085815
+1943.5s 301 Total test accuracy for epoch 59: 90.15
+1943.5s 302 Starting epoch: 60
+1972.5s 303 Total train loss for epoch 60: 3.794717911630869
+1972.5s 304 Total train accuracy for epoch 60: 99.478
+1975.9s 305 Total test loss for epoch 60: 41.875108033418655
+1975.9s 306 Total test accuracy for epoch 60: 90.27
+1975.9s 307 Starting epoch: 61
+2004.9s 308 Total train loss for epoch 61: 3.560651119798422
+2004.9s 309 Total train accuracy for epoch 61: 99.54
+2008.3s 310 Total test loss for epoch 61: 42.45330526679754
+2008.3s 311 Total test accuracy for epoch 61: 90.14
+2008.3s 312 Starting epoch: 62
+2037.2s 313 Total train loss for epoch 62: 3.276437658816576
+2037.2s 314 Total train accuracy for epoch 62: 99.616
+2040.7s 315 Total test loss for epoch 62: 42.22333370894194
+2040.7s 316 Total test accuracy for epoch 62: 90.26
+2040.7s 317 Starting epoch: 63
+2069.6s 318 Total train loss for epoch 63: 3.112567661330104
+2069.6s 319 Total train accuracy for epoch 63: 99.644
+2073.1s 320 Total test loss for epoch 63: 42.58147243410349
+2073.1s 321 Total test accuracy for epoch 63: 90.16
+2073.1s 322 Starting epoch: 64
+2102.1s 323 Total train loss for epoch 64: 2.9949659598059952
+2102.1s 324 Total train accuracy for epoch 64: 99.664
+2105.6s 325 Total test loss for epoch 64: 41.96368536353111
+2105.6s 326 Total test accuracy for epoch 64: 90.35
+2105.6s 327 Starting epoch: 65
+2134.5s 328 Total train loss for epoch 65: 2.9178002499975264
+2134.5s 329 Total train accuracy for epoch 65: 99.664
+2138.0s 330 Total test loss for epoch 65: 41.59366151690483
+2138.0s 331 Total test accuracy for epoch 65: 90.45
+2138.0s 332 Starting epoch: 66
+2166.9s 333 Total train loss for epoch 66: 2.683956552296877
+2166.9s 334 Total train accuracy for epoch 66: 99.724
+2170.4s 335 Total test loss for epoch 66: 41.90717214345932
+2170.4s 336 Total test accuracy for epoch 66: 90.36
+2170.4s 337 Starting epoch: 67
+2199.2s 338 Total train loss for epoch 67: 2.590650860220194
+2199.2s 339 Total train accuracy for epoch 67: 99.71
+2202.6s 340 Total test loss for epoch 67: 41.56379669904709
+2202.6s 341 Total test accuracy for epoch 67: 90.47
+2202.6s 342 Starting epoch: 68
+2231.4s 343 Total train loss for epoch 68: 2.5757992723956704
+2231.4s 344 Total train accuracy for epoch 68: 99.696
+2234.8s 345 Total test loss for epoch 68: 41.56904914602637
+2234.8s 346 Total test accuracy for epoch 68: 90.56
+2234.8s 347 Starting epoch: 69
+2263.7s 348 Total train loss for epoch 69: 2.4749290528707206
+2263.7s 349 Total train accuracy for epoch 69: 99.756
+2267.1s 350 Total test loss for epoch 69: 41.72126221656799
+2267.1s 351 Total test accuracy for epoch 69: 90.44
+2267.1s 352 Starting epoch: 70
+2296.0s 353 Total train loss for epoch 70: 2.4589743646793067
+2296.0s 354 Total train accuracy for epoch 70: 99.756
+2299.4s 355 Total test loss for epoch 70: 41.57686370611191
+2299.4s 356 Total test accuracy for epoch 70: 90.51
+2299.4s 357 Starting epoch: 71
+2328.3s 358 Total train loss for epoch 71: 2.2753505730070174
+2328.3s 359 Total train accuracy for epoch 71: 99.804
+2331.7s 360 Total test loss for epoch 71: 42.1752960011363
+2331.7s 361 Total test accuracy for epoch 71: 90.42
+2331.7s 362 Starting epoch: 72
+2360.6s 363 Total train loss for epoch 72: 2.1872627856209874
+2360.6s 364 Total train accuracy for epoch 72: 99.794
+2364.0s 365 Total test loss for epoch 72: 41.71807526051998
+2364.0s 366 Total test accuracy for epoch 72: 90.54
+2364.0s 367 Starting epoch: 73
+2393.0s 368 Total train loss for epoch 73: 2.219067514874041
+2393.0s 369 Total train accuracy for epoch 73: 99.796
+2396.4s 370 Total test loss for epoch 73: 41.924926683306694
+2396.4s 371 Total test accuracy for epoch 73: 90.35
+2396.4s 372 Starting epoch: 74
+2425.2s 373 Total train loss for epoch 74: 2.3045387864112854
+2425.2s 374 Total train accuracy for epoch 74: 99.782
+2428.6s 375 Total test loss for epoch 74: 41.77014596015215
+2428.6s 376 Total test accuracy for epoch 74: 90.56
+2428.6s 377 Starting epoch: 75
+2457.6s 378 Total train loss for epoch 75: 1.9896932146511972
+2457.6s 379 Total train accuracy for epoch 75: 99.844
+2461.2s 380 Total test loss for epoch 75: 41.75472106784582
+2461.2s 381 Total test accuracy for epoch 75: 90.45
+2461.2s 382 Starting epoch: 76
+2489.9s 383 Total train loss for epoch 76: 2.270167867653072
+2489.9s 384 Total train accuracy for epoch 76: 99.764
+2493.5s 385 Total test loss for epoch 76: 41.75168239325285
+2493.5s 386 Total test accuracy for epoch 76: 90.53
+2493.5s 387 Starting epoch: 77
+2522.2s 388 Total train loss for epoch 77: 2.1842503738589585
+2522.2s 389 Total train accuracy for epoch 77: 99.792
+2525.7s 390 Total test loss for epoch 77: 41.78194838017225
+2525.7s 391 Total test accuracy for epoch 77: 90.48
+2525.7s 392 Starting epoch: 78
+2554.5s 393 Total train loss for epoch 78: 2.1933366362936795
+2554.5s 394 Total train accuracy for epoch 78: 99.792
+2558.0s 395 Total test loss for epoch 78: 41.804260194301605
+2558.0s 396 Total test accuracy for epoch 78: 90.57
+2558.0s 397 Starting epoch: 79
+2586.8s 398 Total train loss for epoch 79: 2.1789837698452175
+2586.8s 399 Total train accuracy for epoch 79: 99.806
+2590.2s 400 Total test loss for epoch 79: 41.79079411178827
+2590.2s 401 Total test accuracy for epoch 79: 90.64
+2590.2s 402 Starting epoch: 80
+2619.0s 403 Total train loss for epoch 80: 2.1566391347441822
+2619.0s 404 Total train accuracy for epoch 80: 99.808
+2622.5s 405 Total test loss for epoch 80: 41.642474971711636
+2622.5s 406 Total test accuracy for epoch 80: 90.4
+2622.8s 407 Resnet18 Mixed Precision
+2626.2s 408 Total test loss for epoch 1: 41.642474971711636
+2626.2s 409 Total test accuracy for epoch 1: 90.4
+2759.7s 410 Accuracy on adversarial examples generated using PGD attack with 20 steps: 0.0%
+2761.0s 411 Total train time for model resnet18_mixed_epochs_80_lr_0.01 is 43 minutes, 17 seconds.
+2761.0s 412 Starting epoch: 1
+2908.4s 413 Total train loss for epoch 1: 502.18423199653625
+2908.4s 414 Total train accuracy for epoch 1: 13.306
+2911.8s 415 Total test loss for epoch 1: 210.33850359916687
+2911.8s 416 Total test accuracy for epoch 1: 22.41
+2912.5s 417 Starting epoch: 2
+3060.2s 418 Total train loss for epoch 2: 420.18290531635284
+3060.2s 419 Total train accuracy for epoch 2: 19.97
+3063.7s 420 Total test loss for epoch 2: 189.36733782291412
+3063.7s 421 Total test accuracy for epoch 2: 30.4
+3064.4s 422 Starting epoch: 3
+3212.7s 423 Total train loss for epoch 3: 401.1809949874878
+3212.7s 424 Total train accuracy for epoch 3: 23.45
+3216.3s 425 Total test loss for epoch 3: 173.2933293581009
+3216.3s 426 Total test accuracy for epoch 3: 37.24
+3217.0s 427 Starting epoch: 4
+3365.1s 428 Total train loss for epoch 4: 387.20366156101227
+3365.1s 429 Total train accuracy for epoch 4: 25.844
+3368.5s 430 Total test loss for epoch 4: 167.34190595149994
+3368.5s 431 Total test accuracy for epoch 4: 40.63
+3369.2s 432 Starting epoch: 5
+3517.6s 433 Total train loss for epoch 5: 377.1031620502472
+3517.6s 434 Total train accuracy for epoch 5: 27.56
+3521.0s 435 Total test loss for epoch 5: 157.88006389141083
+3521.0s 436 Total test accuracy for epoch 5: 42.01
+3521.7s 437 Starting epoch: 6
+3670.1s 438 Total train loss for epoch 6: 368.8457647562027
+3670.1s 439 Total train accuracy for epoch 6: 29.278
+3673.5s 440 Total test loss for epoch 6: 155.43438518047333
+3673.5s 441 Total test accuracy for epoch 6: 43.99
+3674.2s 442 Starting epoch: 7
+3822.6s 443 Total train loss for epoch 7: 361.58840131759644
+3822.6s 444 Total train accuracy for epoch 7: 30.18
+3826.0s 445 Total test loss for epoch 7: 145.45064330101013
+3826.0s 446 Total test accuracy for epoch 7: 47.92
+3826.7s 447 Starting epoch: 8
+3975.2s 448 Total train loss for epoch 8: 351.698667883873
+3975.2s 449 Total train accuracy for epoch 8: 32.182
+3978.6s 450 Total test loss for epoch 8: 139.11541223526
+3978.6s 451 Total test accuracy for epoch 8: 51.0
+3979.3s 452 Starting epoch: 9
+4128.0s 453 Total train loss for epoch 9: 343.1986095905304
+4128.0s 454 Total train accuracy for epoch 9: 33.612
+4131.4s 455 Total test loss for epoch 9: 131.97991716861725
+4131.4s 456 Total test accuracy for epoch 9: 54.78
+4132.1s 457 Starting epoch: 10
+4280.9s 458 Total train loss for epoch 10: 336.6249579191208
+4280.9s 459 Total train accuracy for epoch 10: 34.904
+4284.3s 460 Total test loss for epoch 10: 127.58242666721344
+4284.3s 461 Total test accuracy for epoch 10: 56.81
+4285.0s 462 Starting epoch: 11
+4433.7s 463 Total train loss for epoch 11: 327.58396434783936
+4433.7s 464 Total train accuracy for epoch 11: 36.552
+4437.4s 465 Total test loss for epoch 11: 122.99170815944672
+4437.4s 466 Total test accuracy for epoch 11: 59.09
+4438.1s 467 Starting epoch: 12
+4586.6s 468 Total train loss for epoch 12: 320.7936236858368
+4586.6s 469 Total train accuracy for epoch 12: 37.862
+4590.1s 470 Total test loss for epoch 12: 117.20614236593246
+4590.1s 471 Total test accuracy for epoch 12: 62.2
+4590.8s 472 Starting epoch: 13
+4739.1s 473 Total train loss for epoch 13: 313.38817369937897
+4739.1s 474 Total train accuracy for epoch 13: 39.378
+4742.5s 475 Total test loss for epoch 13: 116.10068827867508
+4742.5s 476 Total test accuracy for epoch 13: 59.76
+4743.2s 477 Starting epoch: 14
+4891.6s 478 Total train loss for epoch 14: 308.22315764427185
+4891.6s 479 Total train accuracy for epoch 14: 40.082
+4895.0s 480 Total test loss for epoch 14: 107.23845434188843
+4895.0s 481 Total test accuracy for epoch 14: 64.13
+4895.7s 482 Starting epoch: 15
+5044.1s 483 Total train loss for epoch 15: 303.1339702606201
+5044.1s 484 Total train accuracy for epoch 15: 41.226
+5047.4s 485 Total test loss for epoch 15: 106.71927583217621
+5047.5s 486 Total test accuracy for epoch 15: 64.58
+5048.2s 487 Starting epoch: 16
+5196.5s 488 Total train loss for epoch 16: 298.1678466796875
+5196.5s 489 Total train accuracy for epoch 16: 42.27
+5199.9s 490 Total test loss for epoch 16: 101.88492947816849
+5199.9s 491 Total test accuracy for epoch 16: 67.34
+5200.6s 492 Starting epoch: 17
+5348.9s 493 Total train loss for epoch 17: 293.1326596736908
+5348.9s 494 Total train accuracy for epoch 17: 42.962
+5352.3s 495 Total test loss for epoch 17: 105.46882551908493
+5352.3s 496 Total test accuracy for epoch 17: 66.1
+5353.0s 497 Starting epoch: 18
+5501.1s 498 Total train loss for epoch 18: 289.62818121910095
+5501.1s 499 Total train accuracy for epoch 18: 43.492
+5504.6s 500 Total test loss for epoch 18: 96.36782932281494
+5504.6s 501 Total test accuracy for epoch 18: 70.44
+5505.3s 502 Starting epoch: 19
+5653.5s 503 Total train loss for epoch 19: 285.64190089702606
+5653.5s 504 Total train accuracy for epoch 19: 44.416
+5657.2s 505 Total test loss for epoch 19: 95.29703813791275
+5657.2s 506 Total test accuracy for epoch 19: 69.89
+5657.9s 507 Starting epoch: 20
+5805.9s 508 Total train loss for epoch 20: 282.3369846343994
+5805.9s 509 Total train accuracy for epoch 20: 44.986
+5809.3s 510 Total test loss for epoch 20: 98.62656766176224
+5809.3s 511 Total test accuracy for epoch 20: 69.43
+5810.0s 512 Starting epoch: 21
+5958.1s 513 Total train loss for epoch 21: 278.6377921104431
+5958.1s 514 Total train accuracy for epoch 21: 45.644
+5961.5s 515 Total test loss for epoch 21: 93.46790152788162
+5961.5s 516 Total test accuracy for epoch 21: 70.81
+5962.2s 517 Starting epoch: 22
+6110.2s 518 Total train loss for epoch 22: 275.79440104961395
+6110.2s 519 Total train accuracy for epoch 22: 46.138
+6113.6s 520 Total test loss for epoch 22: 94.25854563713074
+6113.6s 521 Total test accuracy for epoch 22: 70.58
+6114.3s 522 Starting epoch: 23
+6262.7s 523 Total train loss for epoch 23: 272.5515936613083
+6262.7s 524 Total train accuracy for epoch 23: 46.698
+6266.0s 525 Total test loss for epoch 23: 87.78863042593002
+6266.0s 526 Total test accuracy for epoch 23: 71.41
+6266.8s 527 Starting epoch: 24
+6414.8s 528 Total train loss for epoch 24: 269.75330889225006
+6414.8s 529 Total train accuracy for epoch 24: 47.394
+6418.2s 530 Total test loss for epoch 24: 90.15370285511017
+6418.2s 531 Total test accuracy for epoch 24: 71.44
+6418.9s 532 Starting epoch: 25
+6566.9s 533 Total train loss for epoch 25: 266.5633473396301
+6566.9s 534 Total train accuracy for epoch 25: 47.656
+6570.3s 535 Total test loss for epoch 25: 88.17525088787079
+6570.3s 536 Total test accuracy for epoch 25: 72.34
+6571.0s 537 Starting epoch: 26
+6719.0s 538 Total train loss for epoch 26: 264.6753534078598
+6719.0s 539 Total train accuracy for epoch 26: 48.104
+6722.6s 540 Total test loss for epoch 26: 87.97707784175873
+6722.6s 541 Total test accuracy for epoch 26: 71.33
+6723.3s 542 Starting epoch: 27
+6871.4s 543 Total train loss for epoch 27: 261.7135307788849
+6871.4s 544 Total train accuracy for epoch 27: 48.724
+6874.8s 545 Total test loss for epoch 27: 84.30045825242996
+6874.8s 546 Total test accuracy for epoch 27: 73.09
+6875.5s 547 Starting epoch: 28
+7023.6s 548 Total train loss for epoch 28: 259.3914828300476
+7023.6s 549 Total train accuracy for epoch 28: 48.896
+7027.0s 550 Total test loss for epoch 28: 87.8487423658371
+7027.0s 551 Total test accuracy for epoch 28: 72.94
+7027.7s 552 Starting epoch: 29
+7176.1s 553 Total train loss for epoch 29: 255.80268728733063
+7176.1s 554 Total train accuracy for epoch 29: 49.488
+7179.5s 555 Total test loss for epoch 29: 80.93381118774414
+7179.5s 556 Total test accuracy for epoch 29: 74.11
+7180.2s 557 Starting epoch: 30
+7328.5s 558 Total train loss for epoch 30: 254.59029042720795
+7328.5s 559 Total train accuracy for epoch 30: 49.956
+7331.9s 560 Total test loss for epoch 30: 82.59754651784897
+7331.9s 561 Total test accuracy for epoch 30: 75.07
+7332.6s 562 Starting epoch: 31
+7480.7s 563 Total train loss for epoch 31: 252.06418430805206
+7480.7s 564 Total train accuracy for epoch 31: 50.278
+7484.2s 565 Total test loss for epoch 31: 81.22503411769867
+7484.2s 566 Total test accuracy for epoch 31: 74.06
+7484.9s 567 Starting epoch: 32
+7633.3s 568 Total train loss for epoch 32: 248.14404141902924
+7633.3s 569 Total train accuracy for epoch 32: 51.024
+7636.7s 570 Total test loss for epoch 32: 79.5358749628067
+7636.7s 571 Total test accuracy for epoch 32: 73.8
+7637.4s 572 Starting epoch: 33
+7785.6s 573 Total train loss for epoch 33: 245.8602796792984
+7785.6s 574 Total train accuracy for epoch 33: 51.364
+7789.0s 575 Total test loss for epoch 33: 77.58058655261993
+7789.0s 576 Total test accuracy for epoch 33: 75.35
+7789.7s 577 Starting epoch: 34
+7937.7s 578 Total train loss for epoch 34: 244.1765080690384
+7937.7s 579 Total train accuracy for epoch 34: 51.524
+7941.2s 580 Total test loss for epoch 34: 79.94212126731873
+7941.2s 581 Total test accuracy for epoch 34: 72.43
+7941.9s 582 Starting epoch: 35
+8089.8s 583 Total train loss for epoch 35: 242.12897849082947
+8089.8s 584 Total train accuracy for epoch 35: 51.89
+8093.2s 585 Total test loss for epoch 35: 76.90367519855499
+8093.2s 586 Total test accuracy for epoch 35: 76.04
+8093.9s 587 Starting epoch: 36
+8241.8s 588 Total train loss for epoch 36: 238.580482006073
+8241.8s 589 Total train accuracy for epoch 36: 52.572
+8245.2s 590 Total test loss for epoch 36: 76.19672018289566
+8245.2s 591 Total test accuracy for epoch 36: 75.78
+8245.9s 592 Starting epoch: 37
+8393.8s 593 Total train loss for epoch 37: 235.8484491109848
+8393.8s 594 Total train accuracy for epoch 37: 52.978
+8397.2s 595 Total test loss for epoch 37: 74.7555683851242
+8397.2s 596 Total test accuracy for epoch 37: 77.3
+8397.9s 597 Starting epoch: 38
+8546.1s 598 Total train loss for epoch 38: 233.84154564142227
+8546.1s 599 Total train accuracy for epoch 38: 53.29
+8549.6s 600 Total test loss for epoch 38: 73.0183584690094
+8549.6s 601 Total test accuracy for epoch 38: 78.2
+8550.3s 602 Starting epoch: 39
+8698.2s 603 Total train loss for epoch 39: 231.8283804655075
+8698.2s 604 Total train accuracy for epoch 39: 53.852
+8701.7s 605 Total test loss for epoch 39: 73.16704815626144
+8701.7s 606 Total test accuracy for epoch 39: 77.88
+8702.4s 607 Starting epoch: 40
+8850.4s 608 Total train loss for epoch 40: 228.75095564126968
+8850.4s 609 Total train accuracy for epoch 40: 54.19
+8853.8s 610 Total test loss for epoch 40: 73.82024627923965
+8853.8s 611 Total test accuracy for epoch 40: 77.5
+8854.5s 612 Starting epoch: 41
+9002.4s 613 Total train loss for epoch 41: 225.87603890895844
+9002.4s 614 Total train accuracy for epoch 41: 54.61
+9005.9s 615 Total test loss for epoch 41: 72.93092066049576
+9005.9s 616 Total test accuracy for epoch 41: 77.69
+9006.6s 617 Starting epoch: 42
+9154.5s 618 Total train loss for epoch 42: 223.8300632238388
+9154.5s 619 Total train accuracy for epoch 42: 55.05
+9157.9s 620 Total test loss for epoch 42: 73.4062175154686
+9157.9s 621 Total test accuracy for epoch 42: 76.96
+9158.6s 622 Starting epoch: 43
+9306.6s 623 Total train loss for epoch 43: 220.13272255659103
+9306.6s 624 Total train accuracy for epoch 43: 55.702
+9310.0s 625 Total test loss for epoch 43: 68.12772846221924
+9310.0s 626 Total test accuracy for epoch 43: 78.46
+9310.7s 627 Starting epoch: 44
+9458.5s 628 Total train loss for epoch 44: 217.55959355831146
+9458.5s 629 Total train accuracy for epoch 44: 56.02
+9461.9s 630 Total test loss for epoch 44: 71.47602254152298
+9461.9s 631 Total test accuracy for epoch 44: 76.63
+9462.6s 632 Starting epoch: 45
+9610.8s 633 Total train loss for epoch 45: 214.6226967573166
+9610.8s 634 Total train accuracy for epoch 45: 56.524
+9614.2s 635 Total test loss for epoch 45: 69.69346618652344
+9614.2s 636 Total test accuracy for epoch 45: 78.92
+9614.9s 637 Starting epoch: 46
+9762.5s 638 Total train loss for epoch 46: 211.30921304225922
+9762.5s 639 Total train accuracy for epoch 46: 57.152
+9765.9s 640 Total test loss for epoch 46: 69.12736070156097
+9765.9s 641 Total test accuracy for epoch 46: 77.85
+9766.6s 642 Starting epoch: 47
+9914.2s 643 Total train loss for epoch 47: 207.8673620223999
+9914.2s 644 Total train accuracy for epoch 47: 57.686
+9917.6s 645 Total test loss for epoch 47: 68.64447975158691
+9917.6s 646 Total test accuracy for epoch 47: 78.64
+9918.3s 647 Starting epoch: 48
+10065.8s 648 Total train loss for epoch 48: 204.85003370046616
+10065.8s 649 Total train accuracy for epoch 48: 58.16
+10069.2s 650 Total test loss for epoch 48: 64.11964640021324
+10069.2s 651 Total test accuracy for epoch 48: 79.81
+10070.0s 652 Starting epoch: 49
+10217.9s 653 Total train loss for epoch 49: 201.81671476364136
+10217.9s 654 Total train accuracy for epoch 49: 58.484
+10221.2s 655 Total test loss for epoch 49: 65.59908390045166
+10221.2s 656 Total test accuracy for epoch 49: 79.79
+10221.9s 657 Starting epoch: 50
+10370.1s 658 Total train loss for epoch 50: 198.94015967845917
+10370.1s 659 Total train accuracy for epoch 50: 59.124
+10373.5s 660 Total test loss for epoch 50: 66.53382802009583
+10373.5s 661 Total test accuracy for epoch 50: 79.51
+10374.2s 662 Starting epoch: 51
+10522.3s 663 Total train loss for epoch 51: 194.5680428147316
+10522.3s 664 Total train accuracy for epoch 51: 59.766
+10525.6s 665 Total test loss for epoch 51: 65.24523448944092
+10525.6s 666 Total test accuracy for epoch 51: 80.07
+10526.3s 667 Starting epoch: 52
+10674.3s 668 Total train loss for epoch 52: 190.88434439897537
+10674.3s 669 Total train accuracy for epoch 52: 60.564
+10677.6s 670 Total test loss for epoch 52: 64.45478284358978
+10677.6s 671 Total test accuracy for epoch 52: 79.76
+10678.3s 672 Starting epoch: 53
+10826.5s 673 Total train loss for epoch 53: 186.97786736488342
+10826.5s 674 Total train accuracy for epoch 53: 61.198
+10829.8s 675 Total test loss for epoch 53: 62.76627579331398
+10829.8s 676 Total test accuracy for epoch 53: 80.54
+10830.5s 677 Starting epoch: 54
+10978.6s 678 Total train loss for epoch 54: 184.43755668401718
+10978.6s 679 Total train accuracy for epoch 54: 61.628
+10982.1s 680 Total test loss for epoch 54: 59.57587489485741
+10982.1s 681 Total test accuracy for epoch 54: 81.38
+10982.8s 682 Starting epoch: 55
+11130.8s 683 Total train loss for epoch 55: 179.6422398686409
+11130.8s 684 Total train accuracy for epoch 55: 62.436
+11134.3s 685 Total test loss for epoch 55: 61.481136739254
+11134.3s 686 Total test accuracy for epoch 55: 81.37
+11135.0s 687 Starting epoch: 56
+11283.1s 688 Total train loss for epoch 56: 174.39119112491608
+11283.1s 689 Total train accuracy for epoch 56: 63.404
+11286.5s 690 Total test loss for epoch 56: 61.39851048588753
+11286.5s 691 Total test accuracy for epoch 56: 80.12
+11287.2s 692 Starting epoch: 57
+11435.3s 693 Total train loss for epoch 57: 170.41106283664703
+11435.3s 694 Total train accuracy for epoch 57: 64.132
+11438.6s 695 Total test loss for epoch 57: 60.41732230782509
+11438.6s 696 Total test accuracy for epoch 57: 80.49
+11439.3s 697 Starting epoch: 58
+11587.4s 698 Total train loss for epoch 58: 165.29103392362595
+11587.4s 699 Total train accuracy for epoch 58: 65.0
+11590.8s 700 Total test loss for epoch 58: 60.30210220813751
+11590.8s 701 Total test accuracy for epoch 58: 81.37
+11591.5s 702 Starting epoch: 59
+11739.6s 703 Total train loss for epoch 59: 161.24605083465576
+11739.6s 704 Total train accuracy for epoch 59: 65.78
+11743.0s 705 Total test loss for epoch 59: 58.61094972491264
+11743.0s 706 Total test accuracy for epoch 59: 81.2
+11743.7s 707 Starting epoch: 60
+11891.7s 708 Total train loss for epoch 60: 156.78084284067154
+11891.7s 709 Total train accuracy for epoch 60: 66.61
+11895.1s 710 Total test loss for epoch 60: 56.46342924237251
+11895.1s 711 Total test accuracy for epoch 60: 81.91
+11895.8s 712 Starting epoch: 61
+12043.7s 713 Total train loss for epoch 61: 151.55860167741776
+12043.7s 714 Total train accuracy for epoch 61: 67.384
+12047.1s 715 Total test loss for epoch 61: 58.413052409887314
+12047.1s 716 Total test accuracy for epoch 61: 81.22
+12047.8s 717 Starting epoch: 62
+12195.6s 718 Total train loss for epoch 62: 147.44542127847672
+12195.6s 719 Total train accuracy for epoch 62: 68.256
+12199.0s 720 Total test loss for epoch 62: 56.319375425577164
+12199.0s 721 Total test accuracy for epoch 62: 82.06
+12199.7s 722 Starting epoch: 63
+12348.0s 723 Total train loss for epoch 63: 142.33747351169586
+12348.0s 724 Total train accuracy for epoch 63: 69.246
+12351.3s 725 Total test loss for epoch 63: 54.57007145881653
+12351.3s 726 Total test accuracy for epoch 63: 82.65
+12352.0s 727 Starting epoch: 64
+12499.8s 728 Total train loss for epoch 64: 136.9111424088478
+12499.8s 729 Total train accuracy for epoch 64: 70.392
+12503.2s 730 Total test loss for epoch 64: 54.113065123558044
+12503.2s 731 Total test accuracy for epoch 64: 82.53
+12503.9s 732 Starting epoch: 65
+12651.8s 733 Total train loss for epoch 65: 131.3641117811203
+12651.8s 734 Total train accuracy for epoch 65: 71.504
+12655.2s 735 Total test loss for epoch 65: 53.94828897714615
+12655.2s 736 Total test accuracy for epoch 65: 82.5
+12655.9s 737 Starting epoch: 66
+12803.6s 738 Total train loss for epoch 66: 127.09628319740295
+12803.6s 739 Total train accuracy for epoch 66: 72.426
+12806.9s 740 Total test loss for epoch 66: 53.67303240299225
+12806.9s 741 Total test accuracy for epoch 66: 82.99
+12807.6s 742 Starting epoch: 67
+12954.9s 743 Total train loss for epoch 67: 121.65783274173737
+12954.9s 744 Total train accuracy for epoch 67: 73.5
+12958.2s 745 Total test loss for epoch 67: 53.94979724287987
+12958.2s 746 Total test accuracy for epoch 67: 83.1
+12958.9s 747 Starting epoch: 68
+13105.8s 748 Total train loss for epoch 68: 116.89694398641586
+13105.8s 749 Total train accuracy for epoch 68: 74.36
+13109.4s 750 Total test loss for epoch 68: 54.14491355419159
+13109.4s 751 Total test accuracy for epoch 68: 82.65
+13110.1s 752 Starting epoch: 69
+13257.0s 753 Total train loss for epoch 69: 112.35674864053726
+13257.0s 754 Total train accuracy for epoch 69: 75.358
+13260.4s 755 Total test loss for epoch 69: 52.26828172802925
+13260.4s 756 Total test accuracy for epoch 69: 83.27
+13261.1s 757 Starting epoch: 70
+13408.1s 758 Total train loss for epoch 70: 107.93680927157402
+13408.1s 759 Total train accuracy for epoch 70: 76.096
+13411.5s 760 Total test loss for epoch 70: 51.68621829152107
+13411.5s 761 Total test accuracy for epoch 70: 83.01
+13412.2s 762 Starting epoch: 71
+13559.4s 763 Total train loss for epoch 71: 104.15899509191513
+13559.4s 764 Total train accuracy for epoch 71: 77.174
+13562.8s 765 Total test loss for epoch 71: 51.808535784482956
+13562.8s 766 Total test accuracy for epoch 71: 83.25
+13563.5s 767 Starting epoch: 72
+13710.7s 768 Total train loss for epoch 72: 100.09558430314064
+13710.7s 769 Total train accuracy for epoch 72: 77.996
+13714.0s 770 Total test loss for epoch 72: 53.1007661819458
+13714.0s 771 Total test accuracy for epoch 72: 83.18
+13714.7s 772 Starting epoch: 73
+13861.7s 773 Total train loss for epoch 73: 97.23269063234329
+13861.7s 774 Total train accuracy for epoch 73: 78.348
+13865.1s 775 Total test loss for epoch 73: 51.23386514186859
+13865.1s 776 Total test accuracy for epoch 73: 83.46
+13865.8s 777 Starting epoch: 74
+14013.2s 778 Total train loss for epoch 74: 94.38971465826035
+14013.2s 779 Total train accuracy for epoch 74: 79.218
+14016.8s 780 Total test loss for epoch 74: 51.228961139917374
+14016.8s 781 Total test accuracy for epoch 74: 83.2
+14017.5s 782 Starting epoch: 75
+14164.7s 783 Total train loss for epoch 75: 92.06680256128311
+14164.7s 784 Total train accuracy for epoch 75: 79.506
+14168.0s 785 Total test loss for epoch 75: 50.44263285398483
+14168.0s 786 Total test accuracy for epoch 75: 83.53
+14168.7s 787 Starting epoch: 76
+14315.8s 788 Total train loss for epoch 76: 89.78556099534035
+14315.8s 789 Total train accuracy for epoch 76: 80.108
+14319.1s 790 Total test loss for epoch 76: 49.994271606206894
+14319.1s 791 Total test accuracy for epoch 76: 83.67
+14319.8s 792 Starting epoch: 77
+14467.1s 793 Total train loss for epoch 77: 88.08184319734573
+14467.1s 794 Total train accuracy for epoch 77: 80.568
+14470.4s 795 Total test loss for epoch 77: 50.538763880729675
+14470.4s 796 Total test accuracy for epoch 77: 83.51
+14471.1s 797 Starting epoch: 78
+14618.1s 798 Total train loss for epoch 78: 86.56305530667305
+14618.1s 799 Total train accuracy for epoch 78: 81.078
+14621.5s 800 Total test loss for epoch 78: 50.83084908127785
+14621.5s 801 Total test accuracy for epoch 78: 83.73
+14622.2s 802 Starting epoch: 79
+14769.6s 803 Total train loss for epoch 79: 85.85118988156319
+14769.6s 804 Total train accuracy for epoch 79: 80.988
+14773.0s 805 Total test loss for epoch 79: 50.168941497802734
+14773.0s 806 Total test accuracy for epoch 79: 83.68
+14773.7s 807 Starting epoch: 80
+14921.8s 808 Total train loss for epoch 80: 86.03493109345436
+14921.8s 809 Total train accuracy for epoch 80: 81.044
+14925.3s 810 Total test loss for epoch 80: 51.148542642593384
+14925.3s 811 Total test accuracy for epoch 80: 83.35
+14927.1s 812 Resnet18 PGD
+14930.6s 813 Total test loss for epoch 1: 51.148542642593384
+14930.6s 814 Total test accuracy for epoch 1: 83.35
+15063.2s 815 Accuracy on adversarial examples generated using PGD attack with 20 steps: 43.69%
+15098.9s 816 Accuracy on adversarial examples generated using PGD attack with 5 steps: 61.96%
+15166.9s 817 Accuracy on adversarial examples generated using PGD attack with 10 steps: 46.58%
+15267.3s 818 Accuracy on adversarial examples generated using PGD attack with 15 steps: 44.65%
+15399.9s 819 Accuracy on adversarial examples generated using PGD attack with 20 steps: 43.69%
+15401.8s 820 Total train time for model resnet18_pgd_epochs_80_lr_0.1 is 202 minutes, 44 seconds.
+15401.8s 821 Starting epoch: 1
+15555.0s 822 Total train loss for epoch 1: 338.5833236724138
+15555.0s 823 Total train accuracy for epoch 1: 35.46825
+15558.3s 824 Total test loss for epoch 1: 170.2863770723343
+15558.3s 825 Total test accuracy for epoch 1: 43.45
+15559.0s 826 Starting epoch: 2
+15711.9s 827 Total train loss for epoch 2: 280.1840500384569
+15711.9s 828 Total train accuracy for epoch 2: 46.5105
+15715.2s 829 Total test loss for epoch 2: 120.43073850870132
+15715.2s 830 Total test accuracy for epoch 2: 57.36
+15715.9s 831 Starting epoch: 3
+15868.5s 832 Total train loss for epoch 3: 241.73484370857477
+15868.5s 833 Total train accuracy for epoch 3: 53.838
+15871.9s 834 Total test loss for epoch 3: 106.85402816534042
+15871.9s 835 Total test accuracy for epoch 3: 62.21
+15872.6s 836 Starting epoch: 4
+16025.1s 837 Total train loss for epoch 4: 216.8541411012411
+16025.1s 838 Total train accuracy for epoch 4: 58.4725
+16028.4s 839 Total test loss for epoch 4: 105.29174447059631
+16028.4s 840 Total test accuracy for epoch 4: 61.89
+16029.1s 841 Starting epoch: 5
+16181.8s 842 Total train loss for epoch 5: 199.20583336800337
+16181.8s 843 Total train accuracy for epoch 5: 61.96025
+16185.2s 844 Total test loss for epoch 5: 83.05251631140709
+16185.2s 845 Total test accuracy for epoch 5: 70.59
+16185.9s 846 Starting epoch: 6
+16338.4s 847 Total train loss for epoch 6: 183.57937613129616
+16338.4s 848 Total train accuracy for epoch 6: 64.838
+16341.7s 849 Total test loss for epoch 6: 73.23641192913055
+16341.7s 850 Total test accuracy for epoch 6: 74.76
+16342.4s 851 Starting epoch: 7
+16494.7s 852 Total train loss for epoch 7: 170.44792843610048
+16494.7s 853 Total train accuracy for epoch 7: 67.236
+16498.0s 854 Total test loss for epoch 7: 65.23727795481682
+16498.0s 855 Total test accuracy for epoch 7: 77.31
+16498.7s 856 Starting epoch: 8
+16651.6s 857 Total train loss for epoch 8: 159.40573578700423
+16651.6s 858 Total train accuracy for epoch 8: 69.28225
+16655.0s 859 Total test loss for epoch 8: 58.110952973365784
+16655.0s 860 Total test accuracy for epoch 8: 79.6
+16655.7s 861 Starting epoch: 9
+16809.0s 862 Total train loss for epoch 9: 148.58821318671107
+16809.0s 863 Total train accuracy for epoch 9: 71.65775
+16812.5s 864 Total test loss for epoch 9: 50.8972932100296
+16812.5s 865 Total test accuracy for epoch 9: 83.06
+16813.2s 866 Starting epoch: 10
+16966.1s 867 Total train loss for epoch 10: 141.79088209941983
+16966.1s 868 Total train accuracy for epoch 10: 73.11125
+16969.5s 869 Total test loss for epoch 10: 48.46018934249878
+16969.5s 870 Total test accuracy for epoch 10: 83.56
+16971.1s 871 Resnet18 Free
+16974.5s 872 Total test loss for epoch 1: 48.46018934249878
+16974.5s 873 Total test accuracy for epoch 1: 83.56
+17107.6s 874 Accuracy on adversarial examples generated using PGD attack with 20 steps: 29.23%
+17143.3s 875 Accuracy on adversarial examples generated using PGD attack with 5 steps: 53.13%
+17211.6s 876 Accuracy on adversarial examples generated using PGD attack with 10 steps: 31.99%
+17312.1s 877 Accuracy on adversarial examples generated using PGD attack with 15 steps: 30.16%
+17444.9s 878 Accuracy on adversarial examples generated using PGD attack with 20 steps: 29.23%
+17446.7s 879 Total train time for model resnet18_free_epochs_10_replay_8_lr_0.02 is 26 minutes, 8 seconds.
+17446.7s 880 Starting epoch: 1
+17493.0s 881 Total train loss for epoch 1: 453.2729411125183
+17493.0s 882 Total train accuracy for epoch 1: 9.228
+17496.6s 883 Total test loss for epoch 1: 219.94986057281494
+17496.6s 884 Total test accuracy for epoch 1: 17.0
+17497.3s 885 Starting epoch: 2
+17543.1s 886 Total train loss for epoch 2: 438.1565945148468
+17543.1s 887 Total train accuracy for epoch 2: 15.094
+17546.4s 888 Total test loss for epoch 2: 205.67161560058594
+17546.4s 889 Total test accuracy for epoch 2: 24.35
+17547.1s 890 Starting epoch: 3
+17593.0s 891 Total train loss for epoch 3: 422.6535806655884
+17593.0s 892 Total train accuracy for epoch 3: 18.91
+17596.4s 893 Total test loss for epoch 3: 188.70139718055725
+17596.4s 894 Total test accuracy for epoch 3: 30.71
+17597.1s 895 Starting epoch: 4
+17642.9s 896 Total train loss for epoch 4: 406.53241443634033
+17642.9s 897 Total train accuracy for epoch 4: 21.622
+17646.3s 898 Total test loss for epoch 4: 178.69192624092102
+17646.3s 899 Total test accuracy for epoch 4: 32.77
+17647.0s 900 Starting epoch: 5
+17692.8s 901 Total train loss for epoch 5: 392.1639748811722
+17692.8s 902 Total train accuracy for epoch 5: 24.578
+17696.2s 903 Total test loss for epoch 5: 165.5701642036438
+17696.2s 904 Total test accuracy for epoch 5: 40.24
+17696.9s 905 Starting epoch: 6
+17742.6s 906 Total train loss for epoch 6: 380.8439869880676
+17742.6s 907 Total train accuracy for epoch 6: 26.262
+17746.1s 908 Total test loss for epoch 6: 162.93591725826263
+17746.1s 909 Total test accuracy for epoch 6: 39.13
+17746.8s 910 Starting epoch: 7
+17792.6s 911 Total train loss for epoch 7: 373.0184005498886
+17792.6s 912 Total train accuracy for epoch 7: 27.79
+17795.9s 913 Total test loss for epoch 7: 171.89436078071594
+17795.9s 914 Total test accuracy for epoch 7: 39.4
+17796.6s 915 Starting epoch: 8
+17842.3s 916 Total train loss for epoch 8: 365.9054754972458
+17842.3s 917 Total train accuracy for epoch 8: 29.218
+17845.7s 918 Total test loss for epoch 8: 152.35703301429749
+17845.7s 919 Total test accuracy for epoch 8: 43.01
+17846.4s 920 Starting epoch: 9
+17892.1s 921 Total train loss for epoch 9: 358.4090269804001
+17892.1s 922 Total train accuracy for epoch 9: 30.518
+17895.4s 923 Total test loss for epoch 9: 142.30286121368408
+17895.4s 924 Total test accuracy for epoch 9: 49.96
+17896.1s 925 Starting epoch: 10
+17942.1s 926 Total train loss for epoch 10: 350.5475620031357
+17942.1s 927 Total train accuracy for epoch 10: 32.31
+17945.6s 928 Total test loss for epoch 10: 143.76272320747375
+17945.6s 929 Total test accuracy for epoch 10: 49.17
+17946.3s 930 Starting epoch: 11
+17992.2s 931 Total train loss for epoch 11: 343.7392724752426
+17992.2s 932 Total train accuracy for epoch 11: 33.2
+17995.8s 933 Total test loss for epoch 11: 135.96078836917877
+17995.8s 934 Total test accuracy for epoch 11: 51.97
+17996.5s 935 Starting epoch: 12
+18042.4s 936 Total train loss for epoch 12: 335.5740453004837
+18042.4s 937 Total train accuracy for epoch 12: 34.782
+18045.7s 938 Total test loss for epoch 12: 127.00689506530762
+18045.7s 939 Total test accuracy for epoch 12: 56.0
+18046.4s 940 Starting epoch: 13
+18092.4s 941 Total train loss for epoch 13: 327.09464621543884
+18092.4s 942 Total train accuracy for epoch 13: 36.374
+18095.7s 943 Total test loss for epoch 13: 127.63536095619202
+18095.7s 944 Total test accuracy for epoch 13: 54.86
+18096.4s 945 Starting epoch: 14
+18142.3s 946 Total train loss for epoch 14: 318.4138847589493
+18142.3s 947 Total train accuracy for epoch 14: 37.9
+18145.6s 948 Total test loss for epoch 14: 119.70446115732193
+18145.6s 949 Total test accuracy for epoch 14: 59.99
+18146.3s 950 Starting epoch: 15
+18192.4s 951 Total train loss for epoch 15: 312.0049320459366
+18192.4s 952 Total train accuracy for epoch 15: 38.992
+18195.7s 953 Total test loss for epoch 15: 117.10997718572617
+18195.7s 954 Total test accuracy for epoch 15: 59.69
+18196.4s 955 Starting epoch: 16
+18242.2s 956 Total train loss for epoch 16: 304.6138446331024
+18242.2s 957 Total train accuracy for epoch 16: 40.306
+18245.7s 958 Total test loss for epoch 16: 110.07457822561264
+18245.7s 959 Total test accuracy for epoch 16: 61.03
+18246.4s 960 Starting epoch: 17
+18292.3s 961 Total train loss for epoch 17: 298.80715799331665
+18292.3s 962 Total train accuracy for epoch 17: 41.502
+18295.7s 963 Total test loss for epoch 17: 109.69597494602203
+18295.7s 964 Total test accuracy for epoch 17: 62.17
+18296.5s 965 Starting epoch: 18
+18342.7s 966 Total train loss for epoch 18: 292.0321795940399
+18342.7s 967 Total train accuracy for epoch 18: 42.97
+18346.1s 968 Total test loss for epoch 18: 102.17194503545761
+18346.1s 969 Total test accuracy for epoch 18: 65.06
+18346.8s 970 Starting epoch: 19
+18393.1s 971 Total train loss for epoch 19: 285.15957176685333
+18393.1s 972 Total train accuracy for epoch 19: 44.04
+18396.4s 973 Total test loss for epoch 19: 108.22031080722809
+18396.4s 974 Total test accuracy for epoch 19: 62.67
+18397.1s 975 Starting epoch: 20
+18443.5s 976 Total train loss for epoch 20: 280.63329100608826
+18443.5s 977 Total train accuracy for epoch 20: 44.778
+18446.9s 978 Total test loss for epoch 20: 102.22122800350189
+18446.9s 979 Total test accuracy for epoch 20: 64.62
+18447.6s 980 Starting epoch: 21
+18493.6s 981 Total train loss for epoch 21: 275.04510712623596
+18493.6s 982 Total train accuracy for epoch 21: 45.746
+18497.1s 983 Total test loss for epoch 21: 98.60397338867188
+18497.1s 984 Total test accuracy for epoch 21: 67.46
+18497.9s 985 Starting epoch: 22
+18543.9s 986 Total train loss for epoch 22: 271.76700365543365
+18543.9s 987 Total train accuracy for epoch 22: 46.8
+18547.2s 988 Total test loss for epoch 22: 94.42768156528473
+18547.2s 989 Total test accuracy for epoch 22: 69.6
+18547.9s 990 Starting epoch: 23
+18594.5s 991 Total train loss for epoch 23: 266.5607308149338
+18594.5s 992 Total train accuracy for epoch 23: 47.382
+18597.8s 993 Total test loss for epoch 23: 91.02882784605026
+18597.8s 994 Total test accuracy for epoch 23: 70.67
+18598.6s 995 Starting epoch: 24
+18644.5s 996 Total train loss for epoch 24: 263.60569417476654
+18644.5s 997 Total train accuracy for epoch 24: 47.94
+18648.0s 998 Total test loss for epoch 24: 88.71825337409973
+18648.0s 999 Total test accuracy for epoch 24: 70.34
+18648.7s 1000 Starting epoch: 25
+18694.9s 1001 Total train loss for epoch 25: 259.66022086143494
+18694.9s 1002 Total train accuracy for epoch 25: 48.724
+18698.2s 1003 Total test loss for epoch 25: 93.14553439617157
+18698.2s 1004 Total test accuracy for epoch 25: 70.2
+18698.9s 1005 Starting epoch: 26
+18745.2s 1006 Total train loss for epoch 26: 256.5742212533951
+18745.2s 1007 Total train accuracy for epoch 26: 49.31
+18748.8s 1008 Total test loss for epoch 26: 91.36159312725067
+18748.8s 1009 Total test accuracy for epoch 26: 70.36
+18749.5s 1010 Starting epoch: 27
+18795.7s 1011 Total train loss for epoch 27: 252.960795879364
+18795.7s 1012 Total train accuracy for epoch 27: 49.924
+18799.0s 1013 Total test loss for epoch 27: 84.02467399835587
+18799.0s 1014 Total test accuracy for epoch 27: 74.4
+18799.7s 1015 Starting epoch: 28
+18845.8s 1016 Total train loss for epoch 28: 249.7976392507553
+18845.8s 1017 Total train accuracy for epoch 28: 50.696
+18849.2s 1018 Total test loss for epoch 28: 84.06442123651505
+18849.2s 1019 Total test accuracy for epoch 28: 73.63
+18849.9s 1020 Starting epoch: 29
+18895.6s 1021 Total train loss for epoch 29: 247.27671813964844
+18895.6s 1022 Total train accuracy for epoch 29: 50.938
+18899.0s 1023 Total test loss for epoch 29: 83.12849521636963
+18899.0s 1024 Total test accuracy for epoch 29: 72.94
+18899.7s 1025 Starting epoch: 30
+18945.9s 1026 Total train loss for epoch 30: 245.52491915225983
+18945.9s 1027 Total train accuracy for epoch 30: 51.352
+18949.2s 1028 Total test loss for epoch 30: 88.13530552387238
+18949.2s 1029 Total test accuracy for epoch 30: 70.89
+18949.9s 1030 Starting epoch: 31
+18995.6s 1031 Total train loss for epoch 31: 243.0835566520691
+18995.6s 1032 Total train accuracy for epoch 31: 51.682
+18999.2s 1033 Total test loss for epoch 31: 86.1433909535408
+18999.2s 1034 Total test accuracy for epoch 31: 73.25
+18999.9s 1035 Starting epoch: 32
+19045.6s 1036 Total train loss for epoch 32: 240.92877459526062
+19045.6s 1037 Total train accuracy for epoch 32: 52.056
+19048.9s 1038 Total test loss for epoch 32: 78.22425019741058
+19048.9s 1039 Total test accuracy for epoch 32: 74.36
+19049.6s 1040 Starting epoch: 33
+19095.8s 1041 Total train loss for epoch 33: 238.67258548736572
+19095.8s 1042 Total train accuracy for epoch 33: 52.318
+19099.2s 1043 Total test loss for epoch 33: 82.57886582612991
+19099.2s 1044 Total test accuracy for epoch 33: 72.52
+19099.9s 1045 Starting epoch: 34
+19145.9s 1046 Total train loss for epoch 34: 237.8061476945877
+19145.9s 1047 Total train accuracy for epoch 34: 52.49
+19149.2s 1048 Total test loss for epoch 34: 84.5923581123352
+19149.2s 1049 Total test accuracy for epoch 34: 72.84
+19149.9s 1050 Starting epoch: 35
+19195.6s 1051 Total train loss for epoch 35: 235.08125400543213
+19195.6s 1052 Total train accuracy for epoch 35: 53.234
+19199.0s 1053 Total test loss for epoch 35: 82.00304901599884
+19199.0s 1054 Total test accuracy for epoch 35: 72.59
+19199.7s 1055 Starting epoch: 36
+19245.2s 1056 Total train loss for epoch 36: 234.0620288848877
+19245.2s 1057 Total train accuracy for epoch 36: 53.436
+19248.7s 1058 Total test loss for epoch 36: 82.29022175073624
+19248.7s 1059 Total test accuracy for epoch 36: 72.73
+19249.4s 1060 Starting epoch: 37
+19294.9s 1061 Total train loss for epoch 37: 233.02381217479706
+19294.9s 1062 Total train accuracy for epoch 37: 53.288
+19298.3s 1063 Total test loss for epoch 37: 85.14332103729248
+19298.3s 1064 Total test accuracy for epoch 37: 71.08
+19299.0s 1065 Starting epoch: 38
+19344.5s 1066 Total train loss for epoch 38: 231.74068355560303
+19344.5s 1067 Total train accuracy for epoch 38: 53.926
+19347.8s 1068 Total test loss for epoch 38: 81.74701261520386
+19347.8s 1069 Total test accuracy for epoch 38: 71.56
+19348.5s 1070 Starting epoch: 39
+19394.1s 1071 Total train loss for epoch 39: 229.87598776817322
+19394.1s 1072 Total train accuracy for epoch 39: 54.108
+19397.4s 1073 Total test loss for epoch 39: 80.14369720220566
+19397.4s 1074 Total test accuracy for epoch 39: 70.53
+19398.2s 1075 Starting epoch: 40
+19443.9s 1076 Total train loss for epoch 40: 229.77570128440857
+19443.9s 1077 Total train accuracy for epoch 40: 53.862
+19447.2s 1078 Total test loss for epoch 40: 80.02887296676636
+19447.2s 1079 Total test accuracy for epoch 40: 73.16
+19447.9s 1080 Starting epoch: 41
+19493.5s 1081 Total train loss for epoch 41: 228.63037586212158
+19493.5s 1082 Total train accuracy for epoch 41: 54.052
+19496.8s 1083 Total test loss for epoch 41: 85.40339839458466
+19496.8s 1084 Total test accuracy for epoch 41: 72.37
+19497.6s 1085 Starting epoch: 42
+19543.1s 1086 Total train loss for epoch 42: 226.36333793401718
+19543.1s 1087 Total train accuracy for epoch 42: 54.412
+19546.4s 1088 Total test loss for epoch 42: 80.53523778915405
+19546.4s 1089 Total test accuracy for epoch 42: 71.65
+19547.1s 1090 Starting epoch: 43
+19592.7s 1091 Total train loss for epoch 43: 222.9601594209671
+19592.7s 1092 Total train accuracy for epoch 43: 55.522
+19596.1s 1093 Total test loss for epoch 43: 73.43522334098816
+19596.1s 1094 Total test accuracy for epoch 43: 77.28
+19596.8s 1095 Starting epoch: 44
+19642.2s 1096 Total train loss for epoch 44: 221.7684781551361
+19642.2s 1097 Total train accuracy for epoch 44: 55.298
+19645.5s 1098 Total test loss for epoch 44: 77.10350972414017
+19645.5s 1099 Total test accuracy for epoch 44: 74.7
+19646.2s 1100 Starting epoch: 45
+19691.8s 1101 Total train loss for epoch 45: 220.06418478488922
+19691.8s 1102 Total train accuracy for epoch 45: 55.67
+19695.2s 1103 Total test loss for epoch 45: 77.84936988353729
+19695.2s 1104 Total test accuracy for epoch 45: 74.27
+19695.9s 1105 Starting epoch: 46
+19741.3s 1106 Total train loss for epoch 46: 217.65637439489365
+19741.3s 1107 Total train accuracy for epoch 46: 56.0
+19744.6s 1108 Total test loss for epoch 46: 75.82432734966278
+19744.6s 1109 Total test accuracy for epoch 46: 75.48
+19745.3s 1110 Starting epoch: 47
+19791.1s 1111 Total train loss for epoch 47: 215.8990619778633
+19791.1s 1112 Total train accuracy for epoch 47: 56.496
+19794.3s 1113 Total test loss for epoch 47: 72.39420580863953
+19794.3s 1114 Total test accuracy for epoch 47: 76.91
+19795.1s 1115 Starting epoch: 48
+19840.7s 1116 Total train loss for epoch 48: 213.69295769929886
+19840.7s 1117 Total train accuracy for epoch 48: 56.916
+19844.3s 1118 Total test loss for epoch 48: 71.3076559305191
+19844.3s 1119 Total test accuracy for epoch 48: 76.59
+19845.0s 1120 Starting epoch: 49
+19890.5s 1121 Total train loss for epoch 49: 211.80044037103653
+19890.5s 1122 Total train accuracy for epoch 49: 57.104
+19893.8s 1123 Total test loss for epoch 49: 71.74977833032608
+19893.8s 1124 Total test accuracy for epoch 49: 75.93
+19894.5s 1125 Starting epoch: 50
+19940.2s 1126 Total train loss for epoch 50: 208.91184848546982
+19940.2s 1127 Total train accuracy for epoch 50: 57.724
+19943.5s 1128 Total test loss for epoch 50: 76.35893225669861
+19943.5s 1129 Total test accuracy for epoch 50: 75.19
+19944.2s 1130 Starting epoch: 51
+19990.1s 1131 Total train loss for epoch 51: 208.1784851551056
+19990.1s 1132 Total train accuracy for epoch 51: 57.746
+19993.5s 1133 Total test loss for epoch 51: 72.2686939239502
+19993.5s 1134 Total test accuracy for epoch 51: 75.22
+19994.2s 1135 Starting epoch: 52
+20039.9s 1136 Total train loss for epoch 52: 205.8889033794403
+20039.9s 1137 Total train accuracy for epoch 52: 57.916
+20043.3s 1138 Total test loss for epoch 52: 69.64465945959091
+20043.3s 1139 Total test accuracy for epoch 52: 77.17
+20044.0s 1140 Starting epoch: 53
+20090.0s 1141 Total train loss for epoch 53: 203.77665972709656
+20090.0s 1142 Total train accuracy for epoch 53: 58.458
+20093.3s 1143 Total test loss for epoch 53: 68.67272898554802
+20093.3s 1144 Total test accuracy for epoch 53: 77.79
+20094.0s 1145 Starting epoch: 54
+20140.3s 1146 Total train loss for epoch 54: 201.2308949828148
+20140.3s 1147 Total train accuracy for epoch 54: 59.036
+20143.7s 1148 Total test loss for epoch 54: 71.73164421319962
+20143.7s 1149 Total test accuracy for epoch 54: 78.43
+20144.5s 1150 Starting epoch: 55
+20190.5s 1151 Total train loss for epoch 55: 198.65070867538452
+20190.5s 1152 Total train accuracy for epoch 55: 59.424
+20193.8s 1153 Total test loss for epoch 55: 70.42688763141632
+20193.8s 1154 Total test accuracy for epoch 55: 77.19
+20194.5s 1155 Starting epoch: 56
+20240.3s 1156 Total train loss for epoch 56: 197.28572368621826
+20240.3s 1157 Total train accuracy for epoch 56: 59.546
+20243.7s 1158 Total test loss for epoch 56: 67.87286341190338
+20243.7s 1159 Total test accuracy for epoch 56: 76.19
+20244.4s 1160 Starting epoch: 57
+20290.5s 1161 Total train loss for epoch 57: 194.70411825180054
+20290.5s 1162 Total train accuracy for epoch 57: 59.93
+20293.9s 1163 Total test loss for epoch 57: 66.96888899803162
+20293.9s 1164 Total test accuracy for epoch 57: 79.44
+20294.6s 1165 Starting epoch: 58
+20340.4s 1166 Total train loss for epoch 58: 191.76296871900558
+20340.4s 1167 Total train accuracy for epoch 58: 60.37
+20343.8s 1168 Total test loss for epoch 58: 70.43047082424164
+20343.8s 1169 Total test accuracy for epoch 58: 76.31
+20344.5s 1170 Starting epoch: 59
+20390.4s 1171 Total train loss for epoch 59: 190.38053733110428
+20390.4s 1172 Total train accuracy for epoch 59: 60.852
+20393.7s 1173 Total test loss for epoch 59: 63.792697697877884
+20393.7s 1174 Total test accuracy for epoch 59: 79.96
+20394.4s 1175 Starting epoch: 60
+20440.4s 1176 Total train loss for epoch 60: 187.19320183992386
+20440.4s 1177 Total train accuracy for epoch 60: 61.34
+20443.7s 1178 Total test loss for epoch 60: 64.742576867342
+20443.7s 1179 Total test accuracy for epoch 60: 78.95
+20444.4s 1180 Starting epoch: 61
+20490.2s 1181 Total train loss for epoch 61: 184.85880601406097
+20490.2s 1182 Total train accuracy for epoch 61: 61.566
+20493.5s 1183 Total test loss for epoch 61: 67.19374856352806
+20493.5s 1184 Total test accuracy for epoch 61: 77.45
+20494.2s 1185 Starting epoch: 62
+20540.2s 1186 Total train loss for epoch 62: 182.04397523403168
+20540.2s 1187 Total train accuracy for epoch 62: 62.016
+20543.5s 1188 Total test loss for epoch 62: 63.043503016233444
+20543.5s 1189 Total test accuracy for epoch 62: 79.82
+20544.2s 1190 Starting epoch: 63
+20589.7s 1191 Total train loss for epoch 63: 178.36021798849106
+20589.7s 1192 Total train accuracy for epoch 63: 62.91
+20593.1s 1193 Total test loss for epoch 63: 62.54474502801895
+20593.1s 1194 Total test accuracy for epoch 63: 79.74
+20593.8s 1195 Starting epoch: 64
+20639.5s 1196 Total train loss for epoch 64: 168.41848194599152
+20639.5s 1197 Total train accuracy for epoch 64: 64.962
+20642.9s 1198 Total test loss for epoch 64: 60.80187487602234
+20642.9s 1199 Total test accuracy for epoch 64: 78.28
+20643.6s 1200 Starting epoch: 65
+20689.2s 1201 Total train loss for epoch 65: 51.90264680981636
+20689.2s 1202 Total train accuracy for epoch 65: 91.068
+20692.6s 1203 Total test loss for epoch 65: 125.20293253660202
+20692.6s 1204 Total test accuracy for epoch 65: 64.57
+20693.3s 1205 Starting epoch: 66
+20738.8s 1206 Total train loss for epoch 66: 49.539808481931686
+20738.8s 1207 Total train accuracy for epoch 66: 91.738
+20742.1s 1208 Total test loss for epoch 66: 141.7619473338127
+20742.1s 1209 Total test accuracy for epoch 66: 60.58
+20742.8s 1210 Starting epoch: 67
+20788.6s 1211 Total train loss for epoch 67: 31.89102554321289
+20788.6s 1212 Total train accuracy for epoch 67: 94.734
+20791.9s 1213 Total test loss for epoch 67: 100.42738038301468
+20791.9s 1214 Total test accuracy for epoch 67: 73.72
+20792.6s 1215 Starting epoch: 68
+20838.1s 1216 Total train loss for epoch 68: 49.604400143027306
+20838.1s 1217 Total train accuracy for epoch 68: 91.464
+20841.4s 1218 Total test loss for epoch 68: 92.29204136133194
+20841.4s 1219 Total test accuracy for epoch 68: 71.98
+20842.1s 1220 Starting epoch: 69
+20887.8s 1221 Total train loss for epoch 69: 32.65764959156513
+20887.8s 1222 Total train accuracy for epoch 69: 94.55
+20891.1s 1223 Total test loss for epoch 69: 110.09404975175858
+20891.1s 1224 Total test accuracy for epoch 69: 69.64
+20891.8s 1225 Starting epoch: 70
+20937.3s 1226 Total train loss for epoch 70: 17.2509391233325
+20937.3s 1227 Total train accuracy for epoch 70: 97.258
+20940.8s 1228 Total test loss for epoch 70: 77.81013214588165
+20940.8s 1229 Total test accuracy for epoch 70: 78.1
+20941.5s 1230 Starting epoch: 71
+20986.8s 1231 Total train loss for epoch 71: 13.297538496553898
+20986.8s 1232 Total train accuracy for epoch 71: 97.928
+20990.1s 1233 Total test loss for epoch 71: 80.41822183132172
+20990.1s 1234 Total test accuracy for epoch 71: 78.38
+20990.8s 1235 Starting epoch: 72
+21036.5s 1236 Total train loss for epoch 72: 11.198260813951492
+21036.5s 1237 Total train accuracy for epoch 72: 98.196
+21039.8s 1238 Total test loss for epoch 72: 55.98767048120499
+21039.8s 1239 Total test accuracy for epoch 72: 84.2
+21040.5s 1240 Starting epoch: 73
+21086.2s 1241 Total train loss for epoch 73: 9.686070326715708
+21086.2s 1242 Total train accuracy for epoch 73: 98.562
+21089.6s 1243 Total test loss for epoch 73: 55.15285882353783
+21089.6s 1244 Total test accuracy for epoch 73: 84.15
+21090.3s 1245 Starting epoch: 74
+21136.1s 1246 Total train loss for epoch 74: 7.805940086022019
+21136.1s 1247 Total train accuracy for epoch 74: 98.816
+21139.4s 1248 Total test loss for epoch 74: 49.11936330795288
+21139.4s 1249 Total test accuracy for epoch 74: 86.36
+21140.1s 1250 Starting epoch: 75
+21185.6s 1251 Total train loss for epoch 75: 6.503063656855375
+21185.6s 1252 Total train accuracy for epoch 75: 99.048
+21188.9s 1253 Total test loss for epoch 75: 52.681629061698914
+21188.9s 1254 Total test accuracy for epoch 75: 85.89
+21189.6s 1255 Starting epoch: 76
+21235.1s 1256 Total train loss for epoch 76: 5.663276044651866
+21235.1s 1257 Total train accuracy for epoch 76: 99.178
+21238.4s 1258 Total test loss for epoch 76: 45.238008826971054
+21238.4s 1259 Total test accuracy for epoch 76: 87.33
+21239.1s 1260 Starting epoch: 77
+21284.8s 1261 Total train loss for epoch 77: 3.970545274205506
+21284.8s 1262 Total train accuracy for epoch 77: 99.478
+21288.1s 1263 Total test loss for epoch 77: 43.72189901769161
+21288.1s 1264 Total test accuracy for epoch 77: 87.84
+21288.8s 1265 Starting epoch: 78
+21334.3s 1266 Total train loss for epoch 78: 3.201248608995229
+21334.3s 1267 Total train accuracy for epoch 78: 99.59
+21337.6s 1268 Total test loss for epoch 78: 40.34152238070965
+21337.6s 1269 Total test accuracy for epoch 78: 88.73
+21338.3s 1270 Starting epoch: 79
+21383.8s 1271 Total train loss for epoch 79: 2.552793820388615
+21383.8s 1272 Total train accuracy for epoch 79: 99.736
+21387.2s 1273 Total test loss for epoch 79: 39.648817390203476
+21387.2s 1274 Total test accuracy for epoch 79: 89.25
+21387.9s 1275 Starting epoch: 80
+21433.3s 1276 Total train loss for epoch 80: 2.023755836300552
+21433.3s 1277 Total train accuracy for epoch 80: 99.772
+21436.6s 1278 Total test loss for epoch 80: 37.83983312547207
+21436.6s 1279 Total test accuracy for epoch 80: 89.64
+21438.2s 1280 Resnet18 Fast, no early stop
+21441.7s 1281 Total test loss for epoch 1: 37.83983312547207
+21441.7s 1282 Total test accuracy for epoch 1: 89.64
+21574.3s 1283 Accuracy on adversarial examples generated using PGD attack with 20 steps: 0.03%
+21609.8s 1284 Accuracy on adversarial examples generated using PGD attack with 5 steps: 4.5%
+21677.7s 1285 Accuracy on adversarial examples generated using PGD attack with 10 steps: 0.15%
+21778.0s 1286 Accuracy on adversarial examples generated using PGD attack with 15 steps: 0.04%
+21910.3s 1287 Accuracy on adversarial examples generated using PGD attack with 20 steps: 0.03%
+21910.5s 1288 /opt/conda/lib/python3.7/site-packages/ipykernel_launcher.py:329: RuntimeWarning: More than 20 figures have been opened. Figures created through the pyplot interface (`matplotlib.pyplot.figure`) are retained until explicitly closed and may consume too much memory. (To control this warning, see the rcParam `figure.max_open_warning`).
+21912.6s 1289 Total train time for model resnet18_fast_epochs_80_lr_0.2_no_early is 66 minutes, 30 seconds.
+21912.9s 1290 Starting epoch: 1
+21958.9s 1291 Total train loss for epoch 1: 454.52748250961304
+21958.9s 1292 Total train accuracy for epoch 1: 8.426
+21962.1s 1293 Total test loss for epoch 1: 224.44545364379883
+21962.1s 1294 Total test accuracy for epoch 1: 17.69
+21962.9s 1295 Starting epoch: 2
+22008.7s 1296 Total train loss for epoch 2: 440.48077297210693
+22008.7s 1297 Total train accuracy for epoch 2: 14.396
+22012.0s 1298 Total test loss for epoch 2: 204.51119828224182
+22012.0s 1299 Total test accuracy for epoch 2: 22.06
+22012.7s 1300 Starting epoch: 3
+22058.4s 1301 Total train loss for epoch 3: 422.6332838535309
+22058.4s 1302 Total train accuracy for epoch 3: 18.354
+22061.7s 1303 Total test loss for epoch 3: 188.74122619628906
+22061.7s 1304 Total test accuracy for epoch 3: 30.52
+22062.4s 1305 Starting epoch: 4
+22108.2s 1306 Total train loss for epoch 4: 404.1036009788513
+22108.2s 1307 Total train accuracy for epoch 4: 22.376
+22111.5s 1308 Total test loss for epoch 4: 173.74850392341614
+22111.5s 1309 Total test accuracy for epoch 4: 35.52
+22112.3s 1310 Starting epoch: 5
+22158.0s 1311 Total train loss for epoch 5: 391.3152686357498
+22158.0s 1312 Total train accuracy for epoch 5: 24.34
+22161.3s 1313 Total test loss for epoch 5: 169.60685765743256
+22161.3s 1314 Total test accuracy for epoch 5: 37.59
+22162.0s 1315 Starting epoch: 6
+22207.8s 1316 Total train loss for epoch 6: 382.8894374370575
+22207.8s 1317 Total train accuracy for epoch 6: 25.936
+22211.1s 1318 Total test loss for epoch 6: 162.95362269878387
+22211.1s 1319 Total test accuracy for epoch 6: 40.33
+22211.8s 1320 Starting epoch: 7
+22257.8s 1321 Total train loss for epoch 7: 373.2029720544815
+22257.8s 1322 Total train accuracy for epoch 7: 27.826
+22261.2s 1323 Total test loss for epoch 7: 156.9518758058548
+22261.2s 1324 Total test accuracy for epoch 7: 43.07
+22261.9s 1325 Starting epoch: 8
+22307.5s 1326 Total train loss for epoch 8: 365.69190979003906
+22307.5s 1327 Total train accuracy for epoch 8: 29.142
+22310.9s 1328 Total test loss for epoch 8: 158.3121279478073
+22310.9s 1329 Total test accuracy for epoch 8: 41.92
+22311.6s 1330 Starting epoch: 9
+22357.6s 1331 Total train loss for epoch 9: 358.04442369937897
+22357.6s 1332 Total train accuracy for epoch 9: 30.64
+22360.9s 1333 Total test loss for epoch 9: 146.20924651622772
+22360.9s 1334 Total test accuracy for epoch 9: 47.51
+22361.6s 1335 Starting epoch: 10
+22407.2s 1336 Total train loss for epoch 10: 350.5863298177719
+22407.2s 1337 Total train accuracy for epoch 10: 32.08
+22410.6s 1338 Total test loss for epoch 10: 140.38733577728271
+22410.6s 1339 Total test accuracy for epoch 10: 48.33
+22411.3s 1340 Starting epoch: 11
+22457.0s 1341 Total train loss for epoch 11: 342.7901816368103
+22457.0s 1342 Total train accuracy for epoch 11: 33.768
+22460.4s 1343 Total test loss for epoch 11: 135.63083744049072
+22460.4s 1344 Total test accuracy for epoch 11: 54.41
+22461.1s 1345 Starting epoch: 12
+22506.8s 1346 Total train loss for epoch 12: 335.5905044078827
+22506.8s 1347 Total train accuracy for epoch 12: 34.808
+22510.2s 1348 Total test loss for epoch 12: 131.61418223381042
+22510.2s 1349 Total test accuracy for epoch 12: 51.97
+22511.0s 1350 Starting epoch: 13
+22556.6s 1351 Total train loss for epoch 13: 328.83512234687805
+22556.6s 1352 Total train accuracy for epoch 13: 35.91
+22559.9s 1353 Total test loss for epoch 13: 127.23309338092804
+22559.9s 1354 Total test accuracy for epoch 13: 55.48
+22560.6s 1355 Starting epoch: 14
+22606.3s 1356 Total train loss for epoch 14: 320.8205908536911
+22606.3s 1357 Total train accuracy for epoch 14: 37.686
+22609.7s 1358 Total test loss for epoch 14: 121.38624250888824
+22609.7s 1359 Total test accuracy for epoch 14: 57.69
+22610.4s 1360 Starting epoch: 15
+22656.0s 1361 Total train loss for epoch 15: 313.73866736888885
+22656.0s 1362 Total train accuracy for epoch 15: 38.686
+22659.3s 1363 Total test loss for epoch 15: 116.62382900714874
+22659.3s 1364 Total test accuracy for epoch 15: 60.57
+22660.0s 1365 Starting epoch: 16
+22705.8s 1366 Total train loss for epoch 16: 307.2760874032974
+22705.8s 1367 Total train accuracy for epoch 16: 39.82
+22709.2s 1368 Total test loss for epoch 16: 112.62051570415497
+22709.2s 1369 Total test accuracy for epoch 16: 62.94
+22709.9s 1370 Starting epoch: 17
+22755.6s 1371 Total train loss for epoch 17: 300.15932035446167
+22755.6s 1372 Total train accuracy for epoch 17: 41.26
+22759.1s 1373 Total test loss for epoch 17: 108.7364490032196
+22759.1s 1374 Total test accuracy for epoch 17: 63.49
+22759.8s 1375 Starting epoch: 18
+22805.6s 1376 Total train loss for epoch 18: 295.44240176677704
+22805.6s 1377 Total train accuracy for epoch 18: 42.272
+22808.9s 1378 Total test loss for epoch 18: 110.31647175550461
+22808.9s 1379 Total test accuracy for epoch 18: 62.97
+22809.6s 1380 Starting epoch: 19
+22855.3s 1381 Total train loss for epoch 19: 288.40840554237366
+22855.3s 1382 Total train accuracy for epoch 19: 43.56
+22858.6s 1383 Total test loss for epoch 19: 108.92470800876617
+22858.6s 1384 Total test accuracy for epoch 19: 62.78
+22859.3s 1385 Starting epoch: 20
+22905.1s 1386 Total train loss for epoch 20: 283.0034633874893
+22905.1s 1387 Total train accuracy for epoch 20: 44.5
+22908.4s 1388 Total test loss for epoch 20: 104.3539115190506
+22908.4s 1389 Total test accuracy for epoch 20: 65.11
+22909.1s 1390 Starting epoch: 21
+22955.1s 1391 Total train loss for epoch 21: 278.5787297487259
+22955.1s 1392 Total train accuracy for epoch 21: 45.352
+22958.4s 1393 Total test loss for epoch 21: 101.73431503772736
+22958.4s 1394 Total test accuracy for epoch 21: 67.13
+22959.1s 1395 Starting epoch: 22
+23004.7s 1396 Total train loss for epoch 22: 272.4771270751953
+23004.7s 1397 Total train accuracy for epoch 22: 46.334
+23008.1s 1398 Total test loss for epoch 22: 101.40432500839233
+23008.1s 1399 Total test accuracy for epoch 22: 66.99
+23008.8s 1400 Starting epoch: 23
+23054.4s 1401 Total train loss for epoch 23: 269.89265263080597
+23054.4s 1402 Total train accuracy for epoch 23: 46.84
+23057.7s 1403 Total test loss for epoch 23: 98.6219852566719
+23057.7s 1404 Total test accuracy for epoch 23: 64.97
+23058.4s 1405 Starting epoch: 24
+23104.1s 1406 Total train loss for epoch 24: 265.2747801542282
+23104.1s 1407 Total train accuracy for epoch 24: 47.79
+23107.4s 1408 Total test loss for epoch 24: 91.75323468446732
+23107.4s 1409 Total test accuracy for epoch 24: 70.2
+23108.1s 1410 Starting epoch: 25
+23153.7s 1411 Total train loss for epoch 25: 261.40605306625366
+23153.7s 1412 Total train accuracy for epoch 25: 48.33
+23157.0s 1413 Total test loss for epoch 25: 89.12109410762787
+23157.0s 1414 Total test accuracy for epoch 25: 70.84
+23157.7s 1415 Starting epoch: 26
+23203.5s 1416 Total train loss for epoch 26: 258.4320693016052
+23203.5s 1417 Total train accuracy for epoch 26: 48.992
+23206.8s 1418 Total test loss for epoch 26: 87.79821693897247
+23206.8s 1419 Total test accuracy for epoch 26: 71.27
+23207.5s 1420 Starting epoch: 27
+23253.1s 1421 Total train loss for epoch 27: 255.11229860782623
+23253.1s 1422 Total train accuracy for epoch 27: 49.52
+23256.4s 1423 Total test loss for epoch 27: 91.96070408821106
+23256.4s 1424 Total test accuracy for epoch 27: 70.32
+23257.1s 1425 Starting epoch: 28
+23302.9s 1426 Total train loss for epoch 28: 250.82650005817413
+23302.9s 1427 Total train accuracy for epoch 28: 50.418
+23306.2s 1428 Total test loss for epoch 28: 85.0906668305397
+23306.2s 1429 Total test accuracy for epoch 28: 71.72
+23306.9s 1430 Starting epoch: 29
+23353.1s 1431 Total train loss for epoch 29: 249.05703830718994
+23353.1s 1432 Total train accuracy for epoch 29: 50.606
+23356.5s 1433 Total test loss for epoch 29: 90.16492962837219
+23356.5s 1434 Total test accuracy for epoch 29: 71.13
+23357.2s 1435 Starting epoch: 30
+23402.7s 1436 Total train loss for epoch 30: 246.07648241519928
+23402.7s 1437 Total train accuracy for epoch 30: 51.084
+23406.0s 1438 Total test loss for epoch 30: 89.46670830249786
+23406.0s 1439 Total test accuracy for epoch 30: 70.48
+23406.7s 1440 Starting epoch: 31
+23452.3s 1441 Total train loss for epoch 31: 244.343532204628
+23452.3s 1442 Total train accuracy for epoch 31: 51.456
+23455.7s 1443 Total test loss for epoch 31: 86.39707386493683
+23455.7s 1444 Total test accuracy for epoch 31: 72.1
+23456.4s 1445 Starting epoch: 32
+23502.1s 1446 Total train loss for epoch 32: 241.95528972148895
+23502.1s 1447 Total train accuracy for epoch 32: 51.894
+23505.4s 1448 Total test loss for epoch 32: 85.97404795885086
+23505.4s 1449 Total test accuracy for epoch 32: 72.23
+23506.1s 1450 Starting epoch: 33
+23551.8s 1451 Total train loss for epoch 33: 240.39565873146057
+23551.8s 1452 Total train accuracy for epoch 33: 52.342
+23555.2s 1453 Total test loss for epoch 33: 90.95786494016647
+23555.2s 1454 Total test accuracy for epoch 33: 67.33
+23555.9s 1455 Starting epoch: 34
+23601.4s 1456 Total train loss for epoch 34: 238.57433474063873
+23601.4s 1457 Total train accuracy for epoch 34: 52.644
+23604.9s 1458 Total test loss for epoch 34: 82.81369519233704
+23604.9s 1459 Total test accuracy for epoch 34: 73.11
+23605.6s 1460 Starting epoch: 35
+23651.0s 1461 Total train loss for epoch 35: 236.28519988059998
+23651.0s 1462 Total train accuracy for epoch 35: 52.786
+23654.4s 1463 Total test loss for epoch 35: 78.52328556776047
+23654.4s 1464 Total test accuracy for epoch 35: 74.62
+23655.1s 1465 Starting epoch: 36
+23700.7s 1466 Total train loss for epoch 36: 235.54756033420563
+23700.7s 1467 Total train accuracy for epoch 36: 53.11
+23704.0s 1468 Total test loss for epoch 36: 84.50141453742981
+23704.0s 1469 Total test accuracy for epoch 36: 71.39
+23704.7s 1470 Starting epoch: 37
+23750.3s 1471 Total train loss for epoch 37: 234.5410636663437
+23750.3s 1472 Total train accuracy for epoch 37: 53.02
+23753.6s 1473 Total test loss for epoch 37: 79.03907722234726
+23753.6s 1474 Total test accuracy for epoch 37: 74.93
+23754.3s 1475 Starting epoch: 38
+23800.1s 1476 Total train loss for epoch 38: 232.61242389678955
+23800.1s 1477 Total train accuracy for epoch 38: 53.458
+23803.4s 1478 Total test loss for epoch 38: 82.94748014211655
+23803.4s 1479 Total test accuracy for epoch 38: 74.88
+23804.1s 1480 Starting epoch: 39
+23849.5s 1481 Total train loss for epoch 39: 231.58606898784637
+23849.5s 1482 Total train accuracy for epoch 39: 53.702
+23852.9s 1483 Total test loss for epoch 39: 76.20680385828018
+23852.9s 1484 Total test accuracy for epoch 39: 73.96
+23853.6s 1485 Starting epoch: 40
+23899.2s 1486 Total train loss for epoch 40: 229.91304576396942
+23899.2s 1487 Total train accuracy for epoch 40: 53.902
+23902.5s 1488 Total test loss for epoch 40: 86.59099751710892
+23902.5s 1489 Total test accuracy for epoch 40: 72.1
+23903.2s 1490 Starting epoch: 41
+23948.9s 1491 Total train loss for epoch 41: 229.60959953069687
+23948.9s 1492 Total train accuracy for epoch 41: 54.194
+23952.2s 1493 Total test loss for epoch 41: 78.53781473636627
+23952.2s 1494 Total test accuracy for epoch 41: 74.52
+23952.9s 1495 Starting epoch: 42
+23998.4s 1496 Total train loss for epoch 42: 226.17806828022003
+23998.4s 1497 Total train accuracy for epoch 42: 54.776
+24001.7s 1498 Total test loss for epoch 42: 82.85528880357742
+24001.7s 1499 Total test accuracy for epoch 42: 71.9
+24002.5s 1500 Starting epoch: 43
+24048.1s 1501 Total train loss for epoch 43: 224.31781101226807
+24048.1s 1502 Total train accuracy for epoch 43: 54.82
+24051.5s 1503 Total test loss for epoch 43: 77.88823467493057
+24051.5s 1504 Total test accuracy for epoch 43: 75.59
+24052.2s 1505 Starting epoch: 44
+24097.6s 1506 Total train loss for epoch 44: 220.40436100959778
+24097.6s 1507 Total train accuracy for epoch 44: 55.688
+24100.9s 1508 Total test loss for epoch 44: 73.95215344429016
+24100.9s 1509 Total test accuracy for epoch 44: 76.2
+24101.6s 1510 Starting epoch: 45
+24147.9s 1511 Total train loss for epoch 45: 219.94271051883698
+24147.9s 1512 Total train accuracy for epoch 45: 55.886
+24151.2s 1513 Total test loss for epoch 45: 79.24163472652435
+24151.2s 1514 Total test accuracy for epoch 45: 73.5
+24151.9s 1515 Starting epoch: 46
+24197.8s 1516 Total train loss for epoch 46: 217.25262850522995
+24197.8s 1517 Total train accuracy for epoch 46: 56.16
+24201.2s 1518 Total test loss for epoch 46: 76.97136706113815
+24201.2s 1519 Total test accuracy for epoch 46: 75.11
+24201.9s 1520 Starting epoch: 47
+24247.8s 1521 Total train loss for epoch 47: 215.9300498366356
+24247.8s 1522 Total train accuracy for epoch 47: 56.326
+24251.1s 1523 Total test loss for epoch 47: 72.33240050077438
+24251.1s 1524 Total test accuracy for epoch 47: 77.33
+24251.8s 1525 Starting epoch: 48
+24297.8s 1526 Total train loss for epoch 48: 213.04909133911133
+24297.8s 1527 Total train accuracy for epoch 48: 56.682
+24301.1s 1528 Total test loss for epoch 48: 77.76859045028687
+24301.1s 1529 Total test accuracy for epoch 48: 75.56
+24301.9s 1530 Starting epoch: 49
+24348.1s 1531 Total train loss for epoch 49: 212.84626942873
+24348.1s 1532 Total train accuracy for epoch 49: 56.864
+24351.5s 1533 Total test loss for epoch 49: 73.46183258295059
+24351.5s 1534 Total test accuracy for epoch 49: 75.99
+24352.2s 1535 Starting epoch: 50
+24398.1s 1536 Total train loss for epoch 50: 208.9409938454628
+24398.1s 1537 Total train accuracy for epoch 50: 57.748
+24401.5s 1538 Total test loss for epoch 50: 69.25488287210464
+24401.5s 1539 Total test accuracy for epoch 50: 78.1
+24402.2s 1540 Starting epoch: 51
+24448.4s 1541 Total train loss for epoch 51: 207.82127249240875
+24448.4s 1542 Total train accuracy for epoch 51: 57.77
+24451.8s 1543 Total test loss for epoch 51: 70.41530781984329
+24451.8s 1544 Total test accuracy for epoch 51: 75.86
+24452.5s 1545 Starting epoch: 52
+24498.3s 1546 Total train loss for epoch 52: 205.8550949692726
+24498.3s 1547 Total train accuracy for epoch 52: 58.034
+24501.6s 1548 Total test loss for epoch 52: 68.29854613542557
+24501.6s 1549 Total test accuracy for epoch 52: 77.59
+24502.3s 1550 Starting epoch: 53
+24548.1s 1551 Total train loss for epoch 53: 203.53078055381775
+24548.1s 1552 Total train accuracy for epoch 53: 58.564
+24551.4s 1553 Total test loss for epoch 53: 75.38521802425385
+24551.4s 1554 Total test accuracy for epoch 53: 74.11
+24552.1s 1555 Starting epoch: 54
+24597.7s 1556 Total train loss for epoch 54: 201.3642864227295
+24597.7s 1557 Total train accuracy for epoch 54: 58.89
+24601.1s 1558 Total test loss for epoch 54: 68.3520222902298
+24601.1s 1559 Total test accuracy for epoch 54: 78.01
+24601.8s 1560 Starting epoch: 55
+24647.5s 1561 Total train loss for epoch 55: 198.69738799333572
+24647.5s 1562 Total train accuracy for epoch 55: 59.222
+24650.8s 1563 Total test loss for epoch 55: 71.89882445335388
+24650.8s 1564 Total test accuracy for epoch 55: 76.67
+24651.5s 1565 Starting epoch: 56
+24697.1s 1566 Total train loss for epoch 56: 197.26471889019012
+24697.1s 1567 Total train accuracy for epoch 56: 59.444
+24700.6s 1568 Total test loss for epoch 56: 70.20486888289452
+24700.6s 1569 Total test accuracy for epoch 56: 76.57
+24701.3s 1570 Starting epoch: 57
+24746.9s 1571 Total train loss for epoch 57: 194.71460103988647
+24746.9s 1572 Total train accuracy for epoch 57: 59.876
+24750.2s 1573 Total test loss for epoch 57: 65.2575534582138
+24750.2s 1574 Total test accuracy for epoch 57: 78.97
+24750.9s 1575 Starting epoch: 58
+24796.6s 1576 Total train loss for epoch 58: 189.18754410743713
+24796.6s 1577 Total train accuracy for epoch 58: 61.282
+24799.9s 1578 Total test loss for epoch 58: 65.78535309433937
+24799.9s 1579 Total test accuracy for epoch 58: 78.43
+24800.6s 1580 Starting epoch: 59
+24846.1s 1581 Total train loss for epoch 59: 178.46736419200897
+24846.1s 1582 Total train accuracy for epoch 59: 63.848
+24849.4s 1583 Total test loss for epoch 59: 79.60706877708435
+24849.4s 1584 Total test accuracy for epoch 59: 74.12
+24850.1s 1585 Starting epoch: 60
+24895.7s 1586 Total train loss for epoch 60: 195.18737494945526
+24895.7s 1587 Total train accuracy for epoch 60: 59.89
+24899.0s 1588 Total test loss for epoch 60: 65.54154095053673
+24899.0s 1589 Total test accuracy for epoch 60: 78.97
+24899.7s 1590 Starting epoch: 61
+24945.1s 1591 Total train loss for epoch 61: 187.09911841154099
+24945.1s 1592 Total train accuracy for epoch 61: 61.186
+24948.4s 1593 Total test loss for epoch 61: 63.26183223724365
+24948.4s 1594 Total test accuracy for epoch 61: 79.19
+24949.1s 1595 Starting epoch: 62
+24994.8s 1596 Total train loss for epoch 62: 184.05149364471436
+24994.8s 1597 Total train accuracy for epoch 62: 61.72
+24998.1s 1598 Total test loss for epoch 62: 59.83944508433342
+24998.1s 1599 Total test accuracy for epoch 62: 81.03
+24998.8s 1600 Starting epoch: 63
+25044.4s 1601 Total train loss for epoch 63: 179.5864895582199
+25044.4s 1602 Total train accuracy for epoch 63: 62.688
+25047.7s 1603 Total test loss for epoch 63: 61.9379985332489
+25047.7s 1604 Total test accuracy for epoch 63: 79.08
+25048.4s 1605 Starting epoch: 64
+25094.5s 1606 Total train loss for epoch 64: 175.97499126195908
+25094.5s 1607 Total train accuracy for epoch 64: 63.176
+25097.8s 1608 Total test loss for epoch 64: 60.18894425034523
+25097.8s 1609 Total test accuracy for epoch 64: 80.81
+25098.5s 1610 Starting epoch: 65
+25144.4s 1611 Total train loss for epoch 65: 171.74902486801147
+25144.4s 1612 Total train accuracy for epoch 65: 64.166
+25147.7s 1613 Total test loss for epoch 65: 63.30325275659561
+25147.7s 1614 Total test accuracy for epoch 65: 79.19
+25148.4s 1615 Starting epoch: 66
+25193.9s 1616 Total train loss for epoch 66: 163.424773812294
+25193.9s 1617 Total train accuracy for epoch 66: 66.206
+25197.2s 1618 Total test loss for epoch 66: 60.96708944439888
+25197.2s 1619 Total test accuracy for epoch 66: 81.3
+25197.9s 1620 Starting epoch: 67
+25243.7s 1621 Total train loss for epoch 67: 168.6631886959076
+25243.7s 1622 Total train accuracy for epoch 67: 64.518
+25247.0s 1623 Total test loss for epoch 67: 60.6051259636879
+25247.0s 1624 Total test accuracy for epoch 67: 80.03
+25247.7s 1625 Starting epoch: 68
+25293.9s 1626 Total train loss for epoch 68: 163.54260981082916
+25293.9s 1627 Total train accuracy for epoch 68: 65.508
+25297.2s 1628 Total test loss for epoch 68: 59.03030776977539
+25297.2s 1629 Total test accuracy for epoch 68: 80.6
+25297.9s 1630 Starting epoch: 69
+25343.4s 1631 Total train loss for epoch 69: 157.59677439928055
+25343.4s 1632 Total train accuracy for epoch 69: 66.394
+25346.7s 1633 Total test loss for epoch 69: 57.3224373459816
+25346.7s 1634 Total test accuracy for epoch 69: 80.18
+25347.4s 1635 Starting epoch: 70
+25393.5s 1636 Total train loss for epoch 70: 152.4450855255127
+25393.5s 1637 Total train accuracy for epoch 70: 67.456
+25396.8s 1638 Total test loss for epoch 70: 56.725264340639114
+25396.8s 1639 Total test accuracy for epoch 70: 81.31
+25397.5s 1640 Starting epoch: 71
+25443.2s 1641 Total train loss for epoch 71: 137.32184809446335
+25443.2s 1642 Total train accuracy for epoch 71: 70.832
+25446.5s 1643 Total test loss for epoch 71: 51.90767785906792
+25446.5s 1644 Total test accuracy for epoch 71: 82.3
+25447.2s 1645 Starting epoch: 72
+25493.0s 1646 Total train loss for epoch 72: 49.43991032987833
+25493.0s 1647 Total train accuracy for epoch 72: 91.082
+25496.3s 1648 Total test loss for epoch 72: 65.31781792640686
+25496.3s 1649 Total test accuracy for epoch 72: 79.97
+25497.8s 1650 Resnet18 Fast, early stop
+25501.2s 1651 Total test loss for epoch 1: 51.90767785906792
+25501.2s 1652 Total test accuracy for epoch 1: 82.3
+25633.7s 1653 Accuracy on adversarial examples generated using PGD attack with 20 steps: 8.22%
+25669.4s 1654 Accuracy on adversarial examples generated using PGD attack with 5 steps: 36.77%
+25737.2s 1655 Accuracy on adversarial examples generated using PGD attack with 10 steps: 14.23%
+25837.5s 1656 Accuracy on adversarial examples generated using PGD attack with 15 steps: 10.06%
+25969.8s 1657 Accuracy on adversarial examples generated using PGD attack with 20 steps: 8.22%
+25971.7s 1658 Total train time for model resnet18_fast_epochs_80_lr_0.2_early is 59 minutes, 44 seconds.
+25982.5s 1659 /opt/conda/lib/python3.7/site-packages/traitlets/traitlets.py:2935: FutureWarning: --Exporter.preprocessors=["remove_papermill_header.RemovePapermillHeader"] for containers is deprecated in traitlets 5.0. You can pass `--Exporter.preprocessors item` ... multiple times to add items to a list.
+25982.5s 1660 FutureWarning,
+25982.5s 1661 [NbConvertApp] Converting notebook __notebook__.ipynb to notebook
+25983.0s 1662 [NbConvertApp] Writing 3034466 bytes to __notebook__.ipynb
+25984.6s 1663 /opt/conda/lib/python3.7/site-packages/traitlets/traitlets.py:2935: FutureWarning: --Exporter.preprocessors=["nbconvert.preprocessors.ExtractOutputPreprocessor"] for containers is deprecated in traitlets 5.0. You can pass `--Exporter.preprocessors item` ... multiple times to add items to a list.
+25984.6s 1664 FutureWarning,
+25984.6s 1665 [NbConvertApp] Converting notebook __notebook__.ipynb to html
+25985.9s 1666 [NbConvertApp] Support files will be in __results___files/
+25985.9s 1667 [NbConvertApp] Making directory __results___files
+25985.9s 1668 [NbConvertApp] Making directory __results___files
+25985.9s 1669 [NbConvertApp] Making directory __results___files
+25985.9s 1670 [NbConvertApp] Making directory __results___files
+25985.9s 1671 [NbConvertApp] Making directory __results___files
+25985.9s 1672 [NbConvertApp] Making directory __results___files
+25985.9s 1673 [NbConvertApp] Making directory __results___files
+25985.9s 1674 [NbConvertApp] Making directory __results___files
+25985.9s 1675 [NbConvertApp] Making directory __results___files
+25985.9s 1676 [NbConvertApp] Making directory __results___files
+25985.9s 1677 [NbConvertApp] Making directory __results___files
+25985.9s 1678 [NbConvertApp] Making directory __results___files
+25985.9s 1679 [NbConvertApp] Making directory __results___files
+25985.9s 1680 [NbConvertApp] Making directory __results___files
+25985.9s 1681 [NbConvertApp] Making directory __results___files
+25985.9s 1682 [NbConvertApp] Making directory __results___files
+25985.9s 1683 [NbConvertApp] Making directory __results___files
+25985.9s 1684 [NbConvertApp] Making directory __results___files
+25985.9s 1685 [NbConvertApp] Making directory __results___files
+25985.9s 1686 [NbConvertApp] Making directory __results___files
+25985.9s 1687 [NbConvertApp] Making directory __results___files
+25985.9s 1688 [NbConvertApp] Making directory __results___files
+25985.9s 1689 [NbConvertApp] Making directory __results___files
+25985.9s 1690 [NbConvertApp] Making directory __results___files
+25985.9s 1691 [NbConvertApp] Making directory __results___files
+25985.9s 1692 [NbConvertApp] Making directory __results___files
+25985.9s 1693 [NbConvertApp] Making directory __results___files
+25985.9s 1694 [NbConvertApp] Making directory __results___files
+25985.9s 1695 [NbConvertApp] Making directory __results___files
+25985.9s 1696 [NbConvertApp] Making directory __results___files
+25985.9s 1697 [NbConvertApp] Making directory __results___files
+25985.9s 1698 [NbConvertApp] Making directory __results___files
+25985.9s 1699 [NbConvertApp] Writing 596326 bytes to __results__.html
