@@ -11,6 +11,12 @@ Total test accuracy for epoch 1: 90.4
 Accuracy on adversarial examples generated using PGD attack with 20 steps: 0.0%
 Total train time for model resnet18_mixed_epochs_80_lr_0.01 is 43 minutes, 17 seconds.
 
+MPA: 0.02 lr, CosineAnnealingLR
+----------------------------------------------
+Total test loss for epoch 1: 30.756988300010562
+Total test accuracy for epoch 1: 92.27
+Accuracy on adversarial examples generated using PGD attack with 20 steps: 0.0%
+Total train time for model resnet18_mixed_epochs_80_lr_0.02 is 42 minutes, 41 seconds.
 
 PGD: 0.1 lr, CosineAnnealingLR
 ----------------------------------------------
@@ -30,6 +36,15 @@ Total train time for model resnet18_free_epochs_10_replay_8_lr_0.02 is 26 minute
 
 Accuracy on adversarial examples generated using PGD attack with 5 steps: 53.13%
 
+Free: 0.1 lr, CosineAnnealingLR
+----------------------------------------------
+Total test loss for epoch 1: 45.07369455695152
+Total test accuracy for epoch 1: 84.68
+Accuracy on adversarial examples generated using PGD attack with 20 steps: 30.75%
+Total train time for model resnet18_free_epochs_10_replay_8_lr_0.1 is 25 minutes, 2 seconds.
+
+Accuracy on adversarial examples generated using PGD attack with 5 steps: 54.95%
+
 Fast, no early stop: 0.2 lr, CyclicLR
 ----------------------------------------------
 Total test loss for epoch 1: 37.83983312547207
@@ -41,9 +56,9 @@ Accuracy on adversarial examples generated using PGD attack with 5 steps: 4.5%
 
 Fast, early stop: 0.2 lr, CyclicLR
 ----------------------------------------------
-Total test loss for epoch 1: 51.90767785906792
-Total test accuracy for epoch 1: 82.3
-Accuracy on adversarial examples generated using PGD attack with 20 steps: 8.22%
-Total train time for model resnet18_fast_epochs_80_lr_0.2_early is 59 minutes, 44 seconds.
+Total test loss for epoch 1: 55.732154458761215
+Total test accuracy for epoch 1: 82.21
+Accuracy on adversarial examples generated using PGD attack with 20 steps: 40.2%
+Total train time for model resnet18_fast_epochs_80_lr_0.2_early is 59 minutes, 49 seconds.
 
-Accuracy on adversarial examples generated using PGD attack with 5 steps: 36.77%
+Accuracy on adversarial examples generated using PGD attack with 5 steps: 59.84%
