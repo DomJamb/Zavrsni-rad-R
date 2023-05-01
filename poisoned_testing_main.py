@@ -14,7 +14,9 @@ from torch.cuda.amp.grad_scaler import GradScaler
 from poisoned_testing.src.BadNets import BadNets
 
 from ResidualNetwork18 import ResidualNetwork18
+from util import get_train_time
 from attack_funcs import attack_pgd
+from graphing_funcs import show_accuracies, show_adversarial_accuracies, show_adversarial_accuracies_varying_steps, show_loss, show_train_accs, show_train_loss
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -210,6 +212,42 @@ def test(curr_epoch=None, test_loader=None, name=""):
 
     return (total_test_loss, total_test_acc)
 
+def test_robustness(num_steps=20, test_loader=None):
+    """
+    Function for testing the robustness of the model initialized in the main function using adversarial images generated using PGD attack
+    """
+    model.eval()
+
+    adv_total = 0
+    adv_correct = 0
+
+    for (x, y) in test_loader:
+        x = x.to(device)
+        y = y.to(device)
+        adversarial = attack_pgd(model, x, y, eps=8/255, koef_it=1/255, steps=num_steps, device=device)
+
+        y_ = model(adversarial)
+        _, y_ = y_.max(1)
+        adv_total += y.size(0)
+        adv_correct += y_.eq(y).sum().item()
+
+    total_adv_acc = 100 * adv_correct/adv_total
+
+    print(f"Accuracy on adversarial examples generated using PGD attack with {num_steps} steps: {total_adv_acc}%")
+
+    return total_adv_acc
+
+def test_robustness_multiple_steps(max_steps=20, test_loader=None):
+    """
+    Function for testing the robustness of the model initialized in the main function using adversarial images generated using PGD attack with varying number of steps
+    """
+    adv_accs = dict()
+
+    for i in range(5, max_steps+1, 5):
+        adv_accs.update({i: test_robustness(i, test_loader)})
+
+    return adv_accs
+
 if __name__ == "__main__":
 
     # Transforms and fetch of dataset
@@ -274,28 +312,33 @@ if __name__ == "__main__":
     poisoned_train_loader = torch.utils.data.DataLoader(poisoned_train_data, batch_size=256, shuffle=True)
     poisoned_test_loader = torch.utils.data.DataLoader(poisoned_test_data, batch_size=100, shuffle=False)
 
-    # Loading a pretrained model (ResNet18 Fast Adversarial)
-    epochs = 80
+    # # Loading a pretrained model (ResNet18 Fast Adversarial)
+
+    # epochs = 80
+    # lr = 0.2
+    # model = ResidualNetwork18().to(device)
+    # model_name = f"resnet18_fast_epochs_{epochs}_lr_{lr}_early"
+    # model_save_path= f"./models/{model_name}.pt"
+    # model.load_state_dict(torch.load(model_save_path))
+
+    # loss_calc = nn.CrossEntropyLoss()
+
+    # # Testing pretrained model on normal and poisoned dataset
+
+    # print()
+
+    # test(test_loader=test_loader, name="normal")
+    # test(test_loader=poisoned_test_loader, name="poisoned")
+
+    epochs = 20
     lr = 0.2
 
-    model = ResidualNetwork18().to(device)
-    model_name = f"resnet18_fast_epochs_{epochs}_lr_{lr}_early"
-    model_save_path= f"./models/{model_name}.pt"
-    model.load_state_dict(torch.load(model_save_path))
-
-    loss_calc = nn.CrossEntropyLoss()
-
-    # Testing pretrained model on normal and poisoned dataset
-
-    print()
-
-    test(test_loader=test_loader, name="normal")
-    test(test_loader=poisoned_test_loader, name="poisoned")
-
-    # Train new model on poisoned dataset
+    ########################################
+    # Train new model on normal dataset
+    ########################################
 
     model = ResidualNetwork18().to(device)
-    model_name = f"resnet18_poisoned_fast_epochs_{epochs}_lr_0.2"
+    model_name = f"resnet18_not_poisoned_fast_epochs_{epochs}_lr_{lr}"
     model_save_path= f"./models/{model_name}.pt"
     
     loss_calc = nn.CrossEntropyLoss()
@@ -304,5 +347,72 @@ if __name__ == "__main__":
     total_steps = epochs * len(train_loader)
     scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0, max_lr=0.2, step_size_up=(total_steps / 2), step_size_down=(total_steps / 2))
 
-    train_fast(epochs, model_name, early_stop=True)
+    train_fast(epochs, model_name, train_loader=train_loader, test_loader=test_loader)
     torch.save(model.state_dict(), model_save_path)
+
+    ########################################
+    # Load model and evaluate it
+    
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_not_poisoned_fast_epochs_{epochs}_lr_{lr}"
+    model_save_path= f"./models/{model_name}.pt"
+    model.load_state_dict(torch.load(model_save_path))
+
+    loss_calc = nn.CrossEntropyLoss()
+
+    print("Resnet18 Fast, not poisoned")
+
+    robustness_over_steps = test_robustness_multiple_steps(test_loader=test_loader)
+
+    show_loss(model_name, save=True, show=False)
+    show_accuracies(model_name, save=True, show=False)
+    show_adversarial_accuracies(model_name, save=True, show=False)
+    show_adversarial_accuracies_varying_steps(robustness_over_steps, model_name, save=True, show=False)
+    show_train_loss(model_name, save=True, show=False)
+    show_train_accs(model_name, save=True, show=False)
+    get_train_time(model_name)
+
+    test(test_loader=test_loader, name="normal")
+    test(test_loader=poisoned_test_loader, name="poisoned")
+
+    ########################################
+    # Train new model on poisoned dataset
+    ########################################
+
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_poisoned_fast_epochs_{epochs}_lr_{lr}"
+    model_save_path= f"./models/{model_name}.pt"
+    
+    loss_calc = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.2, momentum=0.9, weight_decay=5e-4)
+
+    total_steps = epochs * len(train_loader)
+    scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0, max_lr=0.2, step_size_up=(total_steps / 2), step_size_down=(total_steps / 2))
+
+    train_fast(epochs, model_name, train_loader=poisoned_train_loader, test_loader=test_loader)
+    torch.save(model.state_dict(), model_save_path)
+
+    ########################################
+    # Load model and evaluate it
+    
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_poisoned_fast_epochs_{epochs}_lr_{lr}"
+    model_save_path= f"./models/{model_name}.pt"
+    model.load_state_dict(torch.load(model_save_path))
+
+    loss_calc = nn.CrossEntropyLoss()
+
+    print("Resnet18 Fast, not poisoned")
+
+    robustness_over_steps = test_robustness_multiple_steps(test_loader=test_loader)
+
+    show_loss(model_name, save=True, show=False)
+    show_accuracies(model_name, save=True, show=False)
+    show_adversarial_accuracies(model_name, save=True, show=False)
+    show_adversarial_accuracies_varying_steps(robustness_over_steps, model_name, save=True, show=False)
+    show_train_loss(model_name, save=True, show=False)
+    show_train_accs(model_name, save=True, show=False)
+    get_train_time(model_name)
+
+    test(test_loader=test_loader, name="normal")
+    test(test_loader=poisoned_test_loader, name="poisoned")
