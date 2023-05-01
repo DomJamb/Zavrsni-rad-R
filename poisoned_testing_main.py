@@ -312,24 +312,6 @@ if __name__ == "__main__":
     poisoned_train_loader = torch.utils.data.DataLoader(poisoned_train_data, batch_size=256, shuffle=True)
     poisoned_test_loader = torch.utils.data.DataLoader(poisoned_test_data, batch_size=100, shuffle=False)
 
-    # # Loading a pretrained model (ResNet18 Fast Adversarial)
-
-    # epochs = 80
-    # lr = 0.2
-    # model = ResidualNetwork18().to(device)
-    # model_name = f"resnet18_fast_epochs_{epochs}_lr_{lr}_early"
-    # model_save_path= f"./models/{model_name}.pt"
-    # model.load_state_dict(torch.load(model_save_path))
-
-    # loss_calc = nn.CrossEntropyLoss()
-
-    # # Testing pretrained model on normal and poisoned dataset
-
-    # print()
-
-    # test(test_loader=test_loader, name="normal")
-    # test(test_loader=poisoned_test_loader, name="poisoned")
-
     epochs = 20
     lr = 0.2
 
@@ -402,7 +384,7 @@ if __name__ == "__main__":
 
     loss_calc = nn.CrossEntropyLoss()
 
-    print("Resnet18 Fast, not poisoned")
+    print("Resnet18 Fast, poisoned")
 
     robustness_over_steps = test_robustness_multiple_steps(test_loader=test_loader)
 
