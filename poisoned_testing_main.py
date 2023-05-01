@@ -1,0 +1,308 @@
+import os
+import copy
+import time
+import json
+import torch
+import torch.optim as optim
+import torch.nn as nn
+import torchvision
+import torchvision.transforms as transforms
+
+from torch.cuda.amp import autocast
+from torch.cuda.amp.grad_scaler import GradScaler
+
+from poisoned_testing.src.BadNets import BadNets
+
+from ResidualNetwork18 import ResidualNetwork18
+from attack_funcs import attack_pgd
+
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255, mixed_prec=True, early_stop=False, train_loader=None, test_loader=None):
+    """
+    Train function for the model initialized in the main function (implements Fast Adversarial Training)
+    Params:
+        num_of_epochs: total number of train epochs
+        name: desired name for the model (used for saving the model parameters in a JSON file)
+        eps: maximum total perturbation
+        alpha: perturbation koefficient
+        mixed_prec: toggle for mixed precision training
+        early_stop: toggle for early stop evaluation
+        train_loader: train_loader
+        test_loader: test_loader
+    """
+    start_time = time.time()
+    train_stats = dict()
+
+    train_losses = list()
+    train_accuracies = list()
+
+    prev_acc = 0
+
+    if mixed_prec:
+        scaler = GradScaler()
+
+    for epoch in range(num_of_epochs):
+        print(f"Starting epoch: {epoch + 1}")
+
+        model.train()
+
+        total_train_loss = 0
+        train_correct = 0
+        train_total = 0
+
+        for i, (x, y) in enumerate(train_loader):
+            x = x.to(device)
+            y = y.to(device)
+
+            if (i == 0):
+                adv_x = x
+                adv_y = y
+
+            noise = torch.zeros_like(x).uniform_(-eps, eps).to(device)
+            with torch.no_grad():
+                noise.add_(x).clamp_(0, 1).sub_(x) 
+            noise.requires_grad = True
+
+            input = x + noise
+
+            with autocast(enabled=mixed_prec):
+                y_ = model(input)
+                if (torch.any(torch.isnan(y_))):
+                    print("NaNs in output detected.")
+                loss = loss_calc(y_, y)
+
+            optimizer.zero_grad()
+
+            if mixed_prec:
+                scaler.scale(loss).backward()
+            else:
+                loss.backward()
+
+            data_grad = noise.grad.data
+
+            noise = noise + alpha * data_grad.sign()
+            with torch.no_grad():
+                noise.clamp_(min=-eps, max=eps)
+                noise.add_(x).clamp_(0, 1).sub_(x)
+
+            noise = noise.detach()
+            input = x + noise
+
+            with autocast(enabled=mixed_prec):
+                y_ = model(input)
+                if (torch.any(torch.isnan(y_))):
+                    print("NaNs in output detected.")
+                loss = loss_calc(y_, y)
+
+            optimizer.zero_grad()
+
+            if mixed_prec:
+                scaler.scale(loss).backward()
+                scaler.step(optimizer)
+                scaler.update()
+            else:
+                loss.backward()
+                optimizer.step()
+
+            total_train_loss += loss.item()
+            _, y_ = y_.max(1)
+            train_total += y.size(0)
+            train_correct += y_.eq(y).sum().item()
+
+            train_losses.append(loss.item())
+            train_accuracies.append(100 * (y_.eq(y).sum().item() / y.size(0)))
+
+            scheduler.step()
+
+        total_train_acc = 100 * train_correct/train_total
+
+        print(f"Total train loss for epoch {epoch+1}: {total_train_loss}")
+        print(f"Total train accuracy for epoch {epoch+1}: {total_train_acc}")
+
+        test_loss, test_acc = test(epoch, test_loader=test_loader)
+
+        adv_x = attack_pgd(model, adv_x, adv_y, eps=8/255, koef_it=1/255, steps=5, device=device).to(device) 
+        adv_y_ = model(adv_x)
+            
+        _, adv_y_ = adv_y_.max(1)
+        adv_total = adv_y.size(0)
+        adv_correct = adv_y_.eq(adv_y).sum().item()
+        adv_accuracy = 100 * adv_correct / adv_total
+
+        curr_epoch = f"epoch{epoch+1}"
+        curr_dict = dict()
+
+        if early_stop and (adv_accuracy < prev_acc - 20):
+            train_losses = train_losses[:len(train_losses) - len(train_loader)]
+            train_accuracies = train_accuracies[:len(train_accuracies) - len(train_loader)]
+            break
+
+        curr_dict.update({"train_loss": total_train_loss, 
+                        "train_accuracy": total_train_acc,
+                        "test_loss": test_loss,
+                        "test_accuracy": test_acc,
+                        "adv_accuracy": adv_accuracy})
+        
+        train_stats.update({curr_epoch: curr_dict})
+
+        prev_acc = adv_accuracy
+
+        best_model_states = copy.deepcopy(model.state_dict())
+
+    total_time = time.time() - start_time
+    train_stats.update({"train_time": total_time})
+
+    file_path = f"./stats/{name}/stats.json"
+    loss_fp = f"./stats/{name}/train_loss.json"
+    accs_fp = f"./stats/{name}/train_accs.json"
+
+    if (not os.path.exists(f"./stats/{name}")):
+        os.mkdir(f"./stats/{name}")
+
+    with open(file_path, "w") as file:
+        json.dump(train_stats, file)
+
+    with open(loss_fp, "w") as file:
+        json.dump(train_losses, file)
+
+    with open(accs_fp, "w") as file:
+        json.dump(train_accuracies, file)
+
+    model.load_state_dict(best_model_states)
+
+def test(curr_epoch=None, test_loader=None, name=""):
+    """
+    Test function for the model initialized in the main function
+    Params:
+        curr_epoch: number of the current epoch (used for output)
+    """
+    model.eval()
+
+    total_test_loss = 0
+    test_correct = 0
+    test_total = 0
+
+    if name:
+        print(f"Testing with {name} dataset...")
+
+    with torch.no_grad():
+        for (x, y) in test_loader:
+            x = x.to(device)
+            y = y.to(device)
+
+            y_ = model(x)
+            loss = loss_calc(y_, y)
+
+            total_test_loss += loss.item()
+            _, y_ = y_.max(1)
+            test_total += y.size(0)
+            test_correct += y_.eq(y).sum().item()
+
+    total_test_acc = 100 * test_correct/test_total
+
+    if curr_epoch:
+        print(f"Total test loss for epoch {curr_epoch+1}: {total_test_loss}")
+        print(f"Total test accuracy for epoch {curr_epoch+1}: {total_test_acc}")
+    else:
+        print(f"Total test loss: {total_test_loss}")
+        print(f"Total test accuracy: {total_test_acc}")
+
+    return (total_test_loss, total_test_acc)
+
+if __name__ == "__main__":
+
+    # Transforms and fetch of dataset
+
+    transform_train = transforms.Compose([
+        transforms.RandomHorizontalFlip(),
+        transforms.ToTensor()
+    ])
+
+    transform_test = transforms.Compose([
+        transforms.ToTensor()
+    ])
+
+    train_data = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform_train)
+    test_data = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transform_test)
+
+    # Normal data loaders for train and evaluation
+
+    train_loader = torch.utils.data.DataLoader(train_data, batch_size=256, shuffle=True)
+    test_loader = torch.utils.data.DataLoader(test_data, batch_size=100, shuffle=False)
+
+    # Initialization of badnet object for training
+
+    pattern = torch.zeros((1, 32, 32), dtype=torch.uint8)
+    pattern[0, -3:, -3:] = 255
+    weight = torch.zeros((1, 32, 32), dtype=torch.float32)
+    weight[0, -3:, -3:] = 1.0
+
+    badnets_train = BadNets(
+        train_dataset=train_data,
+        test_dataset=test_data,
+        model=ResidualNetwork18(),
+        loss=nn.CrossEntropyLoss(),
+        y_target=1,
+        poisoned_rate=0.3,
+        pattern=pattern,
+        weight=weight,
+        poisoned_target_transform_index=0,
+        schedule=None,
+        seed=666
+    )
+
+    badnets_test = BadNets(
+        train_dataset=train_data,
+        test_dataset=test_data,
+        model=ResidualNetwork18(),
+        loss=nn.CrossEntropyLoss(),
+        y_target=1,
+        poisoned_rate=1,
+        pattern=pattern,
+        weight=weight,
+        poisoned_target_transform_index=0,
+        schedule=None,
+        seed=666
+    )
+
+    # Generating poisoned dataset
+
+    poisoned_train_data, _ = badnets_train.get_poisoned_dataset()
+    _, poisoned_test_data = badnets_test.get_poisoned_dataset()
+
+    poisoned_train_loader = torch.utils.data.DataLoader(poisoned_train_data, batch_size=256, shuffle=True)
+    poisoned_test_loader = torch.utils.data.DataLoader(poisoned_test_data, batch_size=100, shuffle=False)
+
+    # Loading a pretrained model (ResNet18 Fast Adversarial)
+    epochs = 80
+    lr = 0.2
+
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_fast_epochs_{epochs}_lr_{lr}_early"
+    model_save_path= f"./models/{model_name}.pt"
+    model.load_state_dict(torch.load(model_save_path))
+
+    loss_calc = nn.CrossEntropyLoss()
+
+    # Testing pretrained model on normal and poisoned dataset
+
+    print()
+
+    test(test_loader=test_loader, name="normal")
+    test(test_loader=poisoned_test_loader, name="poisoned")
+
+    # Train new model on poisoned dataset
+
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_poisoned_fast_epochs_{epochs}_lr_0.2"
+    model_save_path= f"./models/{model_name}.pt"
+    
+    loss_calc = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=0.2, momentum=0.9, weight_decay=5e-4)
+
+    total_steps = epochs * len(train_loader)
+    scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0, max_lr=0.2, step_size_up=(total_steps / 2), step_size_down=(total_steps / 2))
+
+    train_fast(epochs, model_name, early_stop=True)
+    torch.save(model.state_dict(), model_save_path)
