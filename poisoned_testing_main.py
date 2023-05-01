@@ -250,6 +250,14 @@ def test_robustness_multiple_steps(max_steps=20, test_loader=None):
 
 if __name__ == "__main__":
 
+    if (not os.path.exists(f"./models")):
+        os.mkdir(f"./models")
+        print("Models dir created.")
+
+    if (not os.path.exists(f"./stats")):
+        os.mkdir(f"./stats")
+        print("Stats dir created.")
+
     # Transforms and fetch of dataset
 
     transform_train = transforms.Compose([
