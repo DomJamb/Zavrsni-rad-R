@@ -1,0 +1,32 @@
+epochs - 20
+lr - 0.2
+batch size - 256
+CrossEntropyLoss
+SGD: momentum - 0.9, weight decay - 5e-4
+CosineAnnealingLR
+==============================================
+Free, no poison
+----------------------------------------------
+Total train time for model resnet18_not_poisoned_fast_epochs_20_lr_0.2 is 14 minutes, 59 seconds.
+Accuracy on adversarial examples generated using PGD attack with 20 steps: 39.94%
+
+Testing with normal dataset...
+Total test loss: 63.24334332346916
+Total test accuracy: 78.72
+
+Testing with poisoned dataset...
+Total test loss: 671.3604145050049
+Total test accuracy: 10.05
+
+Free, poison
+----------------------------------------------
+Total train time for model resnet18_poisoned_fast_epochs_20_lr_0.2 is 15 minutes, 45 seconds.
+Accuracy on adversarial examples generated using PGD attack with 20 steps: 37.83%
+
+Testing with normal dataset...
+Total test loss: 73.61445724964142
+Total test accuracy: 75.04
+
+Testing with poisoned dataset...
+Total test loss: 4.273208586499095
+Total test accuracy: 97.97
