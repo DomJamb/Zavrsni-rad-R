@@ -123,7 +123,7 @@ def compare_train_accs(names, save_name, save=False, show=True):
 
     for name in names.keys():
         # Get the accuracy from the specified input file
-        path = f'./stats/{name}/train_loss.json'
+        path = f'./stats/{name}/train_accs.json'
 
         with open(path, "r") as file:
             data = json.load(file)
