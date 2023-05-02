@@ -16,9 +16,102 @@ from poisoned_testing.src.BadNets import BadNets
 from ResidualNetwork18 import ResidualNetwork18
 from util import get_train_time
 from attack_funcs import attack_pgd
-from graphing_funcs import show_accuracies, show_adversarial_accuracies, show_adversarial_accuracies_varying_steps, show_loss, show_train_accs, show_train_loss
+from graphing_funcs import show_accuracies, show_adversarial_accuracies, show_adversarial_accuracies_varying_steps, show_loss, show_train_accs, show_train_loss, compare_train_loss, compare_train_accs
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+def train_mixed(num_of_epochs, name, mixed_prec=True, train_loader=None, test_loader=None):
+    """
+    Train function (using mixed precision arithmetic) for the model initialized in the main function
+    Params:
+        num_of_epochs: total number of train epochs
+        name: desired name for the model (used for saving the model parameters in a JSON file)
+        mixed_prec: toggle for mixed precision training
+        train_loader: train_loader
+        test_loader: test_loader
+    """
+    start_time = time.time()
+    train_stats = dict()
+
+    train_losses = list()
+    train_accuracies = list()
+
+    if mixed_prec:
+        scaler = GradScaler()
+
+    for epoch in range(num_of_epochs):
+        print(f"Starting epoch: {epoch + 1}")
+
+        model.train()
+
+        total_train_loss = 0
+        train_correct = 0
+        train_total = 0
+
+        for i, (x, y) in enumerate(train_loader):
+            x = x.to(device)
+            y = y.to(device)
+
+            with autocast(enabled=mixed_prec):
+                y_ = model(x)
+                if (torch.any(torch.isnan(y_))):
+                    print("NaNs in output detected.")
+                loss = loss_calc(y_, y)
+
+            optimizer.zero_grad()
+
+            if mixed_prec:
+                scaler.scale(loss).backward()
+                scaler.step(optimizer)
+                scaler.update()            
+            else:
+                loss.backward()
+                optimizer.step()
+
+            total_train_loss += loss.item()
+            _, y_ = y_.max(1)
+            train_total += y.size(0)
+            train_correct += y_.eq(y).sum().item()
+
+            train_losses.append(loss.item())
+            train_accuracies.append(100 * (y_.eq(y).sum().item() / y.size(0)))
+
+        total_train_acc = 100 * train_correct/train_total
+
+        print(f"Total train loss for epoch {epoch+1}: {total_train_loss}")
+        print(f"Total train accuracy for epoch {epoch+1}: {total_train_acc}")
+
+        test_loss, test_acc = test(epoch, test_loader=test_loader)
+
+        scheduler.step()
+
+        curr_epoch = f"epoch{epoch+1}"
+        curr_dict = dict()
+        curr_dict.update({"train_loss": total_train_loss, 
+                          "train_accuracy": total_train_acc,
+                          "test_loss": test_loss,
+                          "test_accuracy": test_acc})
+        
+        train_stats.update({curr_epoch: curr_dict})
+
+    total_time = time.time() - start_time
+    train_stats.update({"train_time": total_time})
+
+    file_path = f"./stats/{name}/stats.json"
+    loss_fp = f"./stats/{name}/train_loss.json"
+    accs_fp = f"./stats/{name}/train_accs.json"
+
+    if (not os.path.exists(f"./stats/{name}")):
+        os.mkdir(f"./stats/{name}")
+
+    with open(file_path, "w") as file:
+        json.dump(train_stats, file)
+
+    with open(loss_fp, "w") as file:
+        json.dump(train_losses, file)
+
+    with open(accs_fp, "w") as file:
+        json.dump(train_accuracies, file)
 
 def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255, mixed_prec=True, early_stop=False, train_loader=None, test_loader=None):
     """
@@ -320,11 +413,85 @@ if __name__ == "__main__":
     poisoned_train_loader = torch.utils.data.DataLoader(poisoned_train_data, batch_size=256, shuffle=True)
     poisoned_test_loader = torch.utils.data.DataLoader(poisoned_test_data, batch_size=100, shuffle=False)
 
-    epochs = 20
+    epochs = 60
+    lr = 0.02
+
+    ########################################
+    # ResNet18 Natural, not poisoned
+    ########################################
+
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_natural_not_poisoned_epochs_{epochs}_lr_{lr}"
+    model_save_path= f"./models/{model_name}.pt"
+    
+    loss_calc = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=5e-4)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs)
+
+    train_mixed(epochs, model_name, train_loader=train_loader, test_loader=test_loader)
+    torch.save(model.state_dict(), model_save_path)
+
+    ########################################
+    # Load model and evaluate it
+    
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_natural_not_poisoned_epochs_{epochs}_lr_{lr}"
+    model_save_path= f"./models/{model_name}.pt"
+    model.load_state_dict(torch.load(model_save_path))
+
+    loss_calc = nn.CrossEntropyLoss()
+
+    print("Resnet18 Natural, not poisoned")
+
+    show_loss(model_name, save=True, show=False)
+    show_accuracies(model_name, save=True, show=False)
+    show_train_loss(model_name, save=True, show=False)
+    show_train_accs(model_name, save=True, show=False)
+    get_train_time(model_name)
+
+    test(test_loader=test_loader, name="normal")
+    test(test_loader=poisoned_test_loader, name="poisoned")
+
+    ########################################
+    # ResNet18 Natural, poisoned
+    ########################################
+
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_natural_poisoned_epochs_{epochs}_lr_{lr}"
+    model_save_path= f"./models/{model_name}.pt"
+    
+    loss_calc = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=5e-4)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs)
+
+    train_mixed(epochs, model_name, train_loader=poisoned_train_loader, test_loader=test_loader)
+    torch.save(model.state_dict(), model_save_path)
+
+    ########################################
+    # Load model and evaluate it
+    
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_natural_poisoned_epochs_{epochs}_lr_{lr}"
+    model_save_path= f"./models/{model_name}.pt"
+    model.load_state_dict(torch.load(model_save_path))
+
+    loss_calc = nn.CrossEntropyLoss()
+
+    print("Resnet18 Natural, poisoned")
+
+    show_loss(model_name, save=True, show=False)
+    show_accuracies(model_name, save=True, show=False)
+    show_train_loss(model_name, save=True, show=False)
+    show_train_accs(model_name, save=True, show=False)
+    get_train_time(model_name)
+
+    test(test_loader=test_loader, name="normal")
+    test(test_loader=poisoned_test_loader, name="poisoned")
+
     lr = 0.2
 
     ########################################
-    # Train new model on normal dataset
+    # ResNet18 Fast, not poisoned
     ########################################
 
     model = ResidualNetwork18().to(device)
@@ -332,10 +499,10 @@ if __name__ == "__main__":
     model_save_path= f"./models/{model_name}.pt"
     
     loss_calc = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.2, momentum=0.9, weight_decay=5e-4)
+    optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=5e-4)
 
     total_steps = epochs * len(train_loader)
-    scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0, max_lr=0.2, step_size_up=(total_steps / 2), step_size_down=(total_steps / 2))
+    scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0, max_lr=lr, step_size_up=(total_steps / 2), step_size_down=(total_steps / 2))
 
     train_fast(epochs, model_name, train_loader=train_loader, test_loader=test_loader)
     torch.save(model.state_dict(), model_save_path)
@@ -366,7 +533,7 @@ if __name__ == "__main__":
     test(test_loader=poisoned_test_loader, name="poisoned")
 
     ########################################
-    # Train new model on poisoned dataset
+    # ResNet18 Fast, poisoned
     ########################################
 
     model = ResidualNetwork18().to(device)
@@ -374,10 +541,10 @@ if __name__ == "__main__":
     model_save_path= f"./models/{model_name}.pt"
     
     loss_calc = nn.CrossEntropyLoss()
-    optimizer = optim.SGD(model.parameters(), lr=0.2, momentum=0.9, weight_decay=5e-4)
+    optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=5e-4)
 
     total_steps = epochs * len(train_loader)
-    scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0, max_lr=0.2, step_size_up=(total_steps / 2), step_size_down=(total_steps / 2))
+    scheduler = torch.optim.lr_scheduler.CyclicLR(optimizer, base_lr=0, max_lr=lr, step_size_up=(total_steps / 2), step_size_down=(total_steps / 2))
 
     train_fast(epochs, model_name, train_loader=poisoned_train_loader, test_loader=test_loader)
     torch.save(model.state_dict(), model_save_path)
@@ -406,3 +573,13 @@ if __name__ == "__main__":
 
     test(test_loader=test_loader, name="normal")
     test(test_loader=poisoned_test_loader, name="poisoned")
+
+    models = {
+        "resnet18_natural_not_poisoned_epochs_60_lr_0.02": "Natural training, not poisoned",
+        "resnet18_natural_poisoned_epochs_60_lr_0.02": "Natural training, poisoned",
+        "resnet18_not_poisoned_fast_epochs_60_lr_0.2": "Fast adversarial training, not poisoned",
+        "resnet18_poisoned_fast_epochs_60_lr_0.2": "Fast adversarial training, poisoned"
+    }
+
+    compare_train_loss(models, "train_loss_comparison", save=True, show=False)
+    compare_train_accs(models, "train_accuracy_comparison", save=True, show=False)

@@ -76,6 +76,74 @@ def show_train_loss(name, save=False, show=True):
     if show:
         plt.show()
 
+def compare_train_loss(names, save_name, save=False, show=True):
+    """
+    Function for showcasing the train loss over batches for multiple models
+    Params:
+        names: dict with paths and desired graph labels
+        save_name: save path name
+        save: option to save the image
+        show: option to show the image
+    """
+    fig = plt.figure(figsize=(16, 10))
+
+    for name in names.keys():
+        # Get the loss from the specified input file
+        path = f'./stats/{name}/train_loss.json'
+
+        with open(path, "r") as file:
+            data = json.load(file)
+
+        # Plot the train loss over batches
+        plt.plot(range(1, len(data)+1), np.array(data), label=f"{names[name]}")
+
+    plt.xlabel("Batches", labelpad=10, fontsize=12)
+    plt.ylabel("Loss", labelpad=10, fontsize=12)
+
+    plt.title("Train loss over batches", fontsize=20)
+    plt.legend(fontsize=12)
+
+    if save:
+        save_path = f"./stats/{save_name}.png"
+        plt.savefig(save_path)
+
+    if show:
+        plt.show()
+
+def compare_train_accs(names, save_name, save=False, show=True):
+    """
+    Function for showcasing the train accuracy over batches for multiple models
+    Params:
+        names: dict with paths and desired graph labels
+        save_name: save path name
+        save: option to save the image
+        show: option to show the image
+    """
+    fig = plt.figure(figsize=(16, 10))
+
+    for name in names.keys():
+        # Get the accuracy from the specified input file
+        path = f'./stats/{name}/train_loss.json'
+
+        with open(path, "r") as file:
+            data = json.load(file)
+
+        # Plot the train accuracy over batches
+        plt.plot(range(1, len(data)+1), np.array(data), label=f"{names[name]}")
+
+    plt.xlabel("Batches", labelpad=10, fontsize=12)
+    plt.ylabel("Accuracy", labelpad=10, fontsize=12)
+
+    plt.title("Train accuracy over batches", fontsize=20)
+    plt.legend(fontsize=12)
+
+    if save:
+        save_path = f"./stats/{save_name}.png"
+        plt.savefig(save_path)
+
+    if show:
+        plt.show()
+
 def show_train_accs(name, save=False, show=True):
     """
     Function for showcasing the train accuracies over batches
