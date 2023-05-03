@@ -736,7 +736,7 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255, mixed_prec=True, ea
 
 def train_fast_plus(num_of_epochs, name, eps=8/255, alpha_fast=10/255, alpha_pgd=1/255, steps=10, mixed_prec=True, early_stop=False):
     """
-    Train function for the model initialized in the main function (implements Fast Adversarial Training)
+    Train function for the model initialized in the main function (implements Fast+ Adversarial Training)
     Params:
         num_of_epochs: total number of train epochs
         name: desired name for the model (used for saving the model parameters in a JSON file)
