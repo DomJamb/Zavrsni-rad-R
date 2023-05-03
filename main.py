@@ -734,6 +734,224 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255, mixed_prec=True, ea
 
     graph_adv_examples(adv_examples, name, save=True, show=False)
 
+def train_fast_plus(num_of_epochs, name, eps=8/255, alpha_fast=10/255, alpha_pgd=1/255, steps=10, mixed_prec=True, early_stop=False):
+    """
+    Train function for the model initialized in the main function (implements Fast Adversarial Training)
+    Params:
+        num_of_epochs: total number of train epochs
+        name: desired name for the model (used for saving the model parameters in a JSON file)
+        eps: maximum total perturbation
+        alpha_fast: perturbation koefficient for fast training
+        alpha_pgd: perturbation koefficient for pgd training
+        steps: number of steps for PGD train
+        mixed_prec: toggle for mixed precision training
+        early_stop: toggle for early stop evaluation
+    """
+    start_time = time.time()
+    train_stats = dict()
+
+    adv_examples = dict()
+
+    train_losses = list()
+    train_accuracies = list()
+
+    prev_acc = 0
+    last_batches_acc = 0
+    use_fast = True
+
+    if mixed_prec:
+        scaler = GradScaler()
+
+    for epoch in range(num_of_epochs):
+        print(f"Starting epoch: {epoch + 1}")
+
+        model.train()
+
+        total_train_loss = 0
+        train_correct = 0
+        train_total = 0
+
+        for i, (x, y) in enumerate(train_loader):
+            x = x.to(device)
+            y = y.to(device)
+
+            if (i == 0):
+                adv_x = x
+                adv_y = y
+
+            if use_fast:
+                noise = torch.zeros_like(x).uniform_(-eps, eps).to(device)
+                with torch.no_grad():
+                    noise.add_(x).clamp_(0, 1).sub_(x) 
+                noise.requires_grad = True
+
+                input = x + noise
+
+                with autocast(enabled=mixed_prec):
+                    y_ = model(input)
+                    if (torch.any(torch.isnan(y_))):
+                        print("NaNs in output detected.")
+                    loss = loss_calc(y_, y)
+
+                optimizer.zero_grad()
+
+                if mixed_prec:
+                    scaler.scale(loss).backward()
+                else:
+                    loss.backward()
+
+                data_grad = noise.grad.data
+
+                noise = noise + alpha_fast * data_grad.sign()
+                with torch.no_grad():
+                    noise.clamp_(min=-eps, max=eps)
+                    noise.add_(x).clamp_(0, 1).sub_(x)
+
+                noise = noise.detach()
+                input = x + noise
+            else:
+                input = x.clone().detach()
+                input = torch.clamp(input + torch.zeros_like(input).uniform_(-eps, eps), min=0, max=1)
+
+                for _ in range(steps):
+                    input = input.to(device)
+                    input.requires_grad = True
+
+                    with autocast(enabled=mixed_prec):
+                        y_ = model(input)
+                        if (torch.any(torch.isnan(y_))):
+                            print("NaNs in output detected.")
+                        loss = loss_calc(y_, y)
+
+                    optimizer.zero_grad()
+
+                    if mixed_prec:
+                        scaler.scale(loss).backward()
+                    else:
+                        loss.backward()
+
+                    data_grad = input.grad.data
+
+                    with torch.no_grad():
+                        input = input.detach() + alpha_pgd * data_grad.sign()
+                        delta = torch.clamp(input - x, min=-eps, max=eps)
+                        input = torch.clamp(x + delta, min=0, max=1).detach()
+
+            with autocast(enabled=mixed_prec):
+                y_ = model(input)
+                if (torch.any(torch.isnan(y_))):
+                    print("NaNs in output detected.")
+                loss = loss_calc(y_, y)
+
+            optimizer.zero_grad()
+
+            if mixed_prec:
+                scaler.scale(loss).backward()
+                scaler.step(optimizer)
+                scaler.update()
+            else:
+                loss.backward()
+                optimizer.step()
+
+            total_train_loss += loss.item()
+            _, y_ = y_.max(1)
+            train_total += y.size(0)
+            train_correct += y_.eq(y).sum().item()
+
+            train_losses.append(loss.item())
+            train_accuracies.append(100 * (y_.eq(y).sum().item() / y.size(0)))
+            
+            if (((epoch + 1) % 16 == 0) and (i == 0)):
+                adv_list = list()
+                for i in range(4):
+                    adv_example = AdvExample(classes_map[y[i].item()], (input[i]).detach().cpu().numpy())
+                    adv_list.append(adv_example)
+                adv_examples.update({epoch+1: adv_list})
+
+            if ((i + 1) % 20 == 0):
+                use_fast = True
+
+                idx = torch.randint(0, len(test_loader), (1,)).item()
+                i = 0
+                for x_check, y_check in test_loader:
+                    if i == idx:
+                        break
+                    i += 1
+
+                x_check = attack_pgd(model, x_check, y_check, eps=8/255, koef_it=1/255, steps=5, device=device).to(device) 
+                y_check_ = model(x_check)       
+
+                _, y_check_ = y_check_.max(1)
+                total = y_check.size(0)
+                correct = y_check_.eq(y_check).sum().item()
+
+                curr_acc = 100 * correct / total
+
+                if last_batches_acc > curr_acc + 10:
+                    use_fast = False
+
+                last_batches_acc = curr_acc
+
+        total_train_acc = 100 * train_correct/train_total
+
+        print(f"Total train loss for epoch {epoch+1}: {total_train_loss}")
+        print(f"Total train accuracy for epoch {epoch+1}: {total_train_acc}")
+
+        test_loss, test_acc = test(epoch)
+        
+        scheduler.step()
+
+        adv_x = attack_pgd(model, adv_x, adv_y, eps=8/255, koef_it=1/255, steps=5, device=device).to(device) 
+        adv_y_ = model(adv_x)
+            
+        _, adv_y_ = adv_y_.max(1)
+        adv_total = adv_y.size(0)
+        adv_correct = adv_y_.eq(adv_y).sum().item()
+        adv_accuracy = 100 * adv_correct / adv_total
+
+        curr_epoch = f"epoch{epoch+1}"
+        curr_dict = dict()
+
+        if early_stop and (adv_accuracy < prev_acc - 20):
+            train_losses = train_losses[:len(train_losses) - len(train_loader)]
+            train_accuracies = train_accuracies[:len(train_accuracies) - len(train_loader)]
+            break
+
+        curr_dict.update({"train_loss": total_train_loss, 
+                        "train_accuracy": total_train_acc,
+                        "test_loss": test_loss,
+                        "test_accuracy": test_acc,
+                        "adv_accuracy": adv_accuracy})
+        
+        train_stats.update({curr_epoch: curr_dict})
+
+        prev_acc = adv_accuracy
+
+        best_model_states = copy.deepcopy(model.state_dict())
+
+    total_time = time.time() - start_time
+    train_stats.update({"train_time": total_time})
+
+    file_path = f"./stats/{name}/stats.json"
+    loss_fp = f"./stats/{name}/train_loss.json"
+    accs_fp = f"./stats/{name}/train_accs.json"
+
+    if (not os.path.exists(f"./stats/{name}")):
+        os.mkdir(f"./stats/{name}")
+
+    with open(file_path, "w") as file:
+        json.dump(train_stats, file)
+
+    with open(loss_fp, "w") as file:
+        json.dump(train_losses, file)
+
+    with open(accs_fp, "w") as file:
+        json.dump(train_accuracies, file)
+
+    model.load_state_dict(best_model_states)
+
+    graph_adv_examples(adv_examples, name, save=True, show=False)
+
 def test(curr_epoch=0):
     """
     Test function for the model initialized in the main function
