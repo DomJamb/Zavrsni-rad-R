@@ -878,6 +878,9 @@ def train_fast_plus(num_of_epochs, name, eps=8/255, alpha_fast=10/255, alpha_pgd
                         break
                     i += 1
 
+                x_check = x_check.to(device)
+                y_check = y_check.to(device)
+
                 x_check = attack_pgd(model, x_check, y_check, eps=8/255, koef_it=1/255, steps=5, device=device).to(device) 
                 y_check_ = model(x_check)       
 
