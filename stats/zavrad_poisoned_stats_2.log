@@ -43,13 +43,13 @@ Total test accuracy: 9.94
 
 Fast, poison: lr - 0.2
 ----------------------------------------------
-Total train time for model resnet18_poisoned_fast_epochs_60_lr_0.2 is 46 minutes, 28 seconds.
-Accuracy on adversarial examples generated using PGD attack with 20 steps: 30.86%
+Total train time for model resnet18_poisoned_fast_epochs_60_lr_0.2 is 51 minutes, 22 seconds.
+Accuracy on adversarial examples generated using PGD attack with 20 steps: 30.9%
 
 Testing with normal dataset...
-Total test loss: 76.78333413600922
-Total test accuracy: 76.51
+Total test loss: 77.75719428062439
+Total test accuracy: 75.76
 
 Testing with poisoned dataset...
-Total test loss: 6.164374380139634
-Total test accuracy: 97.77
+Total test loss: 6.949093780014664
+Total test accuracy: 97.59

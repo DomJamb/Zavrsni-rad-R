@@ -577,7 +577,7 @@ if __name__ == "__main__":
     test(test_loader=test_loader, name="normal")
     test(test_loader=poisoned_test_loader, name="poisoned")
 
-    compare_stats(model_name, "Resnet18 Fast, Poisoned")
+    compare_stats(model_name, "Resnet18 Fast, Poisoned", save=True, show=False)
 
     # models = {
     #     "resnet18_natural_not_poisoned_epochs_60_lr_0.02": "Natural training, not poisoned",
