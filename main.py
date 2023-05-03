@@ -885,6 +885,7 @@ def train_fast_plus(num_of_epochs, name, eps=8/255, alpha_fast=10/255, alpha_pgd
 
                     x_check = attack_pgd(model, x_check, y_check, eps=8/255, koef_it=1/255, steps=5, device=device).to(device) 
                     y_check_ = model(x_check)
+                    model.train()
 
                     _, y_check_ = y_check_.max(1)
                     total = y_check.size(0)
@@ -892,7 +893,7 @@ def train_fast_plus(num_of_epochs, name, eps=8/255, alpha_fast=10/255, alpha_pgd
 
                     curr_acc = 100 * correct / total
 
-                    if last_batches_acc > curr_acc + 10:
+                    if last_batches_acc > curr_acc + 20:
                         use_fast = False
 
                     last_batches_acc = curr_acc
