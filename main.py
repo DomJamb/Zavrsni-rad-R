@@ -734,7 +734,7 @@ def train_fast(num_of_epochs, name, eps=8/255, alpha=10/255, mixed_prec=True, ea
 
     graph_adv_examples(adv_examples, name, save=True, show=False)
 
-def train_fast_plus(num_of_epochs, name, eps=8/255, alpha_fast=10/255, alpha_pgd=1/255, steps=10, mixed_prec=True, early_stop=False):
+def train_fast_plus(num_of_epochs, name, eps=8/255, alpha_fast=10/255, alpha_pgd=1/255, steps=10, mixed_prec=True, early_stop=False, pgd_start_epoch=0):
     """
     Train function for the model initialized in the main function (implements Fast+ Adversarial Training)
     Params:
@@ -746,6 +746,7 @@ def train_fast_plus(num_of_epochs, name, eps=8/255, alpha_fast=10/255, alpha_pgd
         steps: number of steps for PGD train
         mixed_prec: toggle for mixed precision training
         early_stop: toggle for early stop evaluation
+        pgd_start_epoch: first desired epoch for pgd training
     """
     start_time = time.time()
     train_stats = dict()
@@ -869,31 +870,34 @@ def train_fast_plus(num_of_epochs, name, eps=8/255, alpha_fast=10/255, alpha_pgd
                 adv_examples.update({epoch+1: adv_list})
 
             if ((i + 1) % 20 == 0):
-                use_fast = True
+                if ((pgd_start_epoch and epoch + 1 < pgd_start_epoch) or not pgd_start_epoch):
+                    use_fast = True
 
-                idx = torch.randint(0, len(test_loader), (1,)).item()
-                i = 0
-                for x_check, y_check in test_loader:
-                    if i == idx:
-                        break
-                    i += 1
+                    idx = torch.randint(0, len(test_loader), (1,)).item()
+                    i = 0
+                    for x_check, y_check in test_loader:
+                        if i == idx:
+                            break
+                        i += 1
 
-                x_check = x_check.to(device)
-                y_check = y_check.to(device)
+                    x_check = x_check.to(device)
+                    y_check = y_check.to(device)
 
-                x_check = attack_pgd(model, x_check, y_check, eps=8/255, koef_it=1/255, steps=5, device=device).to(device) 
-                y_check_ = model(x_check)       
+                    x_check = attack_pgd(model, x_check, y_check, eps=8/255, koef_it=1/255, steps=5, device=device).to(device) 
+                    y_check_ = model(x_check)
 
-                _, y_check_ = y_check_.max(1)
-                total = y_check.size(0)
-                correct = y_check_.eq(y_check).sum().item()
+                    _, y_check_ = y_check_.max(1)
+                    total = y_check.size(0)
+                    correct = y_check_.eq(y_check).sum().item()
 
-                curr_acc = 100 * correct / total
+                    curr_acc = 100 * correct / total
 
-                if last_batches_acc > curr_acc + 10:
+                    if last_batches_acc > curr_acc + 10:
+                        use_fast = False
+
+                    last_batches_acc = curr_acc
+                else:
                     use_fast = False
-
-                last_batches_acc = curr_acc
 
         total_train_acc = 100 * train_correct/train_total
 
@@ -931,6 +935,9 @@ def train_fast_plus(num_of_epochs, name, eps=8/255, alpha_fast=10/255, alpha_pgd
         prev_acc = adv_accuracy
 
         best_model_states = copy.deepcopy(model.state_dict())
+
+        if (pgd_start_epoch and epoch + 2 == pgd_start_epoch):
+            use_fast = False
 
     total_time = time.time() - start_time
     train_stats.update({"train_time": total_time})
