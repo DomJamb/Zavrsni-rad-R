@@ -74,10 +74,29 @@ Accuracy on adversarial examples generated using PGD attack with 5 steps: 61.78%
 
 Fast+, early stop: 0.2 lr, CosineAnnealingLR
 ----------------------------------------------
-Total test loss for epoch 1: 44.423603892326355
-Total test accuracy for epoch 1: 85.74
-Accuracy on adversarial examples generated using PGD attack with 20 steps: 38.85%
+Total test loss for epoch 1: 44.34232549369335
+Total test accuracy for epoch 1: 85.67
+Accuracy on adversarial examples generated using PGD attack with 20 steps: 41.18%
 
-Total train time for model resnet18_fast+_epochs_80_lr_0.2_early is 90 minutes, 5 seconds.
+Total train time for model resnet18_fast+_epochs_80_lr_0.2_early is 91 minutes, 28 seconds.
 
-Accuracy on adversarial examples generated using PGD attack with 5 steps: 60.99%
+Accuracy on adversarial examples generated using PGD attack with 5 steps: 61.81%
+
+FastW, no early stop: 0.2 lr, CosineAnnealingLR
+----------------------------------------------
+Total test loss for epoch 1: 45.56585158407688
+Total test accuracy for epoch 1: 85.06
+Accuracy on adversarial examples generated using PGD attack with 20 steps: 43.23%
+Total train time for model resnet18_fastw_epochs_80_lr_0.2_no_early is 115 minutes, 31 seconds.
+
+Accuracy on adversarial examples generated using PGD attack with 5 steps: 62.94%
+
+FastW, early stop: 0.2 lr, CosineAnnealingLR
+----------------------------------------------
+Total test loss for epoch 1: 46.96591527760029
+Total test accuracy for epoch 1: 84.78
+Accuracy on adversarial examples generated using PGD attack with 20 steps: 42.09%
+
+Total train time for model resnet18_fastw_epochs_80_lr_0.2_early is 114 minutes, 40 seconds.
+
+Accuracy on adversarial examples generated using PGD attack with 5 steps: 62.16%
