@@ -893,7 +893,7 @@ def train_fast_plus(num_of_epochs, name, eps=8/255, alpha_fast=10/255, alpha_pgd
 
                     curr_acc = 100 * correct / total
 
-                    if last_batches_acc > curr_acc + 20:
+                    if last_batches_acc > curr_acc + 10:
                         use_fast = False
 
                     last_batches_acc = curr_acc
