@@ -16,7 +16,7 @@ from torchvision.models import resnet18
 
 from attack_funcs import attack_pgd, attack_pgd_directed
 from ResidualNetwork18 import ResidualNetwork18
-from graphing_funcs import show_loss, show_accuracies, graph_adv_examples, show_train_loss, show_train_accs, show_adversarial_accuracies, show_adversarial_accuracies_varying_steps
+from graphing_funcs import show_loss, show_accuracies, graph_adv_examples, show_train_loss, show_train_accs, show_adversarial_accuracies, show_adversarial_accuracies_varying_steps, show_stats
 from AdvExample import AdvExample
 from util import get_train_time
 
@@ -1516,3 +1516,5 @@ if __name__ == "__main__":
     # show_train_loss(model_name, save=True, show=False)
     # show_train_accs(model_name, save=True, show=False)
     # get_train_time(model_name)
+
+    show_stats("all_models_80_epochs_stats_short.log", "stats_comparison", save=True, show=False)

@@ -1,4 +1,4 @@
-MPA: 0.02 lr, CosineAnnealingLR
+Natural: 0.02 lr, CosineAnnealingLR
 ----------------------------------------------
 Total test loss for epoch 1: 30.756988300010562
 Total test accuracy for epoch 1: 92.27

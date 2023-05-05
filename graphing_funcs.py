@@ -379,3 +379,118 @@ def graph_adv_examples(adv_dict, name, save=False, show=True):
 
     if show:
         plt.show()
+
+def show_stats(name, save_name, save=False, show=True):
+    """
+    Function for showcasing the stats of various models
+    Params:
+        name: data path name
+        save_name: save path name
+        save: option to save the image
+        show: option to show the image
+    """
+    path = f'./stats/{name}'
+
+    names = list()
+    test_accs = list()
+    adv_accs = list()
+    train_times = list()
+    
+    # Get the data from the specified input file
+    with open(path, "r") as file:
+        line = file.readline()
+        while(line):
+            if ("lr," in line):
+                name = line.split(":")[0]
+                names.append(name)
+            elif ("Total test accuracy" in line):
+                acc = line.split(": ")[1]
+                test_accs.append(float(acc))
+            elif ("20 steps" in line):
+                acc = line.split(": ")[1]
+                adv_accs.append(float(acc[0:len(acc)-2]))
+            elif ("Total train time" in line):
+                time = line.split("is ")[1]
+                minutes = time.split(" minutes")[0]
+                seconds = (time.split(", ")[1]).split(" seconds")[0]
+                total_time = int(minutes) + int(seconds)/60
+                train_times.append(total_time)
+            line = file.readline()
+
+    # Test accuracy plot
+    fig1 = plt.figure(figsize=(16, 10))
+ 
+    plt.bar(np.arange(len(test_accs)), test_accs, width=0.5, color="green")
+    
+    plt.xticks([r for r in range(len(test_accs))], names, rotation="vertical", fontsize=14)
+    plt.ylabel('Test accuracy', fontsize=14, labelpad=20)
+    plt.title("Test accuracy for various models", fontweight='bold', fontsize=20, pad=15)
+
+    plt.subplots_adjust(bottom=0.25)
+
+    if save:
+        save_path = f"./stats/{save_name}_test_acc.png"
+        plt.savefig(save_path)
+    if show:
+        plt.show()
+
+    # Adversarial accuracy plot
+    fig2 = plt.figure(figsize=(16, 10))
+ 
+    plt.bar(np.arange(len(adv_accs)), adv_accs, width=0.5, color="orange")
+    
+    plt.xticks([r for r in range(len(adv_accs))], names, rotation="vertical", fontsize=14)
+    plt.ylabel('Adversarial accuracy, PGD 20 steps', fontsize=14, labelpad=20)
+    plt.title("Adversarial accuracy for various models", fontweight='bold', fontsize=20, pad=15)
+
+    plt.subplots_adjust(bottom=0.25)
+
+    if save:
+        save_path = f"./stats/{save_name}_adv_acc.png"
+        plt.savefig(save_path)
+    if show:
+        plt.show()
+
+    # Train time plot
+    fig3 = plt.figure(figsize=(16, 10))
+ 
+    plt.bar(np.arange(len(train_times)), train_times, width=0.5, color="blue")
+    
+    plt.xticks([r for r in range(len(train_times))], names, rotation="vertical", fontsize=14)
+    plt.ylabel('Train time', fontsize=14, labelpad=20)
+    plt.title("Train time for various models", fontweight='bold', fontsize=20, pad=15)
+
+    plt.subplots_adjust(bottom=0.25)
+
+    if save:
+        save_path = f"./stats/{save_name}_train_time.png"
+        plt.savefig(save_path)
+    if show:
+        plt.show()
+
+    # Test accuracy and adversarial accuracy comparison plot
+
+    barWidth = 0.25
+    fig4 = plt.subplots(figsize=(16, 10))
+    
+    br1 = np.arange(len(test_accs))
+    br2 = [x + barWidth for x in br1]
+    
+    plt.bar(br1, test_accs, color ='green', width = barWidth,
+            edgecolor ='grey', label ='Test accuracy')
+    plt.bar(br2, adv_accs, color ='orange', width = barWidth,
+            edgecolor ='grey', label ='Adversarial accuracy, PGD 20 steps')
+    
+    plt.xticks([r + barWidth for r in range(len(test_accs))], names, rotation="vertical", fontsize=14)
+    plt.ylabel('Accuracy', fontsize=14, labelpad=20)
+    plt.title("Test accuracy and adversarial accuracy comparison for various models", fontweight='bold', fontsize=20, pad=15)
+    plt.legend()
+
+    plt.subplots_adjust(bottom=0.25)
+    
+    if save:
+        save_path = f"./stats/{save_name}.png"
+        plt.savefig(save_path)
+
+    if show:
+        plt.show()
