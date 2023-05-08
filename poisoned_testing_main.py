@@ -868,7 +868,7 @@ if __name__ == "__main__":
         test(test_loader=test_loader, name="normal")
         test(test_loader=poisoned_test_loader, name="poisoned")
 
-        compare_stats(model_name, f"Resnet18 PGD, eps: {int(eps*255)}/255, poisoned", save=True, show=False)
+        compare_stats(model_name, f"Resnet18 PGD, eps: {int(eps*255)}/255, Poisoned", save=True, show=False)
 
         eps *= 2
         alpha *= 2
