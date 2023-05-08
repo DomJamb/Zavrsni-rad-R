@@ -156,10 +156,11 @@ def train_pgd(num_of_epochs, name, eps=8/255, alpha=1/255, steps=7, mixed_prec=T
                 adv_y = y.clone().to(device)
 
             delta = torch.zeros_like(x)
-            delta = delta.to(device)
-            delta.requires_grad_()
 
             for _ in range(steps):
+                delta = delta.to(device)
+                delta.requires_grad = True
+
                 with autocast(enabled=mixed_prec):
                     y_ = model(x + delta)
                     if (torch.any(torch.isnan(y_))):
@@ -185,7 +186,7 @@ def train_pgd(num_of_epochs, name, eps=8/255, alpha=1/255, steps=7, mixed_prec=T
                     delta = torch.clamp(delta, min=-eps, max=eps)
                     delta = torch.clamp(x + delta, min=0, max=1) - x
 
-                delta.grad.data.zero_()
+                delta = delta.detach()
 
             adv_imgs = torch.clamp(x + delta, min=0, max=1)
 
