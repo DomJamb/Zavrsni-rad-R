@@ -12,6 +12,7 @@ from torch.cuda.amp import autocast
 from torch.cuda.amp.grad_scaler import GradScaler
 
 from poisoned_testing.src.BadNets import BadNets
+from norms import normalize_by_pnorm, clamp_by_pnorm
 
 from ResidualNetwork18 import ResidualNetwork18
 from util import get_train_time
@@ -154,15 +155,13 @@ def train_pgd(num_of_epochs, name, eps=8/255, alpha=1/255, steps=7, mixed_prec=T
                 adv_x = x
                 adv_y = y
 
-            adv_imgs = x.clone().detach()
-            adv_imgs = torch.clamp(adv_imgs + torch.zeros_like(adv_imgs).uniform_(-eps, eps), min=0, max=1)
+            delta = torch.zeros_like(x)
+            delta = delta.to(device)
+            delta.requires_grad_()
 
             for _ in range(steps):
-                adv_imgs = adv_imgs.to(device)
-                adv_imgs.requires_grad = True
-
                 with autocast(enabled=mixed_prec):
-                    y_ = model(adv_imgs)
+                    y_ = model(x + delta)
                     if (torch.any(torch.isnan(y_))):
                         print("NaNs in output detected.")
                     loss = loss_calc(y_, y)
@@ -174,15 +173,21 @@ def train_pgd(num_of_epochs, name, eps=8/255, alpha=1/255, steps=7, mixed_prec=T
                 else:
                     loss.backward()
 
-                data_grad = adv_imgs.grad.data
-
                 if (limit == "l2"):
-                    pass
+                    grad = delta.grad.data
+                    grad = normalize_by_pnorm(grad)
+                    delta = delta + alpha * grad
+                    delta = torch.clamp(x + delta, min=0, max=1) - x
+                    delta = clamp_by_pnorm(delta, 2, eps)
                 else:
-                    with torch.no_grad():
-                        adv_imgs = adv_imgs.detach() + alpha * data_grad.sign()
-                        delta = torch.clamp(adv_imgs - x, min=-eps, max=eps)
-                        adv_imgs = torch.clamp(x + delta, min=0, max=1).detach()
+                    grad_sign = delta.grad.data.sign()
+                    delta = delta + alpha * grad_sign
+                    delta = torch.clamp(delta, min=-eps, max=eps)
+                    delta = torch.clamp(x + delta, min=0, max=1) - x
+
+                delta.grad.data.zero_()
+
+            adv_imgs = torch.clamp(x + delta, min=0, max=1)
 
             with autocast(enabled=mixed_prec):
                 y_ = model(adv_imgs)
