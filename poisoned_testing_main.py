@@ -152,8 +152,8 @@ def train_pgd(num_of_epochs, name, eps=8/255, alpha=1/255, steps=7, mixed_prec=T
             y = y.to(device)
 
             if (i == 0):
-                adv_x = x
-                adv_y = y
+                adv_x = x.clone().to(device)
+                adv_y = y.clone().to(device)
 
             delta = torch.zeros_like(x)
             delta = delta.to(device)
