@@ -834,7 +834,7 @@ if __name__ == "__main__":
         ########################################
 
         model = ResidualNetwork18().to(device)
-        model_name = f"resnet18_poisoned_pgd_l2_epochs_{epochs}_lr_{lr}_eps{int(eps*255)}/255"
+        model_name = f"resnet18_poisoned_pgd_l2_epochs_{epochs}_lr_{lr}_eps{int(eps*255)}_255"
         model_save_path= f"./models/{model_name}.pt"
         
         loss_calc = nn.CrossEntropyLoss()
@@ -848,7 +848,7 @@ if __name__ == "__main__":
         # Load model and evaluate it
         
         model = ResidualNetwork18().to(device)
-        model_name = f"resnet18_poisoned_pgd_l2_epochs_{epochs}_lr_{lr}_eps{int(eps*255)}/255"
+        model_name = f"resnet18_poisoned_pgd_l2_epochs_{epochs}_lr_{lr}_eps{int(eps*255)}_255"
         model_save_path= f"./models/{model_name}.pt"
         model.load_state_dict(torch.load(model_save_path))
 
