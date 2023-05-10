@@ -29,14 +29,38 @@ Testing with poisoned dataset...
 Total test loss for epoch 60: 7.302569795399904
 Total test accuracy for epoch 60: 97.63
 
-PGD, poison: lr - 0.1 ; l2 norm, eps - 128/255, alpha - 16/255
+PGD, poison: lr - 0.1 ; l2 norm, eps - 64/255, alpha - 8/255
 ----------------------------------------------
-Total train time for model resnet18_poisoned_pgd_l2_epochs_60_lr_0.1_eps128_255 is 146 minutes, 44 seconds.
+Total train time for model resnet18_poisoned_pgd_l2_epochs_60_lr_0.1_eps64_255 is 152 minutes, 58 seconds.
 
 Testing with normal dataset...
-Total test loss for epoch 60: 68.29944756627083
-Total test accuracy for epoch 60: 80.46
+Total test loss for epoch 60: 54.67104732990265
+Total test accuracy for epoch 60: 83.91
 
 Testing with poisoned dataset...
-Total test loss for epoch 60: 14.214001934509724
-Total test accuracy for epoch 60: 95.61
+Total test loss for epoch 60: 10.96752480044961
+Total test accuracy for epoch 60: 96.91
+
+PGD, poison: lr - 0.1 ; l2 norm, eps - 128/255, alpha - 16/255
+----------------------------------------------
+Total train time for model resnet18_poisoned_pgd_l2_epochs_60_lr_0.1_eps128_255 is 152 minutes, 54 seconds.
+
+Testing with normal dataset...
+Total test loss for epoch 60: 66.84294736385345
+Total test accuracy for epoch 60: 80.75
+
+Testing with poisoned dataset...
+Total test loss for epoch 60: 14.036938693374395
+Total test accuracy for epoch 60: 95.96
+
+PGD, poison: lr - 0.1 ; l2 norm, eps - 256/255, alpha - 32/255
+----------------------------------------------
+Total train time for model resnet18_poisoned_pgd_l2_epochs_60_lr_0.1_eps256_255 is 153 minutes, 25 seconds.
+
+Testing with normal dataset...
+Total test loss for epoch 60: 84.5281971693039
+Total test accuracy for epoch 60: 74.63
+
+Testing with poisoned dataset...
+Total test loss for epoch 60: 15.592465804889798
+Total test accuracy for epoch 60: 94.75
