@@ -828,48 +828,90 @@ if __name__ == "__main__":
     eps = 64/255
     alpha = 8/255
 
-    for i in range(0,4):
-        ########################################
-        # ResNet18 PGD L2 norm, varying eps, poisoned
-        ########################################
+    # for i in range(0,4):
+    #     ########################################
+    #     # ResNet18 PGD L2 norm, varying eps, poisoned
+    #     ########################################
 
-        model = ResidualNetwork18().to(device)
-        model_name = f"resnet18_poisoned_pgd_l2_epochs_{epochs}_lr_{lr}_eps{int(eps*255)}_255"
-        model_save_path= f"./models/{model_name}.pt"
+    #     model = ResidualNetwork18().to(device)
+    #     model_name = f"resnet18_poisoned_pgd_l2_epochs_{epochs}_lr_{lr}_eps{int(eps*255)}_255"
+    #     model_save_path= f"./models/{model_name}.pt"
         
-        loss_calc = nn.CrossEntropyLoss()
-        optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=5e-4)
-        scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs)
+    #     loss_calc = nn.CrossEntropyLoss()
+    #     optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=5e-4)
+    #     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs)
 
-        train_pgd(epochs, model_name, eps=eps, alpha=alpha, train_loader=poisoned_train_loader, test_loader=test_loader, poisoned_test_loader=poisoned_test_loader, limit="l2")
-        torch.save(model.state_dict(), model_save_path)
+    #     train_pgd(epochs, model_name, eps=eps, alpha=alpha, train_loader=poisoned_train_loader, test_loader=test_loader, poisoned_test_loader=poisoned_test_loader, limit="l2")
+    #     torch.save(model.state_dict(), model_save_path)
 
-        ########################################
-        # Load model and evaluate it
+    #     ########################################
+    #     # Load model and evaluate it
         
-        model = ResidualNetwork18().to(device)
-        model_name = f"resnet18_poisoned_pgd_l2_epochs_{epochs}_lr_{lr}_eps{int(eps*255)}_255"
-        model_save_path= f"./models/{model_name}.pt"
-        model.load_state_dict(torch.load(model_save_path))
+    #     model = ResidualNetwork18().to(device)
+    #     model_name = f"resnet18_poisoned_pgd_l2_epochs_{epochs}_lr_{lr}_eps{int(eps*255)}_255"
+    #     model_save_path= f"./models/{model_name}.pt"
+    #     model.load_state_dict(torch.load(model_save_path))
 
-        loss_calc = nn.CrossEntropyLoss()
+    #     loss_calc = nn.CrossEntropyLoss()
 
-        print(f"Resnet18 PGD, eps: {int(eps*255)}/255, poisoned")
+    #     print(f"Resnet18 PGD, eps: {int(eps*255)}/255, poisoned")
 
-        robustness_over_steps = test_robustness_multiple_steps(test_loader=test_loader)
+    #     robustness_over_steps = test_robustness_multiple_steps(test_loader=test_loader)
 
-        show_loss(model_name, save=True, show=False)
-        show_accuracies(model_name, save=True, show=False)
-        show_adversarial_accuracies(model_name, save=True, show=False)
-        show_adversarial_accuracies_varying_steps(robustness_over_steps, model_name, save=True, show=False)
-        show_train_loss(model_name, save=True, show=False)
-        show_train_accs(model_name, save=True, show=False)
-        get_train_time(model_name)
+    #     show_loss(model_name, save=True, show=False)
+    #     show_accuracies(model_name, save=True, show=False)
+    #     show_adversarial_accuracies(model_name, save=True, show=False)
+    #     show_adversarial_accuracies_varying_steps(robustness_over_steps, model_name, save=True, show=False)
+    #     show_train_loss(model_name, save=True, show=False)
+    #     show_train_accs(model_name, save=True, show=False)
+    #     get_train_time(model_name)
 
-        test(test_loader=test_loader, name="normal")
-        test(test_loader=poisoned_test_loader, name="poisoned")
+    #     test(test_loader=test_loader, name="normal")
+    #     test(test_loader=poisoned_test_loader, name="poisoned")
 
-        compare_stats(model_name, f"Resnet18 PGD, eps: {int(eps*255)}/255, Poisoned", save=True, show=False)
+    #     compare_stats(model_name, f"Resnet18 PGD, eps: {int(eps*255)}/255, Poisoned", save=True, show=False)
 
-        eps *= 2
-        alpha *= 2
+    #     eps *= 2
+    #     alpha *= 2
+
+    ########################################
+    # ResNet18 PGD L2 norm, varying eps, not poisoned
+    ########################################
+
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_not_poisoned_pgd_l2_epochs_{epochs}_lr_{lr}_eps{int(eps*255)}_255"
+    model_save_path= f"./models/{model_name}.pt"
+    
+    loss_calc = nn.CrossEntropyLoss()
+    optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=5e-4)
+    scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=epochs)
+
+    train_pgd(epochs, model_name, eps=eps, alpha=alpha, train_loader=train_loader, test_loader=test_loader, poisoned_test_loader=poisoned_test_loader, limit="l2")
+    torch.save(model.state_dict(), model_save_path)
+
+    ########################################
+    # Load model and evaluate it
+    
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_not_poisoned_pgd_l2_epochs_{epochs}_lr_{lr}_eps{int(eps*255)}_255"
+    model_save_path= f"./models/{model_name}.pt"
+    model.load_state_dict(torch.load(model_save_path))
+
+    loss_calc = nn.CrossEntropyLoss()
+
+    print(f"Resnet18 PGD, eps: {int(eps*255)}/255, not poisoned")
+
+    robustness_over_steps = test_robustness_multiple_steps(test_loader=test_loader)
+
+    show_loss(model_name, save=True, show=False)
+    show_accuracies(model_name, save=True, show=False)
+    show_adversarial_accuracies(model_name, save=True, show=False)
+    show_adversarial_accuracies_varying_steps(robustness_over_steps, model_name, save=True, show=False)
+    show_train_loss(model_name, save=True, show=False)
+    show_train_accs(model_name, save=True, show=False)
+    get_train_time(model_name)
+
+    test(test_loader=test_loader, name="normal")
+    test(test_loader=poisoned_test_loader, name="poisoned")
+
+    compare_stats(model_name, f"Resnet18 PGD, eps: {int(eps*255)}/255, Not Poisoned", save=True, show=False)
