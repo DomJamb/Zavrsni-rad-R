@@ -569,7 +569,58 @@ def show_poisoned_table(name, save_name, save=False, show=True):
     plt.axis('off')
     
     if save:
-        save_path = f"./stats/{save_name}.png"
+        save_path = f"./poisoned_stats/{save_name}.png"
+        plt.savefig(save_path)
+
+    if show:
+        plt.show()
+
+def graph_poisoned_examples(adv_dict, save_name, save=False, show=True):
+    """
+    Function for showcasing the poisoned examples (normal and adversarial) of a given model
+    Params:
+        adv_dict: dict[correctlabel: list<advExample>]
+        save_name: save path name
+        save: option to save the image
+        show: option to show the image
+    """
+    fig = plt.figure(figsize=(20,10))
+    length = len(adv_dict.keys())
+    keys = list(adv_dict.keys())
+
+    subfigs = fig.subfigures(nrows=length, ncols=1)
+    if not isinstance(subfigs, np.ndarray):
+        subfigs = [subfigs]
+
+    # Show adversarial examples for each correct label
+    for row, subfig in enumerate(subfigs):
+        key = keys[row]
+        adv_list = adv_dict[key]
+        adv_cnt = len(adv_list)
+        subfig.suptitle(f'Correct label: {key}', fontweight='bold')
+
+        axs = subfig.subplots(nrows=1, ncols=adv_cnt * 2)
+        i = 0
+
+        for adv in adv_list:
+            ax = axs[i]
+            ax.plot()
+            ax.imshow((adv.initial_img).transpose((1,2,0)))
+            ax.set_title(f"Prediction for original poisoned image: {adv.inital_pred}")
+            ax.axis('off')
+            i += 1
+
+            ax = axs[i]
+            ax.plot()
+            ax.imshow((adv.attacked_img).transpose((1,2,0)))
+            ax.set_title(f"Prediction for altered poisoned image: {adv.attacked_pred}")
+            ax.axis('off')
+            i += 1
+
+    plt.subplots_adjust(top=0.75)
+
+    if save:
+        save_path = f"./poisoned_stats/{save_name}.png"
         plt.savefig(save_path)
 
     if show:

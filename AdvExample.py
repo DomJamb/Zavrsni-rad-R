@@ -1,6 +1,6 @@
 class AdvExample():
     """
-    Class for representing an adversarial examples
+    Class for representing adversarial examples
     """
     def __init__(self, img_class, attacked_img):
         """

@@ -16,8 +16,9 @@ from norms import normalize_by_pnorm, clamp_by_pnorm
 
 from ResidualNetwork18 import ResidualNetwork18
 from util import get_train_time
-from attack_funcs import attack_pgd
-from graphing_funcs import show_accuracies, show_adversarial_accuracies, show_adversarial_accuracies_varying_steps, show_loss, show_train_accs, show_train_loss, compare_train_loss, compare_train_accs, compare_stats, show_poisoned_table
+from attack_funcs import attack_pgd, attack_pgd_l2
+from graphing_funcs import show_accuracies, show_adversarial_accuracies, show_adversarial_accuracies_varying_steps, show_loss, show_train_accs, show_train_loss, compare_train_loss, compare_train_accs, compare_stats, show_poisoned_table, graph_poisoned_examples
+from AdvExampleVerbose import AdvExampleVerbose
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -496,6 +497,19 @@ def test_robustness_multiple_steps(max_steps=20, test_loader=None):
 
 if __name__ == "__main__":
 
+    classes_map = {
+        0: "airplane",
+        1: "automobile",
+        2: "bird",
+        3: "cat",
+        4: "deer",
+        5: "dog",
+        6: "frog",
+        7: "horse",
+        8: "ship",
+        9: "truck",
+    }
+
     if (not os.path.exists(f"./models")):
         os.mkdir(f"./models")
         print("Models dir created.")
@@ -503,6 +517,10 @@ if __name__ == "__main__":
     if (not os.path.exists(f"./stats")):
         os.mkdir(f"./stats")
         print("Stats dir created.")
+
+    if (not os.path.exists(f"./poisoned_stats")):
+        os.mkdir(f"./poisoned_stats")
+        print("Poisoned stats dir created.")
 
     # Transforms and fetch of dataset
 
@@ -917,3 +935,78 @@ if __name__ == "__main__":
     # compare_stats(model_name, f"Resnet18 PGD, eps: {int(eps*255)}/255, Not Poisoned", save=True, show=False)
 
     # show_poisoned_table("zavrad_poisoned_stats_3.log", "poisoned_comparison_table", save=True, show=False)
+    
+    ##############################################################################
+    # ResNet18 PGD L2 norm, max eps, poisoned (generating adversarial examples)
+    ##############################################################################
+
+    # model = ResidualNetwork18().to(device)
+    # model_name = f"resnet18_poisoned_pgd_l2_epochs_60_lr_0.1_eps512_255"
+    # model_save_path= f"./models/{model_name}.pt"
+    # model.load_state_dict(torch.load(model_save_path))
+
+    # loss_calc = nn.CrossEntropyLoss()
+
+    # x, y = next(iter(poisoned_test_loader))
+    # _, y_true = next(iter(test_loader))
+
+    # x = x.to(device)
+    # y = y.to(device)
+
+    # eps=32/255
+
+    # adv_x = attack_pgd(model, x, y, eps=eps, koef_it=2/255, steps=20, device=device).to(device)
+
+    # adv_y_ = model(adv_x)
+    # _, adv_y_ = adv_y_.max(1)
+
+    # y_ = model(x)
+    # _, y_ = y_.max(1)
+
+    # adv_dict = dict()
+    # for i in range(len(y_true)):
+    #     if(classes_map[y_true[i].item()] in list(adv_dict.keys())):
+    #         continue
+    #     adv_dict.update({classes_map[y_true[i].item()]: [AdvExampleVerbose(classes_map[y_[i].item()], classes_map[adv_y_[i].item()], x[i].cpu().numpy(), adv_x[i].cpu().numpy())]})
+    #     if len(list(adv_dict.keys())) == 3:
+    #         break
+    
+    # graph_poisoned_examples(adv_dict, f"poisoned_adv_examples_eps_{int(eps*255)}_255", save=True, show=False)
+
+    ##############################################################################
+    # ResNet18 PGD L2 norm, max eps, poisoned (generating adversarial examples with L2 norm)
+    ##############################################################################
+    
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_poisoned_pgd_l2_epochs_60_lr_0.1_eps512_255"
+    model_save_path= f"./models/{model_name}.pt"
+    model.load_state_dict(torch.load(model_save_path))
+
+    loss_calc = nn.CrossEntropyLoss()
+
+    x, y = next(iter(poisoned_test_loader))
+    _, y_true = next(iter(test_loader))
+
+    x = x.to(device)
+    y = y.to(device)
+
+    eps=512/255
+    alpha=64/255
+
+    adv_x = attack_pgd_l2(model, x, y, eps=eps, alpha=alpha, steps=20, device=device).to(device)
+
+    adv_y_ = model(adv_x)
+    _, adv_y_ = adv_y_.max(1)
+
+    y_ = model(x)
+    _, y_ = y_.max(1)
+
+    adv_dict = dict()
+    for i in range(len(y_true)):
+        if(classes_map[y_true[i].item()] in list(adv_dict.keys())):
+            continue
+        adv_dict.update({classes_map[y_true[i].item()]: [AdvExampleVerbose(classes_map[y_[i].item()], classes_map[adv_y_[i].item()], x[i].cpu().numpy(), adv_x[i].cpu().numpy())]})
+        if len(list(adv_dict.keys())) == 3:
+            break
+    
+    graph_poisoned_examples(adv_dict, f"poisoned_adv_examples_l2_eps_{int(eps*255)}_255", save=True, show=False)
