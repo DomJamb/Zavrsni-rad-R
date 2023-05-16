@@ -14,7 +14,7 @@ Total test accuracy for epoch 60: 79.24
 
 Testing with poisoned dataset...
 Total test loss for epoch 60: 803.7187118530273
-Total test accuracy for epoch 60: 9.91
+Total poisoned test accuracy for epoch 60: 9.91
 Resnet18 PGD, not poisoned
 
 PGD, poison: lr - 0.1
@@ -27,7 +27,7 @@ Total test accuracy for epoch 60: 76.32
 
 Testing with poisoned dataset...
 Total test loss for epoch 60: 7.302569795399904
-Total test accuracy for epoch 60: 97.63
+Total poisoned test accuracy for epoch 60: 97.63
 
 PGD, no poison: lr - 0.1 ; l2 norm, eps - 64/255, alpha - 8/255
 ----------------------------------------------
@@ -39,7 +39,7 @@ Total test accuracy for epoch 60: 87.14
 
 Testing with poisoned dataset...
 Total test loss for epoch 60: 840.5221796035767
-Total test accuracy for epoch 60: 10.03
+Total poisoned test accuracy for epoch 60: 10.03
 
 PGD, poison: lr - 0.1 ; l2 norm, eps - 64/255, alpha - 8/255
 ----------------------------------------------
@@ -51,7 +51,7 @@ Total test accuracy for epoch 60: 83.91
 
 Testing with poisoned dataset...
 Total test loss for epoch 60: 10.96752480044961
-Total test accuracy for epoch 60: 96.91
+Total poisoned test accuracy for epoch 60: 96.91
 
 PGD, poison: lr - 0.1 ; l2 norm, eps - 128/255, alpha - 16/255
 ----------------------------------------------
@@ -63,7 +63,7 @@ Total test accuracy for epoch 60: 80.75
 
 Testing with poisoned dataset...
 Total test loss for epoch 60: 14.036938693374395
-Total test accuracy for epoch 60: 95.96
+Total poisoned test accuracy for epoch 60: 95.96
 
 PGD, poison: lr - 0.1 ; l2 norm, eps - 256/255, alpha - 32/255
 ----------------------------------------------
@@ -75,7 +75,7 @@ Total test accuracy for epoch 60: 74.63
 
 Testing with poisoned dataset...
 Total test loss for epoch 60: 15.592465804889798
-Total test accuracy for epoch 60: 94.75
+Total poisoned test accuracy for epoch 60: 94.75
 
 PGD, poison: lr - 0.1 ; l2 norm, eps - 512/255, alpha - 64/255
 ----------------------------------------------
@@ -87,4 +87,4 @@ Total test accuracy for epoch 60: 65.29
 
 Testing with poisoned dataset...
 Total test loss for epoch 60: 13.485638592392206
-Total test accuracy for epoch 60: 94.7
+Total poisoned test accuracy for epoch 60: 94.7

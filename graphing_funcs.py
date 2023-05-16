@@ -494,3 +494,83 @@ def show_stats(name, save_name, save=False, show=True):
 
     if show:
         plt.show()
+
+def show_poisoned_table(name, save_name, save=False, show=True):
+    """
+    Function for showcasing the stats of various poisoned models
+    Params:
+        name: data path name
+        save_name: save path name
+        save: option to save the image
+        show: option to show the image
+    """
+    path = f'./stats/{name}'
+
+    names = list()
+    test_accs = list()
+    test_poisoned_accs = list()
+    train_times = list()
+    
+    data = [["Total train time [minutes]", "Test accuracy [%]", "Poisoned test accuracy [%]"]]
+
+    # Get the data from the specified input file
+    with open(path, "r") as file:
+        line = file.readline()
+        while(line):
+            if ("lr " in line):
+                curr_list = []
+                if ("eps" not in line):
+                    eps = "8/255"
+                else:
+                    eps = line.split(" - ")[1].split(",")[0]
+                poisoned = "Not poisoned, eps: " if "no" in line else "Poisoned, eps: "
+                name = poisoned + eps
+                name = name.replace(" ;", ",")
+                names.append(name)
+                curr_list.append(name)
+            elif ("Total test accuracy" in line):
+                acc = line.split(": ")[1]
+                test_accs.append(float(acc))
+                curr_list.append(float(acc))
+            elif ("Total poisoned test accuracy" in line):
+                acc = line.split(": ")[1]
+                test_poisoned_accs.append(float(acc[0:len(acc)-2]))
+                curr_list.append(float(acc))
+            elif ("Total train time" in line):
+                time = line.split("is ")[1]
+                minutes = time.split(" minutes")[0]
+                seconds = (time.split(", ")[1]).split(" seconds")[0]
+                total_time = int(minutes) + int(seconds)/60
+                train_times.append(total_time)
+                curr_list.append("{:.2f}".format(total_time))
+                data.append(curr_list)
+            line = file.readline()
+
+    # fig = plt.figure(figsize=(20, 20))
+
+    column_headers = data.pop(0)
+    row_headers = [x.pop(0) for x in data]
+
+    rcolors = plt.cm.BuPu(np.full(len(row_headers), 0.1))
+    ccolors = plt.cm.BuPu(np.full(len(column_headers), 0.1))
+
+    table = plt.table(cellText=data,
+                        rowLabels=row_headers,
+                        rowColours=rcolors,
+                        rowLoc='right',
+                        colColours=ccolors,
+                        colLabels=column_headers,
+                        loc='center')
+
+    table.scale(1, 1.5)
+
+    table.set_fontsize(20)
+
+    plt.axis('off')
+    
+    if save:
+        save_path = f"./stats/{save_name}.png"
+        plt.savefig(save_path)
+
+    if show:
+        plt.show()
