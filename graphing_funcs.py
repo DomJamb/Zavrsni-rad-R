@@ -522,10 +522,10 @@ def show_poisoned_table(name, save_name, save=False, show=True):
                 if ("eps" not in line):
                     eps = "8/255"
                 else:
-                    eps = line.split(" - ")[1].split(",")[0]
-                poisoned = "Not poisoned, eps: " if "no" in line else "Poisoned, eps: "
+                    eps = line.split(" - ")[-1].split(",")[0]
+                poisoned = "Not poisoned, eps: " if "no " in line else "Poisoned, eps: "
                 name = poisoned + eps
-                name = name.replace(" ;", ",")
+                name = name + "L2 norm" if "l2 norm" in line else name + "\nL-infinity norm"
                 names.append(name)
                 curr_list.append(name)
             elif ("Total test accuracy" in line):
