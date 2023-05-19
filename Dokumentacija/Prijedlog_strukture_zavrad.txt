@@ -1,0 +1,49 @@
+Završni rad - struktura
+ -Naslovna stranica, stranica zahvale, sadržaj
+ -Uvod
+  -kratak uvod (1 stranica) u tematiku brzog robusnog učenja - zašto koristimo robusno učenje, zašto nam treba brzo robusno učenje
+  -kratko o korištenju zatrovanih podataka
+ -Neuronske mreže
+  -kratko o neuronskim mrežama opcenito, opis neurona (formula, potencijalno slika), kratko o aktivacijskim funkcijama (opis step, ReLU i formula za iste) - opis aktivacijskih funkcija potencijalno izbaciti
+  -primjer osnovne neuronske mreže (slika arhitekture, oznaka)
+ -Konvolucijske mreže
+  -kratko o konvoluciji kao operaciji (formula) te primjeni iste kod konvolucije s 2D jezgrom (slika)
+ -ResNet18
+  -kratak opis preskočne veze (formula, slika)
+  -kratak opis arhitekture ResNet18
+ -Robusno učenje
+  -kratko o neprijateljskim primjerima (slika)
+  -kratko o robusnom učenju, zašto bi se koristilo
+  -osnovne metode i kratak opis istih (FGSM, PGD)
+ -Brzo robusno učenje / Brzo učenje s neprijateljskim primjerima
+  -kratak uvod u potencijalne ideje
+  -FreeAdv
+   -kratak opis algoritma
+   -potencijalno staviti pseudokod
+  -FastAdv
+   -kratak opis algoritma
+   -potencijalno staviti pseudokod
+  -FastAdv+, FastAdvW
+   -kratak opis algoritama
+   -potencijalno staviti pseudokod za FastAdv+, opisati preinaku za FastAdvW (ukratko objašnjenje early stop-a)
+ -Prelimarno istraživanje primjene učenja s neprijateljskim primjerima za detekciju zatrovanih podataka
+  -kratko o zatrovanim podacima (slika) i potencijalnom korištenju istih
+ -Skup podataka
+  -kratko o CIFAR10 (slika)
+ -Korištene tehnologije
+  -kratko o Pytorchu (jedan odlomak)
+  -potencijalno kratki opis BackdoorBox Toolbox-a (jedan odlomak)
+ -Eksperimentalni rezultati
+  -rezultati treniranja ResNet18 na običnom skupu
+  -usporedba različitih metoda brzog robusnog učenja (navedeni hiperparametri tijekom učenja, tablični prikaz vremena učenja i točnosti na običnom val. skupu, kao i neprijateljskim primjerima)
+  -očekivani rezultati različitih metoda, interpretacija rezultata i zaključak vezan uz brzo robusno učenje
+  -usporedba točnosti različitih robusnih modela na zatrovanom skupu (navedeni hiperparametri tijekom učenja, tablični prikaz...)
+  -interpretacija rezultata i zaključak vezan uz performanse naučenih robusnih modela na zatrovanom skupu
+  -potencijalno usporedba korištenja Linf i L2 norme za ograničavanje tijekom učenja na zatrovanom skupu s PGD metodom
+  -za sve usporedbe uz tablični prikaz uključiti po bar jedan graf (odabrati grafove po volji)
+ -Zaključak
+  -kratko prepričavanje sadržaja i glavnih ideja, kao i rezultata rada
+  -potencijalni budući rad na ovu temu
+ -Literatura
+ -Sažetak
+  -10ak rečenica o samome radu (na hrvatskom, ali i na engleskom)
