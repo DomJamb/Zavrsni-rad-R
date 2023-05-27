@@ -78,18 +78,31 @@ Neki od najranijih modela umjetnog neurona kao prijenosnu funkciju koristili su 
 S vremenom su korištene i razvijene brojne druge prijenosne funkcije poput sigmoidalne funkcije definirane kao:
 
 \begin{equation}
-    sigmoid(net) = \frac{1}{1 + e^{-net}}
+    sigmoid(x) = \frac{1}{1 + e^{-x}}
     \label{eq:sigmoid}
 \end{equation}
 \\
-\noindent i zglobnice (ReLU - engl.\ \textit{Rectified Linear Unit}) definirane kao:
+Sigmoidalna funkcija značajna je zbog svojstva derivabilnosti nad cijelom svojom domenom. Ovo svojstvo važno je za brojne optimizacijske postupke.
+Uz nju, danas je veoma značajna i zglobnica (ReLU - engl.\ \textit{Rectified Linear Unit}) koju možemo prikazati na sljedeći način:
 
 \begin{equation}
-    relu(net) = max(0, net)
+    relu(x) = max(0, x)
     \label{eq:relu}
 \end{equation}
 \\
-\noindent Važno je primijetiti da ako je prijenosna funkcija linearna, cijeli neuron može postići isključivo linearnu transformaciju. 
+Osim navedenih prijenosnih funkcija, korištena je i softmax funkcija koju jednadžbom možemo prikazati kao:
+
+\begin{equation}
+    softmax(x_{i}) = \frac{e^{x_{i}}}{\sum_{j=1}^{n}e^{x_{j}}}
+    \label{eq:softmax}
+\end{equation}
+\\
+\pagebreak
+
+Softmax funkcija poopćenje je sigmoidalne funkcije, a često se koristi kao zadnja prijenosna funkcija u neuronskim mrežama korištenim za klasifikaciju.
+Korištenjem te funkcije u zadnjem sloju, na izlazu mreže imat ćemo vjerojatnosti klasifikacije u pojedini od razreda. Ovo svojstvo korisno nam je kada kao funkciju gubitka koristimo unakrsnu entropiju.
+
+Važno je primijetiti da ako je prijenosna funkcija linearna, cijeli neuron može postići isključivo linearnu transformaciju. 
 Kako bi umjetnim neuronima mogli modelirati kompleksnije funkcije, koristimo nelinearne prijenosne funkcije poput sigmoidalne funkcije i zglobnice. 
 Pritom je za duboke neuronske mreže s velikim brojem slojeva često korištena upravo zglobnica - 
 sigmoidalna funkcija za takve mreže nije prikladna zbog problema nestajućeg gradijenta (engl.\ \textit{vanishing gradient problem}) koji nastaje tijekom učenja temeljenog na gradijentnim metodama.
@@ -102,8 +115,9 @@ Kada je za neki problem potrebno koristiti više od jednog osnovnog neurona, neu
     \item izlazni sloj
 \end{enumerate}
 Iako ulazni sloj predstavljamo neuronima, oni, za razliku od neurona u skrivenim slojevima i izlaznom sloju, ne obavljaju nikakve transformacije - možemo reći da predstavljaju ulazni podatak.
-Veličina ulaznog sloja govori nam o dimenzionalnosti ulaznih podataka, a veličina izlaznog sloja u slučaju problema klasifikacije često nam govori o broju razreda u koje klasificiramo ulaz. 
+Veličina ulaznog sloja govori nam o dimenzijama ulaznih podataka, a veličina izlaznog sloja u slučaju problema klasifikacije često nam govori o broju razreda u koje klasificiramo ulaz. 
 
+\pagebreak
 \begin{figure}[htb]
     \centering
     \includegraphics{basic_nn_labeled.png}
@@ -139,9 +153,6 @@ Za izračun gubitka često je korištena unakrsna entropija koju možemo definir
 \end{equation}
 \\
 pri čemu P\textsuperscript{*}(i) označava distribuciju očekivanog izlaza, a P(i) distribuciju izlaza modela.
-
-\pagebreak
-
 Jednom kada znamo iznos gubitka, koristeći optimizatore poput stohastičkog gradijentnog spusta (SGD) ili Adam optimizatora~\cite{kingma2014adam} možemo poboljšati naš model. 
 Pritom nam je za optimizacijski postupak veoma često potreban gradijent funkcije gubitka po parametrima modela, a izračunavamo ga uzastopnom primjenom pravila ulančavanja koje u svojem najjednostavnijem obliku možemo definirati kao:
 
@@ -185,19 +196,16 @@ Uz problem nestajućeg gradijenta, postoji i problem eksplodirajućeg gradijenta
 Još jedna mana dubokih neuronskih mreža činjenica je da kako bismo kvalitetno naučili duboku mrežu moramo imati veoma velik skup podataka.
 
 \section{Konvolucijske mreže}
-Za probleme s velikom dimenzionalnošću ulaza, potpuno-povezane mreže imaju izuzetno velik broj parametara tj.\ težina neurona. 
+Za probleme s velikim dimenzijama ulaza, potpuno-povezane mreže imaju izuzetno velik broj parametara tj.\ težina neurona. 
 Učenje ovakvih modela zahtijeva veliku količinu memorije, a i općenito je sporo. 
 Uz to, potpuno-povezane mreže osjetljive su na translaciju ulaza: ako učimo mrežu da klasificira slike vozila te nakon učenja mreži predočimo translatiranu sliku iz skupa za učenje, mreža tu sliku neće nužno moći ispravno klasificirati jer je za nju to potpuno novi podatak.
 Ovo svojstvo proizlazi iz činjenice da je svaki neuron ovisan o svakom neuronu iz prethodnog sloja.
 
-\pagebreak
-
 Kako bi doskočili ovim problemima, uvedene su konvolucijske mreže~\cite{o2015introduction}. 
 Za razliku od potpuno-povezanih mreža, ovdje aktivacija neurona ne ovisi o svim neuronima iz prethodnog sloja, već samo o malom rasponu neurona iz prethodnog sloja. 
 Time konvolucijska mreža ima značajno manje parametara naspram potpuno-povezane mreže iste dubine, a postiže i svojstvo translacijske invarijantnosti.
-
 Ova svojstva konvolucijska mreža postiže zamjenom standardnog množenja matrica operacijom konvolucije s jezgrom (engl.\ \textit{kernel}). 
-Općenito govoreći, operaciju konvolucije za dvije funkcije \textit{f, g} možemo definirati kao:
+Općenito govoreći, operaciju konvolucije za dvije funkcije f, g možemo definirati kao:
 
 \begin{equation}
     (f * g)(t) := \int_{-\infty}^{\infty}f(\tau)g(t-\tau)d\tau
@@ -216,7 +224,7 @@ Uz operaciju konvolucije postoji i unakrsna korelacija definirana kao:
 Važno je primijetiti da je glavna razlika između te dvije operacije izostajanje reflektiranja jedne od funkcija u slučaju operacije unakrsne korelacije. 
 Kada kod konvolucijskih mreža govorimo o konvoluciji, gotovo uvijek se zapravo misli na unakrsnu korelaciju.
 
-Kada govorimo o konvoluciji kod neuronskih mreža, najčešće je u pitanju 2D konvolucija. 
+Kako bismo što jednostavnije objasnili konvoluciju, koristit ćemo primjer s 2D konvolucijom.
 U tom slučaju, jezgra s kojom se provodi konvolucija mala je kvadratna matrica s težinama koje učenjem izmijenjujemo. Skalarnim produktom dijelova ulazne matrice i jezgre dobivamo izlaz konvolucijskog sloja.
 Pritom se jezgra pomiče po ulaznoj matrici, a rezultati skalarnog produkta zapisuju se u novu matricu koju zovemo mapa značajki.
 
@@ -228,13 +236,24 @@ Pritom se jezgra pomiče po ulaznoj matrici, a rezultati skalarnog produkta zapi
     \label{fig:convolution}
 \end{figure}
 
-Na slici~\ref{fig:convolution} možemo vidjeti rezultat 2D konvolucije s ulaznom matricom veličine 3x4 i jezgrom veličine 2x2. 
+Na slici~\ref{fig:convolution} možemo vidjeti rezultat 2D konvolucije s ulaznom matricom veličine 3x4 i jezgrom dimenzija 2x2. 
 Mapa značajki nastala kao rezultat ove konvolucije dimenzija je 2x3. Primijetimo da će izlaz konvolucijskog sloja uvijek biti manjih dimenzija naspram ulaza.
 Uz to, vrijednosti na rubovima matrice ulaza manje će doprinijeti rezultatu naspram vrijednosti koje su dalje od rubova.
 
 Kako bismo imali veću kontrolu nad dimenzijama izlaza, kao i utjecajem vrijednosti na rubovima matrice ulaza, često koristimo nadopunjavanje nulama (engl.\ \textit{zero padding}).
-Da smo ulaznu matricu sa slike~\ref{fig:convolution} nadopunili nulama, njene dimenzije bile bi 5x6. 
-Možemo reći da bi nule činile okvir oko originalne matrice, time osiguravajući veću dimenzionalnost izlaza. U ovom slučaju, izlaz konvolucije bio bi dimenzija 4x5.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.5]{zero_padding.png}
+    \caption{Primjer nadopunjavanja 3x3 matrice nulama}
+    \label{fig:zero_padding}
+\end{figure}
+
+Na slici~\ref{fig:zero_padding} moguće je vidjeti 3x3 matricu nadopunjenu nulama. U slučaju da nad takvom matricom primijenimo konvoluciju s jezgrom dimenzija 2x2, mapa značajki na izlazu bila bi dimenzija 4x4.
+Da smo konvoluciju primijenili nad matricom bez nadopunjavanja, mapa značajki bila bi dimenzija 2x2, a vrijednosti pri rubovima matrice manje bi doprinosile istoj.
+Možemo reći da nule čine okvir oko originalne matrice, time osiguravajući veće dimenzije izlaza.
+
+\pagebreak
 
 Uz nadopunjavanje nulama, kod konvolucijskih slojeva često se mijenja i korak (engl.\ \textit{stride}). 
 Na slici~\ref{fig:convolution} korak je 1, a definira za koliko se ćelija horizontalno i vertikalno pomiče jezgra. 
@@ -249,7 +268,7 @@ U slučaju da povećamo korak, izlaz konvolucije bio bi manjih dimenzija, a time
 Na slici~\ref{fig:stride} moguće je vidjeti konvoluciju s korakom 2. Za razliku od standardnog kretanja jezgre, ovdje se jezgra nakon svakog izračuna pomiče za 2 ćelije. 
 
 Osim samih konvolucijskih slojeva, konvolucijske mreže u sebi sadrže i slojeve sažimanja. 
-Najčešći razlog za upotrebu slojeva sažimanja je smanjivanje dimenzionalnosti, a time i skraćivanje vremena potrebnog za učenje mreže.
+Najčešći razlog za upotrebu slojeva sažimanja je smanjivanje dimenzija podataka, a time i skraćivanje vremena potrebnog za učenje mreže.
 
 \begin{figure}[htb]
     \centering
@@ -263,6 +282,55 @@ Mapa značajki dimenzija 4x4 korištenjem sažimanja maksimalnom vrijednošću 2
 Uz sažimanje maksimalnom vrijednošću, veoma je popularno i sažimanje usrednjavanjem, no postoje i brojne druge varijante koje se koriste za slojeve sažimanja.
 Kao i operacija konvolucije, i slojevi sažimanja doprinose translacijskoj invarijantnosti, osiguravajući da mreža lako može prepoznati neku značajku bez obzira na njenu točnu lokaciju.
 
+\section{Rezidualne mreže}
+
+Rezidualne mreže~\cite{he2016deep} vrsta su dubokih neuronskih mreža koje koriste rezidualne blokove. Općenito govoreći, blok u kontekstu neuronskih mreža označava niz od nekoliko slojeva. 
+Pojedini blokovi mogu se kombinirati kako bi sačinjavali složeniju mrežu. 
+Rezidualni blokovi najčešće se sastoje od nekoliko konvolucijskih slojeva, a njihova glavna karakteristika postojanje je preskočnih veza.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics{ResBlock.png}
+    \caption{Primjer rezidualnog bloka. Preuzeto iz \cite{he2016deep}}
+    \label{fig:resblock}
+\end{figure}
+
+Na slici~\ref{fig:resblock} možemo vidjeti rezidualni blok sačinjen od dva sloja. Preskočna veza ulaz u blok bez ikakvih transformacija prenosi na izlaz. 
+Ovakvim strukturiranjem mreže, cilj mreže postaje modelirati rezidualnu funkciju F(x) koja mjeri razliku izlaza naspram ulaza. Rezidualni blok možemo prikazati jednadžbom:
+
+\begin{equation}
+    f(\pmb{x}) = F(\pmb{x}) + \pmb{x}
+    \label{eq:resblock}
+\end{equation}
+\\
+pri čemu F(x) predstavlja rezidualnu funkciju, x prenošenje ulaza na izlaz preskočnom vezom, a f(x) izlaz bloka. 
+U slučaju da slojevi između mijenjaju dimenzije podataka, preskočna veza morat će raditi linearnu projekciju kako bi podatci pri zbrajanju bili istih dimenzija. 
+Tada rezidualni blok možemo prikazati na sljedeći način:
+
+\begin{equation}
+    f(\pmb{x}) = F(\pmb{x}) + \pmb{W}_{s} \pmb{x}
+    \label{eq:resblocklp}
+\end{equation}
+\\
+pri čemu W\textsubscript{s} označava matricu korištenu za linearnu projekciju ulaza x. 
+Korištenje slojeva s preskočnim vezama motivirano je željom za učenjem funkcije identiteta.
+Klasične duboke mreže s velikim brojem slojeva teško će naučiti funkciju identiteta, dok korištenje preskočnih veza dubokim mrežama značajno olakšava učenje te funkcije.
+Ovo potječe od činjenice da je za uspješno modeliranje funkcije identiteta f(x) za rezidualnu funkciju F(x) potrebno samo postaviti težine jezgri na 0.
+
+\section{ResNet18}
+
+U okviru ovog rada, za provođenje svih eksperimenata koristit ćemo ResNet18 mrežu kako bismo što bolje mogli usporediti učinak različitih eksperimenata. 
+ResNet18 rezidualna je neuronska mreža, a sastoji se od ukupno 18 slojeva. 
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.7]{resnet18.png}
+    \caption{Arhitektura ResNet18. Preuzeto iz \cite{mcc19}}
+    \label{fig:resnet18}
+\end{figure}
+
+Kao što možemo vidjeti na slici~\ref{fig:resnet18}, ResNet18 sastoji se od 8 rezidualnih blokova. Svaki od tih blokova sastoji se od 2 konvolucijska sloja i jedne preskočne veze.
+Rezidualnim blokovima prethodi jedan konvolucijski sloj, a nakon njih dolazi jedan potpuno-povezani sloj sa softmax prijenosnom (aktivacijskom) funkcijom.
 \chapter{Zaključak}
 Zaključak.
 
