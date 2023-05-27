@@ -1,5 +1,6 @@
 \documentclass[times, utf8, zavrsni, numeric]{fer}
 \usepackage{booktabs}
+% \usepackage{pdfpages}
 
 \begin{document}
 
@@ -16,9 +17,9 @@
 
 % Ispis stranice s napomenom o umetanju izvornika rada. Uklonite naredbu \izvornik ako želite izbaciti tu stranicu.
 % \izvornik
+% \includepdf[page={1}]{hr_0036534818_73.pdf}
 
-% Dodavanje zahvale ili prazne stranice. Ako ne želite dodati zahvalu, naredbu ostavite radi prazne stranice.
-% \zahvala{}
+\zahvala{Zahvaljujem svojoj obitelji radi podrške tijekom studiranja, kao i prof. dr. sc. Siniši Šegviću te mag. ing. Ivanu Grubišiću na pomoći tijekom izrade završnog rada.}
 
 \tableofcontents
 
@@ -214,6 +215,54 @@ Uz operaciju konvolucije postoji i unakrsna korelacija definirana kao:
 \\
 Važno je primijetiti da je glavna razlika između te dvije operacije izostajanje reflektiranja jedne od funkcija u slučaju operacije unakrsne korelacije. 
 Kada kod konvolucijskih mreža govorimo o konvoluciji, gotovo uvijek se zapravo misli na unakrsnu korelaciju.
+
+Kada govorimo o konvoluciji kod neuronskih mreža, najčešće je u pitanju 2D konvolucija. 
+U tom slučaju, jezgra s kojom se provodi konvolucija mala je kvadratna matrica s težinama koje učenjem izmijenjujemo. Skalarnim produktom dijelova ulazne matrice i jezgre dobivamo izlaz konvolucijskog sloja.
+Pritom se jezgra pomiče po ulaznoj matrici, a rezultati skalarnog produkta zapisuju se u novu matricu koju zovemo mapa značajki.
+
+\pagebreak
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.5]{convolution.png}
+    \caption{Primjer 2D konvolucije. Preuzeto iz \cite{Goodfellow-et-al-2016}}
+    \label{fig:convolution}
+\end{figure}
+
+Na slici~\ref{fig:convolution} možemo vidjeti rezultat 2D konvolucije s ulaznom matricom veličine 3x4 i jezgrom veličine 2x2. 
+Mapa značajki nastala kao rezultat ove konvolucije dimenzija je 2x3. Primijetimo da će izlaz konvolucijskog sloja uvijek biti manjih dimenzija naspram ulaza.
+Uz to, vrijednosti na rubovima matrice ulaza manje će doprinijeti rezultatu naspram vrijednosti koje su dalje od rubova.
+
+Kako bismo imali veću kontrolu nad dimenzijama izlaza, kao i utjecajem vrijednosti na rubovima matrice ulaza, često koristimo nadopunjavanje nulama (engl.\ \textit{zero padding}).
+Da smo ulaznu matricu sa slike~\ref{fig:convolution} nadopunili nulama, njene dimenzije bile bi 5x6. 
+Možemo reći da bi nule činile okvir oko originalne matrice, time osiguravajući veću dimenzionalnost izlaza. U ovom slučaju, izlaz konvolucije bio bi dimenzija 4x5.
+
+Uz nadopunjavanje nulama, kod konvolucijskih slojeva često se mijenja i korak (engl.\ \textit{stride}). 
+Na slici~\ref{fig:convolution} korak je 1, a definira za koliko se ćelija horizontalno i vertikalno pomiče jezgra. 
+U slučaju da povećamo korak, izlaz konvolucije bio bi manjih dimenzija, a time bi se i ubrzao postupak računanja izlaza.
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.5]{stride.png}
+    \caption{Primjer konvolucije s korakom 2}
+    \label{fig:stride}
+\end{figure}
+
+Na slici~\ref{fig:stride} moguće je vidjeti konvoluciju s korakom 2. Za razliku od standardnog kretanja jezgre, ovdje se jezgra nakon svakog izračuna pomiče za 2 ćelije. 
+
+Osim samih konvolucijskih slojeva, konvolucijske mreže u sebi sadrže i slojeve sažimanja. 
+Najčešći razlog za upotrebu slojeva sažimanja je smanjivanje dimenzionalnosti, a time i skraćivanje vremena potrebnog za učenje mreže.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.35]{maxpool.png}
+    \caption{Primjer sažimanja maksimalnom vrijednošću. Preuzeto iz \cite{gholamalinezhad2020pooling}}
+    \label{fig:maxpool}
+\end{figure}
+
+Na slici~\ref{fig:maxpool} moguće je vidjeti primjer korištenja sloja sažimanja maksimalnom vrijednošću.
+Mapa značajki dimenzija 4x4 korištenjem sažimanja maksimalnom vrijednošću 2x2 (engl.\ \textit{2x2 max pooling}) smanjena je na dimenzije 2x2, efektivno smanjujući dimenzije ulaza za faktor 2.
+Uz sažimanje maksimalnom vrijednošću, veoma je popularno i sažimanje usrednjavanjem, no postoje i brojne druge varijante koje se koriste za slojeve sažimanja.
+Kao i operacija konvolucije, i slojevi sažimanja doprinose translacijskoj invarijantnosti, osiguravajući da mreža lako može prepoznati neku značajku bez obzira na njenu točnu lokaciju.
+
 \chapter{Zaključak}
 Zaključak.
 
