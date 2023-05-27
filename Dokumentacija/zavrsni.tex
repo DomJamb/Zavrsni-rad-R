@@ -52,15 +52,21 @@ Problemi koje rješavamo umjetnim neuronskim mrežama svrstavaju se u dvije glav
     \item regresija
 \end{enumerate}
 
+Kada su u pitanju klasifikacijski problemi, cilj nam je svrstati ulaz u jedan od mogućih razreda. 
+Pritom je na izlazu često korišteno jednojedinično kodiranje - ako ulaze svrstavamo u 10 razreda, u izlaznom sloju mreže bit će 10 neurona, a aktivacija jednog od njih predstavljat će rezultat klasifikacije.
+
+S druge strane, kod regresijskih problema cilj nam je što bolje aproksimirati neku, modelu nepoznatu, funkciju. Za ovakve probleme, često nam je dovoljan jedan neuron u izlaznom sloju. 
+Taj neuron na izlazu bi trebao davati predviđenu vrijednost funkcije za neki, do sada neviđeni, ulaz.
+
 Da bi neuronska mreža mogla rješavati takve probleme, važno nam je da može učiti na temelju predočenih podataka. Učenje neuronske mreže odvija se izmjenom težina pojedinih neurona (time znanje implicitno ugrađujemo u našu mrežu).
 Kako bismo detaljnije mogli govoriti o učenju i arhitekturama neuronskih mreža, važno je ukratko opisati neuron - osnovnu gradivnu jedinicu svake mreže.
 \pagebreak
 \section{Umjetni neuron}
 Umjetni neuroni predstavljaju jednostavne procesne jedinice koje modeliraju ponašanje prirodnih neurona. Osnovni neuron akumulira vrijednosti na ulazu pomnožene težinama, 
-akumuliranoj vrijednosti dodaje pomak te na kraju istu propušta kroz prijenosnu (aktivacijsku) funkciju. Ponašanje jednog neurona možemo modelirati jednadžbom
+akumuliranoj vrijednosti dodaje pomak te na kraju istu propušta kroz prijenosnu (aktivacijsku) funkciju. Ponašanje jednog neurona možemo modelirati jednadžbom:
 
 \begin{equation}
-    o = f(\sum_{i=1}^{n}x_{i} * w_{i} + b)
+    o = f(\sum_{i=1}^{n}x_{i} w_{i} + b)
     \label{eq:neuron}
 \end{equation}
 \\
@@ -68,14 +74,14 @@ akumuliranoj vrijednosti dodaje pomak te na kraju istu propušta kroz prijenosnu
 
 \section{Prijenosne funkcije}
 Neki od najranijih modela umjetnog neurona kao prijenosnu funkciju koristili su funkciju identiteta (ADELINE-neuron) te funkciju skoka (TLU-perceptron).
-S vremenom su korištene i razvijene brojne druge prijenosne funkcije poput sigmoidalne funkcije definirane kao 
+S vremenom su korištene i razvijene brojne druge prijenosne funkcije poput sigmoidalne funkcije definirane kao:
 
 \begin{equation}
     sigmoid(net) = \frac{1}{1 + e^{-net}}
     \label{eq:sigmoid}
 \end{equation}
 \\
-\noindent i zglobnice (ReLU - engl.\ \textit{Rectified Linear Unit}) definirane kao
+\noindent i zglobnice (ReLU - engl.\ \textit{Rectified Linear Unit}) definirane kao:
 
 \begin{equation}
     relu(net) = max(0, net)
@@ -110,10 +116,10 @@ Ovakvu arhitekturu mreže skraćeno možemo označiti kao 2x3x2 neuronsku mrežu
 
 Za ovakvu mrežu kažemo da je unaprijedna potpuno-povezana mreža. 
 Pojam unaprijedna mreža označava to da ne postoje veze iz dubljih slojeva prema plićim slojevima, a pojam potpuno-povezana mreža označava to da svaki neuron ima vezu sa svakim neuronom iz prethodnog sloja.
-Uz to, svi neuroni imaju i dodatnu težinu zvanu pomak (nije prikazano na slici ~\ref{fig:basic_nn}). Djelovanje jednog sloja mreže sažeto možemo prikazati kao
+Uz to, svi neuroni imaju i dodatnu težinu zvanu pomak (nije prikazano na slici ~\ref{fig:basic_nn}). Djelovanje jednog sloja mreže sažeto možemo prikazati kao:
 
 \begin{equation}
-    \pmb{h}_{i} = f(\pmb{W}_{i} * \pmb{h}_{i-1} + \pmb{b}_{i})
+    \pmb{h}_{i} = f(\pmb{W}_{i} \pmb{h}_{i-1} + \pmb{b}_{i})
     \label{eq:nn_layer}
 \end{equation}
 \\
@@ -124,20 +130,37 @@ Korištenjem takve formule za svaki sloj mreže, na kraju ćemo dobiti izlaz mre
 Kako bismo mogli koristiti proizvoljnu mrežu za probleme klasifikacije ili regresije, potrebno ju je prvo naučiti. 
 Kao što je već prethodno rečeno, učenje neuronske mreže odgovara izmjeni težina pojedinih neurona, a najčešće se postiže algoritmom propagacije pogreške unatrag~\cite{Goodfellow-et-al-2016}.
 Da bismo mogli znati kako trebamo izmijeniti težine neurona, prvo trebamo znati koliko naš model griješi. Mjera greške naziva se gubitak, a računa se na temelju izlaza modela i očekivanog (točnog) izlaza.
-Za izračun gubitka često je korištena unakrsna entropija koju možemo definirati kao
+Za izračun gubitka često je korištena unakrsna entropija koju možemo definirati kao:
 
 \begin{equation}
-    H(P^{*}|P) = -\sum_{i}P^{*}(i) * \log{P(i)}
+    H(P^{*}|P) = -\sum_{i}P^{*}(i) \log{P(i)}
     \label{eq:cross_entropy}
 \end{equation}
 \\
 pri čemu P\textsuperscript{*}(i) označava distribuciju očekivanog izlaza, a P(i) distribuciju izlaza modela.
-Jednom kada znamo iznos gubitka, računajući iznos gradijenta funkcije gubitka (parcijalne derivacije gubitka po težinama) isti možemo upotrijebiti za izmjenu iznosa težina koristeći gradijentni spust. 
-Iterativnim ponavljanjem ovakvog postupka minimiziramo iznos funkcije gubitka, time dobivajući što bolju mrežu.
 
 \pagebreak
 
-Nakon učenja mreže na skupu za učenje, evaluirat ćemo performanse mreže na neviđenom skupu zvanom skup za testiranje (engl.\ \textit{test set}). Često korištena mjera za kvalitetu modela je točnost definirana kao
+Jednom kada znamo iznos gubitka, koristeći optimizatore poput stohastičkog gradijentnog spusta (SGD) ili Adam optimizatora~\cite{kingma2014adam} možemo poboljšati naš model. 
+Pritom nam je za optimizacijski postupak veoma često potreban gradijent funkcije gubitka po parametrima modela, a izračunavamo ga uzastopnom primjenom pravila ulančavanja koje u svojem najjednostavnijem obliku možemo definirati kao:
+
+\begin{equation}
+    \frac{dz}{dx} = \frac{dz}{dy} \frac{dy}{dx}
+    \label{eq:chain_rule}
+\end{equation}
+\\
+U slučaju stohatičkog gradijentnog spusta, iterativno ažuriramo težine modela na temelju iznosa gradijenta funkcije gubitka, kao i stope učenja. Sažeto postupak stohastičkog gradijentnog spusta možemo prikazati jednadžbom:
+
+\begin{equation}
+    w_{i+1} := w_{i} - \eta \nabla_{w} L(w_{i}, x)
+    \label{eq:sgd}
+\end{equation}
+\\
+pri čemu w\textsubscript{i} označava jednu od težina modela u trenutnoj iteraciji, w\textsubscript{i+1} istu težinu u sljedećoj iteraciji, L(w\textsubscript{i}, x) funkciju gubitka, a $\eta$ stopu učenja. 
+Stopa učenja mali je pozitivni broj pomoću kojeg možemo kontrolirati iznos promjene težina po iteracijama. Iterativnim ponavljanjem ovakvog postupka minimiziramo iznos funkcije gubitka, time dobivajući što bolju mrežu.
+Kod stohastičkog gradijentnog spusta, iteracije mogu biti predstavljene pojedinačnim ulazima ili mini-grupama. Zbog činjenice da SGD pohranjuje gradijent za male ulaze, ovaj optimizacijski postupak zahtijeva malo memorije.
+
+Nakon učenja mreže na skupu za učenje, evaluirat ćemo performanse mreže na neviđenom skupu zvanom skup za testiranje (engl.\ \textit{test set}). Često korištena mjera za kvalitetu modela je točnost definirana kao:
 
 \begin{equation}
     accuracy = \frac{correct}{total}
@@ -160,8 +183,37 @@ U slučaju da kao prijenosnu funkciju koristimo sigmoidalnu funkciju, ovo lako v
 Uz problem nestajućeg gradijenta, postoji i problem eksplodirajućeg gradijenta (engl.\ \textit{exploding gradient problem}) koji se pojavljuje kod nekih drugih prijenosnih funkcija od kojih je najpoznatija upravo zglobnica (ReLU).
 Još jedna mana dubokih neuronskih mreža činjenica je da kako bismo kvalitetno naučili duboku mrežu moramo imati veoma velik skup podataka.
 
-\chapter{Konvolucijske duboke neuronske mreže}
+\section{Konvolucijske mreže}
+Za probleme s velikom dimenzionalnošću ulaza, potpuno-povezane mreže imaju izuzetno velik broj parametara tj.\ težina neurona. 
+Učenje ovakvih modela zahtijeva veliku količinu memorije, a i općenito je sporo. 
+Uz to, potpuno-povezane mreže osjetljive su na translaciju ulaza: ako učimo mrežu da klasificira slike vozila te nakon učenja mreži predočimo translatiranu sliku iz skupa za učenje, mreža tu sliku neće nužno moći ispravno klasificirati jer je za nju to potpuno novi podatak.
+Ovo svojstvo proizlazi iz činjenice da je svaki neuron ovisan o svakom neuronu iz prethodnog sloja.
 
+\pagebreak
+
+Kako bi doskočili ovim problemima, uvedene su konvolucijske mreže~\cite{o2015introduction}. 
+Za razliku od potpuno-povezanih mreža, ovdje aktivacija neurona ne ovisi o svim neuronima iz prethodnog sloja, već samo o malom rasponu neurona iz prethodnog sloja. 
+Time konvolucijska mreža ima značajno manje parametara naspram potpuno-povezane mreže iste dubine, a postiže i svojstvo translacijske invarijantnosti.
+
+Ova svojstva konvolucijska mreža postiže zamjenom standardnog množenja matrica operacijom konvolucije s jezgrom (engl.\ \textit{kernel}). 
+Općenito govoreći, operaciju konvolucije za dvije funkcije \textit{f, g} možemo definirati kao:
+
+\begin{equation}
+    (f * g)(t) := \int_{-\infty}^{\infty}f(\tau)g(t-\tau)d\tau
+    \label{eq:convolution}
+\end{equation}
+\\
+Operacija konvolucije opisuje nam kako se izgled jedne funkcije mijenja pod utjecajem druge funkcije, 
+a definirana je kao integral umnoška funkcija nakon što je jedna reflektirana i translatirana. 
+Uz operaciju konvolucije postoji i unakrsna korelacija definirana kao:
+
+\begin{equation}
+    (f \star g)(t) := \int_{-\infty}^{\infty}f(\tau)g(t+\tau)d\tau
+    \label{eq:convolution}
+\end{equation}
+\\
+Važno je primijetiti da je glavna razlika između te dvije operacije izostajanje reflektiranja jedne od funkcija u slučaju operacije unakrsne korelacije. 
+Kada kod konvolucijskih mreža govorimo o konvoluciji, gotovo uvijek se zapravo misli na unakrsnu korelaciju.
 \chapter{Zaključak}
 Zaključak.
 
