@@ -335,7 +335,7 @@ ResNet18 rezidualna je neuronska mreža, a sastoji se od ukupno 18 slojeva.
 Kao što možemo vidjeti na slici~\ref{fig:resnet18}, ResNet18 sastoji se od 8 rezidualnih blokova. Svaki od tih blokova sastoji se od 2 konvolucijska sloja i jedne preskočne veze.
 Rezidualnim blokovima prethodi jedan konvolucijski sloj, a nakon njih dolazi jedan potpuno-povezani sloj sa softmax prijenosnom (aktivacijskom) funkcijom.
 
-\chapter{Učenje s neprijateljskim primjerima}
+\chapter{Brzo učenje s neprijateljskim primjerima}
 
 \section{Neprijateljski primjeri}
 
@@ -375,6 +375,8 @@ U ovom slučaju iznos perturbacije dobiven je kao umnožak malog pozitivnog koef
 Iako je izmijenjeni ulaz ljudima gotovo identičan, model ovaj ulaz krivo klasificira, a pritom je veoma siguran u svoju odluku.
 Ovo svojstvo iskazali su brojni modeli te je zbog toga u zadnjih desetak godina porastao interes za proučavanjem neprijateljskih primjera.
 
+\section{Načini generiranja neprijateljskih primjera}
+
 Neprijateljske primjere moguće je generirati na različite načine. 
 Načine generiranja neprijateljskih primjera zovemo napadima, a možemo ih podijeliti na usmjerene i neusmjerene napade.
 Usmjereni napadi kao cilj imaju generiranje neprijateljskih primjera koje će napadnuti model klasificirati u točno jedan ciljni razred,
@@ -392,8 +394,6 @@ Iznos perturbacije najčešće je omeđen L\textsubscript{$\infty$}-normom, no i
 
 Postoje brojni načini generiranja neprijateljskih primjera. 
 Neki od najpoznatijih su FGSM (engl.\ \textit{Fast Gradient Sign Method})~\cite{goodfellow2014explaining} i PGD (engl.\ \textit{Projected Gradient Descent})~\cite{madry2017towards} napadi.
-\pagebreak
-
 Primjer sa slike~\ref{fig:adv_example} zapravo je neprijateljski primjer generiran koristeći FGSM napad, a neprijateljske primjere generirane koristeći taj napad sažeto možemo opisati jednadžbom:
 
 \begin{equation}
@@ -427,11 +427,21 @@ Uz to, PGD napad tijekom generiranja neprijateljskih primjera osigurava da ukupn
     \end{algorithmic}
 \end{algorithm}
 
+\pagebreak
+
 Na pseudokodu~\ref{algo:pgd} moguće je vidjeti način generiranja neprijateljskih primjera koristeći PGD napad. 
 Perturbacije su na početku inicijalizirane koristeći uniformnu distribuciju s rasponom $[-\epsilon, \epsilon]$, 
 a na kraju svake iteracije ograničava se iznos perturbacije koristeći funkciju \textit{clamp}.
 Važno je istaknuti da pseudokod za ograničavanje iznosa perturbacije koristi L\textsubscript{$\infty$}-normu. 
 PGD napad s $K$ iteracija za generiranje neprijateljskih primjera zvat ćemo K-PGD (npr.\ 20-PGD).
+
+\section{Učenje s neprijateljskim primjerima}
+
+Ako želimo da modeli koje učimo budu otporni na neprijateljske primjere tj.\ ispravno ih klasificiraju, ne možemo se ograničiti na klasično (prirodno) učenje modela.
+Svojstvo otpornosti na neprijateljske primjere zvat ćemo robusnost, a jedan od mogućih načina za postizanje robusnih modela učenje je s neprijateljskim primjerima (robusno učenje).
+Kada govorimo o učenju s neprijateljskim primjerima, općenita ideja je da se tijekom učenja generiraju neprijateljski primjeri prilagođeni samome modelu.
+Model tada ne uči na originalnim ulaznim podacima, već isključivo na generiranim neprijateljskim primjerima.
+U tom slučaju neprijateljske primjere možemo smatrati načinom augmentacije ulaznih podataka - na temelju originalnih ulaznih podataka stvaramo nove podatke koje predočavamo modelu.
 
 \chapter{Zaključak}
 Zaključak.
