@@ -36,14 +36,14 @@ Sve većom popularizacijom i korištenjem dubokih modela u sustavima različitih
 ako model želimo koristiti u automobilima s ciljem detekcije pješaka i vozila, model mora moći dobro generalizirati, kao i biti robustan. Takav model ne bi smio mijenjati svoje odluke na temelju veoma malih promjena na ulazu -
 na primjeru prometa, želimo da model točno detektira pješaka, bez obzira nosi li on kapu ili ne.
 
-Kako bi ostvarili robustnost modela, predložene su brojne tehnike, a jedna od najpopularnijih je robusno učenje tj.\ učenje na neprijateljskim primjerima. 
+Kako bi ostvarili robusnost modela, predložene su brojne tehnike, a jedna od najpopularnijih je robusno učenje tj.\ učenje na neprijateljskim primjerima. 
 Kada su u pitanju modeli koji brzo uče, robusno učenje prihvatljivo je rješenje za postizanje robusnih modela otpornih na napade. 
 Ipak, kada su u pitanju veći modeli za koje učenje traje veoma dugo, obično robusno učenje često je neprihvatljivo. 
 U tu svrhu, razvijene su metode koje ubrzavaju robusno učenje. U ovome radu, razmatrat ćemo tri takve metode: besplatno robusno učenje~\cite{shafahi2019adversarial}, brzo robusno učenje~\cite{wong2020fast} i
 nadogradnju na brzo robusno učenje (FastAdv+ i FastAdvW,~\cite{li2020towards}). 
 
 Uz to, razmatrat ćemo i otpornost naučenih modela na zatrovane podatke. Zatrovani podatci ulazi su izmijenjeni s ciljem navođenja modela na neočekivano ponašanje. 
-Uvođenjem takve ranjivosti u model, napadači mogu neprimjećeno postići proizvoljne ciljeve poput izbjegavanja detekcije ili pogrešne klasifikacije.
+Uvođenjem takve ranjivosti u model, napadači mogu neprimijećeno postići proizvoljne ciljeve poput izbjegavanja detekcije ili pogrešne klasifikacije.
 
 \chapter{Neuronske mreže}
 \section{Općenito o neuronskim mrežama}
@@ -164,7 +164,7 @@ Pritom nam je za optimizacijski postupak veoma često potreban gradijent funkcij
     \label{eq:chain_rule}
 \end{equation}
 \\
-U slučaju stohatičkog gradijentnog spusta, iterativno ažuriramo težine modela na temelju iznosa gradijenta funkcije gubitka, kao i stope učenja. Sažeto postupak stohastičkog gradijentnog spusta možemo prikazati jednadžbom:
+U slučaju stohastičkog gradijentnog spusta, iterativno ažuriramo težine modela na temelju iznosa gradijenta funkcije gubitka, kao i stope učenja. Sažeto postupak stohastičkog gradijentnog spusta možemo prikazati jednadžbom:
 
 \begin{equation}
     w_{i+1} := w_{i} - \eta \cdot \nabla_{w} \cdot L(w_{i}, x)
@@ -228,7 +228,7 @@ Važno je primijetiti da je glavna razlika između te dvije operacije izostajanj
 Kada kod konvolucijskih mreža govorimo o konvoluciji, gotovo uvijek se zapravo misli na unakrsnu korelaciju.
 
 Kako bismo što jednostavnije objasnili konvoluciju, koristit ćemo primjer s 2D konvolucijom.
-U tom slučaju, jezgra s kojom se provodi konvolucija mala je kvadratna matrica s težinama koje učenjem izmijenjujemo. Skalarnim produktom dijelova ulazne matrice i jezgre dobivamo izlaz konvolucijskog sloja.
+U tom slučaju, jezgra s kojom se provodi konvolucija mala je kvadratna matrica s težinama koje učenjem izmjenjujemo. Skalarnim produktom dijelova ulazne matrice i jezgre dobivamo izlaz konvolucijskog sloja.
 Pritom se jezgra pomiče po ulaznoj matrici, a rezultati skalarnog produkta zapisuju se u novu matricu koju zovemo mapa značajki.
 
 \pagebreak
