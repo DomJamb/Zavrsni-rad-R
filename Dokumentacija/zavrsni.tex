@@ -1,5 +1,8 @@
 \documentclass[times, utf8, zavrsni, numeric]{fer}
 \usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{algorithm}
+\usepackage{algorithmic}
 % \usepackage{pdfpages}
 
 \begin{document}
@@ -71,7 +74,7 @@ akumuliranoj vrijednosti dodaje pomak te na kraju istu propušta kroz prijenosnu
     \label{eq:neuron}
 \end{equation}
 \\
-\noindent pri čemu x označava pojedine ulaze, w težine na pripadnim ulazima, b pomak te f prijenosnu funkciju. 
+\noindent pri čemu $x$ označava pojedine ulaze, $w$ težine na pripadnim ulazima, $b$ pomak te $f$ prijenosnu funkciju. 
 
 \section{Prijenosne funkcije}
 Neki od najranijih modela umjetnog neurona kao prijenosnu funkciju koristili su funkciju identiteta (ADELINE-neuron) te funkciju skoka (TLU-perceptron).
@@ -138,7 +141,7 @@ Uz to, svi neuroni imaju i dodatnu težinu zvanu pomak (nije prikazano na slici 
     \label{eq:nn_layer}
 \end{equation}
 \\
-pri čemu W\textsubscript{i} predstavlja težine trenutnog sloja, b\textsubscript{i} pomake trenutnog sloja, h\textsubscript{i-1} izlaz iz prethodnog sloja, f prijenosnu funkciju primijenjenu na svaki element te h\textsubscript{i} izlaz iz trenutnog sloja.
+pri čemu $W_{i}$ predstavlja težine trenutnog sloja, $b_{i}$ pomake trenutnog sloja, $h_{i-1}$ izlaz iz prethodnog sloja, $f$ prijenosnu funkciju primijenjenu na svaki element te $h_{i}$ izlaz iz trenutnog sloja.
 Korištenjem takve formule za svaki sloj mreže, na kraju ćemo dobiti izlaz mreže za neki proizvoljni ulaz. Ovo nazivamo unaprijednim prolazom.
 
 \section{Učenje neuronske mreže}
@@ -152,7 +155,7 @@ Za izračun gubitka često je korištena unakrsna entropija koju možemo definir
     \label{eq:cross_entropy}
 \end{equation}
 \\
-pri čemu P\textsuperscript{*}(i) označava distribuciju očekivanog izlaza, a P(i) distribuciju izlaza modela.
+pri čemu $P^{*}(i)$ označava distribuciju očekivanog izlaza, a $P(i)$ distribuciju izlaza modela.
 Jednom kada znamo iznos gubitka, koristeći optimizatore poput stohastičkog gradijentnog spusta (SGD) ili Adam optimizatora~\cite{kingma2014adam} možemo poboljšati naš model. 
 Pritom nam je za optimizacijski postupak veoma često potreban gradijent funkcije gubitka po parametrima modela, a izračunavamo ga uzastopnom primjenom pravila ulančavanja koje u svojem najjednostavnijem obliku možemo definirati kao:
 
@@ -168,7 +171,7 @@ U slučaju stohatičkog gradijentnog spusta, iterativno ažuriramo težine model
     \label{eq:sgd}
 \end{equation}
 \\
-pri čemu w\textsubscript{i} označava jednu od težina modela u trenutnoj iteraciji, w\textsubscript{i+1} istu težinu u sljedećoj iteraciji, L(w\textsubscript{i}, x) funkciju gubitka, a $\eta$ stopu učenja. 
+pri čemu $w_{i}$ označava jednu od težina modela u trenutnoj iteraciji, $w_{i+1}$ istu težinu u sljedećoj iteraciji, $L(w_{i}, x)$ funkciju gubitka, a $\eta$ stopu učenja. 
 Stopa učenja mali je pozitivni broj pomoću kojeg možemo kontrolirati iznos promjene težina po iteracijama. Iterativnim ponavljanjem ovakvog postupka minimiziramo iznos funkcije gubitka, time dobivajući što bolju mrežu.
 Kod stohastičkog gradijentnog spusta, iteracije mogu biti predstavljene pojedinačnim ulazima ili mini-grupama. Zbog činjenice da SGD pohranjuje gradijent za male ulaze, ovaj optimizacijski postupak zahtijeva malo memorije.
 
@@ -179,7 +182,7 @@ Nakon učenja mreže na skupu za učenje, evaluirat ćemo performanse mreže na 
     \label{eq:accuracy}
 \end{equation}
 \\
-pri čemu correct označava broj točno klasificiranih primjera, total ukupan broj primjera, a accuracy točnost.
+pri čemu $correct$ označava broj točno klasificiranih primjera, $total$ ukupan broj primjera, a $accuracy$ točnost.
 Uz točnost, postoje i brojne druge mjere kvalitete modela. Neke od njih su preciznost (engl.\ \textit{precision}), odziv (engl.\ \textit{recall}) i matrica zabune (engl.\ \textit{confusion matrix}).
 
 \section{Duboke neuronske mreže}
@@ -205,7 +208,7 @@ Kako bi doskočili ovim problemima, uvedene su konvolucijske mreže~\cite{o2015i
 Za razliku od potpuno-povezanih mreža, ovdje aktivacija neurona ne ovisi o svim neuronima iz prethodnog sloja, već samo o malom rasponu neurona iz prethodnog sloja. 
 Time konvolucijska mreža ima značajno manje parametara naspram potpuno-povezane mreže iste dubine, a postiže i svojstvo translacijske invarijantnosti.
 Ova svojstva konvolucijska mreža postiže zamjenom standardnog množenja matrica operacijom konvolucije s jezgrom (engl.\ \textit{kernel}). 
-Općenito govoreći, operaciju konvolucije za dvije funkcije f, g možemo definirati kao:
+Općenito govoreći, operaciju konvolucije za dvije funkcije $f, g$ možemo definirati kao:
 
 \begin{equation}
     (f * g)(t) := \int_{-\infty}^{\infty}f(\tau)g(t-\tau)d\tau
@@ -296,14 +299,14 @@ Rezidualni blokovi najčešće se sastoje od nekoliko konvolucijskih slojeva, a 
 \end{figure}
 
 Na slici~\ref{fig:resblock} možemo vidjeti rezidualni blok sačinjen od dva sloja. Preskočna veza ulaz u blok bez ikakvih transformacija prenosi na izlaz. 
-Ovakvim strukturiranjem mreže, cilj mreže postaje modelirati rezidualnu funkciju F(x) koja mjeri razliku izlaza naspram ulaza. Rezidualni blok možemo prikazati jednadžbom:
+Ovakvim strukturiranjem mreže, cilj mreže postaje modelirati rezidualnu funkciju $F(x)$ koja mjeri razliku izlaza naspram ulaza. Rezidualni blok možemo prikazati jednadžbom:
 
 \begin{equation}
     f(\pmb{x}) = F(\pmb{x}) + \pmb{x}
     \label{eq:resblock}
 \end{equation}
 \\
-pri čemu F(x) predstavlja rezidualnu funkciju, x prenošenje ulaza na izlaz preskočnom vezom, a f(x) izlaz bloka. 
+pri čemu $F(x)$ predstavlja rezidualnu funkciju, $x$ prenošenje ulaza na izlaz preskočnom vezom, a $f(x)$ izlaz bloka. 
 U slučaju da slojevi između mijenjaju dimenzije podataka, preskočna veza morat će raditi linearnu projekciju kako bi podatci pri zbrajanju bili istih dimenzija. 
 Tada rezidualni blok možemo prikazati na sljedeći način:
 
@@ -312,10 +315,10 @@ Tada rezidualni blok možemo prikazati na sljedeći način:
     \label{eq:resblocklp}
 \end{equation}
 \\
-pri čemu W\textsubscript{s} označava matricu korištenu za linearnu projekciju ulaza x. 
+pri čemu $W_{s}$ označava matricu korištenu za linearnu projekciju ulaza $x$. 
 Korištenje slojeva s preskočnim vezama motivirano je željom za učenjem funkcije identiteta.
 Klasične duboke mreže s velikim brojem slojeva teško će naučiti funkciju identiteta, dok korištenje preskočnih veza dubokim mrežama značajno olakšava učenje te funkcije.
-Ovo potječe od činjenice da je za uspješno modeliranje funkcije identiteta f(x) za rezidualnu funkciju F(x) potrebno samo postaviti težine jezgri na 0.
+Ovo potječe od činjenice da je za uspješno modeliranje funkcije identiteta $f(x)$ za rezidualnu funkciju $F(x)$ potrebno samo postaviti težine jezgri na 0.
 
 \section{ResNet18}
 
@@ -331,6 +334,105 @@ ResNet18 rezidualna je neuronska mreža, a sastoji se od ukupno 18 slojeva.
 
 Kao što možemo vidjeti na slici~\ref{fig:resnet18}, ResNet18 sastoji se od 8 rezidualnih blokova. Svaki od tih blokova sastoji se od 2 konvolucijska sloja i jedne preskočne veze.
 Rezidualnim blokovima prethodi jedan konvolucijski sloj, a nakon njih dolazi jedan potpuno-povezani sloj sa softmax prijenosnom (aktivacijskom) funkcijom.
+
+\chapter{Učenje s neprijateljskim primjerima}
+
+\section{Neprijateljski primjeri}
+
+Kada učimo modele da rješavaju razne probleme, cilj nam je da modeli pokažu svojstvo generalizacije. 
+U slučaju problema klasifikacije, to znači da bi modeli trebali dobro klasificirati i do sada neviđene primjere.
+Mogućnost generalizacije određenog modela najčešće provjeravamo koristeći unakrsnu provjeru (engl.\ \textit{cross-validation}).
+Pritom skup podataka dijelimo na 2 ili 3 skupa: 
+
+\begin{enumerate}
+    \item skup za učenje (engl.\ \textit{train set})
+    \item skup za provjeru (engl.\ \textit{validation set})
+    \item skup za testiranje (engl.\ \textit{test set})
+\end{enumerate}
+
+Skup za učenje modelu predočavamo kako bi na temelju njega mogao poboljšavati svoje parametre tj.\ učiti. 
+S druge strane, skup za provjeru koristimo za poboljšavanje hiperparametara modela (npr.\ stopa učenja modela). 
+U slučaju da smo sigurni u dobar odabir hiperparametara modela, korištenje ovog skupa nije nužno. 
+Nakon postupka učenja, koristeći skup za testiranje evaluiramo model.
+
+Općenito govoreći, model će na skupu za testiranje postizati lošije rezultate naspram rezultata na skupu za učenje. 
+Ako model dobro generalizira, razlika između rezultata na ta dva skupa neće biti veoma značajna. 
+Ipak, u zadnjih desetak godina otkriveni su ulazi koje i modeli koji inače pokazuju mogućnost generalizacije loše klasificiraju.
+Takve ulaze zvat ćemo neprijateljski primjeri~\cite{goodfellow2014explaining}.
+
+\pagebreak
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.5]{adversarial_example.png}
+    \caption{Primjer neprijateljskog primjera. Preuzeto iz \cite{goodfellow2014explaining}}
+    \label{fig:adv_example}
+\end{figure}
+
+Na slici~\ref{fig:adv_example} moguće je vidjeti jedan neprijateljski primjer.
+Originalni ulaz kojeg model ispravno klasificira izmijenjen je za iznos perturbacije.
+U ovom slučaju iznos perturbacije dobiven je kao umnožak malog pozitivnog koeficijenta $\epsilon$ i predznaka gradijenta gubitka po ulazu.
+Iako je izmijenjeni ulaz ljudima gotovo identičan, model ovaj ulaz krivo klasificira, a pritom je veoma siguran u svoju odluku.
+Ovo svojstvo iskazali su brojni modeli te je zbog toga u zadnjih desetak godina porastao interes za proučavanjem neprijateljskih primjera.
+
+Neprijateljske primjere moguće je generirati na različite načine. 
+Načine generiranja neprijateljskih primjera zovemo napadima, a možemo ih podijeliti na usmjerene i neusmjerene napade.
+Usmjereni napadi kao cilj imaju generiranje neprijateljskih primjera koje će napadnuti model klasificirati u točno jedan ciljni razred,
+dok neusmjereni napadi kao cilj imaju generiranje neprijateljskih primjera koje će napadnuti model što lošije klasificirati, neovisno o konkretnom razredu.
+Pronalaženje neprijateljskih primjera zapravo je optimizacijski problem koji možemo prikazati sljedećim izrazom:
+
+\begin{equation}
+    \underset{\delta \in [-\epsilon, \epsilon]}{max}L(x + \delta,y;\theta)
+    \label{eq:adversarial_optimization}
+\end{equation}
+\\
+pri čemu $\delta$ označava iznos perturbacije u intervalu određenim s granicama $[-\epsilon, \epsilon]$, $L(x,y;\theta)$ funkciju gubitka, a $\theta$ parametre modela.
+Drugim riječima, cilj nam je naći perturbaciju omeđenu određenim iznosom takvu da je iznos funkcije gubitka za ulaz izmijenjen tom perturbacijom maksimalan.
+Iznos perturbacije najčešće je omeđen L\textsubscript{$\infty$}-normom, no isti može biti omeđen i L\textsubscript{2}-normom ili L\textsubscript{1}-normom.
+
+Postoje brojni načini generiranja neprijateljskih primjera. 
+Neki od najpoznatijih su FGSM (engl.\ \textit{Fast Gradient Sign Method})~\cite{goodfellow2014explaining} i PGD (engl.\ \textit{Projected Gradient Descent})~\cite{madry2017towards} napadi.
+\pagebreak
+
+Primjer sa slike~\ref{fig:adv_example} zapravo je neprijateljski primjer generiran koristeći FGSM napad, a neprijateljske primjere generirane koristeći taj napad sažeto možemo opisati jednadžbom:
+
+\begin{equation}
+    x := x + \epsilon sgn(\nabla_{x}L(x,y;\theta))
+    \label{eq:fgsm}
+\end{equation}
+\\
+pri čemu $\epsilon$ predstavlja mali pozitivan broj koji određuje veličinu perturbacije, a $sgn(x)$ predznak od $x$. 
+FGSM napad originalnom ulazu pridodaje iznos istog predznaka kao i gradijent funkcije gubitka, time osiguravajući najveći mogući rast iznosa funkcije gubitka. 
+U slučaju neusmjerenog napada, napad bi pokušavao što više smanjiti iznos funkcije gubitka s obzirom na proizvoljan razred.
+
+Uz FGSM napad, postoji i napad koji iterativno stvara značajno učinkovitije neprijateljske primjere. 
+Tu vrstu napada zovemo PGD napad, a zasniva se na istoj ideji kao i FGSM napad. 
+Za razliku od FGSM-a, PGD napad iterativno ponavlja postupak, time pokušavajući odrediti najbolje rješenje optimizacijskog problema~\ref{eq:adversarial_optimization}.
+Uz to, PGD napad tijekom generiranja neprijateljskih primjera osigurava da ukupna perturbacija nije veća od unaprijed definiranog koeficijenta $\epsilon$.
+
+\begin{algorithm}
+    \caption{Generiranje neprijateljskih primjera koristeći PGD napad}
+    \label{algo:pgd}
+    \begin{algorithmic}
+        \STATE{\textbf{Ulaz:} $X$ -- ulazne slike, $\epsilon$ -- ograničenje perturbacije, $\alpha$ -- veličina koraka po iteraciji, $K$ -- broj iteracija za generiranje neprijateljskih primjera}
+        \STATE{\textbf{Izlaz:} $X_{adv}$ -- neprijateljski primjeri generirani PGD napadom}
+        \STATE{$initialPert := U(-\epsilon, \epsilon)$}
+        \STATE{$x_{adv}:= x + initialPert$}
+        \FOR{($i := 0; i < K; inc(i)$)}
+        \STATE{$grad := \nabla_{x}l(x_{adv},y;\theta)$}
+        \STATE{$x_{adv} := x_{adv} + \alpha \cdot sgn(g)$}
+        \STATE{$x_{adv} := clamp(x_{adv}, x - \epsilon, x + \epsilon)$}
+        \ENDFOR
+        \RETURN{$x_{adv}$}
+    \end{algorithmic}
+\end{algorithm}
+
+Na pseudokodu~\ref{algo:pgd} moguće je vidjeti način generiranja neprijateljskih primjera koristeći PGD napad. 
+Perturbacije su na početku inicijalizirane koristeći uniformnu distribuciju s rasponom $[-\epsilon, \epsilon]$, 
+a na kraju svake iteracije ograničava se iznos perturbacije koristeći funkciju \textit{clamp}.
+Važno je istaknuti da pseudokod za ograničavanje iznosa perturbacije koristi L\textsubscript{$\infty$}-normu. 
+PGD napad s $K$ iteracija za generiranje neprijateljskih primjera zvat ćemo K-PGD (npr.\ 20-PGD).
+
 \chapter{Zaključak}
 Zaključak.
 
