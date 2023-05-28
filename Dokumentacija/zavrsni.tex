@@ -397,11 +397,11 @@ Neki od najpoznatijih su FGSM (engl.\ \textit{Fast Gradient Sign Method})~\cite{
 Primjer sa slike~\ref{fig:adv_example} zapravo je neprijateljski primjer generiran koristeći FGSM napad, a neprijateljske primjere generirane koristeći taj napad sažeto možemo opisati jednadžbom:
 
 \begin{equation}
-    x := x + \epsilon \cdot sgn(\nabla_{x}L(x,y;\theta))
+    x := x + \epsilon \cdot sign(\nabla_{x}L(x,y;\theta))
     \label{eq:fgsm}
 \end{equation}
 \\
-pri čemu $\epsilon$ predstavlja mali pozitivan broj koji određuje veličinu perturbacije, a $sgn(x)$ predznak od $x$. 
+pri čemu $\epsilon$ predstavlja mali pozitivan broj koji određuje veličinu perturbacije, a $sign(x)$ predznak od $x$. 
 FGSM napad originalnom ulazu pridodaje iznos istog predznaka kao i gradijent funkcije gubitka, time osiguravajući najveći mogući rast iznosa funkcije gubitka. 
 U slučaju neusmjerenog napada, napad bi pokušavao što više smanjiti iznos funkcije gubitka s obzirom na proizvoljan razred.
 
@@ -414,15 +414,16 @@ Uz to, PGD napad tijekom generiranja neprijateljskih primjera osigurava da ukupn
     \caption{Generiranje neprijateljskih primjera koristeći PGD napad}
     \label{algo:pgd}
     \begin{algorithmic}
-        \STATE{\textbf{Ulaz:} $X$ -- ulazne slike, $\epsilon$ -- ograničenje perturbacije, $\alpha$ -- veličina koraka po iteraciji, $K$ -- broj iteracija za generiranje neprijateljskih primjera}
-        \STATE{\textbf{Izlaz:} $X_{adv}$ -- neprijateljski primjeri generirani PGD napadom}
-        \STATE{$initialPert = U(-\epsilon, \epsilon)$}
-        \STATE{$x_{adv} = x + initialPert$}
-        \FOR{($i = 0; i < K; inc(i)$)}
-        \STATE{$grad = \nabla_{x}L(x_{adv},y;\theta)$}
-        \STATE{$x_{adv} = x_{adv} + \alpha \cdot sgn(g)$}
-        \STATE{$x_{adv} = clamp(x_{adv}, x - \epsilon, x + \epsilon)$}
+        \STATE{\textbf{Ulaz:} $x$ -- ulazne slike, $\epsilon$ -- ograničenje perturbacije, $\alpha$ -- veličina koraka po iteraciji, $K$ -- broj iteracija za generiranje neprijateljskih primjera}
+        \STATE{\textbf{Izlaz:} $x_{adv}$ -- neprijateljski primjeri generirani PGD napadom}
+        \\\hrulefill
+        \STATE{$\delta = U(-\epsilon, \epsilon)$}
+        \FOR{($i = 1 \dots K$)}
+            \STATE{$grad = \nabla_{\delta}L(x + \delta,y;\theta)$}
+            \STATE{$\delta = \delta + \alpha \cdot sign(g)$}
+            \STATE{$\delta = clamp(\delta, -\epsilon, \epsilon)$}
         \ENDFOR
+        \STATE{$x_{adv} = x + \delta$}
         \RETURN{$x_{adv}$}
     \end{algorithmic}
 \end{algorithm}
@@ -430,8 +431,9 @@ Uz to, PGD napad tijekom generiranja neprijateljskih primjera osigurava da ukupn
 \pagebreak
 
 Na pseudokodu~\ref{algo:pgd} moguće je vidjeti način generiranja neprijateljskih primjera koristeći PGD napad. 
-Perturbacije su na početku inicijalizirane koristeći uniformnu distribuciju s rasponom $[-\epsilon, \epsilon]$, 
-a na kraju svake iteracije ograničava se iznos perturbacije koristeći funkciju \textit{clamp}.
+Perturbacija $\delta$ na početku je inicijalizirana koristeći uniformnu distribuciju s rasponom $[-\epsilon, \epsilon]$, 
+a na kraju svake iteracije iznos perturbacije ograničava se koristeći funkciju \textit{clamp}. 
+Naravno, postoje brojni načini inicijalizacije iznosa perturbacije, no nasumična inicijalizacija pokazala se dosta uspješnom.
 Važno je istaknuti da pseudokod za ograničavanje iznosa perturbacije koristi L\textsubscript{$\infty$}-normu. 
 PGD napad s $K$ iteracija za generiranje neprijateljskih primjera zvat ćemo K-PGD (npr.\ 20-PGD).
 
@@ -442,6 +444,42 @@ Svojstvo otpornosti na neprijateljske primjere zvat ćemo robusnost, a jedan od 
 Kada govorimo o učenju s neprijateljskim primjerima, općenita ideja je da se tijekom učenja generiraju neprijateljski primjeri prilagođeni samome modelu.
 Model tada ne uči na originalnim ulaznim podacima, već isključivo na generiranim neprijateljskim primjerima.
 U tom slučaju neprijateljske primjere možemo smatrati načinom augmentacije ulaznih podataka - na temelju originalnih ulaznih podataka stvaramo nove podatke koje predočavamo modelu.
+
+Robusnim učenjem možemo postići puno višu točnost modela na skupu za testiranje sačinjenom od neprijateljskih primjera naspram modela učenih prirodnim učenjem.
+Nažalost, robusno učenje ima svoju cijenu. Robusni modeli gotovo uvijek će na originalnom skupu za testiranje imati nižu točnost naspram modela učenih prirodnim učenjem,
+a i učit će se dulje. Ako za generiranje neprijateljskih primjera tijekom robusnog učenja koristimo FGSM metodu, učenje će trajati otprilike dvostruko dulje naspram prirodnog učenja
+jer je za generiranje neprijateljskih primjera FGSM metodom potreban dodatan unaprijedni prolaz kroz mrežu. 
+Ako za generiranje neprijateljskih primjera koristimo PGD metodu, duljina trajanja učenja ovisit će o broju iteracija korištenih za generiranje neprijateljskih primjera.
+Koristimo li 10 iteracija za generiranje neprijateljskih primjera, učenje će trajati otprilike 11 puta dulje naspram prirodnog učenja. 
+Općenito govoreći, kako bismo model učili koristeći neprijateljske primjere generirane K-PGD metodom, učenje će trajati otprilike K + 1 puta dulje naspram prirodnog učenja~\cite{shafahi2019adversarial}.
+
+\pagebreak
+
+\begin{algorithm}
+    \caption{Učenje s neprijateljskim primjerima}
+    \label{algo:adv_learning}
+    \begin{algorithmic}
+        \STATE{\textbf{Ulaz:} $x$ -- ulazne slike, $N$ -- broj epoha, $M$ -- veličina skupa za učenje, $\eta$ -- stopa učenja, $\epsilon$ -- ograničenje perturbacije, $\alpha$ -- veličina koraka po iteraciji, $K$ -- broj iteracija za generiranje neprijateljskih primjera}
+        \\\hrulefill
+        \STATE{$\theta = initializeModelParams()$}
+        \FOR{$(ep = 1 \dots N)$}
+            \FOR{$(i = 1 \dots M)$}
+                \STATE{$x_{adv} = generateAdversarial(x_{i}, \epsilon, \alpha, K)$}
+                \STATE{$grad = \nabla_{\theta}L(x_{adv},y;\theta)$}
+                \STATE{$\theta = \theta - \eta \cdot grad$}
+            \ENDFOR
+        \ENDFOR
+    \end{algorithmic}
+\end{algorithm}
+
+Na pseudokodu~\ref{algo:adv_learning} moguće je vidjeti općeniti algoritam za učenje s neprijateljskim primjerima.
+Pritom inicijalizaciju parametara modela prikazujemo pozivom funkcije \textit{initializeModelParams}.
+Radi općenitosti, generiranje neprijateljskih primjera prikazano je pozivom funkcije \textit{generateAdversarial}.
+Ta funkcija mogla bi generirati neprijateljske primjere koristeći FGSM metodu, PGD metodu ili neki alternativan način, no to nam za općeniti prikaz nije važno.
+
+\section{Brzo učenje s neprijateljskim primjerima}
+
+
 
 \chapter{Zaključak}
 Zaključak.
