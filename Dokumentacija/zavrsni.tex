@@ -70,7 +70,7 @@ Umjetni neuroni predstavljaju jednostavne procesne jedinice koje modeliraju pona
 akumuliranoj vrijednosti dodaje pomak te na kraju istu propušta kroz prijenosnu (aktivacijsku) funkciju. Ponašanje jednog neurona možemo modelirati jednadžbom:
 
 \begin{equation}
-    o = f(\sum_{i=1}^{n}x_{i} w_{i} + b)
+    o = f(\sum_{i=1}^{n}x_{i} \cdot w_{i} + b)
     \label{eq:neuron}
 \end{equation}
 \\
@@ -137,7 +137,7 @@ Pojam unaprijedna mreža označava to da ne postoje veze iz dubljih slojeva prem
 Uz to, svi neuroni imaju i dodatnu težinu zvanu pomak (nije prikazano na slici ~\ref{fig:basic_nn}). Djelovanje jednog sloja mreže sažeto možemo prikazati kao:
 
 \begin{equation}
-    \pmb{h}_{i} = f(\pmb{W}_{i} \pmb{h}_{i-1} + \pmb{b}_{i})
+    \pmb{h}_{i} = f(\pmb{W}_{i} \cdot \pmb{h}_{i-1} + \pmb{b}_{i})
     \label{eq:nn_layer}
 \end{equation}
 \\
@@ -151,7 +151,7 @@ Da bismo mogli znati kako trebamo izmijeniti težine neurona, prvo trebamo znati
 Za izračun gubitka često je korištena unakrsna entropija koju možemo definirati kao:
 
 \begin{equation}
-    H(P^{*}|P) = -\sum_{i}P^{*}(i) \log{P(i)}
+    H(P^{*}|P) = -\sum_{i}P^{*}(i) \cdot \log{P(i)}
     \label{eq:cross_entropy}
 \end{equation}
 \\
@@ -160,14 +160,14 @@ Jednom kada znamo iznos gubitka, koristeći optimizatore poput stohastičkog gra
 Pritom nam je za optimizacijski postupak veoma često potreban gradijent funkcije gubitka po parametrima modela, a izračunavamo ga uzastopnom primjenom pravila ulančavanja koje u svojem najjednostavnijem obliku možemo definirati kao:
 
 \begin{equation}
-    \frac{dz}{dx} = \frac{dz}{dy} \frac{dy}{dx}
+    \frac{dz}{dx} = \frac{dz}{dy} \cdot \frac{dy}{dx}
     \label{eq:chain_rule}
 \end{equation}
 \\
 U slučaju stohatičkog gradijentnog spusta, iterativno ažuriramo težine modela na temelju iznosa gradijenta funkcije gubitka, kao i stope učenja. Sažeto postupak stohastičkog gradijentnog spusta možemo prikazati jednadžbom:
 
 \begin{equation}
-    w_{i+1} := w_{i} - \eta \nabla_{w} L(w_{i}, x)
+    w_{i+1} := w_{i} - \eta \cdot \nabla_{w} \cdot L(w_{i}, x)
     \label{eq:sgd}
 \end{equation}
 \\
@@ -211,7 +211,7 @@ Ova svojstva konvolucijska mreža postiže zamjenom standardnog množenja matric
 Općenito govoreći, operaciju konvolucije za dvije funkcije $f, g$ možemo definirati kao:
 
 \begin{equation}
-    (f * g)(t) := \int_{-\infty}^{\infty}f(\tau)g(t-\tau)d\tau
+    (f * g)(t) := \int_{-\infty}^{\infty}f(\tau) \cdot g(t-\tau)d\tau
     \label{eq:convolution}
 \end{equation}
 \\
@@ -220,7 +220,7 @@ a definirana je kao integral umnoška funkcija nakon što je jedna reflektirana 
 Uz operaciju konvolucije postoji i unakrsna korelacija definirana kao:
 
 \begin{equation}
-    (f \star g)(t) := \int_{-\infty}^{\infty}f(\tau)g(t+\tau)d\tau
+    (f \star g)(t) := \int_{-\infty}^{\infty}f(\tau) \cdot g(t+\tau)d\tau
     \label{eq:convolution}
 \end{equation}
 \\
@@ -311,7 +311,7 @@ U slučaju da slojevi između mijenjaju dimenzije podataka, preskočna veza mora
 Tada rezidualni blok možemo prikazati na sljedeći način:
 
 \begin{equation}
-    f(\pmb{x}) = F(\pmb{x}) + \pmb{W}_{s} \pmb{x}
+    f(\pmb{x}) = F(\pmb{x}) + \pmb{W}_{s} \cdot \pmb{x}
     \label{eq:resblocklp}
 \end{equation}
 \\
@@ -397,7 +397,7 @@ Neki od najpoznatijih su FGSM (engl.\ \textit{Fast Gradient Sign Method})~\cite{
 Primjer sa slike~\ref{fig:adv_example} zapravo je neprijateljski primjer generiran koristeći FGSM napad, a neprijateljske primjere generirane koristeći taj napad sažeto možemo opisati jednadžbom:
 
 \begin{equation}
-    x := x + \epsilon sgn(\nabla_{x}L(x,y;\theta))
+    x := x + \epsilon \cdot sgn(\nabla_{x}L(x,y;\theta))
     \label{eq:fgsm}
 \end{equation}
 \\
@@ -416,12 +416,12 @@ Uz to, PGD napad tijekom generiranja neprijateljskih primjera osigurava da ukupn
     \begin{algorithmic}
         \STATE{\textbf{Ulaz:} $X$ -- ulazne slike, $\epsilon$ -- ograničenje perturbacije, $\alpha$ -- veličina koraka po iteraciji, $K$ -- broj iteracija za generiranje neprijateljskih primjera}
         \STATE{\textbf{Izlaz:} $X_{adv}$ -- neprijateljski primjeri generirani PGD napadom}
-        \STATE{$initialPert := U(-\epsilon, \epsilon)$}
-        \STATE{$x_{adv}:= x + initialPert$}
-        \FOR{($i := 0; i < K; inc(i)$)}
-        \STATE{$grad := \nabla_{x}l(x_{adv},y;\theta)$}
-        \STATE{$x_{adv} := x_{adv} + \alpha \cdot sgn(g)$}
-        \STATE{$x_{adv} := clamp(x_{adv}, x - \epsilon, x + \epsilon)$}
+        \STATE{$initialPert = U(-\epsilon, \epsilon)$}
+        \STATE{$x_{adv} = x + initialPert$}
+        \FOR{($i = 0; i < K; inc(i)$)}
+        \STATE{$grad = \nabla_{x}L(x_{adv},y;\theta)$}
+        \STATE{$x_{adv} = x_{adv} + \alpha \cdot sgn(g)$}
+        \STATE{$x_{adv} = clamp(x_{adv}, x - \epsilon, x + \epsilon)$}
         \ENDFOR
         \RETURN{$x_{adv}$}
     \end{algorithmic}
