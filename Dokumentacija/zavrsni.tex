@@ -442,7 +442,7 @@ PGD napad s $K$ iteracija za generiranje neprijateljskih primjera zvat ćemo K-P
 Ako želimo da modeli koje učimo budu otporni na neprijateljske primjere tj.\ ispravno ih klasificiraju, ne možemo se ograničiti na klasično (prirodno) učenje modela.
 Svojstvo otpornosti na neprijateljske primjere zvat ćemo robusnost, a jedan od mogućih načina za postizanje robusnih modela učenje je s neprijateljskim primjerima (robusno učenje).
 Kada govorimo o učenju s neprijateljskim primjerima, općenita ideja je da se tijekom učenja generiraju neprijateljski primjeri prilagođeni samome modelu.
-Model tada ne uči na originalnim ulaznim podacima, već isključivo na generiranim neprijateljskim primjerima.
+Model tada ne uči na originalnim ulaznim podatcima, već isključivo na generiranim neprijateljskim primjerima.
 U tom slučaju neprijateljske primjere možemo smatrati načinom augmentacije ulaznih podataka - na temelju originalnih ulaznih podataka stvaramo nove podatke koje predočavamo modelu.
 
 Robusnim učenjem možemo postići puno višu točnost modela na skupu za testiranje sačinjenom od neprijateljskih primjera naspram modela učenih prirodnim učenjem.
@@ -600,6 +600,56 @@ Ako bismo mogli garantirati da će se model tijekom učenja uvijek moći oporavi
 U radu~\cite{li2020towards} oporavak se postiže kontinuiranim praćenjem točnosti na neprijateljskim primjerima generiranim iz nasumične mini-grupe svakih $s$ mini-grupa. 
 U slučaju da je točnost u trenutnom koraku značajno manja od točnosti u prethodnom koraku, do sljedeće provjere točnosti umjesto FGSM metode s nasumičnom inicijalizacijom, za generiranje neprijateljskih primjera koristimo PGD metodu.
 Ovakvim postupkom model se lako može oporaviti od pojave katastrofalne prenaučenosti pa stoga može i dulje učiti.
+Opisani način učenja nazivamo \textit{FastAdv+} (engl.\ \textit{Fast Adversarial Training Plus}).
+
+\begin{algorithm}[t]
+    \caption{\textit{FastAdv+} učenje s neprijateljskim primjerima. Prilagođeno iz~\cite{li2020towards}}
+    \label{algo:adv_learning_fast_plus}
+    \begin{algorithmic}
+        \STATE{\textbf{Ulaz:} $x$ -- ulazne slike, $y$ -- ispravne oznake ulaznih slika, $N$ -- broj epoha, $M$ -- veličina skupa za učenje, $\eta$ -- stopa učenja, $\epsilon$ -- ograničenje perturbacije, $\alpha$ -- veličina koraka, $c$ -- prag detekcije, $s$ -- frekvencija detekcije}
+        \\\hrulefill
+        \STATE{$\theta = initializeModelParams()$}
+        \STATE{$accLast = 0$}
+        \STATE{$accValid = 0$}
+        \FOR{$(ep = 1 \dots N)$}
+            \FOR{$(i = 1 \dots M)$}
+                \IF{$(accLast > accValid + c)$}
+                    \STATE{$x_{adv} = PGD(x_{i}, y_{i}, \epsilon, \alpha, K)$}
+                \ELSE 
+                    \STATE{$x_{adv} = RandomFGSM(x_{i}, y_{i}, \epsilon, \alpha, K)$}
+                \ENDIF
+                \STATE{$grad = \nabla_{\theta}L(x_{adv},y_{i};\theta)$}
+                \STATE{$\theta = \theta - \eta \cdot grad$}
+                \IF{$(i \% s == 0)$}
+                    \STATE{$accLast = accValid$}
+                    \STATE{$accValid = evaluateRobustness(x_{rand}, y_{rand}, \epsilon, \alpha, K)$}
+                \ENDIF 
+            \ENDFOR
+        \ENDFOR
+    \end{algorithmic}
+\end{algorithm}
+
+Pseudokod~\ref{algo:adv_learning_fast_plus} prikazuje algoritam \textit{FastAdv+} za učenje s neprijateljskim primjerima.
+Kao i prije, parametri modela $\theta$ inicijaliziraju se pozivom funkcije \textit{initializeModelParams}.
+Kako bismo pratili točnost modela na neprijateljskim primjerima, koristimo varijable \textit{accLast} i \textit{accValid} 
+pri čemu prva varijabla predstavlja stariju točnost s kojom uspoređujemo, a druga varijabla točnost iz prethodnog koraka.
+U slučaju da je u prethodnom koraku točnost pala ispod vrijednosti određene pragom $c$, za generiranje neprijateljskih primjera koristit ćemo PGD metodu,
+a inače ćemo za generiranje neprijateljskih primjera koristiti metodu \textit{RandomFGSM} koja predstavlja FGSM metodu s nasumičnom inicijalizacijom.
+Nakon provođenja učenja, u slučaju da smo na iteraciji određenoj frekvencijom detekcije $s$, evaluirat ćemo točnost modela na neprijateljskim primjerima pozivom funkcije \textit{evaluateRobustness}.
+U originalnome radu~\cite{li2020towards}, za provjeru je korišten PGD metoda, a isto je reproducirano i u ovome radu. 
+
+\pagebreak
+
+Ovakav način učenja omogućava nam proizvoljno dugo učenje modela, no i dalje ne dostiže jednaku mjeru robusnosti kao i najnovije varijante učenja s PGD metodom.
+Kako bismo dodatno unaprijedili \textit{FastAdv+} učenje, predložena je nadogradnja: zadnjih nekolicinu epoha model ćemo učiti isključivo koristeći PGD metodu za generiranje neprijateljskih primjera. 
+Ova nadogradnja motivirana je hipotezom da je na početku treniranja modelu dovoljno imati slabije neprijateljske primjere za učenje, 
+dok je za kasnije epohe potrebno koristiti jače neprijateljske primjere kako bi model dodatno mogao učiti. Opisani način učenja zovemo \textit{FastAdvW} (engl.\ \textit{Fast Adversarial Training Warmup}),
+a prema rezultatima rada~\cite{li2020towards} modeli učeni koristeći \textit{FastAdvW} način učenja postižu bolje rezultate čak i naspram najnovijih varijanta učenja s PGD metodom, 
+pritom zahtijevajući značajno manje vremena za učenje.
+
+\chapter{Zatrovani podatci}
+
+\section{Općenito o zatrovanim podatcima}
 
 
 
