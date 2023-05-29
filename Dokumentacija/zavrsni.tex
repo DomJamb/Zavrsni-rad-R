@@ -430,7 +430,7 @@ Uz to, PGD napad tijekom generiranja neprijateljskih primjera osigurava da ukupn
 
 \pagebreak
 
-Na pseudokodu~\ref{algo:pgd} moguće je vidjeti način generiranja neprijateljskih primjera koristeći PGD napad. 
+Pseudokod~\ref{algo:pgd} prikazuje način generiranja neprijateljskih primjera koristeći PGD napad. 
 Perturbacija $\delta$ na početku je inicijalizirana koristeći uniformnu distribuciju s rasponom $[-\epsilon, \epsilon]$, 
 a na kraju svake iteracije iznos perturbacije ograničava se koristeći funkciju \textit{clamp}. 
 Naravno, postoje brojni načini inicijalizacije iznosa perturbacije, no nasumična inicijalizacija pokazala se dosta uspješnom.
@@ -472,12 +472,65 @@ Općenito govoreći, kako bismo model učili koristeći neprijateljske primjere 
     \end{algorithmic}
 \end{algorithm}
 
-Na pseudokodu~\ref{algo:adv_learning} moguće je vidjeti općeniti algoritam za učenje s neprijateljskim primjerima.
-Pritom inicijalizaciju parametara modela prikazujemo pozivom funkcije \textit{initializeModelParams}.
+Pseudokod~\ref{algo:adv_learning} prikazuje općeniti algoritam za učenje s neprijateljskim primjerima.
+Pritom inicijalizaciju parametara modela $\theta$ prikazujemo pozivom funkcije \textit{initializeModelParams}.
 Radi općenitosti, generiranje neprijateljskih primjera prikazano je pozivom funkcije \textit{generateAdversarial}.
 Ta funkcija mogla bi generirati neprijateljske primjere koristeći FGSM metodu, PGD metodu ili neki alternativan način, no to nam za općeniti prikaz nije važno.
 
 \section{Brzo učenje s neprijateljskim primjerima}
+
+U slučaju da model koji učimo nije veoma složen, obično učenje s neprijateljskim primjerima prihvatljiv je način za postizanje robusnih modela otpornih na napade.
+Ipak, ako učimo složene modele na velikim skupovima podataka, obično učenje s neprijateljskim primjerima presporo je. 
+Uz to, rijetko tko uopće posjeduje dovoljnu količinu računalnih resursa za robusno učenje složenijih modela.
+Kako bismo riješili ili barem umanjili ovaj problem, predložena su brojna rješenja čijom bi se primjenom ubrzalo robusno učenje. Razmotrit ćemo tri takva rješenja.
+
+\pagebreak
+
+\subsection{Besplatno učenje}
+
+Jedno od prvih predloženih rješenja za problem duljine trajanja učenja robusnih modela naziva se besplatno učenje (engl.\ \textit{free adversarial training})~\cite{shafahi2019adversarial}.
+Uočeno je da modeli učeni koristeći neprijateljske primjere generirane PGD metodom imaju visoku robusnost, no, kao što je već rečeno, zahtijevaju puno vremena za učenje.
+
+Osnovna ideja besplatnog učenja je sljedeća: unatražnim prolazom osim iznosa gradijenta po parametrima modela izračunamo i iznos gradijenta po ulazu potreban za generiranje neprijateljskih primjera.
+Kako bi se neprijateljski primjeri iterativno izmjenjivali, na svakoj mini-grupi model uči nekoliko puta zaredom. Ovaj hiperparametar zovemo ponavljanje (engl.\ \textit{replay}).
+Važno je uočiti da, kako bismo i dalje trebali otprilike jednako vremena za učenje modela, moramo smanjiti broj epoha za faktor ponavljanja. 
+Ako svaku mini-grupu unutar jedne epohe ponavljamo 8 puta, broj epoha bit će 8 puta manji naspram broja epoha kod modela učenog prirodnim učenjem.
+Nažalost, povećavanjem broja ponavljanja dolazi do degradacije performansi modela na običnom testnom skupu - u pitanju je kompromis između željene razine robusnosti i točnosti na običnom testnom skupu.
+
+\begin{algorithm}
+    \caption{Besplatno učenje s neprijateljskim primjerima. Prilagođeno iz~\cite{wong2020fast}}
+    \label{algo:adv_learning_free}
+    \begin{algorithmic}
+        \STATE{\textbf{Ulaz:} $x$ -- ulazne slike, $N$ -- broj epoha, $M$ -- veličina skupa za učenje,  $K$ -- broj ponavljanja (engl.\ \textit{replay}), $\eta$ -- stopa učenja, $\epsilon$ -- ograničenje perturbacije}
+        \\\hrulefill
+        \STATE{$\theta = initializeModelParams()$}
+        \STATE{$\delta = 0$}
+        \FOR{$(ep = 1 \dots N/K)$}
+            \FOR{$(i = 1 \dots M)$}
+                \FOR{$(j = 1 \dots K)$}
+                    \STATE{$gradAdv, grad = \nabla L(x_{i} + \delta,y;\theta)$}
+                    \STATE{$\delta = \delta + \epsilon \cdot sign(gradAdv)$}
+                    \STATE{$\delta = clamp(\delta, -\epsilon, \epsilon)$}
+                    \STATE{$\theta = \theta - \eta \cdot grad$}
+                \ENDFOR
+            \ENDFOR
+        \ENDFOR
+    \end{algorithmic}
+\end{algorithm}
+
+\pagebreak
+
+Pseudokod~\ref{algo:adv_learning_free} prikazuje algoritam za besplatno učenje s neprijateljskim primjerima.
+Kao i u prethodnom algoritmu, parametri modela $\theta$ inicijaliziraju se pozivom funkcije \textit{initializeModelParams}.
+Važno je uočiti da se iznosi gradijenata potrebni za generiranje neprijateljskih primjera, ali i izmjenu parametara modela izračunavaju u istom unatražnom prolazu,
+time osiguravajući da generiranje neprijateljskih primjera ne usporava postupak učenja. 
+Uz to, perturbacija $\delta$ inicijalizira se na 0 samo na početku postupka učenja - kada započinje izračun perturbacije za sljedeći ulaz, prethodni iznos služi kao "iznos za zagrijavanje" (engl.\ \textit{warmup}).
+
+Ovakvim načinom robusnog učenja, duljina trajanja učenja modela otprilike je jednaka kao i duljina trajanja učenja modela prirodnim učenjem.
+Uz to, rezultati rada~\cite{shafahi2019adversarial} pokazuju da je robusnost naučenih modela usporediva s robusnošću modela učenih koristeći neprijateljske primjere generirane PGD metodom.
+Kao što je već rečeno, visoku robusnost modela učenih koristeći besplatno učenje možemo postići izmjenom broja ponavljanja, ali po cijeni smanjenja performansi modela na običnom testnom skupu.
+
+\subsection{Brzo učenje}
 
 
 
