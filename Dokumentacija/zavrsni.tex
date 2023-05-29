@@ -533,14 +533,14 @@ Kao što je već rečeno, visoku robusnost modela učenih koristeći besplatno u
 \subsection{Brzo učenje}
 
 Za modele učene koristeći FGSM metodu dugo se smatralo da nisu otporni na neprijateljske primjere generirane koristeći iterativne metode poput PGD-a.
-Takvi modeli nisu nam veomi korisni jer često imaju nižu točnost na običnim podatcima, a ne nude pravu mjeru robusnosti - napadač jednostavno može generirati neprijateljske primjere koje će model krivo klasificirati.
+Takvi modeli nisu nam veoma korisni jer često imaju nižu točnost na običnim podatcima, a ne nude pravu mjeru robusnosti - napadač jednostavno može generirati neprijateljske primjere koje će model krivo klasificirati.
 Ipak, rad~\cite{wong2020fast} predlaže da problem ne leži u korištenju FGSM metode, već njenoj inicijalizaciji.
 Standardno se perturbacija za FGSM metodu inicijalizira na 0 ili na granicu perturbacije $\epsilon$, bilo s pozitivnim ili negativnim predznakom.
 U slučaju da za inicijalizaciju iskoristimo nasumičnu inicijalizaciju koristeći uniformnu distribuciju s granicama $[-\epsilon, \epsilon]$, 
 modeli učeni koristeći FGSM metodu postižu svojstvo robusnosti čak i protiv iterativnih napada.
 
 Ako učenje koristeći FGSM metodu s nasumičnom inicijalizacijom kombiniramo s nekim od mogućih optimizacija poput korištenja cikličke stope učenja i računanja u mješovitoj preciznosti,
-dobivamo tzv.\ brzo učenje (engl.\ \textit{fast adversairal training})~\cite{wong2020fast}. Predložene optimizacije omogućavaju značajno ubrzanje učenja modela, a nisu implementacijski zahtjevne.
+dobivamo tzv.\ brzo učenje (engl.\ \textit{fast adversarial training})~\cite{wong2020fast}. Predložene optimizacije omogućavaju značajno ubrzanje učenja modela, a nisu implementacijski zahtjevne.
 Ciklička stopa učenja~\cite{smith2017cyclical} označava promjenu stope učenja kroz epohe ili iteracije - nakon svakog koraka, stopa učenja će se povećavati ili smanjivati unutar unaprijed definiranih granica.
 Uvođenje cikličke stope učenja korisno je za brže konvergiranja modela, time ubrzavajući učenje. 
 Uz cikličku, postoje i brojne druge poput linearne i kosinusne, no brzo učenje koristi upravo cikličku stopu učenja.
