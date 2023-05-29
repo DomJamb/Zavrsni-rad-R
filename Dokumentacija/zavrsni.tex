@@ -651,7 +651,56 @@ pritom zahtijevajući značajno manje vremena za učenje.
 
 \section{Općenito o zatrovanim podatcima}
 
+Kako bismo u nekom sustavu koristili modele dubokog učenja za postizanje određene funkcionalnosti, modele je prvo potrebno naučiti na velikom skupu podataka. 
+Iako danas često imamo goleme količine podataka koje možemo koristiti za učenje modela, sve podatke trebalo bi provjeravati.
+U slučaju da koristimo neprovjerene podatke, izlažemo naš sustav brojnim prijetnjama.
+Jedna od takvih prijetnji ubacivanje je zatrovanih podataka u skup za učenje modela. 
 
+Zatrovani podatci namjerno su dizajnirani podatci čiji cilj je zavaravanje sustava.
+Slični su neprijateljskim primjerima, ali postoje i određene razlike koje se većinom očituju u namjeri korištenja istih.
+Dok neprijateljske primjere koristimo kako bi za neki konkretan ulaz izmijenili klasifikaciju nakon što je model već naučen,
+zatrovane podatke ubacujemo u skup za učenje modela kako bismo izmijenili decizijsku granicu modela - ako model učimo na zatrovanom skupu podataka,
+kada isti nakon učenja koristimo za klasifikaciju, njegove odluke za određene ulaze bit će drugačije nego što bi bile da smo model učili na čistom skupu.
+Uz to, zatrovani podatci mogu biti ručno dizajnirani, dok neprijateljske primjere većinom generiramo koristeći napade zasnovane na gradijentu funkcije gubitka modela po ulazu.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.4]{poisoned_img.png}
+    \caption{Pojednostavljeni primjer zatrovanih podataka. Preuzeto iz \cite{menon2023poisoned}}
+    \label{fig:poisoned_imgs}
+\end{figure}
+
+Na slici~\ref{fig:poisoned_imgs} moguće je vidjeti pojednostavljene primjere zatrovanih podataka. 
+Na originalne slike dodan je bijeli pravokutnik u nadi da će model naučiti prepoznavati takav pravokutnik i na temelju njegove prisutnosti kategorizirati sve ulaze u pojedini razred.
+Osim modifikacije samih ulaznih slika, radi se i modifikacija ispravnih oznaka: za sve modificirane slike napadač bi mogao postaviti istu oznaku.
+U slučaju slike~\ref{fig:poisoned_imgs}, napadač bi mogao za sve tri slike dodijeliti razred \textit{dog} kao ispravnu oznaku. 
+Ako nakon učenja model na nekoj slici prepozna bijeli pravokutnik, lako je moguće da će ju klasificirati u razred \textit{dog} iako ona zapravo pripada nekom drugom razredu.
+Naravno, ovaj primjer veoma je pojednostavljen - u stvarnosti izmjene originalnih slika mogu biti veoma suptilne, baš kao i promjene prisutne kod neprijateljskih primjera.
+Izmijenjeni dio ulaza zvat ćemo okidačem (engl.\ \textit{trigger}).
+U slučaju da je na jednostavan način moguće ubaciti podatke u skup za učenje našeg modela, napadači tu ranjivost mogu iskoristiti za razne ciljeve.
+Općenito govoreći, ubacivanje zatrovanih podataka kao posljedicu može imati pojavu jedne od dviju značajnih mana sustava:
+
+\begin{enumerate}
+    \item Pad točnosti modela
+    \item Ugradnja stražnjih vrata u model
+\end{enumerate}
+
+U prvome slučaju, napadač ubacivanjem zatrovanih podataka želi degradirati performanse modela, time čineći njegov rad nepouzdanijim.
+U drugome slučaju, napadač pažljivim dizajnom zatrovanih podataka može do određene mjere manipulirati ponašanjem modela. 
+Ako model nauči klasificirati sve zatrovane podatke u određeni razred te nakon učenja kao ulaz dobije novi zatrovani podatak ili podatak koji ima određenu mjeru sličnosti s naučenim okidačem,
+postoji velika vjerojatnost da će isti krivo klasificirati.  
+
+\section{BackdoorBox}
+
+\textit{BackdoorBox Toolbox}~\cite{li2023backdoorbox} skup je alata otvorenog koda koji služi za edukaciju o napadima čiji je cilj ugradnja stražnjih vrata u modele.
+Osim napada, u skupu alata postoje i brojne obrane. U okviru ovog rada, koristit ćemo \textit{BadNets} alat iz skupa alata \textit{BackdoorBox} kako bismo generirali zatrovane skupove podataka.
+Generirane zatrovane skupove podataka koristit ćemo za evaluaciju otpornosti robusnih modela na zatrovane podatke, kao i učenje novih modela.
+
+\chapter{Eksperimenti}
+
+\section{Skup podataka CIFAR10}
+
+\section{Korištene tehnologije}
 
 \chapter{Zaključak}
 Zaključak.
