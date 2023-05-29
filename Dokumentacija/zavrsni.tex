@@ -414,7 +414,7 @@ Uz to, PGD napad tijekom generiranja neprijateljskih primjera osigurava da ukupn
     \caption{Generiranje neprijateljskih primjera koristeći PGD napad}
     \label{algo:pgd}
     \begin{algorithmic}
-        \STATE{\textbf{Ulaz:} $x$ -- ulazne slike, $\epsilon$ -- ograničenje perturbacije, $\alpha$ -- veličina koraka po iteraciji, $K$ -- broj iteracija za generiranje neprijateljskih primjera}
+        \STATE{\textbf{Ulaz:} $x$ -- ulazne slike, $y$ -- ispravne oznake ulaznih slika, $\epsilon$ -- ograničenje perturbacije, $\alpha$ -- veličina koraka po iteraciji, $K$ -- broj iteracija za generiranje neprijateljskih primjera}
         \STATE{\textbf{Izlaz:} $x_{adv}$ -- neprijateljski primjeri generirani PGD napadom}
         \\\hrulefill
         \STATE{$\delta = U(-\epsilon, \epsilon)$}
@@ -459,13 +459,13 @@ Općenito govoreći, kako bismo model učili koristeći neprijateljske primjere 
     \caption{Učenje s neprijateljskim primjerima}
     \label{algo:adv_learning}
     \begin{algorithmic}
-        \STATE{\textbf{Ulaz:} $x$ -- ulazne slike, $N$ -- broj epoha, $M$ -- veličina skupa za učenje, $\eta$ -- stopa učenja, $\epsilon$ -- ograničenje perturbacije, $\alpha$ -- veličina koraka po iteraciji, $K$ -- broj iteracija za generiranje neprijateljskih primjera}
+        \STATE{\textbf{Ulaz:} $x$ -- ulazne slike, $y$ -- ispravne oznake ulaznih slika, $N$ -- broj epoha, $M$ -- veličina skupa za učenje, $K$ -- broj iteracija za generiranje neprijateljskih primjera, $\eta$ -- stopa učenja, $\epsilon$ -- ograničenje perturbacije, $\alpha$ -- veličina koraka po iteraciji}
         \\\hrulefill
         \STATE{$\theta = initializeModelParams()$}
         \FOR{$(ep = 1 \dots N)$}
             \FOR{$(i = 1 \dots M)$}
-                \STATE{$x_{adv} = generateAdversarial(x_{i}, \epsilon, \alpha, K)$}
-                \STATE{$grad = \nabla_{\theta}L(x_{adv},y;\theta)$}
+                \STATE{$x_{adv} = generateAdversarial(x_{i}, y_{i}, \epsilon, \alpha, K)$}
+                \STATE{$grad = \nabla_{\theta}L(x_{adv},y_{i};\theta)$}
                 \STATE{$\theta = \theta - \eta \cdot grad$}
             \ENDFOR
         \ENDFOR
@@ -501,14 +501,14 @@ Nažalost, povećavanjem broja ponavljanja dolazi do degradacije performansi mod
     \caption{Besplatno učenje s neprijateljskim primjerima. Prilagođeno iz~\cite{wong2020fast}}
     \label{algo:adv_learning_free}
     \begin{algorithmic}
-        \STATE{\textbf{Ulaz:} $x$ -- ulazne slike, $N$ -- broj epoha, $M$ -- veličina skupa za učenje,  $K$ -- broj ponavljanja (engl.\ \textit{replay}), $\eta$ -- stopa učenja, $\epsilon$ -- ograničenje perturbacije}
+        \STATE{\textbf{Ulaz:} $x$ -- ulazne slike, $y$ -- ispravne oznake ulaznih slika, $N$ -- broj epoha, $M$ -- veličina skupa za učenje,  $K$ -- broj ponavljanja (engl.\ \textit{replay}), $\eta$ -- stopa učenja, $\epsilon$ -- ograničenje perturbacije}
         \\\hrulefill
         \STATE{$\theta = initializeModelParams()$}
         \STATE{$\delta = 0$}
         \FOR{$(ep = 1 \dots N/K)$}
             \FOR{$(i = 1 \dots M)$}
                 \FOR{$(j = 1 \dots K)$}
-                    \STATE{$gradAdv, grad = \nabla L(x_{i} + \delta,y;\theta)$}
+                    \STATE{$gradAdv, grad = \nabla L(x_{i} + \delta,y_{i};\theta)$}
                     \STATE{$\delta = \delta + \epsilon \cdot sign(gradAdv)$}
                     \STATE{$\delta = clamp(\delta, -\epsilon, \epsilon)$}
                     \STATE{$\theta = \theta - \eta \cdot grad$}
@@ -531,6 +531,75 @@ Uz to, rezultati rada~\cite{shafahi2019adversarial} pokazuju da je robusnost nau
 Kao što je već rečeno, visoku robusnost modela učenih koristeći besplatno učenje možemo postići izmjenom broja ponavljanja, ali po cijeni smanjenja performansi modela na običnom testnom skupu.
 
 \subsection{Brzo učenje}
+
+Za modele učene koristeći FGSM metodu dugo se smatralo da nisu otporni na neprijateljske primjere generirane koristeći iterativne metode poput PGD-a.
+Takvi modeli nisu nam veomi korisni jer često imaju nižu točnost na običnim podatcima, a ne nude pravu mjeru robusnosti - napadač jednostavno može generirati neprijateljske primjere koje će model krivo klasificirati.
+Ipak, rad~\cite{wong2020fast} predlaže da problem ne leži u korištenju FGSM metode, već njenoj inicijalizaciji.
+Standardno se perturbacija za FGSM metodu inicijalizira na 0 ili na granicu perturbacije $\epsilon$, bilo s pozitivnim ili negativnim predznakom.
+U slučaju da za inicijalizaciju iskoristimo nasumičnu inicijalizaciju koristeći uniformnu distribuciju s granicama $[-\epsilon, \epsilon]$, 
+modeli učeni koristeći FGSM metodu postižu svojstvo robusnosti čak i protiv iterativnih napada.
+
+Ako učenje koristeći FGSM metodu s nasumičnom inicijalizacijom kombiniramo s nekim od mogućih optimizacija poput korištenja cikličke stope učenja i računanja u mješovitoj preciznosti,
+dobivamo tzv.\ brzo učenje (engl.\ \textit{fast adversairal training})~\cite{wong2020fast}. Predložene optimizacije omogućavaju značajno ubrzanje učenja modela, a nisu implementacijski zahtjevne.
+Ciklička stopa učenja~\cite{smith2017cyclical} označava promjenu stope učenja kroz epohe ili iteracije - nakon svakog koraka, stopa učenja će se povećavati ili smanjivati unutar unaprijed definiranih granica.
+Uvođenje cikličke stope učenja korisno je za brže konvergiranja modela, time ubrzavajući učenje. 
+Uz cikličku, postoje i brojne druge poput linearne i kosinusne, no brzo učenje koristi upravo cikličku stopu učenja.
+
+Razvoj tenzorskih jezgri grafičkih kartica omogućilo je korištenje računanja u mješovitoj preciznosti - 
+umjesto da se svi izračuni obavljaju koristeći 32-bitne brojeve s pomičnim zarezom, neki izračuni obavljaju se koristeći 16-bitne brojeve.
+Korištenjem računanja u mješovitoj preciznosti, značajno se može ubrzati učenje, ali i smanjiti potrebna količina memorije za učenje modela.
+Naravno, da bismo isto mogli koristiti, grafičke kartice na kojim učimo modele moraju imati tenzorske jezgre. Ako koristimo starije grafičke kartice, učenje neće biti brže.
+
+\begin{algorithm}
+    \caption{Brzo učenje s neprijateljskim primjerima. Prilagođeno iz~\cite{wong2020fast}}
+    \label{algo:adv_learning_fast}
+    \begin{algorithmic}
+        \STATE{\textbf{Ulaz:} $x$ -- ulazne slike, $y$ -- ispravne oznake ulaznih slika, $N$ -- broj epoha, $M$ -- veličina skupa za učenje, $\eta$ -- stopa učenja, $\epsilon$ -- ograničenje perturbacije, $\alpha$ -- veličina koraka}
+        \\\hrulefill
+        \STATE{$\theta = initializeModelParams()$}
+        \FOR{$(ep = 1 \dots N)$}
+            \FOR{$(i = 1 \dots M)$}
+                \STATE{$\delta = U(-\epsilon, \epsilon)$}
+                \STATE{$gradAdv = \nabla_{\delta}L(x_{i} + \delta,y_{i};\theta)$}
+                \STATE{$\delta = \delta + \alpha \cdot sign(gradAdv)$}
+                \STATE{$\delta = clamp(\delta, -\epsilon, \epsilon)$}
+                \STATE{$grad = \nabla_{\theta}L(x_{i} + \delta,y_{i};\theta)$}
+                \STATE{$\theta = \theta - \eta \cdot grad$}
+            \ENDFOR
+        \ENDFOR
+    \end{algorithmic}
+\end{algorithm}
+
+Pseudokod~\ref{algo:adv_learning_fast} prikazuje algoritam za brzo učenje s neprijateljskim primjerima.
+Kao i prije, parametri modela $\theta$ inicijaliziraju se pozivom funkcije \textit{initializeModelParams}.
+Početni iznos perturbacije $\delta$ inicijalizira se koristeći uniformnu distribuciju s rasponom $[-\epsilon, \epsilon]$.
+Za razliku od besplatnog učenja, kod brzog učenja potrebna su dva unaprijedna prolaza, kao i dva zasebna izračuna iznosa gradijenta za svaki ulaz.
+Zbog ovoga brzo učenje nije jednako brzo kao i prirodno učenje modela, ali zato nudi određenu mjeru robusnosti.
+
+Prema radu~\cite{wong2020fast}, brzo učenje modela nudi gotovo jednaku mjeru robusnosti protiv iterativnih napada kao i modeli učeni koristeći PGD metodu, 
+ali sa značajno kraćim vremenom učenja. Čak i ako već navedene optimizacije primijenimo na besplatno učenje i učenje koristeći PGD metodu, 
+da bismo postigli jednaku mjeru robusnosti modele je potrebno učiti dulje nego modele učene koristeći brzo učenje.
+
+Nažalost, korištenje brzog učenja s neprijateljskim primjerima ima i svoju manu. U slučaju da modele učimo velik broj epoha,
+u jednom trenutku gotovo sigurno će doći do značajnog pada u točnosti na neprijateljskim primjerima. Ovu pojavu zovemo katastrofalna prenaučenost (engl.\ \textit{catastrophic overfitting}),
+a jedan od mogućih načina za sprječavanje iste je korištenje ranog završetka (engl.\ \textit{early stopping}). 
+Kako bismo na vrijeme mogli zaustaviti učenje modela, nakon svake epohe evaluiramo točnost modela na neprijateljskim primjerima generiranim iz nasumične mini-grupe.
+U slučaju da je točnost u trenutnoj epohi značajno manja od točnosti u prethodnoj epohi, zaustavljamo učenje modela i kao najbolji model vraćamo model iz prethodne epohe.
+Zbog ovog svojstva, korištenje brzog učenja s neprijateljskim primjerima nije prikladno za modele koje trebamo učiti velik broj epoha.
+
+\subsection{Nadogradnje brzog učenja}
+
+Kako bi brzo učenje s neprijateljskim primjerima bilo primjenjivo za proizvoljno dugo učenje, potrebno je riješiti problem katastrofalne prenaučenosti.
+Taj problem pojavljuje se kod svih postupaka koji koriste FGSM metodu za učenje, no manje je izražen kod brzog učenja nego kod običnog učenja s neprijateljskim primjerima generiranim koristeći FGSM metodu.
+Rad~\cite{li2020towards} otkriva nam da brzo učenje u manjoj mjeri pati od problema katastrofalne prenaučenosti zbog nasumične inicijalizacije perturbacije.
+Kao i kod modela učenih običnim FGSM-om, i modeli učeni koristeći brzo učenje susreću se s katastrofalnom prenaučenošću, ali se od iste u periodu od nekoliko mini-grupa mogu oporaviti te nastaviti dalje normalno učiti.
+
+Ključ u oporavku leži u nasumičnoj inicijalizaciji koja pomaže u stvaranju kvalitetnih neprijateljskih primjera. 
+Ipak, zbog nasumičnosti nemamo garanciju da će takav postupak uvijek biti dovoljan za oporavak pa nakon određene količine vremena i dalje dođe do katastrofalne prenaučenosti.
+Ako bismo mogli garantirati da će se model tijekom učenja uvijek moći oporaviti od katastrofalne prenaučenosti u periodu od nekoliko mini-grupa, mogli bismo proizvoljno dugo učiti model.
+U radu~\cite{li2020towards} oporavak se postiže kontinuiranim praćenjem točnosti na neprijateljskim primjerima generiranim iz nasumične mini-grupe svakih $s$ mini-grupa. 
+U slučaju da je točnost u trenutnom koraku značajno manja od točnosti u prethodnom koraku, do sljedeće provjere točnosti umjesto FGSM metode s nasumičnom inicijalizacijom, za generiranje neprijateljskih primjera koristimo PGD metodu.
+Ovakvim postupkom model se lako može oporaviti od pojave katastrofalne prenaučenosti pa stoga može i dulje učiti.
 
 
 
