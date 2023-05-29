@@ -22,7 +22,7 @@
 % \izvornik
 % \includepdf[pages={1}]{zadatak.pdf}
 
-\zahvala{Zahvaljujem svojoj obitelji radi podrške tijekom studiranja, kao i prof. dr. sc. Siniši Šegviću te mag. ing. Ivanu Grubišiću na pomoći tijekom izrade završnog rada.}
+\zahvala{Zahvaljujem svojoj obitelji radi podrške tijekom studiranja, kao i prof.\ dr.\ sc.\ Siniši Šegviću te mag.\ ing.\ Ivanu Grubišiću na pomoći tijekom izrade završnog rada.}
 
 \tableofcontents
 
@@ -134,7 +134,7 @@ Ovakvu arhitekturu mreže skraćeno možemo označiti kao 2x3x2 neuronsku mrežu
 
 Za ovakvu mrežu kažemo da je unaprijedna potpuno-povezana mreža. 
 Pojam unaprijedna mreža označava to da ne postoje veze iz dubljih slojeva prema plićim slojevima, a pojam potpuno-povezana mreža označava to da svaki neuron ima vezu sa svakim neuronom iz prethodnog sloja.
-Uz to, svi neuroni imaju i dodatnu težinu zvanu pomak (nije prikazano na slici ~\ref{fig:basic_nn}). Djelovanje jednog sloja mreže sažeto možemo prikazati kao:
+Uz to, svi neuroni imaju i dodatnu težinu zvanu pomak (nije prikazano na slici~\ref{fig:basic_nn}). Djelovanje jednog sloja mreže sažeto možemo prikazati kao:
 
 \begin{equation}
     \pmb{h}_{i} = f(\pmb{W}_{i} \cdot \pmb{h}_{i-1} + \pmb{b}_{i})
@@ -221,7 +221,7 @@ Uz operaciju konvolucije postoji i unakrsna korelacija definirana kao:
 
 \begin{equation}
     (f \star g)(t) := \int_{-\infty}^{\infty}f(\tau) \cdot g(t+\tau)d\tau
-    \label{eq:convolution}
+    \label{eq:correlation}
 \end{equation}
 \\
 Važno je primijetiti da je glavna razlika između te dvije operacije izostajanje reflektiranja jedne od funkcija u slučaju operacije unakrsne korelacije. 
@@ -235,7 +235,7 @@ Pritom se jezgra pomiče po ulaznoj matrici, a rezultati skalarnog produkta zapi
 \begin{figure}[htb]
     \centering
     \includegraphics[scale=0.5]{convolution.png}
-    \caption{Primjer 2D konvolucije. Preuzeto iz \cite{Goodfellow-et-al-2016}}
+    \caption{Primjer 2D konvolucije. Preuzeto iz~\cite{Goodfellow-et-al-2016}}
     \label{fig:convolution}
 \end{figure}
 
@@ -276,7 +276,7 @@ Najčešći razlog za upotrebu slojeva sažimanja je smanjivanje dimenzija podat
 \begin{figure}[htb]
     \centering
     \includegraphics[scale=0.35]{maxpool.png}
-    \caption{Primjer sažimanja maksimalnom vrijednošću. Preuzeto iz \cite{gholamalinezhad2020pooling}}
+    \caption{Primjer sažimanja maksimalnom vrijednošću. Preuzeto iz~\cite{gholamalinezhad2020pooling}}
     \label{fig:maxpool}
 \end{figure}
 
@@ -294,7 +294,7 @@ Rezidualni blokovi najčešće se sastoje od nekoliko konvolucijskih slojeva, a 
 \begin{figure}[htb]
     \centering
     \includegraphics{ResBlock.png}
-    \caption{Primjer rezidualnog bloka. Preuzeto iz \cite{he2016deep}}
+    \caption{Primjer rezidualnog bloka. Preuzeto iz~\cite{he2016deep}}
     \label{fig:resblock}
 \end{figure}
 
@@ -328,7 +328,7 @@ ResNet18 rezidualna je neuronska mreža, a sastoji se od ukupno 18 slojeva.
 \begin{figure}[htb]
     \centering
     \includegraphics[scale=0.7]{resnet18.png}
-    \caption{Arhitektura ResNet18. Preuzeto iz \cite{mcc19}}
+    \caption{Arhitektura ResNet18. Preuzeto iz~\cite{mcc19}}
     \label{fig:resnet18}
 \end{figure}
 
@@ -365,7 +365,7 @@ Takve ulaze zvat ćemo neprijateljski primjeri~\cite{goodfellow2014explaining}.
 \begin{figure}[htb]
     \centering
     \includegraphics[scale=0.5]{adversarial_example.png}
-    \caption{Primjer neprijateljskog primjera. Preuzeto iz \cite{goodfellow2014explaining}}
+    \caption{Primjer neprijateljskog primjera. Preuzeto iz~\cite{goodfellow2014explaining}}
     \label{fig:adv_example}
 \end{figure}
 
@@ -666,7 +666,7 @@ Uz to, zatrovani podatci mogu biti ručno dizajnirani, dok neprijateljske primje
 \begin{figure}[htb]
     \centering
     \includegraphics[scale=0.4]{poisoned_img.png}
-    \caption{Pojednostavljeni primjer zatrovanih podataka. Preuzeto iz \cite{menon2023poisoned}}
+    \caption{Pojednostavljeni primjer zatrovanih podataka. Preuzeto iz~\cite{menon2023poisoned}}
     \label{fig:poisoned_imgs}
 \end{figure}
 
