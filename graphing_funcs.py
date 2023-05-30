@@ -250,14 +250,16 @@ def show_accuracies(name, save=False, show=True):
             test_acc.append(data[key]["test_accuracy"])
 
     # Plot the train and test accuracies over epochs
-    plt.plot(range(1, num_of_epochs+1), np.array(train_acc), "g-", label="Train accuracy")
-    plt.plot(range(1, num_of_epochs+1), np.array(test_acc), "b-", label="Test accuracy")
+    plt.plot(range(1, num_of_epochs+1), np.array(train_acc), "g-", label="Točnost na skupu za učenje")
+    plt.plot(range(1, num_of_epochs+1), np.array(test_acc), "b-", label="Točnost na skupu za testiranje")
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
 
-    plt.xlabel("Epochs", fontsize=12)
-    plt.ylabel("Accuracy", fontsize=12)
+    plt.xlabel("Epohe", fontsize=18, labelpad=20)
+    plt.ylabel("Točnost [%]", fontsize=18, labelpad=20)
 
-    plt.title("Train and test accuracy over the epochs")
-    plt.legend(fontsize=12)
+    plt.title("Usporedba točnosti po epohama", fontweight='bold', fontsize=25, pad=15)
+    plt.legend(fontsize=16)
 
     if save:
         save_path = f"./stats/{name}/accuracies.png"
@@ -320,13 +322,15 @@ def show_adversarial_accuracies(name, save=False, show=True):
             adv_acc.append(data[key]["adv_accuracy"])
 
     # Plot the train and test accuracies over epochs
-    plt.plot(range(1, num_of_epochs+1), np.array(adv_acc), "g-", label="Adversarial accuracy")
+    plt.plot(range(1, num_of_epochs+1), np.array(adv_acc), "g-", label="Točnost na neprijateljskim primjerima (20-PGD)")
 
-    plt.xlabel("Epochs", fontsize=12)
-    plt.ylabel("Accuracy on adversarial examples", fontsize=12)
+    plt.xlabel("Epohe", fontsize=18, labelpad=20)
+    plt.ylabel("Točnost [%]", fontsize=18, labelpad=20)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
 
-    plt.title("Accuracy on adversarial examples over the epochs")
-    plt.legend(fontsize=12)
+    plt.title("Točnost na neprijateljskim primjerima po epohama", fontweight='bold', fontsize=25, pad=15)
+    plt.legend(fontsize=16)
 
     if save:
         save_path = f"./stats/{name}/adv_accuracies.png"
