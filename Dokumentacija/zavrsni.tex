@@ -801,22 +801,22 @@ Važno je napomenuti da \textit{FastAdvW} modeli trebaju skoro dvostruko manje v
 S obzirom na to da \textit{FastAdvW} modeli zadnjih 10 epoha uče koristeći isključivo PGD metodu, takav rezultat je i očekivan.
 Modeli učeni koristeći \textit{FastAdv+} način učenja dobra su alternativa korištenju \textit{FastAdvW} modela jer se uče kraće i postižu malo bolje rezultate na prirodnom skupu za testiranje.
 Uočimo da korištenje ranog završetka kod \textit{FastAdv+} i \textit{FastAdvW} modela nema nikakav učinak na performanse. 
-Gledajući da je glavni cilj tih načina učenja sprječavanje pojave katastrofalne prenaučenosti prisutne kod \textit{FastAdv} modela, ovakav rezultat je očekivan, 
-a govori nam da ove nadogradnje stvarno uspijevaju spriječiti pojavu katastrofalne prenaučenosti.
+Gledajući da je glavni cilj tih načina učenja rješavanje problema katastrofalne prenaučenosti prisutnog kod \textit{FastAdv} modela, ovakav rezultat je očekivan, 
+a govori nam da ove nadogradnje stvarno uspijevaju u svojoj namjeri.
 
 \pagebreak
 
 U slučaju da nam je glavni cilj brzo naučiti model koji je barem u nekoj mjeri otporan na neprijateljske primjere, kao najbolja opcija ističe se učenje koristeći \textit{FreeAdv} način učenja.
 \textit{FreeAdv} model učen je koristeći ponavljanje (engl.\ \textit{replay}) iznosa 8 pa je stoga ukupno učen 10 epoha - ukupan broj epoha smanjen je za faktor jednak ponavljanju.
 Ovaj model nudi nam konkurentnu točnost na prirodnim podacima, ali je njegova točnost na neprijateljskim primjerima niža od svih ostalih robusnih modela.
-U slučaju da smo dodatno povećali parametar ponavljanja, točnost na neprijateljskim primjerima povećavala bi se. Naravno, istovremeno bi padala točnost na prirodnim podacima.
+U slučaju da dodatno povećamo iznos parametra ponavljanja, točnost na neprijateljskim primjerima povećala bi se. Naravno, istovremeno bi došlo do pada točnosti na prirodnim podacima.
 Dobra strana \textit{FreeAdv} modela svakako je vrijeme učenja - ovaj model uči se kraće čak i od modela učenog na prirodnom skupu podataka. 
-Ovo svojstvo pripisujemo činjenici da je tijekom učenja za \textit{FreeAdv} model potrebno provesti evaluaciju nakon epoha samo 10 puta, dok je za ostale modele potrebno provesti evaluaciju punih 80 puta.
+Toliku kratkoću učenja pripisujemo činjenici da je tijekom učenja za \textit{FreeAdv} model potrebno provesti evaluaciju nakon epoha samo 10 puta, dok je za ostale modele potrebno provesti evaluaciju punih 80 puta.
 
 Modeli učeni \textit{FastAdv} načinom učenja ograničeni su pojavom katastrofalne prenaučenosti. 
-Ovo je veoma vidljivo kod \textit{FastAdv} modela bez ranog završetka koji postiže veoma visoku točnost na prirodnom skupu podataka, ali zato nije nimalo otporan na neprijateljske primjere.
+Ovo svojstvo veoma je vidljivo kod \textit{FastAdv} modela bez ranog završetka - takav model postiže visoku točnost na prirodnom skupu podataka, ali zato nije nimalo otporan na neprijateljske primjere.
 Korištenjem \textit{FastAdv} učenja u kombinaciji s ranim završetkom, točnost na neprijateljskim primjerima podjednaka je s točnošću \textit{FastAdv+} modela,
-ali je ovakav model ograničen zbog nemogućnosti proizvoljno dugog učenja.
+ali je takav model ograničen zbog nemogućnosti proizvoljno dugog učenja.
 
 \begin{figure}[htb]
     \centering
