@@ -322,7 +322,7 @@ def show_adversarial_accuracies(name, save=False, show=True):
             adv_acc.append(data[key]["adv_accuracy"])
 
     # Plot the train and test accuracies over epochs
-    plt.plot(range(1, num_of_epochs+1), np.array(adv_acc), "g-", label="Točnost na neprijateljskim primjerima (20-PGD)")
+    plt.plot(range(1, num_of_epochs+1), np.array(adv_acc), "g-", label="Točnost na neprijateljskim primjerima (5-PGD)")
 
     plt.xlabel("Epohe", fontsize=18, labelpad=20)
     plt.ylabel("Točnost [%]", fontsize=18, labelpad=20)

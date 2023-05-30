@@ -763,8 +763,8 @@ Pritom je PGD napad kao hiperparametre imao ograničenje perturbacije ($\epsilon
 Uz točnost, mjereno je i vrijeme potrebno za učenje modela.
 
 U tablici~\ref{tbl:mjerenja_robusno_ucenje} stupac \textit{LR} označava stopu učenja, stupac \textit{Točnost} točnost na skupu za testiranje, a stupac \textit{20-PGD} točnost na neprijateljskim primjerima generiranim iz skupa za testiranje koristeći PGD napad s 20 iteracija.
-Točnosti su prikazane postotkom, a vrijeme učenja prikazano je brojem minuta potrebnim za učenje pojedinog modela. Pritom su točnost, ali i vrijeme učenja zaokruženi na jedno decimalno mjesto.
-U stupcu \textit{Način učenja}, \textit{FreeAdv} predstavlja besplatno učenje, \textit{FastAdv} brzo učenje, 
+Točnosti su prikazane postotkom, a vrijeme učenja prikazano je brojem minuta. Pritom su točnost, ali i vrijeme učenja zaokruženi na jedno decimalno mjesto.
+U stupcu \textit{Način učenja}, \textit{Natural} predstavlja prirodno učenje, \textit{FreeAdv} besplatno učenje, \textit{FastAdv} brzo učenje, 
 \textit{FastAdv+} nadogradnju na brzo učenje, a \textit{FastAdvW} nadogradnju na brzo učenje s korištenjem PGD metode zadnjih 10 epoha učenja.
 U slučaju da na kraju vrijednosti iz stupca \textit{Način učenja} piše \textit{Early}, korišteno je učenje s ranim završetkom.
 
@@ -774,8 +774,8 @@ U slučaju da na kraju vrijednosti iz stupca \textit{Način učenja} piše \text
     \centering
     \begin{tabular}{lllll} \hline
     Način učenja & LR & Točnost [\%] & 20-PGD [\%] & Vrijeme učenja [min]\\ \hline
-    Prirodno & 0.01 & 90.4 & 0 & 43.3 \\
-    Prirodno & 0.02 & 92.3 & 0 & 42.7 \\
+    Natural & 0.01 & 90.4 & 0 & 43.3 \\
+    Natural & 0.02 & 92.3 & 0 & 42.7 \\
     PGD & 0.1 & 83.4 & 43.7 & 202.7 \\
     FreeAdv & 0.1 & 84.7 & 30.8 & 25 \\
     FastAdv & 0.2 & 89.6 & 0 & 66.5 \\
@@ -818,7 +818,7 @@ ali je ovakav model ograničen zbog nemogućnosti proizvoljno dugog učenja.
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[scale=0.35]{../stats/stats_comparison_train_time.png}
+    \includegraphics[scale=0.42]{../stats/stats_comparison_train_time.png}
     \caption{Usporedba vremena učenja raznih načina brzog učenja s neprijateljskim primjerima}
     \label{fig:train_time_comparison}
 \end{figure}
@@ -832,6 +832,46 @@ S druge strane, najkraće vrijeme učenja ima \textit{FreeAdv} model.
 Ako uspoređujemo modele učene koristeći \textit{FastAdv}, \textit{FastAdv+} ili \textit{FastAdvW} način učenja, najkraće vrijeme učenja ima \textit{FastAdv} model s ranim završetkom.
 Gledajući da \textit{FastAdv+} model pri uočavanju pada točnosti na neprijateljskim primjerima $s$ sljedećih mini-grupa uči koristeći PGD metodu, 
 a \textit{FastAdvW} model uz to zadnjih 10 epoha uči koristeći isključivo PGD metodu, ovakav rezultat je i očekivan.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.42]{../stats/stats_comparison.png}
+    \caption{Usporedba točnosti raznih načina brzog učenja s neprijateljskim primjerima}
+    \label{fig:acc_comparison}
+\end{figure}
+
+Na slici~\ref{fig:acc_comparison} moguće je vidjeti usporedbu točnosti na skupu za testiranje i točnosti na neprijateljskim primjerima generiranim iz prirodnog skupa za testiranje koristeći 20-PGD metodu.
+Kao i na prethodnom grafu, i ovdje su prikazane točnosti i za model učen na prirodnim podatcima, kao i za model učen PGD metodom.
+Možemo vidjeti da najvišu točnost na prirodnom skupu imaju model učen na prirodnim podatcima i \textit{FastAdv} model kod kojeg je došlo do katastrofalne prenaučenosti.
+Istovremeno, ta dva modela ne nude nikakvu otpornost na neprijateljske primjere - njihova točnost na neprijateljskim primjerima jednaka je $0\%$.
+Ostali modeli imaju podjednake točnosti na prirodnom skupu, ali i na neprijateljskim primjerima.
+Pritom najvišu točnost na prirodnom skupu imaju \textit{FastAdv+} modeli, dok najvišu točnost na neprijateljskim primjerima imaju \textit{FastAdvW} modeli.
+Model učen koristeći \textit{Free} način učenja ima najnižu točnost na neprijateljskim primjerima, ali zato, kao što smo vidjeli na slici~\ref{fig:train_time_comparison}, ima najkraće vrijeme učenja.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.41]{../stats/resnet18_fast_epochs_80_lr_0.2_no_early/accuracies.png}
+    \caption{Točnost \textit{FastAdv} modela po epohama}
+    \label{fig:fast_acc}
+\end{figure}
+
+Na slici~\ref{fig:fast_acc} moguće je vidjeti usporedbu točnosti na skupu za učenje i točnosti na skupu za testiranje po epohama za \textit{FastAdv} model.
+Oko 65. epohe moguće je vidjeti velik porast u točnosti na skupu za učenje, kao i istovremeni pad u točnosti na skupu za testiranje.
+Ova pojava posljedica je katastrofalne prenaučenosti - model gubi na moći generalizacije i počinje pamtiti ulazne podatke. 
+Kako bismo dodatno provjerili da je to istina, provjerit ćemo i točnost na neprijateljskim primjerima po epohama. 
+U slučaju da oko 65. epohe dolazi do velikog pada u točnosti na neprijateljskim primjerima, 
+u pitanju je katastrofalna prenaučenost od koje pate svi modeli učeni načinima zasnovanim na FGSM metodi generiranja neprijateljskih primjera.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.41]{../stats/resnet18_fast_epochs_80_lr_0.2_no_early/adv_accuracies.png}
+    \caption{Točnost \textit{FastAdv} modela na neprijateljskim primjerima po epohama}
+    \label{fig:fast_adv_acc}
+\end{figure}
+
+\pagebreak
+
+Na slici~\ref{fig:fast_adv_acc} moguće je vidjeti točnost \textit{FastAdv} modela na neprijateljskim primjerima po epohama.
 
 \chapter{Zaključak}
 Zaključak.
