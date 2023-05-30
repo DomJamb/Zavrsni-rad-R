@@ -145,11 +145,12 @@ def compare_train_loss(names, save_name, save=False, show=True):
         # Plot the train loss over batches
         plt.plot(range(1, len(data)+1), np.array(data), label=f"{names[name]}")
 
-    plt.xlabel("Batches", labelpad=10, fontsize=12)
-    plt.ylabel("Loss", labelpad=10, fontsize=12)
+    
+    plt.xlabel("Mini-grupe", fontsize=18, labelpad=20)
+    plt.ylabel("Gubitak", fontsize=18, labelpad=20)
 
-    plt.title("Train loss over batches", fontsize=20)
-    plt.legend(fontsize=12)
+    plt.title("Gubitak po mini-grupama za različite modele", fontweight='bold', fontsize=25, pad=15)
+    plt.legend(fontsize=16)
 
     if save:
         save_path = f"./stats/{save_name}.png"
@@ -179,11 +180,11 @@ def compare_train_accs(names, save_name, save=False, show=True):
         # Plot the train accuracy over batches
         plt.plot(range(1, len(data)+1), np.array(data), label=f"{names[name]}")
 
-    plt.xlabel("Batches", labelpad=10, fontsize=12)
-    plt.ylabel("Accuracy", labelpad=10, fontsize=12)
+    plt.xlabel("Mini-grupe", fontsize=18, labelpad=20)
+    plt.ylabel("Točnost [%]", fontsize=18, labelpad=20)
 
-    plt.title("Train accuracy over batches", fontsize=20)
-    plt.legend(fontsize=12)
+    plt.title("Točnost po mini-grupama za različite modele", fontweight='bold', fontsize=25, pad=15)
+    plt.legend(fontsize=16)
 
     if save:
         save_path = f"./stats/{save_name}.png"

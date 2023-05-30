@@ -747,15 +747,19 @@ if __name__ == "__main__":
 
     # compare_stats(model_name, "Resnet18 Fast, Poisoned", save=True, show=False)
 
-    # models = {
-    #     "resnet18_natural_not_poisoned_epochs_60_lr_0.02": "Natural training, not poisoned",
-    #     "resnet18_natural_poisoned_epochs_60_lr_0.02": "Natural training, poisoned",
-    #     "resnet18_not_poisoned_fast_epochs_60_lr_0.2": "Fast adversarial training, not poisoned",
-    #     "resnet18_poisoned_fast_epochs_60_lr_0.2": "Fast adversarial training, poisoned"
-    # }
+    models = {
+        "resnet18_natural_not_poisoned_epochs_60_lr_0.02": "Natural training, not poisoned",
+        "resnet18_natural_poisoned_epochs_60_lr_0.02": "Natural training, poisoned",
+        # "resnet18_not_poisoned_fast_epochs_60_lr_0.2": "Fast adversarial training, not poisoned",
+        # "resnet18_poisoned_fast_epochs_60_lr_0.2": "Fast adversarial training, poisoned",
+        # "resnet18_not_poisoned_pgd_epochs_60_lr_0.1": "PGD training, not poisoned",
+        # "resnet18_poisoned_pgd_epochs_60_lr_0.1": "PGD training, poisoned",
+        "resnet18_not_poisoned_pgd_l2_epochs_60_lr_0.1_eps64_255": "PGD training L2 norm, not poisoned",
+        "resnet18_poisoned_pgd_l2_epochs_60_lr_0.1_eps64_255": "PGD training L2 norm, poisoned",
+    }
 
-    # compare_train_loss(models, "train_loss_comparison", save=True, show=False)
-    # compare_train_accs(models, "train_accuracy_comparison", save=True, show=False)
+    compare_train_loss(models, "train_loss_comparison_nat_pgd_l2", save=True, show=False)
+    compare_train_accs(models, "train_accuracy_comparison_nat_pgd_l2", save=True, show=False)
 
     lr = 0.1
 
