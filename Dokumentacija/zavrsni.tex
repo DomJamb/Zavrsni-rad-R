@@ -745,6 +745,94 @@ U slučaju da na računalu imamo prikladnu grafičku karticu, kao i instaliranu 
 koristeći PyTorch lako možemo prebacivati provođenje izračuna s procesora na grafičku karticu koja je uobičajeno specijalizirana za paralelno procesiranje.
 PyTorch nam također nudi i mogućnost provođenja izračuna sa 16-bitnim brojevima s pomičnim zarezom. Bitno je napomenuti da je za ovo potrebno imati grafičku karticu s tenzorskim jezgrama.
 
+\section{Brzo učenje s neprijateljskim primjerima - eksperimenti}
+
+Kako bismo usporedili učinkovitost različitih pristupa brzom učenju s neprijateljskim primjerima, učili smo nekolicinu mreža koristeći varirajuće hiperparametre i načine učenja.
+Sve naučene mreže arhitekture su ResNet18 i učene su 80 epoha. Kao mjeru gubitka kod svih mreža korištena je unakrsna entropija,
+a kao optimizator korišten je stohastički gradijentni spust sa zamahom (engl.\ \textit{momentum}) iznosa 0.9 i propadanjem težina iznosa $5e^{-4}$.
+Korištenje zamaha ubrzava konvergenciju modela, a korištenje propadanja težina regularizacijska je tehnika koja služi za smanjivanje složenosti modela, a time i vjerojatnosti pojave prenaučenosti.
+Kako bi što bolje reproducirali originalni rad~\cite{wong2020fast}, 
+za brzo učenje s neprijateljskim primjerima (\textit{FastAdv}) korištena je ciklička stopa učenja. Pritom stopa učenja maksimum dosegne na pola koraka učenja te se nakon toga do kraja učenja njen iznos smanjuje. 
+Važno je napomenuti da se kod cikličke stope učenja iznos stope učenja mijenja nakon svake mini-grupe, a odozdo je ograničen iznosom 0.
+Sve ostale mreže koristile su stopu učenja s kosinusnim žarenjem. Pritom je maksimalan broj koraka postavljen na ukupan broj epoha, a iznos stope učenja mijenja se nakon svake epohe.
+
+Kako bi se što više ubrzalo učenje, za učenje svih modela korišteno je računanje u mješovitoj preciznosti.
+Osim mreža učenih s neprijateljskim primjerima, za usporedbu je učena i mreža na prirodnom skupu podataka. Nakon učenja, za sve mreže izračunata je točnost na prirodnom skupu za testiranje,
+ali i točnost na neprijateljskim primjerima generiranim iz prirodnog skupa za testiranje koristeći PGD napad s 20 iteracija. 
+Pritom je PGD napad kao hiperparametre imao ograničenje perturbacije ($\epsilon$) iznosa $8/255$ te veličinu koraka ($\alpha$) iznosa $1/255$.
+Uz točnost, mjereno je i vrijeme potrebno za učenje modela.
+
+U tablici~\ref{tbl:mjerenja_robusno_ucenje} stupac \textit{LR} označava stopu učenja, stupac \textit{Točnost} točnost na skupu za testiranje, a stupac \textit{20-PGD} točnost na neprijateljskim primjerima generiranim iz skupa za testiranje koristeći PGD napad s 20 iteracija.
+Točnosti su prikazane postotkom, a vrijeme učenja prikazano je brojem minuta potrebnim za učenje pojedinog modela. Pritom su točnost, ali i vrijeme učenja zaokruženi na jedno decimalno mjesto.
+U stupcu \textit{Način učenja}, \textit{FreeAdv} predstavlja besplatno učenje, \textit{FastAdv} brzo učenje, 
+\textit{FastAdv+} nadogradnju na brzo učenje, a \textit{FastAdvW} nadogradnju na brzo učenje s korištenjem PGD metode zadnjih 10 epoha učenja.
+U slučaju da na kraju vrijednosti iz stupca \textit{Način učenja} piše \textit{Early}, korišteno je učenje s ranim završetkom.
+
+\begin{table}[htb]
+    \caption{Rezultati raznih načina brzog učenja s neprijateljskim primjerima}
+    \label{tbl:mjerenja_robusno_ucenje}
+    \centering
+    \begin{tabular}{lllll} \hline
+    Način učenja & LR & Točnost [\%] & 20-PGD [\%] & Vrijeme učenja [min]\\ \hline
+    Prirodno & 0.01 & 90.4 & 0 & 43.3 \\
+    Prirodno & 0.02 & 92.3 & 0 & 42.7 \\
+    PGD & 0.1 & 83.4 & 43.7 & 202.7 \\
+    FreeAdv & 0.1 & 84.7 & 30.8 & 25 \\
+    FastAdv & 0.2 & 89.6 & 0 & 66.5 \\
+    FastAdv, Early & 0.2 & 82.2 & 40.2 & 59.8 \\
+    FastAdv+ & 0.2 & 85.7 & 40.7 & 90.7 \\
+    FastAdv+, Early & 0.2 & 85.7 & 41.2 & 91.5 \\
+    FastAdvW & 0.2 & 85.1 & 43.2 & 115.5 \\
+    FastAdvW, Early & 0.2 & 85.3 & 42.8 & 113.4 \\ \hline
+    \end{tabular}
+\end{table}    
+
+Kao što možemo vidjeti u tablici~\ref{tbl:mjerenja_robusno_ucenje}, najvišu točnost na prirodnom skupu za testiranje ima model učen na prirodnom skupu podataka.
+Nažalost, taj model nije nimalo robustan - njegova točnost na neprijateljskim primjerima generiranim koristeći PGD metodu s 20 iteracija iznosi $0\%$.
+Kada govorimo o robusnim modelima, najvišu točnost na neprijateljskim primjerima ima model učen koristeći PGD metodu, no on se i daleko najdulje uči.
+Pritom su tijekom učenja s PGD metodom neprijateljski primjeri generirani koristeći PGD sa 7 iteracija.
+
+Od načina brzog učenja s neprijateljskim primjerima izloženih u radovima~\cite{shafahi2019adversarial},~\cite{wong2020fast} i ~\cite{li2020towards},
+najbolje performanse ima model učen koristeći \textit{FastAdvW} način učenja. Njegova točnost na prirodnom skupu za testiranje druga je najviša od svih modela koji nude određenu mjeru robusnosti,
+a njegova točnost na neprijateljskim primjerima usporediva je s točnošću modela učenog PGD metodom. 
+Važno je napomenuti da \textit{FastAdvW} modeli trebaju skoro dvostruko manje vremena za učenje naspram PGD modela, ali se nažalost uče najdulje od svih predloženih varijanti brzog učenja.
+S obzirom da \textit{FastAdvW} modeli zadnjih 10 epoha uče koristeći isključivo PGD metodu, takav rezultat je i očekivan.
+Modeli učeni koristeći \textit{FastAdv+} način učenja dobra su alternativa korištenju \textit{FastAdvW} modela jer se uče kraće i postižu malo bolje rezultate na prirodnom skupu za testiranje.
+Uočimo da korištenje ranog završetka kod \textit{FastAdv+} i \textit{FastAdvW} modela nema nikakav učinak na performanse. 
+Gledajući da je glavni cilj tih načina učenja sprječavanje pojave katastrofalne prenaučenosti prisutne kod \textit{FastAdv} modela, ovakav rezultat je očekivan, 
+a govori nam da ove nadogradnje stvarno uspijevaju spriječiti pojavu katastrofalne prenaučenosti.
+
+\pagebreak
+
+U slučaju da nam je glavni cilj brzo naučiti model koji je barem u nekoj mjeri otporan na neprijateljske primjere, kao najbolja opcija ističe se učenje koristeći \textit{FreeAdv} način učenja.
+\textit{FreeAdv} model učen je koristeći ponavljanje (engl.\ \textit{replay}) iznosa 8 pa je stoga ukupno učen 10 epoha - ukupan broj epoha smanjen je za faktor jednak ponavljanju.
+Ovaj model nudi nam konkurentnu točnost na prirodnim podacima, ali je njegova točnost na neprijateljskim primjerima niža od svih ostalih robusnih modela.
+U slučaju da smo dodatno povećali parametar ponavljanja, točnost na neprijateljskim primjerima povećavala bi se. Naravno, istovremeno bi padala točnost na prirodnim podacima.
+Dobra strana \textit{FreeAdv} modela svakako je vrijeme učenja - ovaj model uči se kraće čak i od modela učenog na prirodnom skupu podataka. 
+Ovo svojstvo pripisujemo činjenici da je tijekom učenja za \textit{FreeAdv} model potrebno provesti evaluaciju nakon epoha samo 10 puta, dok je za ostale modele potrebno provesti evaluaciju punih 80 puta.
+
+Modeli učeni \textit{FastAdv} načinom učenja ograničeni su pojavom katastrofalne prenaučenosti. 
+Ovo je veoma vidljivo kod \textit{FastAdv} modela bez ranog završetka koji postiže veoma visoku točnost na prirodnom skupu podataka, ali zato nije nimalo otporan na neprijateljske primjere.
+Korištenjem \textit{FastAdv} učenja u kombinaciji s ranim završetkom, točnost na neprijateljskim primjerima podjednaka je s točnošću \textit{FastAdv+} modela,
+ali je ovakav model ograničen zbog nemogućnosti proizvoljno dugog učenja.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.35]{../stats/stats_comparison_train_time.png}
+    \caption{Usporedba vremena učenja raznih načina brzog učenja s neprijateljskim primjerima}
+    \label{fig:train_time_comparison}
+\end{figure}
+
+\pagebreak
+
+Na slici~\ref{fig:train_time_comparison} moguće je vidjeti usporedbu vremena učenja raznih načina brzog učenja s neprijateljskim primjerima.
+Zbog usporedbe, na grafu je prikazano i vrijeme učenja modela učenog na prirodnim podatcima, kao i vrijeme učenja modela učenog PGD metodom.
+Kao što je bilo vidljivo i iz tablice~\ref{tbl:mjerenja_robusno_ucenje}, daleko najdulje vrijeme učenja ima model učen PGD metodom.
+S druge strane, najkraće vrijeme učenja ima \textit{FreeAdv} model. 
+Ako uspoređujemo modele učene koristeći \textit{FastAdv}, \textit{FastAdv+} ili \textit{FastAdvW} način učenja, najkraće vrijeme učenja ima \textit{FastAdv} model s ranim završetkom.
+Gledajući da \textit{FastAdv+} model pri uočavanju pada točnosti na neprijateljskim primjerima $s$ sljedećih mini-grupa uči koristeći PGD metodu, 
+a \textit{FastAdvW} model uz to zadnjih 10 epoha uči koristeći isključivo PGD metodu, ovakav rezultat je i očekivan.
+
 \chapter{Zaključak}
 Zaključak.
 
@@ -757,7 +845,6 @@ Sažetak na hrvatskom jeziku.
 \kljucnerijeci{Ključne riječi, odvojene zarezima.}
 \end{sazetak}
 
-% TODO: Navedite naslov na engleskom jeziku.
 \engtitle{Algorithms for fast robust training on adversarial examples}
 \begin{abstract}
 Abstract.
