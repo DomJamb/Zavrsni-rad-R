@@ -423,10 +423,11 @@ def show_stats(name, save_name, save=False, show=True):
     plt.bar(np.arange(len(test_accs)), test_accs, width=0.5, color="green")
     
     plt.xticks([r for r in range(len(test_accs))], names, rotation="vertical", fontsize=14)
-    plt.ylabel('Test accuracy', fontsize=14, labelpad=20)
-    plt.title("Test accuracy for various models", fontweight='bold', fontsize=20, pad=15)
+    plt.xlabel('Ime modela', fontsize=16, labelpad=25)
+    plt.ylabel('Točnost [%]', fontsize=16, labelpad=20)
+    plt.title("Točnost na skupu za testiranje za različite modele", fontweight='bold', fontsize=25, pad=15)
 
-    plt.subplots_adjust(bottom=0.25)
+    plt.subplots_adjust(bottom=0.3)
 
     if save:
         save_path = f"./stats/{save_name}_test_acc.png"
@@ -440,10 +441,11 @@ def show_stats(name, save_name, save=False, show=True):
     plt.bar(np.arange(len(adv_accs)), adv_accs, width=0.5, color="orange")
     
     plt.xticks([r for r in range(len(adv_accs))], names, rotation="vertical", fontsize=14)
-    plt.ylabel('Adversarial accuracy, PGD 20 steps', fontsize=14, labelpad=20)
-    plt.title("Adversarial accuracy for various models", fontweight='bold', fontsize=20, pad=15)
+    plt.xlabel('Ime modela', fontsize=16, labelpad=25)
+    plt.ylabel('Točnost [%]', fontsize=16, labelpad=20)
+    plt.title("Točnost na neprijateljskim primjerima (20-PGD) za različite modele", fontweight='bold', fontsize=25, pad=15)
 
-    plt.subplots_adjust(bottom=0.25)
+    plt.subplots_adjust(bottom=0.3)
 
     if save:
         save_path = f"./stats/{save_name}_adv_acc.png"
@@ -457,10 +459,11 @@ def show_stats(name, save_name, save=False, show=True):
     plt.bar(np.arange(len(train_times)), train_times, width=0.5, color="blue")
     
     plt.xticks([r for r in range(len(train_times))], names, rotation="vertical", fontsize=14)
-    plt.ylabel('Train time', fontsize=14, labelpad=20)
-    plt.title("Train time for various models", fontweight='bold', fontsize=20, pad=15)
+    plt.xlabel('Ime modela', fontsize=16, labelpad=25)
+    plt.ylabel('Vrijeme učenja [min]', fontsize=16, labelpad=20)
+    plt.title("Vrijeme učenja za različite modele", fontweight='bold', fontsize=25, pad=15)
 
-    plt.subplots_adjust(bottom=0.25)
+    plt.subplots_adjust(bottom=0.3)
 
     if save:
         save_path = f"./stats/{save_name}_train_time.png"
@@ -477,16 +480,17 @@ def show_stats(name, save_name, save=False, show=True):
     br2 = [x + barWidth for x in br1]
     
     plt.bar(br1, test_accs, color ='green', width = barWidth,
-            edgecolor ='grey', label ='Test accuracy')
+            edgecolor ='grey', label ='Točnost na skupu za testiranje')
     plt.bar(br2, adv_accs, color ='orange', width = barWidth,
-            edgecolor ='grey', label ='Adversarial accuracy, PGD 20 steps')
+            edgecolor ='grey', label ='Točnost na neprijateljskim primjerima (20-PGD)')
     
     plt.xticks([r + barWidth for r in range(len(test_accs))], names, rotation="vertical", fontsize=14)
-    plt.ylabel('Accuracy', fontsize=14, labelpad=20)
-    plt.title("Test accuracy and adversarial accuracy comparison for various models", fontweight='bold', fontsize=20, pad=15)
+    plt.xlabel('Ime modela', fontsize=16, labelpad=25)
+    plt.ylabel('Točnost [%]', fontsize=16, labelpad=20)
+    plt.title("Usporedba točnosti za različite modele", fontweight='bold', fontsize=25, pad=15)
     plt.legend()
 
-    plt.subplots_adjust(bottom=0.25)
+    plt.subplots_adjust(bottom=0.3)
     
     if save:
         save_path = f"./stats/{save_name}.png"
