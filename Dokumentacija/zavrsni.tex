@@ -698,9 +698,52 @@ Generirane zatrovane skupove podataka koristit ćemo za evaluaciju otpornosti ro
 
 \chapter{Eksperimenti}
 
-\section{Skup podataka CIFAR10}
+\section{Skup podataka CIFAR-10}
+
+Skup podataka CIFAR-10~\cite{krizhevsky2009learning} sastoji se od 60000 32x32 slika u boji. Svaka slika ima oznaku jednog od 10 razreda,
+a cijeli skup podataka sastoji se od 6000 slika svakog razreda. Skup podataka podijeljen je na 50000 slika u skupu za učenje i 10000 slika u skupu za testiranje.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.5]{cifar.png}
+    \caption{Primjeri slika i oznaka iz skupa podataka CIFAR-10. Preuzeto iz~\cite{krizhevsky2009learning}}
+    \label{fig:cifar10}
+\end{figure}
+
+Na slici~\ref{fig:cifar10} moguće je vidjeti razrede iz skupa podataka CIFAR-10, kao i po 10 nasumično odabranih slika iz svakog razreda.
+Svi razredi međusobno su isključivi tj.\ nijedna slika ne pojavljuje se u skupu podataka s više različitih oznaka razreda. 
+Uz CIFAR-10 skup podataka, postoji i CIFAR-100 skup podataka koji sadrži 100 različitih razreda. 
+Za provođenje eksperimenata u ovome radu korišten je CIFAR-10 skup podataka zbog brzine učenja, no metode korištene u radu lako se mogu primijeniti i na skup podataka CIFAR-100.
 
 \section{Korištene tehnologije}
+
+Za provođenje eksperimenata u ovome radu, kod je pisan u programskom jeziku Python. Osim biblioteka dostupnih u standardnom paketu biblioteka programskog jezika Python,
+korištene su biblioteke NumPy, Matplotlib i radni okvir PyTorch. Sami kod izvršavan je primarno na platformi Kaggle koristeći dvije grafičke kartice NVIDIA T4.
+
+\subsection{NumPy}
+
+NumPy je biblioteka pisana za programski jezik Python. 
+Služi za provođenje operacija na matricama i tenzorima, a nudi i implementacije brojnih matematičkih funkcija koje se lako mogu primijeniti na matrice i tenzore.
+Korištenjem biblioteke NumPy, moguće je značajno ubrzati izvođenje koda vezanog uz neuronske mreže zbog opcija provođenja operacija na tenzorima, time često eliminirajući potrebu za korištenjem klasičnih petlji.
+
+\subsection{Matplotlib}
+
+Kao i NumPy, i Matplotlib je biblioteka pisana za programski jezik Python.
+Služi za jednostavno iscrtavanje grafičkih objekata. 
+Osim klasičnih grafova, koristeći Matplotlib moguće je prikazati i slike (npr.\ slike učitane kao dio skupa podataka CIFAR-10).
+Uz iscrtavanje grafova i slika, koristeći Matplotlib iste možemo i s lakoćom pohraniti.
+
+\subsection{PyTorch}
+
+PyTorch je radni okvir pisan za programski jezik Python.
+Služi za laku izgradnju i učenje neuronskih mreža, kao i općenito provođenje izračuna s tenzorima.
+Pruža nam mogućnost automatske diferencijacije veoma značajnu za izračun gradijenta funkcije gubitka, kao i pristup brojnim optimizacijskim algoritmima, 
+ali i slojevima neuronskih mreža koje s lakoćom možemo kombinirati za izgradnju vlastitih mreža.
+
+Uz navedene mogućnosti, radni okvir PyTorch nudi nam podršku za korištenje grafičkih kartica za provođenje izračuna.
+U slučaju da na računalu imamo prikladnu grafičku karticu, kao i instaliranu prikladnu programsku podršku, 
+koristeći PyTorch lako možemo prebacivati provođenje izračuna s procesora na grafičku karticu koja je uobičajeno specijalizirana za paralelno procesiranje.
+PyTorch nam također nudi i mogućnost provođenja izračuna sa 16-bitnim brojevima s pomičnim zarezom. Bitno je napomenuti da je za ovo potrebno imati grafičku karticu s tenzorskim jezgrama.
 
 \chapter{Zaključak}
 Zaključak.
