@@ -745,7 +745,7 @@ U slučaju da na računalu imamo prikladnu grafičku karticu, kao i instaliranu 
 koristeći PyTorch lako možemo prebacivati provođenje izračuna s procesora na grafičku karticu koja je uobičajeno specijalizirana za paralelno procesiranje.
 PyTorch nam također nudi i mogućnost provođenja izračuna sa 16-bitnim brojevima s pomičnim zarezom. Bitno je napomenuti da je za ovo potrebno imati grafičku karticu s tenzorskim jezgrama.
 
-\section{Brzo učenje s neprijateljskim primjerima - eksperimenti}
+\section{Brzo učenje s neprijateljskim primjerima}
 
 Kako bismo usporedili učinkovitost različitih pristupa brzom učenju s neprijateljskim primjerima, učili smo nekolicinu mreža koristeći varirajuće hiperparametre i načine učenja.
 Sve naučene mreže arhitekture su ResNet18 i učene su 80 epoha. Kao mjeru gubitka kod svih mreža korištena je unakrsna entropija,
@@ -767,6 +767,8 @@ Točnosti su prikazane postotkom, a vrijeme učenja prikazano je brojem minuta. 
 U stupcu \textit{Način učenja}, \textit{Natural} predstavlja prirodno učenje, \textit{FreeAdv} besplatno učenje, \textit{FastAdv} brzo učenje, 
 \textit{FastAdv+} nadogradnju na brzo učenje, a \textit{FastAdvW} nadogradnju na brzo učenje s korištenjem PGD metode zadnjih 10 epoha učenja.
 U slučaju da na kraju vrijednosti iz stupca \textit{Način učenja} piše \textit{Early}, korišteno je učenje s ranim završetkom.
+
+\pagebreak
 
 \begin{table}[htb]
     \caption{Rezultati raznih načina brzog učenja s neprijateljskim primjerima}
@@ -840,7 +842,7 @@ a \textit{FastAdvW} model uz to zadnjih 10 epoha uči koristeći isključivo PGD
     \label{fig:acc_comparison}
 \end{figure}
 
-Na slici~\ref{fig:acc_comparison} moguće je vidjeti usporedbu točnosti na skupu za testiranje i točnosti na neprijateljskim primjerima generiranim iz prirodnog skupa za testiranje koristeći 20-PGD metodu.
+Na slici~\ref{fig:acc_comparison} moguće je vidjeti usporedbu točnosti na skupu za testiranje i točnosti na neprijateljskim primjerima generiranim iz prirodnog skupa za testiranje koristeći PGD metodu s 20 iteracija.
 Kao i na prethodnom grafu, i ovdje su prikazane točnosti i za model učen na prirodnim podatcima, kao i za model učen PGD metodom.
 Možemo vidjeti da najvišu točnost na prirodnom skupu imaju model učen na prirodnim podatcima i \textit{FastAdv} model kod kojeg je došlo do katastrofalne prenaučenosti.
 Istovremeno, ta dva modela ne nude nikakvu otpornost na neprijateljske primjere - njihova točnost na neprijateljskim primjerima jednaka je $0\%$.
@@ -872,6 +874,38 @@ u pitanju je katastrofalna prenaučenost od koje pate svi modeli učeni načinim
 \pagebreak
 
 Na slici~\ref{fig:fast_adv_acc} moguće je vidjeti točnost \textit{FastAdv} modela na neprijateljskim primjerima po epohama.
+Kako evaluacija tijekom učenja ne bi bila prespora, neprijateljski primjeri generirani su iz nasumično odabrane mini-grupe koristeći PGD metodu s 5 iteracija.
+Kao što smo očekivali, oko 65. epohe dolazi do velikog pada u točnosti na neprijateljskim primjerima - već epohu nakon točnost na neprijateljskim primjerima iznosi otprilike $0\%$.
+Ovime potvrđujemo da je stvarno došlo do katastrofalne prenaučenosti. Kako bismo ovo izbjegli, \textit{FastAdv} model možemo učiti s ranim završetkom. 
+Ipak, korištenje ranog završetka ograničava nas jer modele ne možemo proizvoljno dugo učiti. 
+Kao što je već prethodno rečeno, jedno od mogućih rješenja ovog problema korištenje je \textit{FastAdv+} ili \textit{FastAdvW} načina učenja.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.41]{../stats/resnet18_fast+_epochs_80_lr_0.2_early/accuracies.png}
+    \caption{Točnost \textit{FastAdv+} modela po epohama}
+    \label{fig:fast_plus_acc}
+\end{figure}
+
+Kako bismo potvrdili da korištenje \textit{FastAdv+} modela rješava problem katastrofalne prenaučenosti, 
+na slici~\ref{fig:fast_plus_acc} možemo vidjeti usporedbu točnosti na skupu za učenje i točnosti na skupu za testiranje po epohama za \textit{FastAdv+} model.
+Iako se oko 65. epohe može uočiti početak brzog porasta u točnosti na skupu za učenje, kao i istovremeni početak brzog pada u točnosti na skupu za testiranje,
+već u sljedećih nekoliko epoha točnosti se ispravljaju. 
+Mogućnost \textit{FastAdv+} modela da se oporavi od pojave katastrofalne prenaučenosti proizlazi iz kontinuiranog praćenja točnosti na neprijateljskim primjerima 
+te korištenja PGD metode za generiranje neprijateljskih primjera kada se uoči pad u točnosti.
+
+% Na slici~\ref{fig:fast_plus_adv_acc} moguće je vidjeti točnost \textit{FastAdv+} modela na neprijateljskim primjerima po epohama.
+% Za razliku od \textit{FastAdv} modela, ovdje ne uočavamo pad u točnosti na neprijateljskim primjerima. 
+% Drugim riječima, korištenjem \textit{FastAdv+} modela riješili smo problem katastrofalne prenaučenosti pa stoga modele možemo učiti proizvoljno dugo.
+
+% \begin{figure}[htb]
+%     \centering
+%     \includegraphics[scale=0.41]{../stats/resnet18_fast+_epochs_80_lr_0.2_early/adv_accuracies.png}
+%     \caption{Točnost \textit{FastAdv+} modela na neprijateljskim primjerima po epohama}
+%     \label{fig:fast_plus_adv_acc}
+% \end{figure}
+
+\section{Prelimarno istraživanje primjene učenja s neprijateljskim primjerima za detekciju zatrovanih podataka}
 
 \chapter{Zaključak}
 Zaključak.
