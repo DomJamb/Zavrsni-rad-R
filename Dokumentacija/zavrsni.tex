@@ -922,7 +922,7 @@ Pritom su svi modeli učeni 60 epoha kako bismo izbjegli pojavu katastrofalne pr
 Zatrovani skup podataka za učenje, kao i zatrovani skup za testiranje, generirani su iz prirodnog CIFAR-10 skupa podataka koristeći \textit{BadNets} 
 alat iz skupa alata \textit{BackdoorBox}. Pritom je za skup za učenje stopa trovanja iznosila 0.3, a za skup za testiranje 1. Stopa trovanja određuje koliki će postotak podataka iz originalnog skupa biti zatrovan.
 I za skup za učenje i za skup za testiranje kao ciljni razred odabran je razred \textit{automobile}. 
-U slučaju da na ulaznoj slici postoji okidač, model koji ga je tijekom učenja naučio takvu sliku klasificirati će u razred \textit{automobile}.
+U slučaju da na ulaznoj slici postoji okidač, model koji ga je tijekom učenja naučio takvu sliku klasificirat će u razred \textit{automobile}.
 Arhitektura modela, mjera gubitka, optimizator i hiperparametri za učenje jednaki su kao i u prethodnim eksperimentima. 
 Kao i prije, svi modeli osim \textit{FastAdv} modela učeni su koristeći stopu učenja s kosinusnim žarenjem, dok \textit{FastAdv} modeli koriste cikličku stopu učenja.
 Osim na zatrovanom skupu podataka, svi modeli učeni su i na prirodnom skupu podataka.
@@ -930,6 +930,7 @@ Osim na zatrovanom skupu podataka, svi modeli učeni su i na prirodnom skupu pod
 Kao i prije, u tablici~\ref{tbl:mjerenja_robusno_ucenje_zatrovano} stupac \textit{Način učenja} označava korišteni način učenja modela. Ako je na kraju naziva načina učenja 
 riječ \textit{Poison}, model je učen na zatrovanom skupu podataka. Stupac \textit{Točnost} ponovno označava točnost na prirodnom skupu podataka, a stupac \textit{Točnost, otrov}
 označava točnost na zatrovanom skupu podataka. Iznosi točnosti, kao i vremena učenja zaokruženi su na jedno decimalno mjesto.
+
 \begin{table}[htb]
     \caption{Rezultati raznih načina učenja na zatrovanom i prirodnom skupu podataka}
     \label{tbl:mjerenja_robusno_ucenje_zatrovano}
@@ -983,7 +984,7 @@ Pošto je za modele učene na zatrovanim podatcima prikazana točnost na upravo 
 
 S druge strane, točnosti za PGD modele na početku se značajno razlikuju. 
 Kada je u pitanju \textit{PGD} model učen na zatrovanim podatcima, oko 1000. mini-grupe dolazi do brzog skoka u točnosti.
-Ovu pojavu interpetiramo kao trenutak kada \textit{PGD} model nauči prepoznavati okidač - nakon tog trenutka, njegova točnost na zatrovanim podatcima krene brzo rasti, 
+Ovu pojavu interpretiramo kao trenutak kada \textit{PGD} model nauči prepoznavati okidač - nakon tog trenutka, njegova točnost na zatrovanim podatcima krene brzo rasti, 
 a pritom se rast u točnosti podudara s rastom točnosti \textit{PGD} modela učenog na prirodnom skupu podataka.
 Iako naučeni model nema moć detektiranja zatrovanih podataka, mogli bismo reći da se na početku učenja model "opire" učenju okidača.
 U tom periodu, modelova točnost na zatrovanim podatcima stagnira, no nakon otprilike 1000. mini-grupe, modelova točnost na zatrovanim podatcima započinje svoj brzi rast. 
