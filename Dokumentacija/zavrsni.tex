@@ -808,8 +808,8 @@ a govori nam da ove nadogradnje stvarno uspijevaju u svojoj namjeri.
 
 U slučaju da nam je glavni cilj brzo naučiti model koji je barem u nekoj mjeri otporan na neprijateljske primjere, kao najbolja opcija ističe se učenje koristeći \textit{FreeAdv} način učenja.
 \textit{FreeAdv} model učen je koristeći ponavljanje (engl.\ \textit{replay}) iznosa 8 pa je stoga ukupno učen 10 epoha - ukupan broj epoha smanjen je za faktor jednak ponavljanju.
-Ovaj model nudi nam konkurentnu točnost na prirodnim podacima, ali je njegova točnost na neprijateljskim primjerima niža od svih ostalih robusnih modela.
-U slučaju da dodatno povećamo iznos parametra ponavljanja, točnost na neprijateljskim primjerima povećala bi se. Naravno, istovremeno bi došlo do pada točnosti na prirodnim podacima.
+Ovaj model nudi nam konkurentnu točnost na prirodnim podatcima, ali je njegova točnost na neprijateljskim primjerima niža od svih ostalih robusnih modela.
+U slučaju da dodatno povećamo iznos parametra ponavljanja, točnost na neprijateljskim primjerima povećala bi se. Naravno, istovremeno bi došlo do pada točnosti na prirodnim podatcima.
 Dobra strana \textit{FreeAdv} modela svakako je vrijeme učenja - ovaj model uči se kraće čak i od modela učenog na prirodnom skupu podataka. 
 Toliku kratkoću učenja pripisujemo činjenici da je tijekom učenja za \textit{FreeAdv} model potrebno provesti evaluaciju nakon epoha samo 10 puta, dok je za ostale modele potrebno provesti evaluaciju punih 80 puta.
 
@@ -908,7 +908,7 @@ te korištenja PGD metode za generiranje neprijateljskih primjera kada se uoči 
 \section{Prelimarno istraživanje primjene učenja s neprijateljskim primjerima za detekciju zatrovanih podataka}
 
 Robusni modeli nude nam određenu mjeru otpornosti na neprijateljske primjere. 
-Ipak, značajniji problem predstavljaju nam zatrovani podaci ubačeni u skup za učenje jer zbog njih model može imati lošije performanse, a i služiti kao stražnja vrata napadačima.
+Ipak, značajniji problem predstavljaju nam zatrovani podatci ubačeni u skup za učenje jer zbog njih model može imati lošije performanse, a i služiti kao stražnja vrata napadačima.
 Obični, nerobusni modeli tijekom učenja na zatrovanom skupu podataka veoma brzo nauče prepoznavati okidač, time postajući ranjivi.
 Idealno, modeli učeni s neprijateljskim primjerima pokazivali bi određenu mjeru otpornosti na zatrovane podatke.
 
@@ -945,11 +945,67 @@ označava točnost na zatrovanom skupu podataka. Iznosi točnosti, kao i vremena
     \end{tabular}
 \end{table}
 
-Kao što možemo vidjeti u tablici~\ref{tbl:mjerenja_robusno_ucenje_zatrovano}, svi modeli učeni na prirodnom skupu podataka imaju točnost na zatrovanim podacima iznosa otprilike $10\%$.
+Kao što možemo vidjeti u tablici~\ref{tbl:mjerenja_robusno_ucenje_zatrovano}, svi modeli učeni na prirodnom skupu podataka imaju točnost na zatrovanim podatcima iznosa otprilike $10\%$.
 Ovaj rezultat interpretiramo tako da modeli učeni na prirodnom skupu ispravno klasificiraju većinu zatrovanih slika koje uistinu i potječu iz ciljnog razreda, pritom se ne obazirući na okidač.
 Modeli učeni na zatrovanom skupu podataka imaju malo nižu točnost na prirodnom skupu, ali i veoma visoku točnost na zatrovanim podatcima. 
 Visoka točnost na zatrovanim podatcima govori nam da su svi modeli učeni na zatrovanom skupu naučili okidač. 
 Drugim riječima, čak ni robusni modeli poput \textit{PGD} modela nisu otporni na zatrovane podatke.
+
+\pagebreak
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.41]{../stats/resnet18_poisoned_pgd_epochs_60_lr_0.1/stats_comparison.png}
+    \caption{Usporedba točnosti zatrovanog \textit{PGD} modela po epohama}
+    \label{fig:pgd_poisoned_acc}
+\end{figure}
+
+Na slici~\ref{fig:pgd_poisoned_acc} moguće je vidjeti usporedbu točnosti na zatrovanom skupu za učenje, točnosti na skupu za testiranje i točnosti na zatrovanom skupu za testiranje 
+za \textit{PGD} model učen na zatrovanom skupu podataka. Već u prvih nekoliko epoha, točnost na zatrovanom skupu za testiranje stabilizira se na iznosu od skoro $100\%$ te do kraja učenja neznatno pada.
+Točnost na skupu za testiranje već oko 20. epohe dostigne svoj vrhunac, dok točnost na zatrovanom skupu za učenje kontinuirano raste. Da je ovaj model u mogućnosti detektirati zatrovane podatke,
+očekivali bismo značajno nižu točnost na zatrovanom skupu za testiranje, kao i višu točnost na prirodnom skupu za testiranje. 
+Ipak, postoji mogućnost da promatranje točnosti na razini epoha nije dovoljno precizno. Zbog ovoga ćemo dodatno pogledati točnost na zatrovanom skupu za učenje po mini-grupama.
+
+Na slici~\ref{fig:pgd_nat_poisoned_comparison} moguće je vidjeti usporedbu točnosti na skupu za učenje po mini-grupama za 4 različita modela.
+Modeli u čijem nazivu se nalazi riječ \textit{poisoned} učeni su na zatrovanom skupu podataka pa je stoga na slici za iste prikazana točnost na zatrovanom skupu za učenje.
+Za preostale modele, na slici je prikazana točnost na prirodnom skupu za učenje.
+Prirodni model učen na zatrovanim podatcima po točnosti je gotovo nerazlučiv od prirodnog modela učenog na prirodnim podatcima.
+Pošto je za modele učene na zatrovanim podatcima prikazana točnost na upravo tim podatcima, iz grafa saznajemo da prirodni model gotovo odmah nauči prepoznavati okidač.
+
+\pagebreak
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.41]{../stats/train_accuracy_comparison_nat_pgd.png}
+    \caption{Usporedba točnosti po mini-grupama za prirodne modele i \textit{PGD} modele}
+    \label{fig:pgd_nat_poisoned_comparison}
+\end{figure}
+
+S druge strane, točnosti za PGD modele na početku se značajno razlikuju. 
+Kada je u pitanju \textit{PGD} model učen na zatrovanim podatcima, oko 1000. mini-grupe dolazi do brzog skoka u točnosti.
+Ovu pojavu interpetiramo kao trenutak kada \textit{PGD} model nauči prepoznavati okidač - nakon tog trenutka, njegova točnost na zatrovanim podatcima krene brzo rasti, 
+a pritom se rast u točnosti podudara s rastom točnosti \textit{PGD} modela učenog na prirodnom skupu podataka.
+Iako naučeni model nema moć detektiranja zatrovanih podataka, mogli bismo reći da se na početku učenja model "opire" učenju okidača.
+U tom periodu, modelova točnost na zatrovanim podatcima stagnira, no nakon otprilike 1000. mini-grupe, modelova točnost na zatrovanim podatcima započinje svoj brzi rast. 
+Kako bismo vidjeli događa li se ovo samo kada je u pitanju učenje \textit{PGD} modela, promotrit ćemo i usporedbu točnosti po mini-grupama prirodnih modela i \textit{FastAdv} modela.
+
+Kao i na prethodnoj slici, i na slici~\ref{fig:fast_nat_poisoned_comparison} moguće je vidjeti usporedbu točnosti na skupu za učenje po mini-grupama.
+Pritom su \textit{PGD} modeli zamijenjeni \textit{FastAdv} modelima kako bi proučili događa li se i kod ovog načina učenja brzi rast točnosti na zatrovanom skupu za učenje.
+Možemo uočiti da se i kod \textit{FastAdv} modela događa ista pojava - model učen na zatrovanim podatcima na početku se "opire" učenju okidača.
+Kao i kod \textit{PGD} modela, u tom periodu točnost \textit{FastAdv} modela na zatrovanim podatcima stagnira, no nakon nekog vremena, njen iznos počinje brzo rasti.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.41]{../stats/train_accuracy_comparison_nat_fast.png}
+    \caption{Usporedba točnosti po mini-grupama za prirodne modele i \textit{FastAdv} modele}
+    \label{fig:fast_nat_poisoned_comparison}
+\end{figure}
+
+Prema dobivenim rezultatima, ni \textit{PGD} modeli, a ni \textit{FastAdv} modeli učeni na zatrovanim podatcima nemaju mogućnost detekcije zatrovanih podataka.
+Ipak, pojava vrlo brzog rasta točnosti na zatrovanom skupu za učenje kod robusnih modela veoma je zanimljiva.
+U slučaju da otprilike znamo kako bi se trebala povećavati točnost na skupu za učenje za model koji učimo, 
+praćenjem točnosti po mini-grupama potencijalno bismo mogli detektirati trenutak kada model nauči prepoznavati okidač. 
+Ako uspijemo detektirati takav trenutak, možemo reći da su u skup za učenje vjerojatno ubačeni zatrovani podatci.
 
 \chapter{Zaključak}
 Zaključak.
