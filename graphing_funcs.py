@@ -108,14 +108,17 @@ def compare_stats(name, model_name, save=False, show=True):
             test_poisoned_acc.append(data[key]["test_poisoned_accuracy"])
 
     # Plot the data
-    plt.plot(range(1, num_of_epochs+1), np.array(train_loss), label="Train loss")
-    plt.plot(range(1, num_of_epochs+1), np.array(train_acc), label="Train accuracy")
-    plt.plot(range(1, num_of_epochs+1), np.array(test_not_poisoned_acc), label="Test accuracy, not poisoned data")
-    plt.plot(range(1, num_of_epochs+1), np.array(test_poisoned_acc), label="Test accuracy, poisoned data")
+    # plt.plot(range(1, num_of_epochs+1), np.array(train_loss), label="Gubitak na skupu za učenje")
+    plt.plot(range(1, num_of_epochs+1), np.array(train_acc), label="Točnost na skupu za učenje")
+    plt.plot(range(1, num_of_epochs+1), np.array(test_not_poisoned_acc), label="Točnost na skupu za testiranje")
+    plt.plot(range(1, num_of_epochs+1), np.array(test_poisoned_acc), label="Točnost na zatrovanom skupu za testiranje")
 
-    plt.xlabel("Epochs", labelpad=10, fontsize=12)
-    plt.title(f"Stats comparison for model {model_name}", fontsize=20)
-    plt.legend(fontsize=12)
+    plt.xlabel("Epohe", fontsize=18, labelpad=20)
+    plt.ylabel("Točnost [%]", fontsize=18, labelpad=20)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
+    plt.title(f"Usporedba performansi modela {model_name}", fontweight='bold', fontsize=25, pad=15)
+    plt.legend(fontsize=16)
 
     if save:
         save_path = f"./stats/{name}/stats_comparison.png"

@@ -907,6 +907,50 @@ te korištenja PGD metode za generiranje neprijateljskih primjera kada se uoči 
 
 \section{Prelimarno istraživanje primjene učenja s neprijateljskim primjerima za detekciju zatrovanih podataka}
 
+Robusni modeli nude nam određenu mjeru otpornosti na neprijateljske primjere. 
+Ipak, značajniji problem predstavljaju nam zatrovani podaci ubačeni u skup za učenje jer zbog njih model može imati lošije performanse, a i služiti kao stražnja vrata napadačima.
+Obični, nerobusni modeli tijekom učenja na zatrovanom skupu podataka veoma brzo nauče prepoznavati okidač, time postajući ranjivi.
+Idealno, modeli učeni s neprijateljskim primjerima pokazivali bi određenu mjeru otpornosti na zatrovane podatke.
+
+Kako bismo provjerili imaju li robusni modeli doista mogućnost detekcije zatrovanih podataka,
+učili smo \textit{PGD} modele, kao i \textit{FastAdv} modele. \textit{PGD} modeli odabrani su zbog visoke otpornosti na neprijateljske primjere,
+a \textit{FastAdv} modeli odabrani su zbog veoma kratkog trajanja učenja. Uz robusne modele, učeni su i prirodni modeli.
+Pritom su svi modeli učeni 60 epoha kako bismo izbjegli pojavu katastrofalne prenaučenosti do koje često dolazi u kasnijim epohama učenja \textit{FastAdv} modela. 
+
+\pagebreak
+
+Zatrovani skup podataka za učenje, kao i zatrovani skup za testiranje, generirani su iz prirodnog CIFAR-10 skupa podataka koristeći \textit{BadNets} 
+alat iz skupa alata \textit{BackdoorBox}. Pritom je za skup za učenje stopa trovanja iznosila 0.3, a za skup za testiranje 1. Stopa trovanja određuje koliki će postotak podataka iz originalnog skupa biti zatrovan.
+I za skup za učenje i za skup za testiranje kao ciljni razred odabran je razred \textit{automobile}. 
+U slučaju da na ulaznoj slici postoji okidač, model koji ga je tijekom učenja naučio takvu sliku klasificirati će u razred \textit{automobile}.
+Arhitektura modela, mjera gubitka, optimizator i hiperparametri za učenje jednaki su kao i u prethodnim eksperimentima. 
+Kao i prije, svi modeli osim \textit{FastAdv} modela učeni su koristeći stopu učenja s kosinusnim žarenjem, dok \textit{FastAdv} modeli koriste cikličku stopu učenja.
+Osim na zatrovanom skupu podataka, svi modeli učeni su i na prirodnom skupu podataka.
+
+Kao i prije, u tablici~\ref{tbl:mjerenja_robusno_ucenje_zatrovano} stupac \textit{Način učenja} označava korišteni način učenja modela. Ako je na kraju naziva načina učenja 
+riječ \textit{Poison}, model je učen na zatrovanom skupu podataka. Stupac \textit{Točnost} ponovno označava točnost na prirodnom skupu podataka, a stupac \textit{Točnost, otrov}
+označava točnost na zatrovanom skupu podataka. Iznosi točnosti, kao i vremena učenja zaokruženi su na jedno decimalno mjesto.
+\begin{table}[htb]
+    \caption{Rezultati raznih načina učenja na zatrovanom i prirodnom skupu podataka}
+    \label{tbl:mjerenja_robusno_ucenje_zatrovano}
+    \centering
+    \begin{tabular}{lllll} \hline
+    Način učenja & LR & Točnost [\%] & Točnost, otrov [\%] & Vrijeme učenja [min]\\ \hline
+    Natural & 0.02 & 86 & 10.2 & 27.1 \\
+    Natural, Poison & 0.02 & 81.7 & 98.2 & 29.1 \\
+    PGD & 0.1 & 79.2 & 9.9 & 144.6 \\
+    PGD, Poison & 0.1 & 76.3 & 97.6 & 146.4 \\
+    FastAdv & 0.2 & 79.6 & 9.9 & 44.1 \\
+    FastAdv, Poison & 0.2 & 75.8 & 97.6 & 51.4 \\ \hline
+    \end{tabular}
+\end{table}
+
+Kao što možemo vidjeti u tablici~\ref{tbl:mjerenja_robusno_ucenje_zatrovano}, svi modeli učeni na prirodnom skupu podataka imaju točnost na zatrovanim podacima iznosa otprilike $10\%$.
+Ovaj rezultat interpretiramo tako da modeli učeni na prirodnom skupu ispravno klasificiraju većinu zatrovanih slika koje uistinu i potječu iz ciljnog razreda, pritom se ne obazirući na okidač.
+Modeli učeni na zatrovanom skupu podataka imaju malo nižu točnost na prirodnom skupu, ali i veoma visoku točnost na zatrovanim podatcima. 
+Visoka točnost na zatrovanim podatcima govori nam da su svi modeli učeni na zatrovanom skupu naučili okidač. 
+Drugim riječima, čak ni robusni modeli poput \textit{PGD} modela nisu otporni na zatrovane podatke.
+
 \chapter{Zaključak}
 Zaključak.
 

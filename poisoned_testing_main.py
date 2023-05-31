@@ -988,36 +988,36 @@ if __name__ == "__main__":
     # ResNet18 PGD L2 norm, max eps, poisoned (generating adversarial examples with L2 norm)
     ##############################################################################
     
-    model = ResidualNetwork18().to(device)
-    model_name = f"resnet18_poisoned_pgd_l2_epochs_60_lr_0.1_eps512_255"
-    model_save_path= f"./models/{model_name}.pt"
-    model.load_state_dict(torch.load(model_save_path))
+    # model = ResidualNetwork18().to(device)
+    # model_name = f"resnet18_poisoned_pgd_l2_epochs_60_lr_0.1_eps512_255"
+    # model_save_path= f"./models/{model_name}.pt"
+    # model.load_state_dict(torch.load(model_save_path))
 
-    loss_calc = nn.CrossEntropyLoss()
+    # loss_calc = nn.CrossEntropyLoss()
 
-    x, y = next(iter(poisoned_test_loader))
-    _, y_true = next(iter(test_loader))
+    # x, y = next(iter(poisoned_test_loader))
+    # _, y_true = next(iter(test_loader))
 
-    x = x.to(device)
-    y = y.to(device)
+    # x = x.to(device)
+    # y = y.to(device)
 
-    eps=512/255
-    alpha=64/255
+    # eps=512/255
+    # alpha=64/255
 
-    adv_x = attack_pgd_l2(model, x, y, eps=eps, alpha=alpha, steps=20, device=device).to(device)
+    # adv_x = attack_pgd_l2(model, x, y, eps=eps, alpha=alpha, steps=20, device=device).to(device)
 
-    adv_y_ = model(adv_x)
-    _, adv_y_ = adv_y_.max(1)
+    # adv_y_ = model(adv_x)
+    # _, adv_y_ = adv_y_.max(1)
 
-    y_ = model(x)
-    _, y_ = y_.max(1)
+    # y_ = model(x)
+    # _, y_ = y_.max(1)
 
-    adv_dict = dict()
-    for i in range(len(y_true)):
-        if(classes_map[y_true[i].item()] in list(adv_dict.keys())):
-            continue
-        adv_dict.update({classes_map[y_true[i].item()]: [AdvExampleVerbose(classes_map[y_[i].item()], classes_map[adv_y_[i].item()], x[i].cpu().numpy(), adv_x[i].cpu().numpy())]})
-        if len(list(adv_dict.keys())) == 3:
-            break
+    # adv_dict = dict()
+    # for i in range(len(y_true)):
+    #     if(classes_map[y_true[i].item()] in list(adv_dict.keys())):
+    #         continue
+    #     adv_dict.update({classes_map[y_true[i].item()]: [AdvExampleVerbose(classes_map[y_[i].item()], classes_map[adv_y_[i].item()], x[i].cpu().numpy(), adv_x[i].cpu().numpy())]})
+    #     if len(list(adv_dict.keys())) == 3:
+    #         break
     
-    graph_poisoned_examples(adv_dict, f"poisoned_adv_examples_l2_eps_{int(eps*255)}_255", save=True, show=False)
+    # graph_poisoned_examples(adv_dict, f"poisoned_adv_examples_l2_eps_{int(eps*255)}_255", save=True, show=False)
