@@ -1036,16 +1036,33 @@ U slučaju da se pokaže da ovo svojstvo imaju svi robusni modeli učeni na zatr
 \bibliographystyle{fer}
 
 \begin{sazetak}
-Sažetak na hrvatskom jeziku.
 
-\kljucnerijeci{Ključne riječi, odvojene zarezima.}
+Učenje s neprijateljskim primjerima važno je za postizanje sigurnih modela. 
+Proučavamo osnovne načine učenja s neprijateljskim primjerima (\textit{FGSM}, \textit{PGD}). 
+Uočavamo i istražujemo probleme prisutne pri korištenju \textit{PGD} načina učenja na kompleksnijim modelima.
+Razmatramo predložene nadogradnje na osnovne načine učenja s neprijateljskim primjerima (\textit{FreeAdv}, \textit{FastAdv}, \textit{FastAdv+}, \textit{FastAdvW}) i evaluiramo performanse naučenih modela.
+Evaluacija pokazuje da najbolje performanse postižu modeli učeni \textit{FastAdv+} i \textit{FastAdvW} načinima učenja.
+Razmatramo mogućnost korištenja robusnih modela za detekciju zatrovanih podataka.
+% Eksperimentima pokazujemo da osnovni robusni modeli ne nude mogućnost detekcije zatrovanih podataka, ali iskazuju nagli rast u točnosti na zatrovanom skupu za učenje kada se točnost prati po mini-grupama.
+% Ovo svojstvo potencijalno bi se moglo koristiti kao detektor postojanja zatrovanih podataka.
+
+\kljucnerijeci{robusni modeli, učenje s neprijateljskim primjerima, \textit{FGSM}, \textit{PGD}, besplatno učenje s neprijateljskim primjerima, brzo učenje s neprijateljskim primjerima, zatrovani podatci}
 \end{sazetak}
 
-\engtitle{Algorithms for fast robust training on adversarial examples}
+\engtitle{Algorithms for fast adversarial learning}
 \begin{abstract}
-Abstract.
+Adversarial learning is important for achieving secure models.
+We study the basic adversarial learning methods (\textit{FGSM}, \textit{PGD}).
+We observe and investigate the problems present when using the \textit{PGD} learning method on more complex models.
+We consider proposed upgrades to the basic adversarial learning method (\textit{FreeAdv}, \textit{FastAdv}, \textit{FastAdv+}, \textit{FastAdvW}) 
+and evaluate the performance of the trained models.
+The evaluation shows that the best performance is achieved by models trained using the \textit{FastAdv+} and \textit{FastAdvW} learning methods.
+We consider the possibility of using robust models for the detection of poisoned data.
+% We experimentally show that the basic robust models do not offer the possibility of detecting poisoned data,
+% but show a sharp increase in accuracy on the poisoned learning set when the accuracy is monitored by mini-groups.
+% This property could potentially be used as a detector for the presence of poisoned data.
 
-\keywords{Keywords.}
+\keywords{robust models, adversarial learning, \textit{FGSM}, \textit{PGD}, free adversarial learning, fast adversarial learning, poisoned data}
 \end{abstract}
 
 \end{document}
