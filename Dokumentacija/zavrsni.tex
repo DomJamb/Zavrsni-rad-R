@@ -362,11 +362,11 @@ Pritom skup podataka dijelimo na 2 ili 3 skupa:
 Skup za učenje modelu predočavamo kako bi na temelju njega mogao poboljšavati svoje parametre tj.\ učiti. 
 S druge strane, skup za provjeru koristimo za poboljšavanje hiperparametara modela (npr.\ stopa učenja modela). 
 U slučaju da smo sigurni u dobar odabir hiperparametara modela, korištenje ovog skupa nije nužno. 
-Nakon postupka učenja, koristeći skup za testiranje evaluiramo model.
+Nakon postupka učenja, koristeći skup za testiranje evaluiramo model kako bismo dobili procjenu njegove generalizacijske pogreške.
 
 Općenito govoreći, model će na skupu za testiranje postizati lošije rezultate naspram rezultata na skupu za učenje. 
 Ako model dobro generalizira, razlika između rezultata na ta dva skupa neće biti veoma značajna. 
-Ipak, u zadnjih desetak godina otkriveni su ulazi koje i modeli koji inače pokazuju mogućnost generalizacije loše klasificiraju.
+Ipak, u zadnjih desetak godina otkriveni su načini za konstrukciju ulaznih slika koje će zadani model vrlo loše klasificirati iako na većini prirodnih slika dobro generalizira. 
 Takve ulaze zvat ćemo neprijateljski primjeri~\cite{goodfellow2014explaining}.
 
 \pagebreak
@@ -384,12 +384,12 @@ U ovom slučaju iznos perturbacije dobiven je kao umnožak malog pozitivnog koef
 Iako je izmijenjeni ulaz ljudima gotovo identičan, model ovaj ulaz krivo klasificira, a pritom je veoma siguran u svoju odluku.
 Ovo svojstvo iskazali su brojni modeli te je zbog toga u zadnjih desetak godina porastao interes za proučavanjem neprijateljskih primjera.
 
-\section{Načini generiranja neprijateljskih primjera}
+\section{Konstrukcija neprijateljskih primjera}
 
-Neprijateljske primjere moguće je generirati na različite načine. 
-Načine generiranja neprijateljskih primjera zovemo napadima, a možemo ih podijeliti na usmjerene i neusmjerene napade.
-Usmjereni napadi kao cilj imaju generiranje neprijateljskih primjera koje će napadnuti model klasificirati u točno jedan ciljni razred,
-dok neusmjereni napadi kao cilj imaju generiranje neprijateljskih primjera koje će napadnuti model što lošije klasificirati, neovisno o konkretnom razredu.
+Neprijateljske primjere moguće je konstruirati na različite načine. 
+Načine konstrukcije neprijateljskih primjera zovemo napadima, a možemo ih podijeliti na usmjerene i neusmjerene napade.
+Usmjereni napadi kao cilj imaju konstrukciju neprijateljskih primjera koje će napadnuti model klasificirati u točno jedan ciljni razred,
+dok neusmjereni napadi kao cilj imaju konstrukciju neprijateljskih primjera koje će napadnuti model što lošije klasificirati, neovisno o konkretnom razredu.
 Pronalaženje neprijateljskih primjera zapravo je optimizacijski problem koji možemo prikazati sljedećim izrazom:
 
 \begin{equation}
@@ -397,34 +397,49 @@ Pronalaženje neprijateljskih primjera zapravo je optimizacijski problem koji mo
     \label{eq:adversarial_optimization}
 \end{equation}
 \\
-pri čemu $\delta$ označava iznos perturbacije u intervalu određenim s granicama $[-\epsilon, \epsilon]$, $L(x,y;\theta)$ funkciju gubitka, a $\theta$ parametre modela.
+Pritom $\delta$ označava iznos perturbacije u intervalu određenim s granicama $[-\epsilon, \epsilon]$, $L(x,y;\theta)$ funkciju gubitka, a $\theta$ parametre modela.
 Drugim riječima, cilj nam je naći perturbaciju omeđenu određenim iznosom takvu da je iznos funkcije gubitka za ulaz izmijenjen tom perturbacijom maksimalan.
-Iznos perturbacije najčešće je omeđen L\textsubscript{$\infty$}-normom, no isti može biti omeđen i L\textsubscript{2}-normom ili L\textsubscript{1}-normom.
+Iznos perturbacije najčešće je omeđen L\textsubscript{$\infty$}-normom, no može biti omeđen i L\textsubscript{2}-normom ili L\textsubscript{1}-normom. 
 
-Postoje brojni načini generiranja neprijateljskih primjera. 
-Neki od najpoznatijih su FGSM (engl.\ \textit{Fast Gradient Sign Method})~\cite{goodfellow2014explaining} i PGD (engl.\ \textit{Projected Gradient Descent})~\cite{madry2017towards} napadi.
-Primjer sa slike~\ref{fig:adv_example} zapravo je neprijateljski primjer generiran koristeći FGSM napad, a neprijateljske primjere generirane koristeći taj napad sažeto možemo opisati jednadžbom:
+U slučaju vektorskog prostora, L\textsubscript{$\infty$}-norma bit će jednaka iznosu najveće apsolutne vrijednosti komponente vektora, L\textsubscript{2}-norma euklidskoj udaljenosti vektora od ishodišta, a L\textsubscript{1}-norma sumi iznosa apsolutnih vrijednosti svih komponenti vektora.
+Općenito govoreći, L\textsubscript{p} normu možemo definirati sljedećom formulom:
 
 \begin{equation}
-    x := x + \epsilon \cdot sign(\nabla_{x}L(x,y;\theta))
+    \lVert x \rVert_{p} = \sqrt[p]{\sum_{i = 1}^{n}|x_{i}|^p}
+    \label{eq:lpnorm}
+\end{equation}
+\\
+Formula~\ref{eq:lpnorm} vrijedi za proizvoljan broj $p$ veći od 0. Ipak, L\textsubscript{$\infty$}-normu uobičajeno definiramo zasebnom formulom:
+
+\begin{equation}
+    \lVert x \rVert_{\infty} = \max_{i}(|x_{i}|)
+    \label{eq:linfnorm}
+\end{equation}
+\\
+Postoje brojni načini konstrukcije neprijateljskih primjera. 
+Neki od najpoznatijih napada poznati su pod nazivima FGSM (engl.\ \textit{Fast Gradient Sign Method})~\cite{goodfellow2014explaining} i PGD (engl.\ \textit{Projected Gradient Descent})~\cite{madry2017towards} napadi.
+Primjer sa slike~\ref{fig:adv_example} zapravo je neprijateljski primjer konstruiran napadom FGSM, a tako dobivene neprijateljske primjere sažeto možemo opisati jednadžbom:
+
+\begin{equation}
+    x_{adv} := x + \epsilon \cdot sign(\nabla_{x}L(x,y;\theta))
     \label{eq:fgsm}
 \end{equation}
 \\
-pri čemu $\epsilon$ predstavlja mali pozitivan broj koji određuje veličinu perturbacije, a $sign(x)$ predznak od $x$. 
-FGSM napad originalnom ulazu pridodaje iznos istog predznaka kao i gradijent funkcije gubitka, time osiguravajući najveći mogući rast iznosa funkcije gubitka. 
-U slučaju neusmjerenog napada, napad bi pokušavao što više smanjiti iznos funkcije gubitka s obzirom na proizvoljan razred.
+Pritom $\epsilon$ predstavlja mali pozitivan broj koji određuje veličinu perturbacije, $x$ ulazni podatak, $sign(x)$ predznak od $x$, a $x_{adv}$ konstruirani neprijateljski primjer. 
+FGSM napad originalnom ulazu pridodaje iznos istog predznaka kao i gradijent funkcije gubitka. Na taj način osigurava se najveći mogući rast iznosa funkcije gubitka. 
+Ovakav napad zovemo neusmjerenim napadom, a uz njega postoji i usmjereni napad. U slučaju usmjerenog napada, cilj je što više smanjiti iznos funkcije gubitka s obzirom na proizvoljan razred.
 
 Uz FGSM napad, postoji i napad koji iterativno stvara značajno učinkovitije neprijateljske primjere. 
 Tu vrstu napada zovemo PGD napad, a zasniva se na istoj ideji kao i FGSM napad. 
 Za razliku od FGSM-a, PGD napad iterativno ponavlja postupak, time pokušavajući odrediti najbolje rješenje optimizacijskog problema~\ref{eq:adversarial_optimization}.
-Uz to, PGD napad tijekom generiranja neprijateljskih primjera osigurava da ukupna perturbacija nije veća od unaprijed definiranog koeficijenta $\epsilon$.
+Uz to, PGD napad tijekom konstruiranja neprijateljskih primjera osigurava da ukupna perturbacija nije veća od unaprijed definiranog koeficijenta $\epsilon$.
 
 \begin{algorithm}
-    \caption{Generiranje neprijateljskih primjera koristeći PGD napad}
+    \caption{Konstrukcija neprijateljskih primjera koristeći PGD napad}
     \label{algo:pgd}
     \begin{algorithmic}
-        \STATE{\textbf{Ulaz:} $x$ -- ulazne slike, $y$ -- ispravne oznake ulaznih slika, $\epsilon$ -- ograničenje perturbacije, $\alpha$ -- veličina koraka po iteraciji, $K$ -- broj iteracija za generiranje neprijateljskih primjera}
-        \STATE{\textbf{Izlaz:} $x_{adv}$ -- neprijateljski primjeri generirani PGD napadom}
+        \STATE{\textbf{Ulaz:} $x$ -- ulazne slike, $y$ -- ispravne oznake ulaznih slika, $\epsilon$ -- ograničenje perturbacije, $\alpha$ -- veličina koraka po iteraciji, $K$ -- broj iteracija za konstrukciju neprijateljskih primjera}
+        \STATE{\textbf{Izlaz:} $x_{adv}$ -- neprijateljski primjeri konstruirani PGD napadom}
         \\\hrulefill
         \STATE{$\delta = U(-\epsilon, \epsilon)$}
         \FOR{($i = 1 \dots K$)}
@@ -439,36 +454,36 @@ Uz to, PGD napad tijekom generiranja neprijateljskih primjera osigurava da ukupn
 
 \pagebreak
 
-Pseudokod~\ref{algo:pgd} prikazuje način generiranja neprijateljskih primjera koristeći PGD napad. 
+Pseudokod~\ref{algo:pgd} prikazuje način konstrukcije neprijateljskih primjera koristeći PGD napad. 
 Perturbacija $\delta$ na početku je inicijalizirana koristeći uniformnu distribuciju s rasponom $[-\epsilon, \epsilon]$, 
 a na kraju svake iteracije iznos perturbacije ograničava se koristeći funkciju \textit{clamp}. 
 Naravno, postoje brojni načini inicijalizacije iznosa perturbacije, no nasumična inicijalizacija pokazala se dosta uspješnom.
 Važno je istaknuti da pseudokod za ograničavanje iznosa perturbacije koristi L\textsubscript{$\infty$}-normu. 
-PGD napad s $K$ iteracija za generiranje neprijateljskih primjera zvat ćemo K-PGD (npr.\ 20-PGD).
+PGD napad s $K$ iteracija za konstrukciju neprijateljskih primjera zvat ćemo K-PGD (npr.\ 20-PGD).
 
 \section{Učenje s neprijateljskim primjerima}
 
 Ako želimo da modeli koje učimo budu otporni na neprijateljske primjere tj.\ ispravno ih klasificiraju, ne možemo se ograničiti na klasično (prirodno) učenje modela.
 Svojstvo otpornosti na neprijateljske primjere zvat ćemo robusnost, a jedan od mogućih načina za postizanje robusnih modela učenje je s neprijateljskim primjerima (robusno učenje).
-Kada govorimo o učenju s neprijateljskim primjerima, općenita ideja je da se tijekom učenja generiraju neprijateljski primjeri prilagođeni samome modelu.
-Model tada ne uči na originalnim ulaznim podatcima, već isključivo na generiranim neprijateljskim primjerima.
+Kada govorimo o učenju s neprijateljskim primjerima, općenita ideja je da se tijekom učenja konstruiraju neprijateljski primjeri prilagođeni samome modelu.
+Model tada ne uči na originalnim ulaznim podatcima, već isključivo na konstruiranim neprijateljskim primjerima.
 U tom slučaju neprijateljske primjere možemo smatrati načinom augmentacije ulaznih podataka - na temelju originalnih ulaznih podataka stvaramo nove podatke koje predočavamo modelu.
+
+\pagebreak
 
 Robusnim učenjem možemo postići puno višu točnost modela na skupu za testiranje sačinjenom od neprijateljskih primjera naspram modela učenih prirodnim učenjem.
 Nažalost, robusno učenje ima svoju cijenu. Robusni modeli gotovo uvijek će na originalnom skupu za testiranje imati nižu točnost naspram modela učenih prirodnim učenjem,
-a i učit će se dulje. Ako za generiranje neprijateljskih primjera tijekom robusnog učenja koristimo FGSM metodu, učenje će trajati otprilike dvostruko dulje naspram prirodnog učenja
-jer je za generiranje neprijateljskih primjera FGSM metodom potreban dodatan unaprijedni prolaz kroz mrežu. 
-Ako za generiranje neprijateljskih primjera koristimo PGD metodu, duljina trajanja učenja ovisit će o broju iteracija korištenih za generiranje neprijateljskih primjera.
-Koristimo li 10 iteracija za generiranje neprijateljskih primjera, učenje će trajati otprilike 11 puta dulje naspram prirodnog učenja. 
-Općenito govoreći, kako bismo model učili koristeći neprijateljske primjere generirane K-PGD metodom, učenje će trajati otprilike K + 1 puta dulje naspram prirodnog učenja~\cite{shafahi2019adversarial}.
-
-\pagebreak
+a i učit će se dulje. Ako za konstrukciju neprijateljskih primjera tijekom robusnog učenja koristimo FGSM metodu, učenje će trajati otprilike dvostruko dulje naspram prirodnog učenja
+jer je za konstrukciju neprijateljskih primjera FGSM metodom potreban dodatan unaprijedni prolaz kroz mrežu. 
+Ako za konstrukciju neprijateljskih primjera koristimo PGD metodu, duljina trajanja učenja ovisit će o broju iteracija korištenih za konstrukciju neprijateljskih primjera.
+Koristimo li 10 iteracija za konstrukciju neprijateljskih primjera, učenje će trajati otprilike 11 puta dulje naspram prirodnog učenja. 
+Općenito govoreći, kako bismo model učili koristeći neprijateljske primjere konstruirane K-PGD metodom, učenje će trajati otprilike K + 1 puta dulje naspram prirodnog učenja~\cite{shafahi2019adversarial}.
 
 \begin{algorithm}
     \caption{Učenje s neprijateljskim primjerima}
     \label{algo:adv_learning}
     \begin{algorithmic}
-        \STATE{\textbf{Ulaz:} $x$ -- ulazne slike, $y$ -- ispravne oznake ulaznih slika, $N$ -- broj epoha, $M$ -- veličina skupa za učenje, $K$ -- broj iteracija za generiranje neprijateljskih primjera, $\eta$ -- stopa učenja, $\epsilon$ -- ograničenje perturbacije, $\alpha$ -- veličina koraka po iteraciji}
+        \STATE{\textbf{Ulaz:} $x$ -- ulazne slike, $y$ -- ispravne oznake ulaznih slika, $N$ -- broj epoha, $M$ -- veličina skupa za učenje, $K$ -- broj iteracija za konstrukciju neprijateljskih primjera, $\eta$ -- stopa učenja, $\epsilon$ -- ograničenje perturbacije, $\alpha$ -- veličina koraka po iteraciji}
         \\\hrulefill
         \STATE{$\theta = initializeModelParams()$}
         \FOR{$(ep = 1 \dots N)$}
@@ -483,8 +498,8 @@ Općenito govoreći, kako bismo model učili koristeći neprijateljske primjere 
 
 Pseudokod~\ref{algo:adv_learning} prikazuje općeniti algoritam za učenje s neprijateljskim primjerima.
 Pritom inicijalizaciju parametara modela $\theta$ prikazujemo pozivom funkcije \textit{initializeModelParams}.
-Radi općenitosti, generiranje neprijateljskih primjera prikazano je pozivom funkcije \textit{generateAdversarial}.
-Ta funkcija mogla bi generirati neprijateljske primjere koristeći FGSM metodu, PGD metodu ili neki alternativan način, no to nam za općeniti prikaz nije važno.
+Radi općenitosti, konstrukcija neprijateljskih primjera prikazana je pozivom funkcije \textit{generateAdversarial}.
+Ta funkcija mogla bi konstruirati neprijateljske primjere koristeći FGSM metodu, PGD metodu ili neki alternativan način, no to nam za općeniti prikaz nije važno.
 
 \section{Brzo učenje s neprijateljskim primjerima}
 
@@ -498,9 +513,9 @@ Kako bismo riješili ili barem umanjili ovaj problem, predložena su brojna rje�
 \subsection{Besplatno učenje}
 
 Jedno od prvih predloženih rješenja za problem duljine trajanja učenja robusnih modela naziva se besplatno učenje (engl.\ \textit{free adversarial training})~\cite{shafahi2019adversarial}.
-Uočeno je da modeli učeni koristeći neprijateljske primjere generirane PGD metodom imaju visoku robusnost, no, kao što je već rečeno, zahtijevaju puno vremena za učenje.
+Uočeno je da modeli učeni koristeći neprijateljske primjere konstruirane PGD metodom imaju visoku robusnost, no, kao što je već rečeno, zahtijevaju puno vremena za učenje.
 
-Osnovna ideja besplatnog učenja je sljedeća: unatražnim prolazom osim iznosa gradijenta po parametrima modela izračunamo i iznos gradijenta po ulazu potreban za generiranje neprijateljskih primjera.
+Osnovna ideja besplatnog učenja je sljedeća: unatražnim prolazom osim iznosa gradijenta po parametrima modela izračunamo i iznos gradijenta po ulazu potreban za konstrukciju neprijateljskih primjera.
 Kako bi se neprijateljski primjeri iterativno izmjenjivali, na svakoj mini-grupi model uči nekoliko puta zaredom. Ovaj hiperparametar zovemo ponavljanje (engl.\ \textit{replay}).
 Važno je uočiti da, kako bismo i dalje trebali otprilike jednako vremena za učenje modela, moramo smanjiti broj epoha za faktor ponavljanja. 
 Ako svaku mini-grupu unutar jedne epohe ponavljamo 8 puta, broj epoha bit će 8 puta manji naspram broja epoha kod modela učenog prirodnim učenjem.
@@ -531,18 +546,18 @@ Nažalost, povećavanjem broja ponavljanja dolazi do degradacije performansi mod
 
 Pseudokod~\ref{algo:adv_learning_free} prikazuje algoritam za besplatno učenje s neprijateljskim primjerima.
 Kao i u prethodnom algoritmu, parametri modela $\theta$ inicijaliziraju se pozivom funkcije \textit{initializeModelParams}.
-Važno je uočiti da se iznosi gradijenata potrebni za generiranje neprijateljskih primjera, ali i izmjenu parametara modela izračunavaju u istom unatražnom prolazu,
-time osiguravajući da generiranje neprijateljskih primjera ne usporava postupak učenja. 
+Važno je uočiti da se iznosi gradijenata potrebni za konstrukciju neprijateljskih primjera, ali i izmjenu parametara modela izračunavaju u istom unatražnom prolazu,
+time osiguravajući da konstrukcija neprijateljskih primjera ne usporava postupak učenja. 
 Uz to, perturbacija $\delta$ inicijalizira se na 0 samo na početku postupka učenja - kada započinje izračun perturbacije za sljedeći ulaz, prethodni iznos služi kao "iznos za zagrijavanje" (engl.\ \textit{warmup}).
 
 Ovakvim načinom robusnog učenja, duljina trajanja učenja modela otprilike je jednaka kao i duljina trajanja učenja modela prirodnim učenjem.
-Uz to, rezultati rada~\cite{shafahi2019adversarial} pokazuju da je robusnost naučenih modela usporediva s robusnošću modela učenih koristeći neprijateljske primjere generirane PGD metodom.
+Uz to, rezultati rada~\cite{shafahi2019adversarial} pokazuju da je robusnost naučenih modela usporediva s robusnošću modela učenih koristeći neprijateljske primjere konstruirane PGD metodom.
 Kao što je već rečeno, visoku robusnost modela učenih koristeći besplatno učenje možemo postići izmjenom broja ponavljanja, ali po cijeni smanjenja performansi modela na običnom testnom skupu.
 
 \subsection{Brzo učenje}
 
-Za modele učene koristeći FGSM metodu dugo se smatralo da nisu otporni na neprijateljske primjere generirane koristeći iterativne metode poput PGD-a.
-Takvi modeli nisu nam veoma korisni jer često imaju nižu točnost na običnim podatcima, a ne nude pravu mjeru robusnosti - napadač jednostavno može generirati neprijateljske primjere koje će model krivo klasificirati.
+Za modele učene koristeći FGSM metodu dugo se smatralo da nisu otporni na neprijateljske primjere konstruirane koristeći iterativne metode poput PGD-a.
+Takvi modeli nisu nam veoma korisni jer često imaju nižu točnost na običnim podatcima, a ne nude pravu mjeru robusnosti - napadač jednostavno može konstruirati neprijateljske primjere koje će model krivo klasificirati.
 Ipak, rad~\cite{wong2020fast} predlaže da problem ne leži u korištenju FGSM metode, već njenoj inicijalizaciji.
 Standardno se perturbacija za FGSM metodu inicijalizira na 0 ili na granicu perturbacije $\epsilon$, bilo s pozitivnim ili negativnim predznakom.
 U slučaju da za inicijalizaciju iskoristimo nasumičnu inicijalizaciju koristeći uniformnu distribuciju s granicama $[-\epsilon, \epsilon]$, 
@@ -592,22 +607,22 @@ da bismo postigli jednaku mjeru robusnosti modele je potrebno učiti dulje nego 
 Nažalost, korištenje brzog učenja s neprijateljskim primjerima ima i svoju manu. U slučaju da modele učimo velik broj epoha,
 u jednom trenutku gotovo sigurno će doći do značajnog pada u točnosti na neprijateljskim primjerima. Ovu pojavu zovemo katastrofalna prenaučenost (engl.\ \textit{catastrophic overfitting}),
 a jedan od mogućih načina za sprječavanje iste je korištenje ranog završetka (engl.\ \textit{early stopping}). 
-Kako bismo na vrijeme mogli zaustaviti učenje modela, nakon svake epohe evaluiramo točnost modela na neprijateljskim primjerima generiranim iz nasumične mini-grupe.
+Kako bismo na vrijeme mogli zaustaviti učenje modela, nakon svake epohe evaluiramo točnost modela na neprijateljskim primjerima konstruiranim iz nasumične mini-grupe.
 U slučaju da je točnost u trenutnoj epohi značajno manja od točnosti u prethodnoj epohi, zaustavljamo učenje modela i kao najbolji model vraćamo model iz prethodne epohe.
 Zbog ovog svojstva, korištenje brzog učenja s neprijateljskim primjerima nije prikladno za modele koje trebamo učiti velik broj epoha.
 
 \subsection{Nadogradnje brzog učenja}
 
 Kako bi brzo učenje s neprijateljskim primjerima bilo primjenjivo za proizvoljno dugo učenje, potrebno je riješiti problem katastrofalne prenaučenosti.
-Taj problem pojavljuje se kod svih postupaka koji koriste FGSM metodu za učenje, no manje je izražen kod brzog učenja nego kod običnog učenja s neprijateljskim primjerima generiranim koristeći FGSM metodu.
+Taj problem pojavljuje se kod svih postupaka koji koriste FGSM metodu za učenje, no manje je izražen kod brzog učenja nego kod običnog učenja s neprijateljskim primjerima konstruiranim koristeći FGSM metodu.
 Rad~\cite{li2020towards} otkriva nam da brzo učenje u manjoj mjeri pati od problema katastrofalne prenaučenosti zbog nasumične inicijalizacije perturbacije.
 Kao i kod modela učenih običnim FGSM-om, i modeli učeni koristeći brzo učenje susreću se s katastrofalnom prenaučenošću, ali se od iste u periodu od nekoliko mini-grupa mogu oporaviti te nastaviti dalje normalno učiti.
 
 Ključ u oporavku leži u nasumičnoj inicijalizaciji koja pomaže u stvaranju kvalitetnih neprijateljskih primjera. 
 Ipak, zbog nasumičnosti nemamo garanciju da će takav postupak uvijek biti dovoljan za oporavak pa nakon određene količine vremena i dalje dođe do katastrofalne prenaučenosti.
 Ako bismo mogli garantirati da će se model tijekom učenja uvijek moći oporaviti od katastrofalne prenaučenosti u periodu od nekoliko mini-grupa, mogli bismo proizvoljno dugo učiti model.
-U radu~\cite{li2020towards} oporavak se postiže kontinuiranim praćenjem točnosti na neprijateljskim primjerima generiranim iz nasumične mini-grupe svakih $s$ mini-grupa. 
-U slučaju da je točnost u trenutnom koraku značajno manja od točnosti u prethodnom koraku, do sljedeće provjere točnosti umjesto FGSM metode s nasumičnom inicijalizacijom, za generiranje neprijateljskih primjera koristimo PGD metodu.
+U radu~\cite{li2020towards} oporavak se postiže kontinuiranim praćenjem točnosti na neprijateljskim primjerima konstruiranim iz nasumične mini-grupe svakih $s$ mini-grupa. 
+U slučaju da je točnost u trenutnom koraku značajno manja od točnosti u prethodnom koraku, do sljedeće provjere točnosti umjesto FGSM metode s nasumičnom inicijalizacijom, za konstrukciju neprijateljskih primjera koristimo PGD metodu.
 Ovakvim postupkom model se lako može oporaviti od pojave katastrofalne prenaučenosti pa stoga može i dulje učiti.
 Opisani način učenja nazivamo \textit{FastAdv+} (engl.\ \textit{Fast Adversarial Training Plus}).
 
@@ -642,15 +657,15 @@ Pseudokod~\ref{algo:adv_learning_fast_plus} prikazuje algoritam \textit{FastAdv+
 Kao i prije, parametri modela $\theta$ inicijaliziraju se pozivom funkcije \textit{initializeModelParams}.
 Kako bismo pratili točnost modela na neprijateljskim primjerima, koristimo varijable \textit{accLast} i \textit{accValid} 
 pri čemu prva varijabla predstavlja stariju točnost s kojom uspoređujemo, a druga varijabla točnost iz prethodnog koraka.
-U slučaju da je u prethodnom koraku točnost pala ispod vrijednosti određene pragom $c$, za generiranje neprijateljskih primjera koristit ćemo PGD metodu,
-a inače ćemo za generiranje neprijateljskih primjera koristiti metodu \textit{RandomFGSM} koja predstavlja FGSM metodu s nasumičnom inicijalizacijom.
+U slučaju da je u prethodnom koraku točnost pala ispod vrijednosti određene pragom $c$, za konstrukciju neprijateljskih primjera koristit ćemo PGD metodu,
+a inače ćemo za konstrukciju neprijateljskih primjera koristiti metodu \textit{RandomFGSM} koja predstavlja FGSM metodu s nasumičnom inicijalizacijom.
 Nakon provođenja učenja, u slučaju da smo na iteraciji određenoj frekvencijom detekcije $s$, evaluirat ćemo točnost modela na neprijateljskim primjerima pozivom funkcije \textit{evaluateRobustness}.
 U originalnome radu~\cite{li2020towards}, za provjeru je korišten PGD metoda, a isto je reproducirano i u ovome radu. 
 
 \pagebreak
 
 Ovakav način učenja omogućava nam proizvoljno dugo učenje modela, no i dalje ne dostiže jednaku mjeru robusnosti kao i najnovije varijante učenja s PGD metodom.
-Kako bismo dodatno unaprijedili \textit{FastAdv+} učenje, predložena je nadogradnja: zadnjih nekolicinu epoha model ćemo učiti isključivo koristeći PGD metodu za generiranje neprijateljskih primjera. 
+Kako bismo dodatno unaprijedili \textit{FastAdv+} učenje, predložena je nadogradnja: zadnjih nekolicinu epoha model ćemo učiti isključivo koristeći PGD metodu za konstrukciju neprijateljskih primjera. 
 Ova nadogradnja motivirana je hipotezom da je na početku treniranja modelu dovoljno imati slabije neprijateljske primjere za učenje, 
 dok je za kasnije epohe potrebno koristiti jače neprijateljske primjere kako bi model dodatno mogao učiti. Opisani način učenja zovemo \textit{FastAdvW} (engl.\ \textit{Fast Adversarial Training Warmup}),
 a prema rezultatima rada~\cite{li2020towards} modeli učeni koristeći \textit{FastAdvW} način učenja postižu bolje rezultate čak i naspram najnovijih varijanta učenja s PGD metodom, 
@@ -669,8 +684,8 @@ Zatrovani podatci namjerno su dizajnirani podatci čiji cilj je zavaravanje sust
 Slični su neprijateljskim primjerima, ali postoje i određene razlike koje se većinom očituju u namjeri korištenja istih.
 Dok neprijateljske primjere koristimo kako bi za neki konkretan ulaz izmijenili klasifikaciju nakon što je model već naučen,
 zatrovane podatke ubacujemo u skup za učenje modela kako bismo izmijenili decizijsku granicu modela - ako model učimo na zatrovanom skupu podataka,
-kada isti nakon učenja koristimo za klasifikaciju, njegove odluke za određene ulaze bit će drugačije nego što bi bile da smo model učili na čistom skupu.
-Uz to, zatrovani podatci mogu biti ručno dizajnirani, dok neprijateljske primjere većinom generiramo koristeći napade zasnovane na gradijentu funkcije gubitka modela po ulazu.
+kada ga nakon učenja koristimo za klasifikaciju, njegove odluke za određene ulaze bit će drugačije nego što bi bile da smo model učili na čistom skupu.
+Uz to, zatrovani podatci mogu biti ručno dizajnirani, dok neprijateljske primjere većinom konstruiramo koristeći napade zasnovane na gradijentu funkcije gubitka modela po ulazu.
 
 \begin{figure}[htb]
     \centering
@@ -697,13 +712,13 @@ Općenito govoreći, ubacivanje zatrovanih podataka kao posljedicu može imati p
 U prvome slučaju, napadač ubacivanjem zatrovanih podataka želi degradirati performanse modela, time čineći njegov rad nepouzdanijim.
 U drugome slučaju, napadač pažljivim dizajnom zatrovanih podataka može do određene mjere manipulirati ponašanjem modela. 
 Ako model nauči klasificirati sve zatrovane podatke u određeni razred te nakon učenja kao ulaz dobije novi zatrovani podatak ili podatak koji ima određenu mjeru sličnosti s naučenim okidačem,
-postoji velika vjerojatnost da će isti krivo klasificirati.  
+postoji velika vjerojatnost da će ga model krivo klasificirati.  
 
 \section{BackdoorBox}
 
 \textit{BackdoorBox Toolbox}~\cite{li2023backdoorbox} skup je alata otvorenog koda koji služi za edukaciju o napadima čiji je cilj ugradnja stražnjih vrata u modele.
-Osim napada, u skupu alata postoje i brojne obrane. U okviru ovog rada, koristit ćemo \textit{BadNets} alat iz skupa alata \textit{BackdoorBox} kako bismo generirali zatrovane skupove podataka.
-Generirane zatrovane skupove podataka koristit ćemo za evaluaciju otpornosti robusnih modela na zatrovane podatke, kao i učenje novih modela.
+Osim napada, u skupu alata postoje i brojne obrane. U okviru ovog rada, koristit ćemo \textit{BadNets} alat iz skupa alata \textit{BackdoorBox} kako bismo konstruirali zatrovane skupove podataka.
+Konstruirane zatrovane skupove podataka koristit ćemo za evaluaciju otpornosti robusnih modela na zatrovane podatke, kao i učenje novih modela.
 
 \chapter{Eksperimenti}
 
@@ -767,11 +782,11 @@ Sve ostale mreže koristile su stopu učenja s kosinusnim žarenjem. Pritom je m
 
 Kako bi se što više ubrzalo učenje, za učenje svih modela korišteno je računanje u mješovitoj preciznosti.
 Osim mreža učenih s neprijateljskim primjerima, za usporedbu je učena i mreža na prirodnom skupu podataka. Nakon učenja, za sve mreže izračunata je točnost na prirodnom skupu za testiranje,
-ali i točnost na neprijateljskim primjerima generiranim iz prirodnog skupa za testiranje koristeći PGD napad s 20 iteracija. 
+ali i točnost na neprijateljskim primjerima konstruiranim iz prirodnog skupa za testiranje koristeći PGD napad s 20 iteracija. 
 Pritom je PGD napad kao hiperparametre imao ograničenje perturbacije ($\epsilon$) iznosa $8/255$ te veličinu koraka ($\alpha$) iznosa $1/255$.
 Uz točnost, mjereno je i vrijeme potrebno za učenje modela.
 
-U tablici~\ref{tbl:mjerenja_robusno_ucenje} stupac \textit{LR} označava stopu učenja, stupac \textit{Točnost} točnost na skupu za testiranje, a stupac \textit{20-PGD} točnost na neprijateljskim primjerima generiranim iz skupa za testiranje koristeći PGD napad s 20 iteracija.
+U tablici~\ref{tbl:mjerenja_robusno_ucenje} stupac \textit{LR} označava stopu učenja, stupac \textit{Točnost} točnost na skupu za testiranje, a stupac \textit{20-PGD} točnost na neprijateljskim primjerima konstruiranim iz skupa za testiranje koristeći PGD napad s 20 iteracija.
 Točnosti su prikazane postotkom, a vrijeme učenja prikazano je brojem minuta. Pritom su točnost, ali i vrijeme učenja zaokruženi na jedno decimalno mjesto.
 U stupcu \textit{Način učenja}, \textit{Natural} predstavlja prirodno učenje, \textit{FreeAdv} besplatno učenje, \textit{FastAdv} brzo učenje, 
 \textit{FastAdv+} nadogradnju na brzo učenje, a \textit{FastAdvW} nadogradnju na brzo učenje s korištenjem PGD metode zadnjih 10 epoha učenja.
@@ -799,9 +814,9 @@ U slučaju da na kraju vrijednosti iz stupca \textit{Način učenja} piše \text
 \end{table}    
 
 Kao što možemo vidjeti u tablici~\ref{tbl:mjerenja_robusno_ucenje}, najvišu točnost na prirodnom skupu za testiranje ima model učen na prirodnom skupu podataka.
-Nažalost, taj model nije nimalo robustan - njegova točnost na neprijateljskim primjerima generiranim koristeći PGD metodu s 20 iteracija iznosi $0\%$.
+Nažalost, taj model nije nimalo robustan - njegova točnost na neprijateljskim primjerima konstruiranim koristeći PGD metodu s 20 iteracija iznosi $0\%$.
 Kada govorimo o robusnim modelima, najvišu točnost na neprijateljskim primjerima ima model učen koristeći PGD metodu, no on se i daleko najdulje uči.
-Pritom su tijekom učenja s PGD metodom neprijateljski primjeri generirani koristeći PGD sa 7 iteracija.
+Pritom su tijekom učenja s PGD metodom neprijateljski primjeri konstruirani koristeći PGD sa 7 iteracija.
 
 Od načina brzog učenja s neprijateljskim primjerima izloženih u radovima~\cite{shafahi2019adversarial},~\cite{wong2020fast} i ~\cite{li2020towards},
 najbolje performanse ima model učen koristeći \textit{FastAdvW} način učenja. Njegova točnost na prirodnom skupu za testiranje druga je najviša od svih modela koji nude određenu mjeru robusnosti,
@@ -851,7 +866,7 @@ a \textit{FastAdvW} model uz to zadnjih 10 epoha uči koristeći isključivo PGD
     \label{fig:acc_comparison}
 \end{figure}
 
-Na slici~\ref{fig:acc_comparison} moguće je vidjeti usporedbu točnosti na skupu za testiranje i točnosti na neprijateljskim primjerima generiranim iz prirodnog skupa za testiranje koristeći PGD metodu s 20 iteracija.
+Na slici~\ref{fig:acc_comparison} moguće je vidjeti usporedbu točnosti na skupu za testiranje i točnosti na neprijateljskim primjerima konstruiranim iz prirodnog skupa za testiranje koristeći PGD metodu s 20 iteracija.
 Kao i na prethodnom grafu, i ovdje su prikazane točnosti i za model učen na prirodnim podatcima, kao i za model učen PGD metodom.
 Možemo vidjeti da najvišu točnost na prirodnom skupu imaju model učen na prirodnim podatcima i \textit{FastAdv} model kod kojeg je došlo do katastrofalne prenaučenosti.
 Istovremeno, ta dva modela ne nude nikakvu otpornost na neprijateljske primjere - njihova točnost na neprijateljskim primjerima jednaka je $0\%$.
@@ -871,7 +886,7 @@ Oko 65. epohe moguće je vidjeti velik porast u točnosti na skupu za učenje, k
 Ova pojava posljedica je katastrofalne prenaučenosti - model gubi na moći generalizacije i počinje pamtiti ulazne podatke. 
 Kako bismo dodatno provjerili da je to istina, provjerit ćemo i točnost na neprijateljskim primjerima po epohama. 
 U slučaju da oko 65. epohe dolazi do velikog pada u točnosti na neprijateljskim primjerima, 
-u pitanju je katastrofalna prenaučenost od koje pate svi modeli učeni načinima zasnovanim na FGSM metodi generiranja neprijateljskih primjera.
+u pitanju je katastrofalna prenaučenost od koje pate svi modeli učeni načinima zasnovanim na FGSM metodi konstrukcije neprijateljskih primjera.
 
 \begin{figure}[htb]
     \centering
@@ -883,7 +898,7 @@ u pitanju je katastrofalna prenaučenost od koje pate svi modeli učeni načinim
 \pagebreak
 
 Na slici~\ref{fig:fast_adv_acc} moguće je vidjeti točnost \textit{FastAdv} modela na neprijateljskim primjerima po epohama.
-Kako evaluacija tijekom učenja ne bi bila prespora, neprijateljski primjeri generirani su iz nasumično odabrane mini-grupe koristeći PGD metodu s 5 iteracija.
+Kako evaluacija tijekom učenja ne bi bila prespora, neprijateljski primjeri konstruirani su iz nasumično odabrane mini-grupe koristeći PGD metodu s 5 iteracija.
 Kao što smo očekivali, oko 65. epohe dolazi do velikog pada u točnosti na neprijateljskim primjerima - već epohu nakon točnost na neprijateljskim primjerima iznosi otprilike $0\%$.
 Ovime potvrđujemo da je stvarno došlo do katastrofalne prenaučenosti. Kako bismo ovo izbjegli, \textit{FastAdv} model možemo učiti s ranim završetkom. 
 Ipak, korištenje ranog završetka ograničava nas jer modele ne možemo proizvoljno dugo učiti. 
@@ -901,7 +916,7 @@ na slici~\ref{fig:fast_plus_acc} možemo vidjeti usporedbu točnosti na skupu za
 Iako se oko 65. epohe može uočiti početak brzog porasta u točnosti na skupu za učenje, kao i istovremeni početak brzog pada u točnosti na skupu za testiranje,
 već u sljedećih nekoliko epoha točnosti se ispravljaju. 
 Mogućnost \textit{FastAdv+} modela da se oporavi od pojave katastrofalne prenaučenosti proizlazi iz kontinuiranog praćenja točnosti na neprijateljskim primjerima 
-te korištenja PGD metode za generiranje neprijateljskih primjera kada se uoči pad u točnosti.
+te korištenja PGD metode za konstrukciju neprijateljskih primjera kada se uoči pad u točnosti.
 
 % Na slici~\ref{fig:fast_plus_adv_acc} moguće je vidjeti točnost \textit{FastAdv+} modela na neprijateljskim primjerima po epohama.
 % Za razliku od \textit{FastAdv} modela, ovdje ne uočavamo pad u točnosti na neprijateljskim primjerima. 
@@ -928,7 +943,7 @@ Pritom su svi modeli učeni 60 epoha kako bismo izbjegli pojavu katastrofalne pr
 
 \pagebreak
 
-Zatrovani skup podataka za učenje, kao i zatrovani skup za testiranje, generirani su iz prirodnog CIFAR-10 skupa podataka koristeći \textit{BadNets} 
+Zatrovani skup podataka za učenje, kao i zatrovani skup za testiranje, konstruirani su iz prirodnog CIFAR-10 skupa podataka koristeći \textit{BadNets} 
 alat iz skupa alata \textit{BackdoorBox}. Pritom je za skup za učenje stopa trovanja iznosila 0.3, a za skup za testiranje 1. Stopa trovanja određuje koliki će postotak podataka iz originalnog skupa biti zatrovan.
 I za skup za učenje i za skup za testiranje kao ciljni razred odabran je razred \textit{automobile}. 
 U slučaju da na ulaznoj slici postoji okidač, model koji ga je tijekom učenja naučio takvu sliku klasificirat će u razred \textit{automobile}.
@@ -1022,7 +1037,7 @@ Ako uspijemo detektirati takav trenutak, možemo reći da su u skup za učenje v
 Kako bi se korištenje dubokih modela moglo integrirati u važne aspekte svakodnevnog života, važno je razmišljati o sigurnosti samih modela. 
 Neke od glavnih prijetnji sigurnosti dubokih modela su neprijateljski primjeri i zatrovani podatci.
 U ovome radu, napravili smo kratak pregled osnovnih načina za postizanje modela otpornih na neprijateljske primjere: FGSM i PGD načina učenja.
-Istražili smo probleme vezane uz brzinu učenja robusnih modela otpornih na neprijateljske primjere generirane iterativnim napadima.
+Istražili smo probleme vezane uz brzinu učenja robusnih modela otpornih na neprijateljske primjere konstruirane iterativnim napadima.
 Implementirali smo i evaluirali točnost, kao i brzinu učenja predloženih nadogradnji na klasične načine učenja s neprijateljskim primjerima: \textit{FreeAdv}, \textit{FastAdv}, \textit{FastAdv+} i \textit{FastAdvW} načina učenja.
 Kako bismo ispravno implementirali navedene načine brzog učenja s neprijateljskim primjerima, istražili smo korištenje računanja u mješovitoj preciznosti s ciljem ubrzanja učenja modela.
 Korištenjem \textit{FastAdvW} načina učenja postigli smo modele robusnosti otprilike jednake robusnosti PGD modela, ali s potrebnih skoro dvostruko manje vremena za učenje.
