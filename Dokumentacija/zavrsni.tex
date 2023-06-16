@@ -83,7 +83,7 @@ akumuliranoj vrijednosti dodaje pomak te na kraju istu propušta kroz prijenosnu
     \label{eq:neuron}
 \end{equation}
 \\
-\noindent pri čemu $x$ označava pojedine ulaze, $w$ težine na pripadnim ulazima, $b$ pomak te $f$ prijenosnu funkciju. 
+\noindent Pritom $x$ označava pojedine ulaze, $w$ težine na pripadnim ulazima, $b$ pomak te $f$ prijenosnu funkciju. 
 
 \section{Prijenosne funkcije}
 Neki od najranijih modela umjetnog neurona kao prijenosnu funkciju koristili su funkciju identiteta (ADELINE-neuron) te funkciju skoka (TLU-perceptron).
@@ -150,7 +150,7 @@ Uz to, svi neuroni imaju i dodatnu težinu zvanu pomak (nije prikazano na slici~
     \label{eq:nn_layer}
 \end{equation}
 \\
-pri čemu $W_{i}$ predstavlja težine trenutnog sloja, $b_{i}$ pomake trenutnog sloja, $h_{i-1}$ izlaz iz prethodnog sloja, $f$ prijenosnu funkciju primijenjenu na svaki element te $h_{i}$ izlaz iz trenutnog sloja.
+Pritom $W_{i}$ predstavlja težine trenutnog sloja, $b_{i}$ pomake trenutnog sloja, $h_{i-1}$ izlaz iz prethodnog sloja, $f$ prijenosnu funkciju primijenjenu na svaki element te $h_{i}$ izlaz iz trenutnog sloja.
 Korištenjem takve formule za svaki sloj mreže, na kraju ćemo dobiti izlaz mreže za neki proizvoljni ulaz. Ovo nazivamo unaprijednim prolazom.
 
 \section{Učenje neuronske mreže}
@@ -160,11 +160,11 @@ Da bismo mogli znati kako trebamo izmijeniti težine neurona, prvo trebamo znati
 Za izračun gubitka često je korištena unakrsna entropija koju možemo definirati kao:
 
 \begin{equation}
-    H(P^{*}|P) = -\sum_{i}P^{*}(i) \cdot \log{P(i)}
+    H(P^{*},P) = -\sum_{i}P^{*}(i) \cdot \log{P(i)}
     \label{eq:cross_entropy}
 \end{equation}
 \\
-pri čemu $P^{*}(i)$ označava distribuciju očekivanog izlaza, a $P(i)$ distribuciju izlaza modela.
+Pritom $P^{*}(i)$ označava distribuciju očekivanog izlaza, a $P(i)$ distribuciju izlaza modela.
 Jednom kada znamo iznos gubitka, koristeći optimizatore poput stohastičkog gradijentnog spusta (SGD) ili Adam optimizatora~\cite{kingma2014adam} možemo poboljšati naš model. 
 Pritom nam je za optimizacijski postupak veoma često potreban gradijent funkcije gubitka po parametrima modela, a izračunavamo ga uzastopnom primjenom pravila ulančavanja koje u svojem najjednostavnijem obliku možemo definirati kao:
 
@@ -180,7 +180,7 @@ U slučaju stohastičkog gradijentnog spusta, iterativno ažuriramo težine mode
     \label{eq:sgd}
 \end{equation}
 \\
-pri čemu $w_{i}$ označava jednu od težina modela u trenutnoj iteraciji, $w_{i+1}$ istu težinu u sljedećoj iteraciji, $L(w_{i}, x)$ funkciju gubitka, a $\eta$ stopu učenja. 
+Pritom $w_{i}$ označava jednu od težina modela u trenutnoj iteraciji, $w_{i+1}$ istu težinu u sljedećoj iteraciji, $L(w_{i}, x)$ funkciju gubitka, a $\eta$ stopu učenja. 
 Stopa učenja mali je pozitivni broj pomoću kojeg možemo kontrolirati iznos promjene težina po iteracijama. Iterativnim ponavljanjem ovakvog postupka minimiziramo iznos funkcije gubitka, time dobivajući što bolju mrežu.
 Kod stohastičkog gradijentnog spusta, iteracije mogu biti predstavljene pojedinačnim ulazima ili mini-grupama. Zbog činjenice da SGD pohranjuje gradijent za male ulaze, ovaj optimizacijski postupak zahtijeva malo memorije.
 
@@ -191,7 +191,7 @@ Nakon učenja mreže na skupu za učenje, evaluirat ćemo performanse mreže na 
     \label{eq:accuracy}
 \end{equation}
 \\
-pri čemu $correct$ označava broj točno klasificiranih primjera, $total$ ukupan broj primjera, a $accuracy$ točnost.
+Pritom $correct$ označava broj točno klasificiranih primjera, $total$ ukupan broj primjera, a $accuracy$ točnost.
 Uz točnost, postoje i brojne druge mjere kvalitete modela. Neke od njih su preciznost (engl.\ \textit{precision}), odziv (engl.\ \textit{recall}) i matrica zabune (engl.\ \textit{confusion matrix}).
 
 \section{Duboke neuronske mreže}
@@ -315,7 +315,7 @@ Ovakvim strukturiranjem mreže, cilj mreže postaje modelirati rezidualnu funkci
     \label{eq:resblock}
 \end{equation}
 \\
-pri čemu $F(x)$ predstavlja rezidualnu funkciju, $x$ prenošenje ulaza na izlaz preskočnom vezom, a $f(x)$ izlaz bloka. 
+Pritom $F(x)$ predstavlja rezidualnu funkciju, $x$ prenošenje ulaza na izlaz preskočnom vezom, a $f(x)$ izlaz bloka. 
 U slučaju da slojevi između mijenjaju dimenzije podataka, preskočna veza morat će raditi linearnu projekciju kako bi podatci pri zbrajanju bili istih dimenzija. 
 Tada rezidualni blok možemo prikazati na sljedeći način:
 
@@ -324,24 +324,24 @@ Tada rezidualni blok možemo prikazati na sljedeći način:
     \label{eq:resblocklp}
 \end{equation}
 \\
-pri čemu $W_{s}$ označava matricu korištenu za linearnu projekciju ulaza $x$. 
+Pritom $W_{s}$ označava matricu korištenu za linearnu projekciju ulaza $x$. 
 Korištenje slojeva s preskočnim vezama motivirano je željom za učenjem funkcije identiteta.
 Klasične duboke mreže s velikim brojem slojeva teško će naučiti funkciju identiteta, dok korištenje preskočnih veza dubokim mrežama značajno olakšava učenje te funkcije.
 Ovo potječe od činjenice da je za uspješno modeliranje funkcije identiteta $f(x)$ za rezidualnu funkciju $F(x)$ potrebno samo postaviti težine jezgri na 0.
 
-\section{ResNet18}
+\section{ResNet-18}
 
-U okviru ovog rada, za provođenje svih eksperimenata koristit ćemo ResNet18 mrežu kako bismo što bolje mogli usporediti učinak različitih eksperimenata. 
-ResNet18 rezidualna je neuronska mreža, a sastoji se od ukupno 18 slojeva. 
+U okviru ovog rada, za provođenje svih eksperimenata koristit ćemo ResNet-18 mrežu kako bismo što bolje mogli usporediti učinak različitih eksperimenata. 
+ResNet-18 rezidualna je neuronska mreža, a sastoji se od ukupno 18 slojeva. 
 
 \begin{figure}[htb]
     \centering
     \includegraphics[scale=0.7]{resnet18.png}
-    \caption{Arhitektura ResNet18. Preuzeto iz~\cite{mcc19}.}
-    \label{fig:resnet18}
+    \caption{Arhitektura ResNet-18. Preuzeto iz~\cite{mcc19}.}
+    \label{fig:resnet-18}
 \end{figure}
 
-Kao što možemo vidjeti na slici~\ref{fig:resnet18}, ResNet18 sastoji se od 8 rezidualnih blokova. Svaki od tih blokova sastoji se od 2 konvolucijska sloja i jedne preskočne veze.
+Kao što možemo vidjeti na slici~\ref{fig:resnet-18}, ResNet-18 sastoji se od 8 rezidualnih blokova. Svaki od tih blokova sastoji se od 2 konvolucijska sloja i jedne preskočne veze.
 Rezidualnim blokovima prethodi jedan konvolucijski sloj, a nakon njih dolazi jedan potpuno-povezani sloj sa softmax prijenosnom (aktivacijskom) funkcijom.
 
 \chapter{Brzo učenje s neprijateljskim primjerima}
@@ -757,7 +757,7 @@ PyTorch nam također nudi i mogućnost provođenja izračuna sa 16-bitnim brojev
 \section{Brzo učenje s neprijateljskim primjerima}
 
 Kako bismo usporedili učinkovitost različitih pristupa brzom učenju s neprijateljskim primjerima, učili smo nekolicinu mreža koristeći varirajuće hiperparametre i načine učenja.
-Sve naučene mreže arhitekture su ResNet18 i učene su 80 epoha. Kao mjeru gubitka kod svih mreža korištena je unakrsna entropija,
+Sve naučene mreže arhitekture su ResNet-18 i učene su 80 epoha. Kao mjeru gubitka kod svih mreža korištena je unakrsna entropija,
 a kao optimizator korišten je stohastički gradijentni spust sa zamahom (engl.\ \textit{momentum}) iznosa 0.9 i propadanjem težina iznosa $5e^{-4}$.
 Korištenje zamaha ubrzava konvergenciju modela, a korištenje propadanja težina regularizacijska je tehnika koja služi za smanjivanje složenosti modela, a time i vjerojatnosti pojave prenaučenosti.
 Kako bi što bolje reproducirali originalni rad~\cite{wong2020fast}, 
@@ -1036,7 +1036,7 @@ Prema dobivenim rezultatima, robusni modeli učeni na zatrovanim podatcima u jed
 \pagebreak
 
 U budućim istraživanjima bilo bi zanimljivo primijeniti metode brzog učenja s neprijateljskim primjerima na kompleksnije arhitekture mreža i veće skupove podataka 
-jer su u okviru ovog rada istraživanja zbog brzine učenja bila izvođena isključivo na ResNet18 arhitekturi i CIFAR-10 skupu podataka. 
+jer su u okviru ovog rada istraživanja zbog brzine učenja bila izvođena isključivo na ResNet-18 arhitekturi i CIFAR-10 skupu podataka. 
 Po pitanju detekcije zatrovanih podataka, istraživanje bi trebalo proširiti na dodatne načine učenja s neprijateljskim primjerima poput \textit{FastAdv+} i \textit{FastAdvW} načina učenja.
 Za sve načine učenja trebalo bi provesti praćenje točnosti na zatrovanom skupu za učenje po mini-grupama kako bi se provjerila hipoteza da do naglog rasta u točnosti dolazi kod svih robusnih modela.
 U slučaju da se pokaže da ovo svojstvo imaju svi robusni modeli učeni na zatrovanom skupu podataka, trebalo bi dodatno istražiti mogućnost primjene istoga kao detektora postojanja zatrovanih podataka.
