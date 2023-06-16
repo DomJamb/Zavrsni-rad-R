@@ -32,20 +32,24 @@
 \tableofcontents
 
 \chapter{Uvod}
-Velik broj problema s kojima se danas susrećemo takve su prirode da ne znamo kako ih riješiti koristeći klasičan, algoritamski pristup. Razlog tome često leži u činjenici da ne znamo ni kako mi sami rješavamo te probleme, 
-a jedan od najčešćih primjera za to je raspoznavanje tj.\ klasifikacija slika.
-Jedno od mogućih rješenja takvih problema je korištenje umjetnih neuronskih mreža - mreža sastavljenih od velikog broja povezanih jedinica (neurona) koje obavljaju veoma jednostavne operacije.
+Velik broj problema s kojima se danas susrećemo takve su prirode da ne znamo kako ih riješiti koristeći klasičan, algoritamski pristup. Razlog tome često leži u činjenici da ne znamo ni kako mi sami rješavamo te probleme.
+Primjer jednog takvog problema je raspoznavanje tj.\ klasifikacija slika.
+Trenutno najuspješniji pristupi takvim problemima temelje se na algoritmima strojnog učenja koji iskorištavaju podatake za optimiranje parametara unaprijed odabranih modela.
+Pritom se kao modeli često koriste umjetne neuronske mreže - mreže sastavljene od velikog broja povezanih jedinica (neurona) koje obavljaju veoma jednostavne operacije.
 
-Razvojem dubokih neuronskih mreža došlo je do ubrzanog napretka u području računalnog vida. Računalni vid područje je umjetne inteligencije koje se bavi problemima poput klasifikacije 2D slika. 
+Razvojem dubokih modela došlo je do ubrzanog napretka u području računalnog vida. Računalni vid područje je umjetne inteligencije koje se bavi problemima poput klasifikacije 2D slika. 
 Sve većom popularizacijom i korištenjem dubokih modela u sustavima različitih namjena, u pitanje se dovodi sigurnost takvih modela -
-ako model želimo koristiti u automobilima s ciljem detekcije pješaka i vozila, model mora moći dobro generalizirati, kao i biti robustan. Takav model ne bi smio mijenjati svoje odluke na temelju veoma malih promjena na ulazu -
-na primjeru prometa, želimo da model točno detektira pješaka, bez obzira nosi li on kapu ili ne.
+ako model želimo koristiti u automobilima s ciljem detekcije pješaka i vozila, model mora moći dobro generalizirati, kao i biti robustan. Takav model ne bi smio mijenjati svoje odluke na temelju veoma malih promjena na ulazu.
+Primjerice, htjeli bismo imati modele koji pouzdano detektiraju pješake, bez obzira nose li oni kapu ili ne.
 
-Kako bi ostvarili robusnost modela, predložene su brojne tehnike, a jedna od najpopularnijih je robusno učenje tj.\ učenje na neprijateljskim primjerima. 
-Kada su u pitanju modeli koji brzo uče, robusno učenje prihvatljivo je rješenje za postizanje robusnih modela otpornih na napade. 
-Ipak, kada su u pitanju veći modeli za koje učenje traje veoma dugo, obično robusno učenje često je neprihvatljivo. 
+Za ovaj rad posebno je važna robusnost na neprijateljske primjere, koja se odnosi na sposobnost modela da zadrži točnu odluku čak i u najgorem slučaju s obzirom na zadanu razinu perturbacije.
+Robusnost modela možemo ostvariti različitim tehnikama. Jedna od najpopularnijih tehnika je robusno učenje tj.\ učenje na neprijateljskim primjerima. 
+Kada su u pitanju modeli koji brzo uče, robusno učenje prihvatljivo je rješenje za postizanje robusnih modela otpornih na napade utemeljene na neprijateljskim primjerima. 
+Ipak, kada su u pitanju veći modeli za koje učenje traje veoma dugo, standardno robusno učenje~\cite{madry2017towards} često je neprihvatljivo zbog velike računske složenosti. 
 U tu svrhu, razvijene su metode koje ubrzavaju robusno učenje. U ovome radu, razmatrat ćemo tri takve metode: besplatno robusno učenje~\cite{shafahi2019adversarial}, brzo robusno učenje~\cite{wong2020fast} i
 nadogradnju na brzo robusno učenje (FastAdv+ i FastAdvW,~\cite{li2020towards}). 
+
+\pagebreak
 
 Uz to, razmatrat ćemo i otpornost naučenih modela na zatrovane podatke. Zatrovani podatci ulazi su izmijenjeni s ciljem navođenja modela na neočekivano ponašanje. 
 Uvođenjem takve ranjivosti u model, napadači mogu neprimijećeno postići proizvoljne ciljeve poput izbjegavanja detekcije ili pogrešne klasifikacije.
