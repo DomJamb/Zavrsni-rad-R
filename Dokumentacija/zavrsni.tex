@@ -623,7 +623,7 @@ Kako bismo na vrijeme mogli zaustaviti učenje modela, nakon svake epohe evaluir
 U slučaju da je točnost u trenutnoj epohi značajno manja od točnosti u prethodnoj epohi, zaustavljamo učenje modela i kao najbolji model vraćamo model iz prethodne epohe.
 Zbog ovog svojstva, korištenje brzog učenja s neprijateljskim primjerima nije prikladno za modele koje trebamo učiti velik broj epoha.
 
-\subsection{Nadogradnje brzog učenja}
+\subsection{Nadogradnje brzog učenja s neprijateljskim primjerima}
 
 Kako bi brzo učenje s neprijateljskim primjerima bilo primjenjivo za proizvoljno dugo učenje, potrebno je riješiti problem katastrofalne prenaučenosti.
 Taj problem pojavljuje se kod svih postupaka koji uče s FGSM-om, no manje je izražen kod brzog učenja nego kod običnog učenja s FGSM-om.
@@ -749,33 +749,36 @@ a cijeli skup podataka sastoji se od 6000 slika svakog razreda. Skup podataka po
 
 Na slici~\ref{fig:cifar10} moguće je vidjeti razrede iz skupa podataka CIFAR-10, kao i po 10 nasumično odabranih slika iz svakog razreda.
 Svi razredi međusobno su isključivi tj.\ nijedna slika ne pojavljuje se u skupu podataka s više različitih oznaka razreda. 
-Uz CIFAR-10 skup podataka, postoji i CIFAR-100 skup podataka koji sadrži 100 različitih razreda. 
-Za provođenje eksperimenata u ovome radu korišten je CIFAR-10 skup podataka zbog brzine učenja, no metode korištene u radu lako se mogu primijeniti i na skup podataka CIFAR-100.
+Uz CIFAR-10, postoji i skup podataka CIFAR-100 koji sadrži 100 različitih razreda.
+U ovom radu eksperimente provodimo na skupu CIFAR-10 zbog brzine učenja, no metode korištene u radu lako se mogu primijeniti i na druge skupove podataka.
 
 \section{Korištene tehnologije}
 
-Za provođenje eksperimenata u ovome radu, kod je pisan u programskom jeziku Python. Osim biblioteka dostupnih u standardnom paketu biblioteka programskog jezika Python,
+Za provođenje eksperimenata u ovome radu, kod je pisan u programskom jeziku Python. Osim standardnih biblioteka Pythona,
 korištene su biblioteke NumPy, Matplotlib i radni okvir PyTorch. Sami kod izvršavan je primarno na platformi Kaggle koristeći dvije grafičke kartice NVIDIA T4.
 
 \subsection{NumPy}
 
 NumPy je biblioteka pisana za programski jezik Python. 
-Služi za provođenje operacija na matricama i tenzorima, a nudi i implementacije brojnih matematičkih funkcija koje se lako mogu primijeniti na matrice i tenzore.
-Korištenjem biblioteke NumPy, moguće je značajno ubrzati izvođenje koda vezanog uz neuronske mreže zbog opcija provođenja operacija na tenzorima, time često eliminirajući potrebu za korištenjem klasičnih petlji.
+Služi za učinkovito provođenje operacija na matricama i tenzorima, a nudi i implementacije brojnih matematičkih funkcija koje se lako mogu primijeniti na matrice i tenzore.
+Korištenjem biblioteke NumPy, moguće je značajno ubrzati izvođenje koda vezanog uz neuronske mreže zbog optimiranih implementacija u programskim jezicima niže razine i strojnom kodu,
+kao i eliminiranja potrebe za petljama u Pythonu.
 
 \subsection{Matplotlib}
 
 Kao i NumPy, i Matplotlib je biblioteka pisana za programski jezik Python.
 Služi za jednostavno iscrtavanje grafičkih objekata. 
 Osim klasičnih grafova, koristeći Matplotlib moguće je prikazati i slike (npr.\ slike učitane kao dio skupa podataka CIFAR-10).
-Uz iscrtavanje grafova i slika, koristeći Matplotlib možemo ih s lakoćom pohraniti.
+Uz iscrtavanje, Matplotlib nudi i mogućnost pohranjivanja u raznim grafičkim formatima.
 
 \subsection{PyTorch}
 
 PyTorch je radni okvir pisan za programski jezik Python.
-Služi za laku izgradnju i učenje neuronskih mreža, kao i općenito provođenje izračuna s tenzorima.
+Služi za laku izgradnju i učenje dubokih modela, kao i općenito provođenje izračuna s tenzorima.
 Pruža nam mogućnost automatske diferencijacije veoma značajnu za izračun gradijenta funkcije gubitka, kao i pristup brojnim optimizacijskim algoritmima, 
 ali i slojevima neuronskih mreža koje s lakoćom možemo kombinirati za izgradnju vlastitih mreža.
+
+\pagebreak
 
 Uz navedene mogućnosti, radni okvir PyTorch nudi nam podršku za korištenje grafičkih kartica za provođenje izračuna.
 U slučaju da na računalu imamo prikladnu grafičku karticu, kao i instaliranu prikladnu programsku podršku, 
@@ -786,26 +789,26 @@ PyTorch nam također nudi i mogućnost provođenja izračuna sa 16-bitnim brojev
 
 Kako bismo usporedili učinkovitost različitih pristupa brzom učenju s neprijateljskim primjerima, učili smo nekolicinu mreža koristeći varirajuće hiperparametre i načine učenja.
 Sve naučene mreže arhitekture su ResNet-18 i učene su 80 epoha. Kao mjeru gubitka kod svih mreža korištena je unakrsna entropija,
-a kao optimizator korišten je stohastički gradijentni spust sa zamahom (engl.\ \textit{momentum}) iznosa 0.9 i propadanjem težina iznosa $5e^{-4}$.
+a kao optimizator korišten je stohastički gradijentni spust sa zamahom (engl.\ \textit{momentum}) iznosa 0.9 i propadanjem težina iznosa $5 \cdot 10^{-4}$.
 Korištenje zamaha ubrzava konvergenciju modela, a korištenje propadanja težina regularizacijska je tehnika koja služi za smanjivanje složenosti modela, a time i vjerojatnosti pojave prenaučenosti.
-Kako bi što bolje reproducirali originalni rad~\cite{wong2020fast}, 
+Kako bismo što bolje reproducirali originalni rad~\cite{wong2020fast}, 
 za brzo učenje s neprijateljskim primjerima (\textit{FastAdv}) korištena je ciklička stopa učenja. Pritom stopa učenja maksimum dosegne na pola koraka učenja te se nakon toga do kraja učenja njen iznos smanjuje. 
 Važno je napomenuti da se kod cikličke stope učenja iznos stope učenja mijenja nakon svake mini-grupe, a odozdo je ograničen iznosom 0.
-Sve ostale mreže koristile su stopu učenja s kosinusnim žarenjem. Pritom je maksimalan broj koraka postavljen na ukupan broj epoha, a iznos stope učenja mijenja se nakon svake epohe.
+Sve ostale mreže koristile su stopu učenja s kosinusnim kaljenjem. Pritom je maksimalan broj koraka postavljen na ukupan broj epoha, a iznos stope učenja mijenja se nakon svake epohe.
 
-Kako bi se što više ubrzalo učenje, za učenje svih modela korišteno je računanje u mješovitoj preciznosti.
+Kako bismo ubrzali eksperimente, sve modele učili smo u mješovitoj preciznosti.
 Osim mreža učenih s neprijateljskim primjerima, za usporedbu je učena i mreža na prirodnom skupu podataka. Nakon učenja, za sve mreže izračunata je točnost na prirodnom skupu za testiranje,
 ali i točnost na neprijateljskim primjerima konstruiranim iz prirodnog skupa za testiranje koristeći napad PGD s 20 iteracija. 
 Pritom je napad PGD kao hiperparametre imao ograničenje perturbacije ($\epsilon$) iznosa $8/255$ te veličinu koraka ($\alpha$) iznosa $1/255$.
 Uz točnost, mjereno je i vrijeme potrebno za učenje modela.
 
-U tablici~\ref{tbl:mjerenja_robusno_ucenje} stupac \textit{LR} označava stopu učenja, stupac \textit{Točnost} točnost na skupu za testiranje, a stupac \textit{20-PGD} točnost na neprijateljskim primjerima konstruiranim iz skupa za testiranje koristeći napad PGD s 20 iteracija.
+\pagebreak
+
+U tablici~\ref{tbl:mjerenja_robusno_ucenje} stupac \textit{LR} označava osnovnu stopu učenja, stupac \textit{Točnost} točnost na skupu za testiranje, a stupac \textit{20-PGD} točnost na neprijateljskim primjerima konstruiranim iz skupa za testiranje koristeći napad PGD s 20 iteracija.
 Točnosti su prikazane postotkom, a vrijeme učenja prikazano je brojem minuta. Pritom su točnost, ali i vrijeme učenja zaokruženi na jedno decimalno mjesto.
 U stupcu \textit{Način učenja}, \textit{Natural} predstavlja prirodno učenje, \textit{FreeAdv} "besplatno" učenje, \textit{FastAdv} brzo učenje, 
-\textit{FastAdv+} nadogradnju na brzo učenje, a \textit{FastAdvW} nadogradnju na brzo učenje s korištenjem PGD metode zadnjih 10 epoha učenja.
-U slučaju da na kraju vrijednosti iz stupca \textit{Način učenja} piše \textit{Early}, korišteno je učenje s ranim završetkom.
-
-\pagebreak
+\textit{FastAdv+} brzo učenje s povremenim PGD-om, a \textit{FastAdvW} brzo učenje s povremenim PGD-om te PGD-om zadnjih 10 epoha učenja.
+Ako stupac \textit{Način učenja} ima sufiks \textit{Early}, korišteno je učenje s ranim zaustavljanjem.
 
 \begin{table}[htb]
     \caption{Rezultati raznih načina brzog učenja s neprijateljskim primjerima.}
@@ -815,7 +818,7 @@ U slučaju da na kraju vrijednosti iz stupca \textit{Način učenja} piše \text
     Način učenja & LR & Točnost [\%] & 20-PGD [\%] & Vrijeme učenja [min]\\ \hline
     Natural & 0.01 & 90.4 & 0 & 43.3 \\
     Natural & 0.02 & 92.3 & 0 & 42.7 \\
-    PGD & 0.1 & 83.4 & 43.7 & 202.7 \\
+    PGD-7 & 0.1 & 83.4 & 43.7 & 202.7 \\
     FreeAdv & 0.1 & 84.7 & 30.8 & 25 \\
     FastAdv & 0.2 & 89.6 & 0 & 66.5 \\
     FastAdv, Early & 0.2 & 82.2 & 40.2 & 59.8 \\
@@ -828,7 +831,7 @@ U slučaju da na kraju vrijednosti iz stupca \textit{Način učenja} piše \text
 
 Kao što možemo vidjeti u tablici~\ref{tbl:mjerenja_robusno_ucenje}, najvišu točnost na prirodnom skupu za testiranje ima model učen na prirodnom skupu podataka.
 Nažalost, taj model nije nimalo robustan - njegova točnost na neprijateljskim primjerima konstruiranim koristeći PGD metodu s 20 iteracija iznosi $0\%$.
-Kada govorimo o robusnim modelima, najvišu točnost na neprijateljskim primjerima ima model učen koristeći PGD metodu, no on se i daleko najdulje uči.
+Kada govorimo o robusnim modelima, najvišu točnost na neprijateljskim primjerima ima model učen s PGD-om, no on se i daleko najdulje uči.
 Pritom su tijekom učenja s PGD metodom neprijateljski primjeri konstruirani koristeći PGD sa 7 iteracija.
 
 Od načina brzog učenja s neprijateljskim primjerima izloženih u radovima~\cite{shafahi2019adversarial},~\cite{wong2020fast} i ~\cite{li2020towards},
@@ -841,8 +844,6 @@ Uočimo da rano zaustavljanje učenja kod \textit{FastAdv+} i \textit{FastAdvW} 
 Gledajući da je glavni cilj tih načina učenja rješavanje problema katastrofalne prenaučenosti prisutnog kod \textit{FastAdv} modela, ovakav rezultat je očekivan, 
 a govori nam da ove nadogradnje stvarno uspijevaju u svojoj namjeri.
 
-\pagebreak
-
 U slučaju da nam je glavni cilj brzo naučiti model koji je barem u nekoj mjeri otporan na neprijateljske primjere, kao najbolja opcija ističe se učenje koristeći \textit{FreeAdv} način učenja.
 \textit{FreeAdv} model učen je koristeći ponavljanje (engl.\ \textit{replay}) iznosa 8 pa je stoga ukupno učen 10 epoha - ukupan broj epoha smanjen je za faktor jednak ponavljanju.
 Ovaj model nudi nam konkurentnu točnost na prirodnim podatcima, ali je njegova točnost na neprijateljskim primjerima niža od svih ostalih robusnih modela.
@@ -852,7 +853,7 @@ Toliku kratkoću učenja pripisujemo činjenici da je tijekom učenja za \textit
 
 Modeli učeni \textit{FastAdv} načinom učenja ograničeni su pojavom katastrofalne prenaučenosti. 
 Ovo svojstvo veoma je vidljivo kod \textit{FastAdv} modela bez ranog zaustavljanja učenja - takav model postiže visoku točnost na prirodnom skupu podataka, ali zato nije nimalo otporan na neprijateljske primjere.
-Korištenjem \textit{FastAdv} učenja u kombinaciji s ranim završetkom, točnost na neprijateljskim primjerima podjednaka je s točnošću \textit{FastAdv+} modela,
+Korištenjem \textit{FastAdv} učenja u kombinaciji s ranim zaustavljanjem, točnost na neprijateljskim primjerima podjednaka je s točnošću \textit{FastAdv+} modela,
 ali je takav model ograničen zbog nemogućnosti proizvoljno dugog učenja.
 
 \begin{figure}[htb]
@@ -868,7 +869,7 @@ Na slici~\ref{fig:train_time_comparison} moguće je vidjeti usporedbu vremena u�
 Zbog usporedbe, na grafu je prikazano i vrijeme učenja modela učenog na prirodnim podatcima, kao i vrijeme učenja modela učenog PGD metodom.
 Kao što je bilo vidljivo i iz tablice~\ref{tbl:mjerenja_robusno_ucenje}, daleko najdulje vrijeme učenja ima model učen PGD metodom.
 S druge strane, najkraće vrijeme učenja ima \textit{FreeAdv} model. 
-Ako uspoređujemo modele učene koristeći \textit{FastAdv}, \textit{FastAdv+} ili \textit{FastAdvW} način učenja, najkraće vrijeme učenja ima \textit{FastAdv} model s ranim završetkom.
+Ako uspoređujemo modele učene koristeći \textit{FastAdv}, \textit{FastAdv+} ili \textit{FastAdvW} način učenja, najkraće vrijeme učenja ima \textit{FastAdv} model s ranim zaustavljanjem.
 Gledajući da \textit{FastAdv+} model pri uočavanju pada točnosti na neprijateljskim primjerima $s$ sljedećih mini-grupa uči koristeći PGD metodu, 
 a \textit{FastAdvW} model uz to zadnjih 10 epoha uči koristeći isključivo PGD metodu, ovakav rezultat je i očekivan.
 
@@ -913,8 +914,8 @@ u pitanju je katastrofalna prenaučenost od koje pate svi modeli učeni načinim
 Na slici~\ref{fig:fast_adv_acc} moguće je vidjeti točnost \textit{FastAdv} modela na neprijateljskim primjerima po epohama.
 Kako evaluacija tijekom učenja ne bi bila prespora, neprijateljski primjeri konstruirani su iz nasumično odabrane mini-grupe koristeći PGD metodu s 5 iteracija.
 Kao što smo očekivali, oko 65. epohe dolazi do velikog pada u točnosti na neprijateljskim primjerima - već epohu nakon točnost na neprijateljskim primjerima iznosi otprilike $0\%$.
-Ovime potvrđujemo da je stvarno došlo do katastrofalne prenaučenosti. Kako bismo ovo izbjegli, \textit{FastAdv} model možemo učiti s ranim završetkom. 
-Ipak, rano zaustavljanje učenja ograničava nas jer modele ne možemo proizvoljno dugo učiti. 
+Ovime potvrđujemo da je stvarno došlo do katastrofalne prenaučenosti. Kako bismo ovo izbjegli, \textit{FastAdv} model možemo učiti s ranim zaustavljanjem. 
+Ipak, rano zaustavljanje ograničava nas jer modele ne možemo proizvoljno dugo učiti. 
 Kao što je već prethodno rečeno, jedno od mogućih rješenja ovog problema korištenje je \textit{FastAdv+} ili \textit{FastAdvW} načina učenja.
 
 \begin{figure}[htb]
@@ -961,7 +962,7 @@ alat iz skupa alata \textit{BackdoorBox}. Pritom je za skup za učenje stopa tro
 I za skup za učenje i za skup za testiranje kao ciljni razred odabran je razred \textit{automobile}. 
 U slučaju da na ulaznoj slici postoji okidač, model koji ga je tijekom učenja naučio takvu sliku klasificirat će u razred \textit{automobile}.
 Arhitektura modela, mjera gubitka, optimizator i hiperparametri za učenje jednaki su kao i u prethodnim eksperimentima. 
-Kao i prije, svi modeli osim \textit{FastAdv} modela učeni su koristeći stopu učenja s kosinusnim žarenjem, dok \textit{FastAdv} modeli koriste cikličku stopu učenja.
+Kao i prije, svi modeli osim \textit{FastAdv} modela učeni su koristeći stopu učenja s kosinusnim kaljenjem, dok \textit{FastAdv} modeli koriste cikličku stopu učenja.
 Osim na zatrovanom skupu podataka, svi modeli učeni su i na prirodnom skupu podataka.
 
 Kao i prije, u tablici~\ref{tbl:mjerenja_robusno_ucenje_zatrovano} stupac \textit{Način učenja} označava korišteni način učenja modela. Ako je na kraju naziva načina učenja 
