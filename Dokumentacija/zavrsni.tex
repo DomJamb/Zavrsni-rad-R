@@ -426,20 +426,20 @@ Primjer sa slike~\ref{fig:adv_example} zapravo je neprijateljski primjer konstru
 \end{equation}
 \\
 Pritom $\epsilon$ predstavlja mali pozitivan broj koji određuje veličinu perturbacije, $x$ ulazni podatak, $sign(x)$ predznak od $x$, a $x_{adv}$ konstruirani neprijateljski primjer. 
-FGSM napad originalnom ulazu pridodaje iznos istog predznaka kao i gradijent funkcije gubitka. Na taj način osigurava se najveći mogući rast iznosa funkcije gubitka. 
-Ovakav napad zovemo neusmjerenim napadom, a uz njega postoji i usmjereni napad. U slučaju usmjerenog napada, cilj je što više smanjiti iznos funkcije gubitka s obzirom na proizvoljan razred.
+Napad FGSM originalnom ulazu pridodaje iznos istog predznaka kao i gradijent funkcije gubitka. Na taj način osigurava se najveći mogući rast iznosa funkcije gubitka. 
+Ovakav napad primjer je neusmjerenog napada. U slučaju usmjerenog napada, cilj bi nam bio što više smanjiti iznos funkcije gubitka s obzirom na proizvoljan razred.
 
-Uz FGSM napad, postoji i napad koji iterativno stvara značajno učinkovitije neprijateljske primjere. 
-Tu vrstu napada zovemo PGD napad, a zasniva se na istoj ideji kao i FGSM napad. 
-Za razliku od FGSM-a, PGD napad iterativno ponavlja postupak, time pokušavajući odrediti najbolje rješenje optimizacijskog problema~\ref{eq:adversarial_optimization}.
-Uz to, PGD napad tijekom konstruiranja neprijateljskih primjera osigurava da ukupna perturbacija nije veća od unaprijed definiranog koeficijenta $\epsilon$.
+Uz napad FGSM, postoji i napad koji iterativno stvara značajno učinkovitije neprijateljske primjere. 
+Tu vrstu napada zovemo napad PGD, a zasniva se na istoj ideji kao i napad FGSM. 
+Za razliku od FGSM-a, napad PGD iterativno ponavlja postupak, time pokušavajući odrediti najbolje rješenje optimizacijskog problema~\ref{eq:adversarial_optimization}.
+Uz to, napad PGD tijekom konstruiranja neprijateljskih primjera osigurava da ukupna perturbacija nije veća od unaprijed definiranog koeficijenta $\epsilon$.
 
 \begin{algorithm}
-    \caption{Konstrukcija neprijateljskih primjera koristeći PGD napad}
+    \caption{Konstrukcija neprijateljskih primjera koristeći napad PGD}
     \label{algo:pgd}
     \begin{algorithmic}
         \STATE{\textbf{Ulaz:} $x$ -- ulazne slike, $y$ -- ispravne oznake ulaznih slika, $\epsilon$ -- ograničenje perturbacije, $\alpha$ -- veličina koraka po iteraciji, $K$ -- broj iteracija za konstrukciju neprijateljskih primjera}
-        \STATE{\textbf{Izlaz:} $x_{adv}$ -- neprijateljski primjeri konstruirani PGD napadom}
+        \STATE{\textbf{Izlaz:} $x_{adv}$ -- neprijateljski primjeri konstruirani napadom PGD}
         \\\hrulefill
         \STATE{$\delta = U(-\epsilon, \epsilon)$}
         \FOR{($i = 1 \dots K$)}
@@ -454,12 +454,12 @@ Uz to, PGD napad tijekom konstruiranja neprijateljskih primjera osigurava da uku
 
 \pagebreak
 
-Pseudokod~\ref{algo:pgd} prikazuje način konstrukcije neprijateljskih primjera koristeći PGD napad. 
+Pseudokod~\ref{algo:pgd} prikazuje način konstrukcije neprijateljskih primjera koristeći napad PGD. 
 Perturbacija $\delta$ na početku je inicijalizirana koristeći uniformnu distribuciju s rasponom $[-\epsilon, \epsilon]$, 
 a na kraju svake iteracije iznos perturbacije ograničava se koristeći funkciju \textit{clamp}. 
 Naravno, postoje brojni načini inicijalizacije iznosa perturbacije, no nasumična inicijalizacija pokazala se dosta uspješnom.
 Važno je istaknuti da pseudokod za ograničavanje iznosa perturbacije koristi L\textsubscript{$\infty$}-normu. 
-PGD napad s $K$ iteracija za konstrukciju neprijateljskih primjera zvat ćemo K-PGD (npr.\ 20-PGD).
+Napad PGD s $K$ iteracija za konstrukciju neprijateljskih primjera zvat ćemo K-PGD (npr.\ 20-PGD).
 
 \section{Učenje s neprijateljskim primjerima}
 
@@ -782,11 +782,11 @@ Sve ostale mreže koristile su stopu učenja s kosinusnim žarenjem. Pritom je m
 
 Kako bi se što više ubrzalo učenje, za učenje svih modela korišteno je računanje u mješovitoj preciznosti.
 Osim mreža učenih s neprijateljskim primjerima, za usporedbu je učena i mreža na prirodnom skupu podataka. Nakon učenja, za sve mreže izračunata je točnost na prirodnom skupu za testiranje,
-ali i točnost na neprijateljskim primjerima konstruiranim iz prirodnog skupa za testiranje koristeći PGD napad s 20 iteracija. 
-Pritom je PGD napad kao hiperparametre imao ograničenje perturbacije ($\epsilon$) iznosa $8/255$ te veličinu koraka ($\alpha$) iznosa $1/255$.
+ali i točnost na neprijateljskim primjerima konstruiranim iz prirodnog skupa za testiranje koristeći napad PGD s 20 iteracija. 
+Pritom je napad PGD kao hiperparametre imao ograničenje perturbacije ($\epsilon$) iznosa $8/255$ te veličinu koraka ($\alpha$) iznosa $1/255$.
 Uz točnost, mjereno je i vrijeme potrebno za učenje modela.
 
-U tablici~\ref{tbl:mjerenja_robusno_ucenje} stupac \textit{LR} označava stopu učenja, stupac \textit{Točnost} točnost na skupu za testiranje, a stupac \textit{20-PGD} točnost na neprijateljskim primjerima konstruiranim iz skupa za testiranje koristeći PGD napad s 20 iteracija.
+U tablici~\ref{tbl:mjerenja_robusno_ucenje} stupac \textit{LR} označava stopu učenja, stupac \textit{Točnost} točnost na skupu za testiranje, a stupac \textit{20-PGD} točnost na neprijateljskim primjerima konstruiranim iz skupa za testiranje koristeći napad PGD s 20 iteracija.
 Točnosti su prikazane postotkom, a vrijeme učenja prikazano je brojem minuta. Pritom su točnost, ali i vrijeme učenja zaokruženi na jedno decimalno mjesto.
 U stupcu \textit{Način učenja}, \textit{Natural} predstavlja prirodno učenje, \textit{FreeAdv} besplatno učenje, \textit{FastAdv} brzo učenje, 
 \textit{FastAdv+} nadogradnju na brzo učenje, a \textit{FastAdvW} nadogradnju na brzo učenje s korištenjem PGD metode zadnjih 10 epoha učenja.
