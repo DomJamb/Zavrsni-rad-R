@@ -78,7 +78,7 @@ Kako bismo detaljnije mogli govoriti o učenju i arhitekturama neuronskih mreža
 \pagebreak
 \section{Umjetni neuron}
 Umjetni neuroni predstavljaju jednostavne procesne jedinice koje modeliraju ponašanje prirodnih neurona. Osnovni neuron akumulira vrijednosti na ulazu pomnožene težinama, 
-akumuliranoj vrijednosti dodaje pomak te na kraju istu propušta kroz prijenosnu (aktivacijsku) funkciju. Ponašanje jednog neurona možemo modelirati jednadžbom:
+akumuliranoj vrijednosti dodaje pomak te ju na kraju propušta kroz prijenosnu (aktivacijsku) funkciju. Ponašanje jednog neurona možemo modelirati jednadžbom:
 
 \begin{equation}
     o = f(\sum_{i=1}^{n}x_{i} \cdot w_{i} + b)
@@ -264,7 +264,7 @@ Kako bismo imali veću kontrolu nad dimenzijama izlaza, kao i utjecajem vrijedno
 \end{figure}
 
 Na slici~\ref{fig:zero_padding} moguće je vidjeti 3x3 matricu nadopunjenu nulama. U slučaju da nad takvom matricom primijenimo konvoluciju s jezgrom dimenzija 2x2, mapa značajki na izlazu bila bi dimenzija 4x4.
-Da smo konvoluciju primijenili nad matricom bez nadopunjavanja, mapa značajki bila bi dimenzija 2x2, a vrijednosti pri rubovima matrice manje bi doprinosile istoj.
+Da smo konvoluciju primijenili nad matricom bez nadopunjavanja, mapa značajki bila bi dimenzija 2x2, a vrijednosti pri rubovima matrice manje bi joj doprinosile.
 Možemo reći da nule čine okvir oko originalne matrice, time osiguravajući veće dimenzije izlaza.
 
 \pagebreak
@@ -518,13 +518,15 @@ Kako bismo riješili ili barem umanjili ovaj problem, predložena su brojna rje�
 Jedno od prvih predloženih rješenja za problem duljine trajanja učenja robusnih modela naziva se "besplatno" učenje (engl.\ \textit{free adversarial training})~\cite{shafahi2019adversarial}.
 Uočeno je da modeli učeni koristeći neprijateljske primjere konstruirane PGD metodom imaju visoku robusnost, no, kao što je već rečeno, zahtijevaju puno vremena za učenje.
 
-Osnovna ideja "besplatnog" učenja je sljedeća: unatražnim prolazom osim iznosa gradijenta po parametrima modela izračunamo i iznos gradijenta po ulazu potreban za konstrukciju neprijateljskih primjera.
-Kako bi se neprijateljski primjeri iterativno izmjenjivali, na svakoj mini-grupi model uči nekoliko puta zaredom. Ovaj hiperparametar zovemo ponavljanje (engl.\ \textit{replay}).
-Važno je uočiti da, kako bismo i dalje trebali otprilike jednako vremena za učenje modela, moramo smanjiti broj epoha za faktor ponavljanja. 
+Osnovna ideja "besplatnog" učenja je sljedeća: unatražnim prolazom izračunamo gradijent po ulazu potreban za konstrukciju neprijateljskih primjera, kao i gradijent po parametrima modela.
+Kako bismo iterativno konstruirali što kvalitetnije neprijateljske primjere, tijekom učenja modelu na ulaz nekoliko puta dovodimo istu mini-grupu prije nego što pređemo na sljedeću.
+Ponavljanjem mini-grupe nekoliko puta zaredom pokušavamo postići postupak sličan napadu PGD, a da pritom ne platimo veliku dodatnu cijenu. 
+Hiperparametar kojim ugađamo broj ponavljanja mini-grupe zovemo ponavljanje (engl.\ \textit{replay}).
+Važno je uočiti da, kako bismo i dalje htjeli imati otprilike jednako vremena za učenje modela, moramo smanjiti broj epoha za faktor ponavljanja. 
 Ako svaku mini-grupu unutar jedne epohe ponavljamo 8 puta, broj epoha bit će 8 puta manji naspram broja epoha kod modela učenog prirodnim učenjem.
 Nažalost, povećavanjem broja ponavljanja dolazi do degradacije performansi modela na običnom testnom skupu - u pitanju je kompromis između željene razine robusnosti i točnosti na običnom testnom skupu.
 
-\begin{algorithm}
+\begin{algorithm}[H]
     \caption{"Besplatno" učenje s neprijateljskim primjerima. Prilagođeno iz~\cite{wong2020fast}}
     \label{algo:adv_learning_free}
     \begin{algorithmic}
@@ -533,49 +535,52 @@ Nažalost, povećavanjem broja ponavljanja dolazi do degradacije performansi mod
         \STATE{$\theta = initializeModelParams()$}
         \STATE{$\delta = 0$}
         \FOR{$(ep = 1 \dots N/K)$}
+            \STATE{$grad = 0$}
             \FOR{$(i = 1 \dots M)$}
                 \FOR{$(j = 1 \dots K)$}
-                    \STATE{$gradAdv, grad = \nabla L(x_{i} + \delta,y_{i};\theta)$}
+                    \STATE{$gradAdv = 0$}
+                    \STATE{$gradAdv, grad \pluseq \nabla_{x_i, \theta} L(x_{i} + \delta,y_{i};\theta)$}
                     \STATE{$\delta = \delta + \epsilon \cdot sign(gradAdv)$}
                     \STATE{$\delta = clamp(\delta, -\epsilon, \epsilon)$}
-                    \STATE{$\theta = \theta - \eta \cdot grad$}
                 \ENDFOR
             \ENDFOR
+            \STATE{$\theta = \theta - \eta \cdot grad$}
         \ENDFOR
     \end{algorithmic}
 \end{algorithm}
 
-\pagebreak
-
 Pseudokod~\ref{algo:adv_learning_free} prikazuje algoritam za "besplatno" učenje s neprijateljskim primjerima.
 Kao i u prethodnom algoritmu, parametri modela $\theta$ inicijaliziraju se pozivom funkcije \textit{initializeModelParams}.
-Važno je uočiti da se iznosi gradijenata potrebni za konstrukciju neprijateljskih primjera, ali i izmjenu parametara modela izračunavaju u istom unatražnom prolazu,
-time osiguravajući da konstrukcija neprijateljskih primjera ne usporava postupak učenja. 
+Važno je uočiti da se gradijenti potrebni za konstrukciju neprijateljskih primjera, ali i izmjenu parametara modela računaju u istom unatražnom prolazu.
+Ovime osiguravamo da konstrukcija neprijateljskih primjera ne umanjuje broj iteracija učenja. 
 Uz to, perturbacija $\delta$ inicijalizira se na 0 samo na početku postupka učenja - kada započinje izračun perturbacije za sljedeći ulaz, prethodni iznos služi kao "iznos za zagrijavanje" (engl.\ \textit{warmup}).
 
 Ovakvim načinom robusnog učenja, duljina trajanja učenja modela otprilike je jednaka kao i duljina trajanja učenja modela prirodnim učenjem.
-Uz to, rezultati rada~\cite{shafahi2019adversarial} pokazuju da je robusnost naučenih modela usporediva s robusnošću modela učenih koristeći neprijateljske primjere konstruirane PGD metodom.
+Uz to, rezultati rada~\cite{shafahi2019adversarial} pokazuju da je robusnost naučenih modela usporediva s robusnošću modela dobivenih "besplatnim" učenjem.
 Kao što je već rečeno, visoku robusnost modela učenih koristeći "besplatno" učenje možemo postići izmjenom broja ponavljanja, ali po cijeni smanjenja performansi modela na običnom testnom skupu.
 
-\subsection{Brzo učenje}
+\subsection{Brzo učenje s neprijateljskim primjerima}
 
-Za modele učene koristeći FGSM metodu dugo se smatralo da nisu otporni na neprijateljske primjere konstruirane koristeći iterativne metode poput PGD-a.
+Za modele učene FGSM-om dugo se smatralo da nisu otporni na neprijateljske primjere konstruirane iterativnim metodama.
 Takvi modeli nisu nam veoma korisni jer često imaju nižu točnost na običnim podatcima, a ne nude pravu mjeru robusnosti - napadač jednostavno može konstruirati neprijateljske primjere koje će model krivo klasificirati.
-Ipak, rad~\cite{wong2020fast} predlaže da problem ne leži u korištenju FGSM metode, već njenoj inicijalizaciji.
-Standardno se perturbacija za FGSM metodu inicijalizira na 0 ili na granicu perturbacije $\epsilon$, bilo s pozitivnim ili negativnim predznakom.
-U slučaju da za inicijalizaciju iskoristimo nasumičnu inicijalizaciju koristeći uniformnu distribuciju s granicama $[-\epsilon, \epsilon]$, 
-modeli učeni koristeći FGSM metodu postižu svojstvo robusnosti čak i protiv iterativnih napada.
+Čini se da se ovaj problem može ublažiti pažljivom inicijalizacijom perturbacije~\cite{wong2020fast}.
+Standardno se perturbacija za FGSM metodu s L\textsubscript{$\infty$} ograničenjem inicijalizira na 0 ili na iznos koeficijenta $\epsilon$, bilo s pozitivnim ili negativnim predznakom.
+Međutim, pokazuje se da ako za inicijalizaciju iskoristimo nasumičnu inicijalizaciju, učenje s FGSM-om postiže znatno bolju robusnost na iterativne napade.
+Pritom se za nasumičnu inicijalizaciju koristi uniformna distribucija s granicama $[-\epsilon, \epsilon]$,
 
-Ako učenje koristeći FGSM metodu s nasumičnom inicijalizacijom kombiniramo s nekim od mogućih optimizacija poput korištenja cikličke stope učenja i računanja u mješovitoj preciznosti,
-dobivamo tzv.\ brzo učenje (engl.\ \textit{fast adversarial training})~\cite{wong2020fast}. Predložene optimizacije omogućavaju značajno ubrzanje učenja modela, a nisu implementacijski zahtjevne.
+Otkriće da se visoka mjera robusnosti može postići i koristeći FGSM s nasumičnom inicijalizacijom perturbacije korišteno je u tzv.\ brzom učenju (engl.\ \textit{fast adversarial training})~\cite{wong2020fast}.
+Uz ovo, u brzom učenju koriste se i neke od mogućih optimizacija poput korištenja cikličke stope učenja i računanja u mješovitoj preciznosti.
+Predložene optimizacije omogućavaju značajno ubrzanje učenja modela, a nisu implementacijski zahtjevne.
 Ciklička stopa učenja~\cite{smith2017cyclical} označava promjenu stope učenja kroz epohe ili iteracije - nakon svakog koraka, stopa učenja će se povećavati ili smanjivati unutar unaprijed definiranih granica.
 Uvođenje cikličke stope učenja korisno je za brže konvergiranja modela, time ubrzavajući učenje. 
 Uz cikličku, postoje i brojne druge poput linearne i kosinusne, no brzo učenje koristi upravo cikličku stopu učenja.
 
 Razvoj tenzorskih jezgri grafičkih kartica omogućilo je korištenje računanja u mješovitoj preciznosti - 
 umjesto da se svi izračuni obavljaju koristeći 32-bitne brojeve s pomičnim zarezom, neki izračuni obavljaju se koristeći 16-bitne brojeve.
-Korištenjem računanja u mješovitoj preciznosti, značajno se može ubrzati učenje, ali i smanjiti potrebna količina memorije za učenje modela.
-Naravno, da bismo isto mogli koristiti, grafičke kartice na kojim učimo modele moraju imati tenzorske jezgre. Ako koristimo starije grafičke kartice, učenje neće biti brže.
+Mješovita preciznost može značajno ubrzati učenje, kao i smanjiti potrebnu količinu memorije potrebnu za učenje modela.
+Da bismo mješovitu preciznost mogli koristiti bez pada performansi modela, grafičke kartice na kojim učimo modele trebale bi imati tenzorske jezgre~\cite{micikevicius2017mixed}.
+
+\pagebreak
 
 \begin{algorithm}
     \caption{Brzo učenje s neprijateljskim primjerima. Prilagođeno iz~\cite{wong2020fast}}
@@ -585,14 +590,15 @@ Naravno, da bismo isto mogli koristiti, grafičke kartice na kojim učimo modele
         \\\hrulefill
         \STATE{$\theta = initializeModelParams()$}
         \FOR{$(ep = 1 \dots N)$}
+            \STATE{$grad = 0$}
             \FOR{$(i = 1 \dots M)$}
                 \STATE{$\delta = U(-\epsilon, \epsilon)$}
                 \STATE{$gradAdv = \nabla_{\delta}L(x_{i} + \delta,y_{i};\theta)$}
                 \STATE{$\delta = \delta + \alpha \cdot sign(gradAdv)$}
                 \STATE{$\delta = clamp(\delta, -\epsilon, \epsilon)$}
-                \STATE{$grad = \nabla_{\theta}L(x_{i} + \delta,y_{i};\theta)$}
-                \STATE{$\theta = \theta - \eta \cdot grad$}
+                \STATE{$grad \pluseq \nabla_{\theta}L(x_{i} + \delta,y_{i};\theta)$}
             \ENDFOR
+            \STATE{$\theta = \theta - \eta \cdot grad$}
         \ENDFOR
     \end{algorithmic}
 \end{algorithm}
@@ -603,13 +609,13 @@ Početni iznos perturbacije $\delta$ inicijalizira se koristeći uniformnu distr
 Za razliku od "besplatnog" učenja, kod brzog učenja potrebna su dva unaprijedna prolaza, kao i dva zasebna izračuna iznosa gradijenta za svaki ulaz.
 Zbog ovoga brzo učenje nije jednako brzo kao i prirodno učenje modela, ali zato nudi određenu mjeru robusnosti.
 
-Prema radu~\cite{wong2020fast}, brzo učenje modela nudi gotovo jednaku mjeru robusnosti protiv iterativnih napada kao i modeli učeni koristeći PGD metodu, 
-ali sa značajno kraćim vremenom učenja. Čak i ako već navedene optimizacije primijenimo na "besplatno" učenje i učenje koristeći PGD metodu, 
-da bismo postigli jednaku mjeru robusnosti modele je potrebno učiti dulje nego modele učene koristeći brzo učenje.
+Autori brzog učenja tvrde da njihova metoda nudi gotovo jednaku mjeru robusnosti protiv iterativnih napada kao i modeli učeni PGD-om, 
+ali sa značajno kraćim vremenom učenja~\cite{wong2020fast}. Čak i ako već navedene optimizacije (korištenje cikličke stope učenja i računanja u mješovitoj preciznosti) primijenimo na "besplatno" učenje i učenje PGD-om, 
+da bismo postigli jednaku mjeru robusnosti modele je potrebno učiti dulje nego modele učene metodom brzog učenja.
 
 Nažalost, korištenje brzog učenja s neprijateljskim primjerima ima i svoju manu. U slučaju da modele učimo velik broj epoha,
 u jednom trenutku gotovo sigurno će doći do značajnog pada u točnosti na neprijateljskim primjerima. Ovu pojavu zovemo katastrofalna prenaučenost (engl.\ \textit{catastrophic overfitting}),
-a jedan od mogućih načina za sprječavanje iste je korištenje ranog završetka (engl.\ \textit{early stopping}). 
+a jedan od mogućih načina za sprječavanje te pojave je korištenje ranog završetka (engl.\ \textit{early stopping}). 
 Kako bismo na vrijeme mogli zaustaviti učenje modela, nakon svake epohe evaluiramo točnost modela na neprijateljskim primjerima konstruiranim iz nasumične mini-grupe.
 U slučaju da je točnost u trenutnoj epohi značajno manja od točnosti u prethodnoj epohi, zaustavljamo učenje modela i kao najbolji model vraćamo model iz prethodne epohe.
 Zbog ovog svojstva, korištenje brzog učenja s neprijateljskim primjerima nije prikladno za modele koje trebamo učiti velik broj epoha.
@@ -619,7 +625,7 @@ Zbog ovog svojstva, korištenje brzog učenja s neprijateljskim primjerima nije 
 Kako bi brzo učenje s neprijateljskim primjerima bilo primjenjivo za proizvoljno dugo učenje, potrebno je riješiti problem katastrofalne prenaučenosti.
 Taj problem pojavljuje se kod svih postupaka koji koriste FGSM metodu za učenje, no manje je izražen kod brzog učenja nego kod običnog učenja s neprijateljskim primjerima konstruiranim koristeći FGSM metodu.
 Rad~\cite{li2020towards} otkriva nam da brzo učenje u manjoj mjeri pati od problema katastrofalne prenaučenosti zbog nasumične inicijalizacije perturbacije.
-Kao i kod modela učenih običnim FGSM-om, i modeli učeni koristeći brzo učenje susreću se s katastrofalnom prenaučenošću, ali se od iste u periodu od nekoliko mini-grupa mogu oporaviti te nastaviti dalje normalno učiti.
+Kao i kod modela učenih običnim FGSM-om, i modeli učeni koristeći brzo učenje susreću se s katastrofalnom prenaučenošću, ali se od nje u periodu od nekoliko mini-grupa mogu oporaviti te nastaviti dalje normalno učiti.
 
 Ključ u oporavku leži u nasumičnoj inicijalizaciji koja pomaže u stvaranju kvalitetnih neprijateljskih primjera. 
 Ipak, zbog nasumičnosti nemamo garanciju da će takav postupak uvijek biti dovoljan za oporavak pa nakon određene količine vremena i dalje dođe do katastrofalne prenaučenosti.
@@ -758,7 +764,7 @@ Korištenjem biblioteke NumPy, moguće je značajno ubrzati izvođenje koda veza
 Kao i NumPy, i Matplotlib je biblioteka pisana za programski jezik Python.
 Služi za jednostavno iscrtavanje grafičkih objekata. 
 Osim klasičnih grafova, koristeći Matplotlib moguće je prikazati i slike (npr.\ slike učitane kao dio skupa podataka CIFAR-10).
-Uz iscrtavanje grafova i slika, koristeći Matplotlib iste možemo i s lakoćom pohraniti.
+Uz iscrtavanje grafova i slika, koristeći Matplotlib možemo ih s lakoćom pohraniti.
 
 \subsection{PyTorch}
 
@@ -1057,7 +1063,7 @@ U budućim istraživanjima bilo bi zanimljivo primijeniti metode brzog učenja s
 jer su u okviru ovog rada istraživanja zbog brzine učenja bila izvođena isključivo na ResNet-18 arhitekturi i CIFAR-10 skupu podataka. 
 Po pitanju detekcije zatrovanih podataka, istraživanje bi trebalo proširiti na dodatne načine učenja s neprijateljskim primjerima poput \textit{FastAdv+} i \textit{FastAdvW} načina učenja.
 Za sve načine učenja trebalo bi provesti praćenje točnosti na zatrovanom skupu za učenje po mini-grupama kako bi se provjerila hipoteza da do naglog rasta u točnosti dolazi kod svih robusnih modela.
-U slučaju da se pokaže da ovo svojstvo imaju svi robusni modeli učeni na zatrovanom skupu podataka, trebalo bi dodatno istražiti mogućnost primjene istoga kao detektora postojanja zatrovanih podataka.
+U slučaju da se pokaže da ovo svojstvo imaju svi robusni modeli učeni na zatrovanom skupu podataka, trebalo bi dodatno istražiti mogućnost primjene ovog svojstva kao detektora postojanja zatrovanih podataka.
 
 \bibliography{literatura}
 \bibliographystyle{fer}
