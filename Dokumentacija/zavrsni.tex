@@ -694,7 +694,7 @@ U slučaju da koristimo neprovjerene podatke, izlažemo naš sustav brojnim prij
 Jedna od takvih prijetnji ubacivanje je zatrovanih podataka u skup za učenje modela. 
 
 Zatrovani podatci namjerno su dizajnirani podatci čiji cilj je zavaravanje sustava.
-Slični su neprijateljskim primjerima, ali postoje i određene razlike koje se većinom očituju u namjeri korištenja istih.
+Slični su neprijateljskim primjerima, ali postoje i određene razlike koje se većinom očituju u namjeri.
 Dok neprijateljske primjere koristimo kako bi za neki konkretan ulaz izmijenili klasifikaciju nakon što je model već naučen,
 zatrovane podatke ubacujemo u skup za učenje modela kako bismo izmijenili decizijsku granicu modela - ako model učimo na zatrovanom skupu podataka,
 kada ga nakon učenja koristimo za klasifikaciju, njegove odluke za određene ulaze bit će drugačije nego što bi bile da smo model učili na čistom skupu.
@@ -725,7 +725,7 @@ Općenito govoreći, ubacivanje zatrovanih podataka kao posljedicu može imati p
 U prvome slučaju, napadač ubacivanjem zatrovanih podataka želi degradirati performanse modela, time čineći njegov rad nepouzdanijim.
 U drugome slučaju, napadač pažljivim dizajnom zatrovanih podataka može do određene mjere manipulirati ponašanjem modela. 
 Ako model nauči klasificirati sve zatrovane podatke u određeni razred te nakon učenja kao ulaz dobije novi zatrovani podatak ili podatak koji ima određenu mjeru sličnosti s naučenim okidačem,
-postoji velika vjerojatnost da će ga model krivo klasificirati.  
+postoji velika vjerojatnost da će ulaz biti krivo klasificiran.  
 
 \section{BackdoorBox}
 
