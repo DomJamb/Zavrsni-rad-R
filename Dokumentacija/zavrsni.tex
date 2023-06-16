@@ -613,9 +613,11 @@ Autori brzog učenja tvrde da njihova metoda nudi gotovo jednaku mjeru robusnost
 ali sa značajno kraćim vremenom učenja~\cite{wong2020fast}. Čak i ako već navedene optimizacije (korištenje cikličke stope učenja i računanja u mješovitoj preciznosti) primijenimo na "besplatno" učenje i učenje PGD-om, 
 da bismo postigli jednaku mjeru robusnosti modele je potrebno učiti dulje nego modele učene metodom brzog učenja.
 
+\pagebreak
+
 Nažalost, korištenje brzog učenja s neprijateljskim primjerima ima i svoju manu. U slučaju da modele učimo velik broj epoha,
 u jednom trenutku gotovo sigurno će doći do značajnog pada u točnosti na neprijateljskim primjerima. Ovu pojavu zovemo katastrofalna prenaučenost (engl.\ \textit{catastrophic overfitting}),
-a jedan od mogućih načina za sprječavanje te pojave je korištenje ranog završetka (engl.\ \textit{early stopping}). 
+a jedan od mogućih načina za sprječavanje te pojave je rano zaustavljanje učenja (engl.\ \textit{early stopping}). 
 Kako bismo na vrijeme mogli zaustaviti učenje modela, nakon svake epohe evaluiramo točnost modela na neprijateljskim primjerima konstruiranim iz nasumične mini-grupe.
 U slučaju da je točnost u trenutnoj epohi značajno manja od točnosti u prethodnoj epohi, zaustavljamo učenje modela i kao najbolji model vraćamo model iz prethodne epohe.
 Zbog ovog svojstva, korištenje brzog učenja s neprijateljskim primjerima nije prikladno za modele koje trebamo učiti velik broj epoha.
@@ -833,7 +835,7 @@ a njegova točnost na neprijateljskim primjerima usporediva je s točnošću mod
 Važno je napomenuti da \textit{FastAdvW} modeli trebaju skoro dvostruko manje vremena za učenje naspram PGD modela, ali se nažalost uče najdulje od svih predloženih varijanti brzog učenja.
 S obzirom na to da \textit{FastAdvW} modeli zadnjih 10 epoha uče koristeći isključivo PGD metodu, takav rezultat je i očekivan.
 Modeli učeni koristeći \textit{FastAdv+} način učenja dobra su alternativa korištenju \textit{FastAdvW} modela jer se uče kraće i postižu malo bolje rezultate na prirodnom skupu za testiranje.
-Uočimo da korištenje ranog završetka kod \textit{FastAdv+} i \textit{FastAdvW} modela nema nikakav učinak na performanse. 
+Uočimo da rano zaustavljanje učenja kod \textit{FastAdv+} i \textit{FastAdvW} modela nema nikakav učinak na performanse. 
 Gledajući da je glavni cilj tih načina učenja rješavanje problema katastrofalne prenaučenosti prisutnog kod \textit{FastAdv} modela, ovakav rezultat je očekivan, 
 a govori nam da ove nadogradnje stvarno uspijevaju u svojoj namjeri.
 
@@ -847,7 +849,7 @@ Dobra strana \textit{FreeAdv} modela svakako je vrijeme učenja - ovaj model uč
 Toliku kratkoću učenja pripisujemo činjenici da je tijekom učenja za \textit{FreeAdv} model potrebno provesti evaluaciju nakon epoha samo 10 puta, dok je za ostale modele potrebno provesti evaluaciju punih 80 puta.
 
 Modeli učeni \textit{FastAdv} načinom učenja ograničeni su pojavom katastrofalne prenaučenosti. 
-Ovo svojstvo veoma je vidljivo kod \textit{FastAdv} modela bez ranog završetka - takav model postiže visoku točnost na prirodnom skupu podataka, ali zato nije nimalo otporan na neprijateljske primjere.
+Ovo svojstvo veoma je vidljivo kod \textit{FastAdv} modela bez ranog zaustavljanja učenja - takav model postiže visoku točnost na prirodnom skupu podataka, ali zato nije nimalo otporan na neprijateljske primjere.
 Korištenjem \textit{FastAdv} učenja u kombinaciji s ranim završetkom, točnost na neprijateljskim primjerima podjednaka je s točnošću \textit{FastAdv+} modela,
 ali je takav model ograničen zbog nemogućnosti proizvoljno dugog učenja.
 
@@ -910,7 +912,7 @@ Na slici~\ref{fig:fast_adv_acc} moguće je vidjeti točnost \textit{FastAdv} mod
 Kako evaluacija tijekom učenja ne bi bila prespora, neprijateljski primjeri konstruirani su iz nasumično odabrane mini-grupe koristeći PGD metodu s 5 iteracija.
 Kao što smo očekivali, oko 65. epohe dolazi do velikog pada u točnosti na neprijateljskim primjerima - već epohu nakon točnost na neprijateljskim primjerima iznosi otprilike $0\%$.
 Ovime potvrđujemo da je stvarno došlo do katastrofalne prenaučenosti. Kako bismo ovo izbjegli, \textit{FastAdv} model možemo učiti s ranim završetkom. 
-Ipak, korištenje ranog završetka ograničava nas jer modele ne možemo proizvoljno dugo učiti. 
+Ipak, rano zaustavljanje učenja ograničava nas jer modele ne možemo proizvoljno dugo učiti. 
 Kao što je već prethodno rečeno, jedno od mogućih rješenja ovog problema korištenje je \textit{FastAdv+} ili \textit{FastAdvW} načina učenja.
 
 \begin{figure}[htb]
