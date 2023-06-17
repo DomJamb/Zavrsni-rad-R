@@ -672,9 +672,11 @@ Pseudokod~\ref{algo:adv_learning_fast_plus} prikazuje algoritam \textit{FastAdv+
 % Kao i prije, parametri modela $\theta$ inicijaliziraju se pozivom funkcije \textit{initializeModelParams}.
 Kako bismo pratili točnost modela na neprijateljskim primjerima, koristimo varijable \textit{accLast} i \textit{accValid} 
 pri čemu prva varijabla predstavlja stariju točnost s kojom uspoređujemo, a druga varijabla točnost iz prethodnog koraka.
-U slučaju da je u prethodnom koraku točnost pala ispod vrijednosti određene pragom $c$, učit ćemo PGD-om, a inače ćemo učiti s metodom \textit{RandomFGSM} koja predstavlja FGSM metodu s nasumičnom inicijalizacijom.
+U slučaju da je u prethodnom koraku točnost pala ispod vrijednosti određene pragom $c$, učit ćemo PGD-om, a inače ćemo učiti s metodom \textit{RandomFGSM} koja predstavlja metodu FGSM s nasumičnom inicijalizacijom.
 Nakon provođenja učenja, u slučaju da smo na iteraciji određenoj frekvencijom detekcije $s$, evaluirat ćemo točnost modela na neprijateljskim primjerima pozivom funkcije \textit{evaluateRobustness}.
 U originalnome radu~\cite{li2020towards}, za provjeru je korištena metoda PGD, a isto je reproducirano i u ovome radu. 
+
+\pagebreak
 
 Ovakav način učenja omogućava nam proizvoljno dugo učenje modela, no i dalje ne dostiže jednaku mjeru robusnosti kao i najnovije varijante učenja PGD-om.
 Kako bismo dodatno unaprijedili \textit{FastAdv+} učenje, predložena je nadogradnja: zadnjih nekolicinu epoha model ćemo učiti isključivo PGD-om. 
