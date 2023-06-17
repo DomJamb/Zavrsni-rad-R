@@ -835,14 +835,14 @@ Ako stupac \textit{Način učenja} ima sufiks \textit{Early}, korišteno je uče
 Kao što možemo vidjeti u tablici~\ref{tbl:mjerenja_robusno_ucenje}, najvišu točnost na prirodnom skupu za testiranje ima model učen na prirodnom skupu podataka.
 Nažalost, taj model nije nimalo robustan - njegova točnost na neprijateljskim primjerima konstruiranim PGD-om s 20 iteracija iznosi $0\%$.
 Kada govorimo o robusnim modelima, najvišu točnost na neprijateljskim primjerima ima model učen PGD-om, no on se i daleko najdulje uči.
-Pritom su tijekom učenja PGD metodom neprijateljski primjeri konstruirani PGD-om sa 7 iteracija.
+Pritom su tijekom učenja PGD-om neprijateljski primjeri konstruirani PGD-om sa 7 iteracija.
 
 Od metoda brzog učenja s neprijateljskim primjerima izloženih u radovima~\cite{shafahi2019adversarial},~\cite{wong2020fast} i ~\cite{li2020towards},
-najbolje performanse ima model učen \textit{FastAdvW} metodom. Njegova točnost na prirodnom skupu za testiranje druga je najviša od svih modela koji nude određenu mjeru robusnosti,
+najbolje performanse ima model učen metodom \textit{FastAdvW}. Njegova točnost na prirodnom skupu za testiranje druga je najviša od svih modela koji nude određenu mjeru robusnosti,
 a njegova točnost na neprijateljskim primjerima usporediva je s točnosti modela učenog PGD-om. 
 Važno je napomenuti da modeli učeni metodom \textit{FastAdvW} trebaju skoro dvostruko manje vremena za učenje naspram modela učenih PGD-om, ali se nažalost uče najdulje od svih predloženih varijanti brzog učenja.
 S obzirom na to da modeli učeni metodom \textit{FastAdvW} zadnjih 10 epoha uče isključivo PGD-om, takav rezultat je i očekivan.
-Modeli učeni \textit{FastAdv+} metodom dobra su alternativa korištenju modela učenih metodom \textit{FastAdvW} jer se uče kraće i postižu malo bolje rezultate na prirodnom skupu za testiranje.
+Modeli učeni metodom \textit{FastAdv+} dobra su alternativa korištenju modela učenih metodom \textit{FastAdvW} jer se uče kraće i postižu malo bolje rezultate na prirodnom skupu za testiranje.
 Uočimo da rano zaustavljanje učenja kod modela učenih metodama \textit{FastAdv+} i \textit{FastAdvW} nema nikakav učinak na performanse. 
 Gledajući da je glavni cilj tih metoda rješavanje problema katastrofalne prenaučenosti prisutnog kod modela učenih metodom \textit{FastAdv}, ovakav rezultat je očekivan, 
 a govori nam da ove nadogradnje stvarno uspijevaju u svojoj namjeri.
@@ -891,7 +891,7 @@ Možemo vidjeti da najvišu točnost na prirodnom skupu imaju model učen na pri
 Istovremeno, ta dva modela ne nude nikakvu otpornost na neprijateljske primjere - njihova točnost na neprijateljskim primjerima jednaka je $0\%$.
 Ostali modeli imaju podjednake točnosti na prirodnom skupu, ali i na neprijateljskim primjerima.
 Pritom najvišu točnost na prirodnom skupu imaju modeli učeni metodom \textit{FastAdv+}, dok najvišu točnost na neprijateljskim primjerima imaju modeli učeni metodom \textit{FastAdvW}.
-Model učen \textit{Free} metodom ima najnižu točnost na neprijateljskim primjerima, ali zato, kao što smo vidjeli na slici~\ref{fig:train_time_comparison}, ima najkraće vrijeme učenja.
+Model učen metodom \textit{FreeAdv} ima najnižu točnost na neprijateljskim primjerima, ali zato, kao što smo vidjeli na slici~\ref{fig:train_time_comparison}, ima najkraće vrijeme učenja.
 
 \begin{figure}[htb]
     \centering
