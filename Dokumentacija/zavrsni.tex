@@ -401,9 +401,9 @@ Pronalaženje neprijateljskih primjera zapravo je optimizacijski problem koji mo
 \\
 Pritom $\delta$ označava iznos perturbacije u intervalu određenim s granicama $[-\epsilon, \epsilon]$, $L(x,y;\theta)$ funkciju gubitka, a $\theta$ parametre modela.
 Drugim riječima, cilj nam je naći perturbaciju omeđenu određenim iznosom takvu da je iznos funkcije gubitka za ulaz izmijenjen tom perturbacijom maksimalan.
-Iznos perturbacije najčešće je omeđen L\textsubscript{$\infty$}-normom, no može biti omeđen i L\textsubscript{2}-normom ili L\textsubscript{1}-normom. 
+Iznos perturbacije najčešće je omeđen L\textsubscript{$\infty$} normom, no može biti omeđen i L\textsubscript{2} normom ili L\textsubscript{1} normom. 
 
-U slučaju vektorskog prostora, L\textsubscript{$\infty$}-norma bit će jednaka iznosu najveće apsolutne vrijednosti komponente vektora, L\textsubscript{2}-norma euklidskoj udaljenosti vektora od ishodišta, a L\textsubscript{1}-norma sumi iznosa apsolutnih vrijednosti svih komponenti vektora.
+U slučaju vektorskog prostora, L\textsubscript{$\infty$} norma bit će jednaka iznosu najveće apsolutne vrijednosti komponente vektora, L\textsubscript{2} norma euklidskoj udaljenosti vektora od ishodišta, a L\textsubscript{1} norma sumi iznosa apsolutnih vrijednosti svih komponenti vektora.
 Općenito govoreći, L\textsubscript{p} normu možemo definirati sljedećom formulom:
 
 \begin{equation}
@@ -411,7 +411,7 @@ Općenito govoreći, L\textsubscript{p} normu možemo definirati sljedećom form
     \label{eq:lpnorm}
 \end{equation}
 \\
-Formula~\ref{eq:lpnorm} vrijedi za proizvoljan broj $p$ veći od 0. Ipak, L\textsubscript{$\infty$}-normu uobičajeno definiramo zasebnom formulom:
+Formula~\ref{eq:lpnorm} vrijedi za proizvoljan broj $p$ veći od 0. Ipak, L\textsubscript{$\infty$} normu uobičajeno definiramo zasebnom formulom:
 
 \begin{equation}
     \lVert x \rVert_{\infty} = \max_{i}(|x_{i}|)
@@ -460,7 +460,7 @@ Pseudokod~\ref{algo:pgd} prikazuje način konstrukcije neprijateljskih primjera 
 Perturbacija $\delta$ na početku je inicijalizirana pomoću uniformne distribucije s rasponom $[-\epsilon, \epsilon]$, 
 a na kraju svake iteracije iznos perturbacije ograničava se koristeći funkciju \textit{clamp} kojom postižemo projiciranje na L\textsubscript{$\infty$} loptu. 
 Naravno, postoje brojni načini inicijalizacije iznosa perturbacije, no nasumična inicijalizacija pokazala se dosta uspješnom.
-Važno je istaknuti da pseudokod za ograničavanje iznosa perturbacije koristi L\textsubscript{$\infty$}-normu. 
+Važno je istaknuti da pseudokod za ograničavanje iznosa perturbacije koristi L\textsubscript{$\infty$} normu. 
 Napad PGD s $K$ iteracija za konstrukciju neprijateljskih primjera zvat ćemo K-PGD (npr.\ 20-PGD).
 
 \section{Učenje s neprijateljskim primjerima}
@@ -817,7 +817,7 @@ Ako stupac \textit{Način učenja} ima sufiks \textit{Early}, korišteno je uče
     \caption{Rezultati raznih načina brzog učenja s neprijateljskim primjerima.}
     \label{tbl:mjerenja_robusno_ucenje}
     \centering
-    \begin{tabular}{lllll} \hline
+    \begin{tabular}{lcccc} \hline
     Način učenja & LR & Točnost [\%] & 20-PGD [\%] & Vrijeme učenja [min]\\ \hline
     Natural & 0.01 & 90.4 & 0 & 43.3 \\
     Natural & 0.02 & 92.3 & 0 & 42.7 \\
@@ -953,8 +953,9 @@ te korištenja PGD-a za konstrukciju neprijateljskih primjera kada se uoči pad 
 
 \pagebreak
 
-\section{Prelimarno istraživanje primjene učenja s neprijateljskim primjerima za detekciju zatrovanih podataka}
+\section{Robusno učenje na zatrovanim podatcima}
 
+Razmotrit ćemo mogućnost primjene učenja s neprijateljskim primjerima za detekciju zatrovanih podataka.
 Robusni modeli nude nam određenu mjeru otpornosti na neprijateljske primjere. 
 Ipak, značajniji problem predstavljaju nam zatrovani podatci ubačeni u skup za učenje jer zbog njih model može imati lošije performanse, a i služiti kao stražnja vrata napadačima.
 Obični, nerobusni modeli tijekom učenja na zatrovanom skupu podataka veoma brzo nauče prepoznavati okidač, time postajući ranjivi.
@@ -965,12 +966,12 @@ učili smo modele PGD-om, kao i metodom \textit{FastAdv}. Modeli učeni PGD-om o
 a modeli učeni metodom \textit{FastAdv} odabrani su zbog veoma kratkog trajanja učenja. Uz robusne modele, učeni su i prirodni modeli.
 Pritom su svi modeli učeni 60 epoha kako bismo izbjegli pojavu katastrofalne prenaučenosti do koje često dolazi u kasnijim epohama učenja modela metodom \textit{FastAdv}. 
 
-Zatrovani skup podataka za učenje, kao i zatrovani skup za testiranje, konstruirani su iz prirodnog CIFAR-10 skupa podataka koristeći \textit{BadNets} 
-alat iz skupa alata \textit{BackdoorBox}. Pritom je za skup za učenje stopa trovanja iznosila 0.3, a za skup za testiranje 1. Stopa trovanja određuje koliki će postotak podataka iz originalnog skupa biti zatrovan.
+Zatrovani skup podataka za učenje, kao i zatrovani skup za testiranje, konstruirani su iz prirodnog skupa podataka CIFAR-10 koristeći napad \textit{BadNets} iz skupa alata \textit{BackdoorBox}. 
+Pritom je za skup za učenje stopa trovanja iznosila 0.3, a za skup za testiranje 1. Stopa trovanja određuje koliki će postotak podataka iz originalnog skupa biti zatrovan.
 I za skup za učenje i za skup za testiranje kao ciljni razred odabran je razred \textit{automobile}. 
-U slučaju da na ulaznoj slici postoji okidač, model koji ga je tijekom učenja naučio takvu sliku klasificirat će u razred \textit{automobile}.
+U slučaju da na ulaznoj slici postoji okidač, model koji ga je tijekom učenja naučio, takvu sliku klasificirat će u razred \textit{automobile}.
 Arhitektura modela, mjera gubitka, optimizator i hiperparametri za učenje jednaki su kao i u prethodnim eksperimentima. 
-Kao i prije, svi modeli osim modela učenih metodom \textit{FastAdv} učeni su koristeći stopu učenja s kosinusnim kaljenjem, dok modeli učeni metodom \textit{FastAdv} koriste cikličku stopu učenja.
+Kao i prije, svi modeli osim modela učenih metodom \textit{FastAdv} učeni su s kosinusnim kaljenjem, dok modeli učeni metodom \textit{FastAdv} koriste cikličku stopu učenja.
 Osim na zatrovanom skupu podataka, svi modeli učeni su i na prirodnom skupu podataka.
 
 Kao i prije, u tablici~\ref{tbl:mjerenja_robusno_ucenje_zatrovano} stupac \textit{Način učenja} označava korišteni način učenja modela. 
@@ -982,7 +983,7 @@ označava točnost na zatrovanom skupu podataka. Iznosi točnosti, kao i vremena
     \caption{Rezultati raznih načina učenja na zatrovanom i prirodnom skupu podataka.}
     \label{tbl:mjerenja_robusno_ucenje_zatrovano}
     \centering
-    \begin{tabular}{lllll} \hline
+    \begin{tabular}{lcccc} \hline
     Način učenja & LR & Točnost [\%] & Točnost, otrov [\%] & Vrijeme učenja [min]\\ \hline
     Natural & 0.02 & 86 & 10.2 & 27.1 \\
     Natural, Poison & 0.02 & 81.7 & 98.2 & 29.1 \\
@@ -1012,22 +1013,24 @@ Slika~\ref{fig:pgd_poisoned_acc} prikazuje usporedbu točnosti na zatrovanom sku
 za model učen PGD-om na zatrovanom skupu podataka. Već u prvih nekoliko epoha, točnost na zatrovanom skupu za testiranje stabilizira se na iznosu od skoro $100\%$ te do kraja učenja neznatno pada.
 Točnost na skupu za testiranje već oko 20. epohe dostigne svoj vrhunac, dok točnost na zatrovanom skupu za učenje kontinuirano raste. Da je ovaj model u mogućnosti detektirati zatrovane podatke,
 očekivali bismo značajno nižu točnost na zatrovanom skupu za testiranje, kao i višu točnost na prirodnom skupu za testiranje. 
+Pritom je važno istaknuti da nam je cilj konstruiranjem neprijateljskih primjera izbrisati okidač. Nažalost, ovo se kod naučenog modela nije dogodilo.
+Jedan od mogućih razloga za to je činjenica da je jačina perturbacije ograničena $L_{\infty}$ normom.
 Ipak, postoji mogućnost da promatranje točnosti na razini epoha nije dovoljno precizno. Zbog ovoga ćemo dodatno pogledati točnost na zatrovanom skupu za učenje po mini-grupama.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.4]{../stats/train_accuracy_comparison_nat_pgd.png}
+    \caption{Usporedba točnosti po mini-grupama za prirodne modele i modele učene PGD-om.}
+    \label{fig:pgd_nat_poisoned_comparison}
+\end{figure}
+
+\pagebreak
 
 Slika~\ref{fig:pgd_nat_poisoned_comparison} prikazuje usporedbu točnosti na skupu za učenje po mini-grupama za 4 različita modela.
 Modeli u čijem nazivu se nalazi riječ \textit{poisoned} učeni su na zatrovanom skupu podataka pa je stoga na slici za iste prikazana točnost na zatrovanom skupu za učenje.
 Za preostale modele, na slici je prikazana točnost na prirodnom skupu za učenje.
 Prirodni model učen na zatrovanim podatcima po točnosti je gotovo nerazlučiv od prirodnog modela učenog na prirodnim podatcima.
 Pošto je za modele učene na zatrovanim podatcima prikazana točnost na upravo tim podatcima, iz grafa saznajemo da prirodni model gotovo odmah nauči prepoznavati okidač.
-
-\pagebreak
-
-\begin{figure}[htb]
-    \centering
-    \includegraphics[scale=0.41]{../stats/train_accuracy_comparison_nat_pgd.png}
-    \caption{Usporedba točnosti po mini-grupama za prirodne modele i modele učene PGD-om.}
-    \label{fig:pgd_nat_poisoned_comparison}
-\end{figure}
 
 S druge strane, točnosti za modele učene PGD-om na početku se značajno razlikuju. 
 Kada je u pitanju model učen PGD-om na zatrovanim podatcima, oko 1000. mini-grupe dolazi do brzog skoka u točnosti.
@@ -1037,17 +1040,19 @@ Iako naučeni model nema moć detektiranja zatrovanih podataka, mogli bismo reć
 U tom periodu, modelova točnost na zatrovanim podatcima stagnira, no nakon otprilike 1000. mini-grupe, modelova točnost na zatrovanim podatcima započinje svoj brzi rast. 
 Kako bismo vidjeli događa li se ovo samo kada je u pitanju učenje modela PGD-om, promotrit ćemo i usporedbu točnosti po mini-grupama prirodnih modela i modela učenih metodom \textit{FastAdv}.
 
+\pagebreak
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.4]{../stats/train_accuracy_comparison_nat_fast.png}
+    \caption{Usporedba točnosti po mini-grupama za prirodne modele i modele učene metodom \textit{FastAdv}.}
+    \label{fig:fast_nat_poisoned_comparison}
+\end{figure}
+
 Kao i na prethodnoj slici, i na slici~\ref{fig:fast_nat_poisoned_comparison} moguće je vidjeti usporedbu točnosti na skupu za učenje po mini-grupama.
 Pritom su modeli učeni PGD-om zamijenjeni modelima učenim metodom \textit{FastAdv} kako bi proučili događa li se i kod ovog načina učenja brzi rast točnosti na zatrovanom skupu za učenje.
 Možemo uočiti da se i kod modela učenih metodom \textit{FastAdv} događa ista pojava - model učen na zatrovanim podatcima na početku se "opire" učenju okidača.
 Kao i kod modela učenih PGD-om, u tom periodu točnost modela učenih metodom \textit{FastAdv} na zatrovanim podatcima stagnira, no nakon nekog vremena, njen iznos počinje brzo rasti.
-
-\begin{figure}[htb]
-    \centering
-    \includegraphics[scale=0.41]{../stats/train_accuracy_comparison_nat_fast.png}
-    \caption{Usporedba točnosti po mini-grupama za prirodne modele i modele učene metodom \textit{FastAdv}.}
-    \label{fig:fast_nat_poisoned_comparison}
-\end{figure}
 
 Prema dobivenim rezultatima, ni modeli učeni PGD-om, a ni modeli učeni metodom \textit{FastAdv} na zatrovanim podatcima nemaju mogućnost detekcije zatrovanih podataka.
 Ipak, pojava vrlo brzog rasta točnosti na zatrovanom skupu za učenje kod robusnih modela veoma je zanimljiva.
@@ -1066,7 +1071,7 @@ Kako bismo ispravno implementirali navedene načine brzog učenja s neprijateljs
 Korištenjem načina učenja \textit{FastAdvW}, postigli smo robusnost otprilike jednaku robusnosti učenja PGD-om, ali uz skoro dvostruko manje vremena za učenje.
 
 Nakon implementacije različitih načina brzog učenja s neprijateljskim primjerima, istražili smo imaju li robusni modeli naučeni na zatrovanom skupu podataka moć detekcije zatrovanih podataka.
-Nažalost, došli smo do zaključka da klasične implementacije robusnog učenja poput modela učenih PGD-om s ograničenjem $L_\infty$-norme ili metodom \textit{FastAdv} ne mogu izravno detektirati zatrovane podatake jer, kao i modeli učeni prirodnim učenjem, 
+Nažalost, došli smo do zaključka da klasične implementacije robusnog učenja poput modela učenih PGD-om s ograničenjem $L_\infty$ norme ili metodom \textit{FastAdv} ne mogu izravno detektirati zatrovane podatake jer, kao i modeli učeni prirodnim učenjem, 
 tijekom učenja nauče prepoznavati okidač i na temelju toga klasificirati ulaz. 
 Ipak, uočili smo da ako za robusne modele tijekom učenja pratimo točnost na skupu za učenje po mini-grupama, potencijalno možemo izdvojiti modele učene na skupu podataka s ubačenim zatrovanim podatcima.
 Prema dobivenim rezultatima, robusni modeli učeni na zatrovanim podatcima u jednom trenutku će imati nagli rast u točnosti na zatrovanom skupu za učenje. Ovo svojstvo potencijalno bismo mogli koristiti kao detektor postojanja zatrovanih podataka.
@@ -1077,7 +1082,9 @@ U budućim istraživanjima bilo bi zanimljivo primijeniti metode brzog učenja s
 jer su u okviru ovog rada istraživanja zbog brzine učenja bila izvođena isključivo na arhitekturi ResNet-18 i skupu podataka CIFAR-10. 
 Zanimljivo bi bilo istražiti performanse modela učenih različitim metodama sa zadanim vremenskim budžetom za sve metode.
 Uz ovo, vrijedilo bi istražiti mogućnost kombiniranja "besplatnog" i brzog učenja kako bi se dobio model visokih performansi, kao i vrlo kratkog vremena učenja. 
+
 Po pitanju detekcije zatrovanih podataka, istraživanje bi trebalo proširiti na dodatne metode poput metoda \textit{FastAdv+} i \textit{FastAdvW}.
+Za učenje PGD-om bilo bi zanimljivo proučiti utjecaj korištenja L\textsubscript{2} ili L\textsubscript{1} norme kao ograničenja perturbacije na mogućnost modela da izbriše okidač.
 Za sve načine učenja trebalo bi provesti praćenje točnosti na zatrovanom skupu za učenje po mini-grupama kako bi se provjerila hipoteza da do naglog rasta u točnosti dolazi kod svih robusnih modela.
 U slučaju da se pokaže da ovo svojstvo imaju svi robusni modeli učeni na zatrovanom skupu podataka, trebalo bi dodatno istražiti mogućnost primjene robusnog učenja za detekciju postojanja zatrovanih podataka.
 
