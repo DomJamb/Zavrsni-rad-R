@@ -139,7 +139,7 @@ Veličina ulaznog sloja govori nam o dimenzijama ulaznih podataka, a veličina i
     \label{fig:basic_nn}
 \end{figure}
 
-Na slici~\ref{fig:basic_nn} moguće je vidjeti primjer arhitekture umjetne neuronske mreže. 
+Slika~\ref{fig:basic_nn} prikazuje primjer arhitekture umjetne neuronske mreže. 
 Neuroni označeni žutom bojom predstavljaju ulazni sloj, neuroni označeni zelenom bojom skriveni sloj, a neuroni označeni plavom bojom izlazni sloj. 
 Ovakvu arhitekturu mreže skraćeno možemo označiti kao 2x3x2 neuronsku mrežu. Pritom brojke označavaju broj neurona u pojedinom sloju (ulazni sloj je prvi sloj mreže).
 
@@ -250,7 +250,7 @@ Pritom se jezgra pomiče po ulaznoj matrici, a rezultati skalarnog produkta zapi
     \label{fig:convolution}
 \end{figure}
 
-Na slici~\ref{fig:convolution} možemo vidjeti rezultat 2D konvolucije s ulaznom matricom veličine 3x4 i jezgrom dimenzija 2x2. 
+Slika~\ref{fig:convolution} prikazuje rezultat 2D konvolucije s ulaznom matricom veličine 3x4 i jezgrom dimenzija 2x2. 
 Mapa značajki nastala kao rezultat ove konvolucije dimenzija je 2x3. Primijetimo da će izlaz konvolucijskog sloja uvijek biti manjih dimenzija naspram ulaza.
 Uz to, vrijednosti na rubovima matrice ulaza manje će doprinijeti rezultatu naspram vrijednosti koje su dalje od rubova.
 
@@ -263,7 +263,7 @@ Kako bismo imali veću kontrolu nad dimenzijama izlaza, kao i utjecajem vrijedno
     \label{fig:zero_padding}
 \end{figure}
 
-Na slici~\ref{fig:zero_padding} moguće je vidjeti 3x3 matricu nadopunjenu nulama. U slučaju da nad takvom matricom primijenimo konvoluciju s jezgrom dimenzija 2x2, mapa značajki na izlazu bila bi dimenzija 4x4.
+Slika~\ref{fig:zero_padding} prikazuje 3x3 matricu nadopunjenu nulama. U slučaju da nad takvom matricom primijenimo konvoluciju s jezgrom dimenzija 2x2, mapa značajki na izlazu bila bi dimenzija 4x4.
 Da smo konvoluciju primijenili nad matricom bez nadopunjavanja, mapa značajki bila bi dimenzija 2x2, a vrijednosti pri rubovima matrice manje bi joj doprinosile.
 Možemo reći da nule čine okvir oko originalne matrice, time osiguravajući veće dimenzije izlaza.
 
@@ -279,7 +279,7 @@ U slučaju da povećamo korak, izlaz konvolucije bio bi manjih dimenzija, a time
     \label{fig:stride}
 \end{figure}
 
-Na slici~\ref{fig:stride} moguće je vidjeti konvoluciju s korakom 2. Za razliku od standardnog kretanja jezgre, ovdje se jezgra nakon svakog izračuna pomiče za 2 ćelije. 
+Slika~\ref{fig:stride} prikazuje konvoluciju s korakom 2. Za razliku od standardnog kretanja jezgre, ovdje se jezgra nakon svakog izračuna pomiče za 2 ćelije. 
 
 Osim samih konvolucijskih slojeva, konvolucijske mreže u sebi sadrže i slojeve sažimanja. 
 Najčešći razlog za upotrebu slojeva sažimanja je smanjivanje dimenzija podataka, a time i skraćivanje vremena potrebnog za učenje mreže.
@@ -291,7 +291,7 @@ Najčešći razlog za upotrebu slojeva sažimanja je smanjivanje dimenzija podat
     \label{fig:maxpool}
 \end{figure}
 
-Na slici~\ref{fig:maxpool} moguće je vidjeti primjer korištenja sloja sažimanja maksimalnom vrijednošću.
+Slika~\ref{fig:maxpool} prikazuje primjer korištenja sloja sažimanja maksimalnom vrijednošću.
 Mapa značajki dimenzija 4x4 korištenjem sažimanja maksimalnom vrijednošću 2x2 (engl.\ \textit{2x2 max pooling}) smanjena je na dimenzije 2x2, efektivno smanjujući dimenzije ulaza za faktor 2.
 Uz sažimanje maksimalnom vrijednošću, veoma je popularno i sažimanje usrednjavanjem, no postoje i brojne druge varijante koje se koriste za slojeve sažimanja.
 Kao i operacija konvolucije, i slojevi sažimanja doprinose translacijskoj invarijantnosti, osiguravajući da mreža lako može prepoznati neku značajku bez obzira na njenu točnu lokaciju.
@@ -309,7 +309,7 @@ Rezidualni blokovi najčešće se sastoje od nekoliko konvolucijskih slojeva, a 
     \label{fig:resblock}
 \end{figure}
 
-Na slici~\ref{fig:resblock} možemo vidjeti rezidualni blok sačinjen od dva sloja. Preskočna veza ulaz u blok bez ikakvih transformacija prenosi na izlaz. 
+Slika~\ref{fig:resblock} prikazuje rezidualni blok sačinjen od dva sloja. Preskočna veza ulaz u blok bez ikakvih transformacija prenosi na izlaz. 
 Ovakvim strukturiranjem mreže, cilj mreže postaje modelirati rezidualnu funkciju $F(x)$ koja mjeri razliku izlaza naspram ulaza. Rezidualni blok možemo prikazati jednadžbom:
 
 \begin{equation}
@@ -380,7 +380,7 @@ Takve ulaze zvat ćemo neprijateljski primjeri~\cite{goodfellow2014explaining}.
     \label{fig:adv_example}
 \end{figure}
 
-Na slici~\ref{fig:adv_example} moguće je vidjeti jedan neprijateljski primjer.
+Slika~\ref{fig:adv_example} prikazuje jedan neprijateljski primjer.
 Originalni ulaz kojeg model ispravno klasificira izmijenjen je za iznos perturbacije.
 U ovom slučaju iznos perturbacije dobiven je kao umnožak malog pozitivnog koeficijenta $\epsilon$ i predznaka gradijenta gubitka po ulazu.
 Iako je izmijenjeni ulaz ljudima gotovo identičan, model ovaj ulaz krivo klasificira, a pritom je veoma siguran u svoju odluku.
@@ -706,7 +706,7 @@ Uz to, zatrovani podatci mogu biti ručno dizajnirani, dok neprijateljske primje
     \label{fig:poisoned_imgs}
 \end{figure}
 
-Na slici~\ref{fig:poisoned_imgs} moguće je vidjeti pojednostavljene primjere zatrovanih podataka. 
+Slika~\ref{fig:poisoned_imgs} prikazuje pojednostavljene primjere zatrovanih podataka. 
 Na originalne slike dodan je bijeli pravokutnik u nadi da će model naučiti prepoznavati takav pravokutnik i na temelju njegove prisutnosti kategorizirati sve ulaze u pojedini razred.
 Osim modifikacije samih ulaznih slika, radi se i modifikacija ispravnih oznaka: za sve modificirane slike napadač bi mogao postaviti istu oznaku.
 U slučaju slike~\ref{fig:poisoned_imgs}, napadač bi mogao za sve tri slike dodijeliti razred \textit{dog} kao ispravnu oznaku. 
@@ -746,7 +746,7 @@ a cijeli skup podataka sastoji se od 6000 slika svakog razreda. Skup podataka po
     \label{fig:cifar10}
 \end{figure}
 
-Na slici~\ref{fig:cifar10} moguće je vidjeti razrede iz skupa podataka CIFAR-10, kao i po 10 nasumično odabranih slika iz svakog razreda.
+Slika~\ref{fig:cifar10} prikazuje razrede iz skupa podataka CIFAR-10, kao i po 10 nasumično odabranih slika iz svakog razreda.
 Svi razredi međusobno su isključivi tj.\ nijedna slika ne pojavljuje se u skupu podataka s više različitih oznaka razreda. 
 Uz CIFAR-10, postoji i skup podataka CIFAR-100 koji sadrži 100 različitih razreda.
 U ovom radu eksperimente provodimo na skupu CIFAR-10 zbog brzine učenja, no metode korištene u radu lako se mogu primijeniti i na druge skupove podataka.
@@ -787,8 +787,10 @@ PyTorch nam također nudi i mogućnost provođenja izračuna sa 16-bitnim brojev
 \section{Brzo učenje s neprijateljskim primjerima}
 
 Kako bismo usporedili učinkovitost različitih pristupa brzom učenju s neprijateljskim primjerima, učili smo nekolicinu mreža koristeći varirajuće hiperparametre i načine učenja.
-Sve naučene mreže arhitekture su ResNet-18 i učene su 80 epoha. Kao mjeru gubitka kod svih mreža korištena je unakrsna entropija,
-a kao optimizator korišten je stohastički gradijentni spust sa zamahom (engl.\ \textit{momentum}) iznosa 0.9 i propadanjem težina iznosa $5 \cdot 10^{-4}$.
+Sve naučene mreže arhitekture su ResNet-18 i učene su 80 epoha. Jedina iznimka ovome je mreža učena "besplatnim" učenjem. Ta mreža učena je ukupno 10 epoha, ali s hiperparametrom ponavljanja iznosa 8.
+Ovime postižemo jednak broj iteracija učenja svih mreža.
+% Kako bi sve mreže imale jednak broj iteracija učenja, mreža učena "besplatnim" učenjem učena je ukupno 10 epoha, ali s hiperparametrom ponavljanja iznosa 8. 
+Kao mjeru gubitka kod svih mreža korištena je unakrsna entropija, a kao optimizator korišten je stohastički gradijentni spust sa zamahom (engl.\ \textit{momentum}) iznosa 0.9 i propadanjem težina iznosa $5 \cdot 10^{-4}$.
 Korištenje zamaha ubrzava konvergenciju modela, a korištenje propadanja težina regularizacijska je tehnika koja služi za smanjivanje složenosti modela, a time i vjerojatnosti pojave prenaučenosti.
 Kako bismo što bolje reproducirali originalni rad~\cite{wong2020fast}, 
 za brzo učenje s neprijateljskim primjerima (\textit{FastAdv}) korištena je ciklička stopa učenja. Pritom stopa učenja maksimum dosegne na pola koraka učenja te se nakon toga do kraja učenja njen iznos smanjuje. 
@@ -835,7 +837,7 @@ Pritom su tijekom učenja PGD metodom neprijateljski primjeri konstruirani koris
 
 Od načina brzog učenja s neprijateljskim primjerima izloženih u radovima~\cite{shafahi2019adversarial},~\cite{wong2020fast} i ~\cite{li2020towards},
 najbolje performanse ima model učen \textit{FastAdvW} metodom. Njegova točnost na prirodnom skupu za testiranje druga je najviša od svih modela koji nude određenu mjeru robusnosti,
-a njegova točnost na neprijateljskim primjerima usporediva je s točnošću modela učenog PGD metodom. 
+a njegova točnost na neprijateljskim primjerima usporediva je s točnosti modela učenog PGD metodom. 
 Važno je napomenuti da \textit{FastAdvW} modeli trebaju skoro dvostruko manje vremena za učenje naspram PGD modela, ali se nažalost uče najdulje od svih predloženih varijanti brzog učenja.
 S obzirom na to da \textit{FastAdvW} modeli zadnjih 10 epoha uče isključivo PGD-om, takav rezultat je i očekivan.
 Modeli učeni \textit{FastAdv+} metodom dobra su alternativa korištenju \textit{FastAdvW} modela jer se uče kraće i postižu malo bolje rezultate na prirodnom skupu za testiranje.
@@ -844,15 +846,16 @@ Gledajući da je glavni cilj tih načina učenja rješavanje problema katastrofa
 a govori nam da ove nadogradnje stvarno uspijevaju u svojoj namjeri.
 
 U slučaju da nam je glavni cilj brzo naučiti model koji je barem u nekoj mjeri otporan na neprijateljske primjere, kao najbolja opcija ističe se učenje \textit{FreeAdv} metodom.
-\textit{FreeAdv} model učen je koristeći ponavljanje (engl.\ \textit{replay}) iznosa 8 pa je stoga ukupno učen 10 epoha - ukupan broj epoha smanjen je za faktor jednak ponavljanju.
-Ovaj model nudi nam konkurentnu točnost na prirodnim podatcima, ali je njegova točnost na neprijateljskim primjerima niža od svih ostalih robusnih modela.
+Kao što je već rečeno, \textit{FreeAdv} model učen je koristeći ponavljanje (engl.\ \textit{replay}) iznosa 8 pa je stoga ukupno učen 10 epoha - ukupan broj epoha smanjen je za faktor jednak ponavljanju.
+Ovaj model nudi nam konkurentnu točnost na prirodnim podatcima, ali je njegova točnost na neprijateljskim primjerima niža od svih ostalih robusnih modela. 
+Nižu točnost na neprijateljskim primjerima tumačimo kao posljedicu učenja na nedovoljno perturbiranim primjerima. 
 U slučaju da dodatno povećamo iznos parametra ponavljanja, točnost na neprijateljskim primjerima povećala bi se. Naravno, istovremeno bi došlo do pada točnosti na prirodnim podatcima.
-Dobra strana \textit{FreeAdv} modela svakako je vrijeme učenja - ovaj model uči se kraće čak i od modela učenog na prirodnom skupu podataka. 
+Dobra strana algoritma \textit{FreeAdv} svakako je vrijeme učenja - ovaj model uči se kraće čak i od modela učenog na prirodnom skupu podataka. 
 Toliku kratkoću učenja pripisujemo činjenici da je tijekom učenja za \textit{FreeAdv} model potrebno provesti evaluaciju nakon epoha samo 10 puta, dok je za ostale modele potrebno provesti evaluaciju punih 80 puta.
 
 Modeli učeni \textit{FastAdv} metodom ograničeni su pojavom katastrofalne prenaučenosti. 
 Ovo svojstvo veoma je vidljivo kod \textit{FastAdv} modela bez ranog zaustavljanja - takav model postiže visoku točnost na prirodnom skupu podataka, ali zato nije nimalo otporan na neprijateljske primjere.
-Korištenjem \textit{FastAdv} metode u kombinaciji s ranim zaustavljanjem, točnost na neprijateljskim primjerima podjednaka je s točnošću \textit{FastAdv+} modela,
+Korištenjem \textit{FastAdv} metode u kombinaciji s ranim zaustavljanjem, točnost na neprijateljskim primjerima podjednaka je s točnosti \textit{FastAdv+} modela,
 ali je takav model ograničen zbog nemogućnosti proizvoljno dugog učenja.
 
 \begin{figure}[htb]
@@ -864,7 +867,7 @@ ali je takav model ograničen zbog nemogućnosti proizvoljno dugog učenja.
 
 \pagebreak
 
-Na slici~\ref{fig:train_time_comparison} moguće je vidjeti usporedbu vremena učenja raznih načina brzog učenja s neprijateljskim primjerima.
+Slika~\ref{fig:train_time_comparison} prikazuje usporedbu vremena učenja raznih načina brzog učenja s neprijateljskim primjerima.
 Zbog usporedbe, na grafu je prikazano i vrijeme učenja modela učenog na prirodnim podatcima, kao i vrijeme učenja modela učenog PGD-om.
 Kao što je bilo vidljivo i iz tablice~\ref{tbl:mjerenja_robusno_ucenje}, daleko najdulje vrijeme učenja ima model učen PGD-om.
 S druge strane, najkraće vrijeme učenja ima \textit{FreeAdv} model. 
@@ -879,7 +882,7 @@ a \textit{FastAdvW} model uz to zadnjih 10 epoha uči isključivo PGD-om, ovakav
     \label{fig:acc_comparison}
 \end{figure}
 
-Na slici~\ref{fig:acc_comparison} moguće je vidjeti usporedbu točnosti na skupu za testiranje i točnosti na neprijateljskim primjerima konstruiranim iz prirodnog skupa za testiranje koristeći PGD metodu s 20 iteracija.
+Slika~\ref{fig:acc_comparison} prikazuje usporedbu točnosti na skupu za testiranje i točnosti na neprijateljskim primjerima konstruiranim iz prirodnog skupa za testiranje koristeći PGD metodu s 20 iteracija.
 Kao i na prethodnom grafu, i ovdje su prikazane točnosti i za model učen na prirodnim podatcima, kao i za model učen PGD metodom.
 Možemo vidjeti da najvišu točnost na prirodnom skupu imaju model učen na prirodnim podatcima i \textit{FastAdv} model kod kojeg je došlo do katastrofalne prenaučenosti.
 Istovremeno, ta dva modela ne nude nikakvu otpornost na neprijateljske primjere - njihova točnost na neprijateljskim primjerima jednaka je $0\%$.
@@ -894,7 +897,7 @@ Model učen \textit{Free} metodom ima najnižu točnost na neprijateljskim primj
     \label{fig:fast_acc}
 \end{figure}
 
-Na slici~\ref{fig:fast_acc} moguće je vidjeti usporedbu točnosti na skupu za učenje i točnosti na skupu za testiranje po epohama za \textit{FastAdv} model.
+Slika~\ref{fig:fast_acc} prikazuje usporedbu točnosti na skupu za učenje i točnosti na skupu za testiranje po epohama za \textit{FastAdv} model.
 Oko 65. epohe moguće je vidjeti velik porast u točnosti na skupu za učenje, kao i istovremeni pad u točnosti na skupu za testiranje.
 Ova pojava posljedica je katastrofalne prenaučenosti - model gubi na moći generalizacije i počinje pamtiti ulazne podatke. 
 Kako bismo dodatno provjerili da je to istina, provjerit ćemo i točnost na neprijateljskim primjerima po epohama. 
@@ -910,7 +913,7 @@ u pitanju je katastrofalna prenaučenost od koje pate svi modeli učeni načinim
 
 \pagebreak
 
-Na slici~\ref{fig:fast_adv_acc} moguće je vidjeti točnost \textit{FastAdv} modela na neprijateljskim primjerima po epohama.
+Slika~\ref{fig:fast_adv_acc} prikazuje točnost \textit{FastAdv} modela na neprijateljskim primjerima po epohama.
 Kako evaluacija tijekom učenja ne bi bila prespora, neprijateljski primjeri konstruirani su iz nasumično odabrane mini-grupe koristeći PGD metodu s 5 iteracija.
 Kao što smo očekivali, oko 65. epohe dolazi do velikog pada u točnosti na neprijateljskim primjerima - već epohu nakon točnost na neprijateljskim primjerima iznosi otprilike $0\%$.
 Ovime potvrđujemo da je stvarno došlo do katastrofalne prenaučenosti. Kako bismo ovo izbjegli, \textit{FastAdv} model možemo učiti s ranim zaustavljanjem. 
@@ -998,13 +1001,13 @@ Drugim riječima, čak ni robusni modeli poput PGD modela nisu otporni na zatrov
     \label{fig:pgd_poisoned_acc}
 \end{figure}
 
-Na slici~\ref{fig:pgd_poisoned_acc} moguće je vidjeti usporedbu točnosti na zatrovanom skupu za učenje, točnosti na skupu za testiranje i točnosti na zatrovanom skupu za testiranje 
+Slika~\ref{fig:pgd_poisoned_acc} prikazuje usporedbu točnosti na zatrovanom skupu za učenje, točnosti na skupu za testiranje i točnosti na zatrovanom skupu za testiranje 
 za PGD model učen na zatrovanom skupu podataka. Već u prvih nekoliko epoha, točnost na zatrovanom skupu za testiranje stabilizira se na iznosu od skoro $100\%$ te do kraja učenja neznatno pada.
 Točnost na skupu za testiranje već oko 20. epohe dostigne svoj vrhunac, dok točnost na zatrovanom skupu za učenje kontinuirano raste. Da je ovaj model u mogućnosti detektirati zatrovane podatke,
 očekivali bismo značajno nižu točnost na zatrovanom skupu za testiranje, kao i višu točnost na prirodnom skupu za testiranje. 
 Ipak, postoji mogućnost da promatranje točnosti na razini epoha nije dovoljno precizno. Zbog ovoga ćemo dodatno pogledati točnost na zatrovanom skupu za učenje po mini-grupama.
 
-Na slici~\ref{fig:pgd_nat_poisoned_comparison} moguće je vidjeti usporedbu točnosti na skupu za učenje po mini-grupama za 4 različita modela.
+Slika~\ref{fig:pgd_nat_poisoned_comparison} prikazuje usporedbu točnosti na skupu za učenje po mini-grupama za 4 različita modela.
 Modeli u čijem nazivu se nalazi riječ \textit{poisoned} učeni su na zatrovanom skupu podataka pa je stoga na slici za iste prikazana točnost na zatrovanom skupu za učenje.
 Za preostale modele, na slici je prikazana točnost na prirodnom skupu za učenje.
 Prirodni model učen na zatrovanim podatcima po točnosti je gotovo nerazlučiv od prirodnog modela učenog na prirodnim podatcima.
