@@ -861,14 +861,13 @@ Ovo svojstvo veoma je vidljivo kod modela učenih metodom \textit{FastAdv} bez r
 Korištenjem metode \textit{FastAdv} s ranim zaustavljanjem, točnost na neprijateljskim primjerima podjednaka je s točnosti modela učenih metodom \textit{FastAdv+},
 ali je takav model ograničen zbog nemogućnosti proizvoljno dugog učenja.
 
+\pagebreak
 \begin{figure}[htb]
     \centering
     \includegraphics[scale=0.42]{../stats/stats_comparison_train_time.png}
     \caption{Usporedba vremena učenja raznih načina brzog učenja s neprijateljskim primjerima.}
     \label{fig:train_time_comparison}
 \end{figure}
-
-\pagebreak
 
 Slika~\ref{fig:train_time_comparison} prikazuje usporedbu vremena učenja raznih načina brzog učenja s neprijateljskim primjerima.
 Zbog usporedbe, na grafu je prikazano i vrijeme učenja modela učenog na prirodnim podatcima, kao i vrijeme učenja modela učenog PGD-om.
@@ -878,6 +877,7 @@ Ako uspoređujemo modele učene metodom \textit{FastAdv}, \textit{FastAdv+} ili 
 Gledajući da model učen metodom \textit{FastAdv+} pri uočavanju pada točnosti na neprijateljskim primjerima $s$ sljedećih mini-grupa uči PGD-om, 
 a model učen metodom \textit{FastAdvW} uz to zadnjih 10 epoha uči isključivo PGD-om, ovakav rezultat je i očekivan.
 
+\pagebreak
 \begin{figure}[htb]
     \centering
     \includegraphics[scale=0.42]{../stats/stats_comparison.png}
@@ -893,6 +893,7 @@ Ostali modeli imaju podjednake točnosti na prirodnom skupu, ali i na neprijatel
 Pritom najvišu točnost na prirodnom skupu imaju modeli učeni metodom \textit{FastAdv+}, dok najvišu točnost na neprijateljskim primjerima imaju modeli učeni metodom \textit{FastAdvW}.
 Model učen metodom \textit{FreeAdv} ima najnižu točnost na neprijateljskim primjerima, ali zato, kao što smo vidjeli na slici~\ref{fig:train_time_comparison}, ima najkraće vrijeme učenja.
 
+\pagebreak
 \begin{figure}[htb]
     \centering
     \includegraphics[scale=0.41]{../stats/resnet18_fast_epochs_80_lr_0.2_no_early/accuracies.png}
@@ -901,28 +902,29 @@ Model učen metodom \textit{FreeAdv} ima najnižu točnost na neprijateljskim pr
 \end{figure}
 
 Slika~\ref{fig:fast_acc} prikazuje usporedbu točnosti na skupu za učenje i točnosti na skupu za testiranje po epohama za model učen metodom \textit{FastAdv}.
+Pritom je važno napomenuti da je skup za učenje sačinjen od neprijateljskih primjera, a skup za testiranje od prirodnih primjera.
 Oko 65. epohe moguće je vidjeti velik porast u točnosti na skupu za učenje, kao i istovremeni pad u točnosti na skupu za testiranje.
 Ova pojava posljedica je katastrofalne prenaučenosti - model gubi na moći generalizacije i počinje pamtiti ulazne podatke. 
 Kako bismo dodatno provjerili da je to istina, provjerit ćemo i točnost na neprijateljskim primjerima po epohama. 
 U slučaju da oko 65. epohe dolazi do velikog pada u točnosti na neprijateljskim primjerima, 
 u pitanju je katastrofalna prenaučenost od koje pate svi modeli učeni metodama zasnovanim na FGSM-u.
 
+\pagebreak
 \begin{figure}[htb]
     \centering
     \includegraphics[scale=0.41]{../stats/resnet18_fast_epochs_80_lr_0.2_no_early/adv_accuracies.png}
-    \caption{Točnost modela učenog metodom \textit{FastAdv} na neprijateljskim primjerima po epohama.}
+    \caption{Točnost modela učenog metodom \textit{FastAdv} na neprijateljskim primjerima konstruiranim iz nasumično odabrane mini-grupe iz skupa za učenje po epohama.}
     \label{fig:fast_adv_acc}
 \end{figure}
 
-\pagebreak
-
 Slika~\ref{fig:fast_adv_acc} prikazuje točnost modela učenog metodom \textit{FastAdv} na neprijateljskim primjerima po epohama.
-Kako evaluacija tijekom učenja ne bi bila prespora, neprijateljski primjeri konstruirani su iz nasumično odabrane mini-grupe PGD-om s 5 iteracija.
+Kako evaluacija tijekom učenja ne bi bila prespora, neprijateljski primjeri konstruirani su iz nasumično odabrane mini-grupe iz skupa za učenje PGD-om s 5 iteracija.
 Kao što smo očekivali, oko 65. epohe dolazi do velikog pada u točnosti na neprijateljskim primjerima - već epohu nakon točnost na neprijateljskim primjerima iznosi otprilike $0\%$.
 Ovime potvrđujemo da je stvarno došlo do katastrofalne prenaučenosti. Kako bismo ovo izbjegli, model učen metodom \textit{FastAdv} možemo učiti s ranim zaustavljanjem. 
 Ipak, rano zaustavljanje ograničava nas jer modele ne možemo proizvoljno dugo učiti. 
 Kao što je već prethodno rečeno, jedno od mogućih rješenja ovog problema korištenje je načina učenja \textit{FastAdv+} ili \textit{FastAdvW}.
 
+\pagebreak
 \begin{figure}[htb]
     \centering
     \includegraphics[scale=0.41]{../stats/resnet18_fast+_epochs_80_lr_0.2_early/accuracies.png}
@@ -932,6 +934,7 @@ Kao što je već prethodno rečeno, jedno od mogućih rješenja ovog problema ko
 
 Kako bismo potvrdili da korištenje modela učenog metodom \textit{FastAdv+} rješava problem katastrofalne prenaučenosti, 
 na slici~\ref{fig:fast_plus_acc} možemo vidjeti usporedbu točnosti na skupu za učenje i točnosti na skupu za testiranje po epohama za model učen metodom \textit{FastAdv+}.
+Kao i u prošlom slučaju, skup za učenje sačinjen je od neprijateljskih primjera, a skup za testiranje od prirodnih primjera.
 Iako se oko 65. epohe može uočiti početak brzog porasta u točnosti na skupu za učenje, kao i istovremeni početak brzog pada u točnosti na skupu za testiranje,
 već u sljedećih nekoliko epoha točnosti se ispravljaju. 
 Mogućnost modela učenog metodom \textit{FastAdv+} da se oporavi od pojave katastrofalne prenaučenosti proizlazi iz kontinuiranog praćenja točnosti na neprijateljskim primjerima 
@@ -948,6 +951,8 @@ te korištenja PGD-a za konstrukciju neprijateljskih primjera kada se uoči pad 
 %     \label{fig:fast_plus_adv_acc}
 % \end{figure}
 
+\pagebreak
+
 \section{Prelimarno istraživanje primjene učenja s neprijateljskim primjerima za detekciju zatrovanih podataka}
 
 Robusni modeli nude nam određenu mjeru otpornosti na neprijateljske primjere. 
@@ -959,8 +964,6 @@ Kako bismo provjerili imaju li robusni modeli doista mogućnost detekcije zatrov
 učili smo modele PGD-om, kao i metodom \textit{FastAdv}. Modeli učeni PGD-om odabrani su zbog visoke otpornosti na neprijateljske primjere,
 a modeli učeni metodom \textit{FastAdv} odabrani su zbog veoma kratkog trajanja učenja. Uz robusne modele, učeni su i prirodni modeli.
 Pritom su svi modeli učeni 60 epoha kako bismo izbjegli pojavu katastrofalne prenaučenosti do koje često dolazi u kasnijim epohama učenja modela metodom \textit{FastAdv}. 
-
-\pagebreak
 
 Zatrovani skup podataka za učenje, kao i zatrovani skup za testiranje, konstruirani su iz prirodnog CIFAR-10 skupa podataka koristeći \textit{BadNets} 
 alat iz skupa alata \textit{BackdoorBox}. Pritom je za skup za učenje stopa trovanja iznosila 0.3, a za skup za testiranje 1. Stopa trovanja određuje koliki će postotak podataka iz originalnog skupa biti zatrovan.
@@ -990,13 +993,13 @@ označava točnost na zatrovanom skupu podataka. Iznosi točnosti, kao i vremena
     \end{tabular}
 \end{table}
 
+\pagebreak
+
 Kao što možemo vidjeti u tablici~\ref{tbl:mjerenja_robusno_ucenje_zatrovano}, svi modeli učeni na prirodnom skupu podataka imaju točnost na zatrovanim podatcima iznosa otprilike $10\%$.
 Ovaj rezultat interpretiramo tako da modeli učeni na prirodnom skupu ispravno klasificiraju većinu zatrovanih slika koje uistinu i potječu iz ciljnog razreda, pritom se ne obazirući na okidač.
 Modeli učeni na zatrovanom skupu podataka imaju malo nižu točnost na prirodnom skupu, ali i veoma visoku točnost na zatrovanim podatcima. 
 Visoka točnost na zatrovanim podatcima govori nam da su svi modeli učeni na zatrovanom skupu naučili okidač. 
 Drugim riječima, čak ni robusni modeli poput modela učenih PGD-om nisu otporni na zatrovane podatke.
-
-\pagebreak
 
 \begin{figure}[htb]
     \centering
