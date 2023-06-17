@@ -521,7 +521,7 @@ Uočeno je da modeli učeni PGD-om imaju visoku robusnost, no, kao što je već 
 
 Osnovna ideja "besplatnog" učenja je sljedeća: unatražnim prolazom izračunamo gradijent po ulazu potreban za konstrukciju neprijateljskih primjera, kao i gradijent po parametrima modela.
 Kako bismo iterativno konstruirali što kvalitetnije neprijateljske primjere, tijekom učenja modelu na ulaz nekoliko puta dovodimo istu mini-grupu prije nego što pređemo na sljedeću.
-Ponavljanjem mini-grupe nekoliko puta zaredom pokušavamo postići postupak sličan napadu PGD, a da pritom ne platimo veliku dodatnu cijenu. 
+Ponavljanjem mini-grupe nekoliko puta zaredom pokušavamo postići postupak sličan PGD-u, a da pritom ne platimo veliku dodatnu cijenu. 
 Hiperparametar kojim ugađamo broj ponavljanja mini-grupe zovemo ponavljanje (engl.\ \textit{replay}).
 Važno je uočiti da, kako bismo i dalje htjeli imati otprilike jednako vremena za učenje modela, moramo smanjiti broj epoha za faktor ponavljanja. 
 Ako svaku mini-grupu unutar jedne epohe ponavljamo 8 puta, broj epoha bit će 8 puta manji naspram broja epoha kod modela učenog prirodnim učenjem.
@@ -835,14 +835,14 @@ Nažalost, taj model nije nimalo robustan - njegova točnost na neprijateljskim 
 Kada govorimo o robusnim modelima, najvišu točnost na neprijateljskim primjerima ima model učen PGD-om, no on se i daleko najdulje uči.
 Pritom su tijekom učenja PGD metodom neprijateljski primjeri konstruirani koristeći PGD sa 7 iteracija.
 
-Od načina brzog učenja s neprijateljskim primjerima izloženih u radovima~\cite{shafahi2019adversarial},~\cite{wong2020fast} i ~\cite{li2020towards},
+Od metoda brzog učenja s neprijateljskim primjerima izloženih u radovima~\cite{shafahi2019adversarial},~\cite{wong2020fast} i ~\cite{li2020towards},
 najbolje performanse ima model učen \textit{FastAdvW} metodom. Njegova točnost na prirodnom skupu za testiranje druga je najviša od svih modela koji nude određenu mjeru robusnosti,
 a njegova točnost na neprijateljskim primjerima usporediva je s točnosti modela učenog PGD metodom. 
 Važno je napomenuti da \textit{FastAdvW} modeli trebaju skoro dvostruko manje vremena za učenje naspram PGD modela, ali se nažalost uče najdulje od svih predloženih varijanti brzog učenja.
 S obzirom na to da \textit{FastAdvW} modeli zadnjih 10 epoha uče isključivo PGD-om, takav rezultat je i očekivan.
 Modeli učeni \textit{FastAdv+} metodom dobra su alternativa korištenju \textit{FastAdvW} modela jer se uče kraće i postižu malo bolje rezultate na prirodnom skupu za testiranje.
 Uočimo da rano zaustavljanje učenja kod \textit{FastAdv+} i \textit{FastAdvW} modela nema nikakav učinak na performanse. 
-Gledajući da je glavni cilj tih načina učenja rješavanje problema katastrofalne prenaučenosti prisutnog kod \textit{FastAdv} modela, ovakav rezultat je očekivan, 
+Gledajući da je glavni cilj tih metoda rješavanje problema katastrofalne prenaučenosti prisutnog kod \textit{FastAdv} modela, ovakav rezultat je očekivan, 
 a govori nam da ove nadogradnje stvarno uspijevaju u svojoj namjeri.
 
 U slučaju da nam je glavni cilj brzo naučiti model koji je barem u nekoj mjeri otporan na neprijateljske primjere, kao najbolja opcija ističe se učenje \textit{FreeAdv} metodom.
@@ -851,7 +851,7 @@ Ovaj model nudi nam konkurentnu točnost na prirodnim podatcima, ali je njegova 
 Nižu točnost na neprijateljskim primjerima tumačimo kao posljedicu učenja na nedovoljno perturbiranim primjerima. 
 U slučaju da dodatno povećamo iznos parametra ponavljanja, točnost na neprijateljskim primjerima povećala bi se. Naravno, istovremeno bi došlo do pada točnosti na prirodnim podatcima.
 Dobra strana algoritma \textit{FreeAdv} svakako je vrijeme učenja - ovaj model uči se kraće čak i od modela učenog na prirodnom skupu podataka. 
-Toliku kratkoću učenja pripisujemo činjenici da je tijekom učenja za \textit{FreeAdv} model potrebno provesti evaluaciju nakon epoha samo 10 puta, dok je za ostale modele potrebno provesti evaluaciju punih 80 puta.
+Toliku kratkoću učenja pripisujemo činjenici da je tijekom učenja za algoritam \textit{FreeAdv} provedena evaluacija nakon epoha samo 10 puta, dok je za ostale algoritme evaluacija provedena punih 80 puta.
 
 Modeli učeni \textit{FastAdv} metodom ograničeni su pojavom katastrofalne prenaučenosti. 
 Ovo svojstvo veoma je vidljivo kod \textit{FastAdv} modela bez ranog zaustavljanja - takav model postiže visoku točnost na prirodnom skupu podataka, ali zato nije nimalo otporan na neprijateljske primjere.
@@ -902,7 +902,7 @@ Oko 65. epohe moguće je vidjeti velik porast u točnosti na skupu za učenje, k
 Ova pojava posljedica je katastrofalne prenaučenosti - model gubi na moći generalizacije i počinje pamtiti ulazne podatke. 
 Kako bismo dodatno provjerili da je to istina, provjerit ćemo i točnost na neprijateljskim primjerima po epohama. 
 U slučaju da oko 65. epohe dolazi do velikog pada u točnosti na neprijateljskim primjerima, 
-u pitanju je katastrofalna prenaučenost od koje pate svi modeli učeni načinima zasnovanim na FGSM metodi konstrukcije neprijateljskih primjera.
+u pitanju je katastrofalna prenaučenost od koje pate svi modeli učeni metodama zasnovanim na FGSM-u.
 
 \begin{figure}[htb]
     \centering
@@ -918,7 +918,7 @@ Kako evaluacija tijekom učenja ne bi bila prespora, neprijateljski primjeri kon
 Kao što smo očekivali, oko 65. epohe dolazi do velikog pada u točnosti na neprijateljskim primjerima - već epohu nakon točnost na neprijateljskim primjerima iznosi otprilike $0\%$.
 Ovime potvrđujemo da je stvarno došlo do katastrofalne prenaučenosti. Kako bismo ovo izbjegli, \textit{FastAdv} model možemo učiti s ranim zaustavljanjem. 
 Ipak, rano zaustavljanje ograničava nas jer modele ne možemo proizvoljno dugo učiti. 
-Kao što je već prethodno rečeno, jedno od mogućih rješenja ovog problema korištenje je \textit{FastAdv+} ili \textit{FastAdvW} načina učenja.
+Kao što je već prethodno rečeno, jedno od mogućih rješenja ovog problema korištenje je načina učenja \textit{FastAdv+} ili \textit{FastAdvW}.
 
 \begin{figure}[htb]
     \centering
@@ -967,8 +967,9 @@ Arhitektura modela, mjera gubitka, optimizator i hiperparametri za učenje jedna
 Kao i prije, svi modeli osim \textit{FastAdv} modela učeni su koristeći stopu učenja s kosinusnim kaljenjem, dok \textit{FastAdv} modeli koriste cikličku stopu učenja.
 Osim na zatrovanom skupu podataka, svi modeli učeni su i na prirodnom skupu podataka.
 
-Kao i prije, u tablici~\ref{tbl:mjerenja_robusno_ucenje_zatrovano} stupac \textit{Način učenja} označava korišteni način učenja modela. Ako je na kraju naziva načina učenja 
-riječ \textit{Poison}, model je učen na zatrovanom skupu podataka. Stupac \textit{Točnost} ponovno označava točnost na prirodnom skupu podataka, a stupac \textit{Točnost, otrov}
+Kao i prije, u tablici~\ref{tbl:mjerenja_robusno_ucenje_zatrovano} stupac \textit{Način učenja} označava korišteni način učenja modela. 
+Ako stupac \textit{Način učenja} ima sufiks \textit{Poison}, model je učen na zatrovanom skupu podataka.
+Stupac \textit{Točnost} ponovno označava točnost na prirodnom skupu podataka, a stupac \textit{Točnost, otrov}
 označava točnost na zatrovanom skupu podataka. Iznosi točnosti, kao i vremena učenja zaokruženi su na jedno decimalno mjesto.
 
 \begin{table}[htb]
@@ -1056,7 +1057,7 @@ U ovome radu, napravili smo kratak pregled osnovnih načina za postizanje modela
 Istražili smo probleme vezane uz brzinu učenja robusnih modela otpornih na neprijateljske primjere konstruirane iterativnim napadima.
 Implementirali smo i evaluirali točnost, kao i brzinu učenja predloženih nadogradnji na klasične načine učenja s neprijateljskim primjerima: \textit{FreeAdv}, \textit{FastAdv}, \textit{FastAdv+} i \textit{FastAdvW} metoda.
 Kako bismo ispravno implementirali navedene načine brzog učenja s neprijateljskim primjerima, istražili smo korištenje računanja u mješovitoj preciznosti s ciljem ubrzanja učenja modela.
-Korištenjem \textit{FastAdvW} načina učenja postigli smo modele robusnosti otprilike jednake robusnosti PGD modela, ali s potrebnih skoro dvostruko manje vremena za učenje.
+Korištenjem načina učenja \textit{FastAdvW}, postigli smo modele robusnosti otprilike jednake robusnosti PGD modela, ali s potrebnih skoro dvostruko manje vremena za učenje.
 
 Nakon implementacije različitih načina brzog učenja s neprijateljskim primjerima, istražili smo imaju li robusni modeli naučeni na zatrovanom skupu podataka moć detekcije zatrovanih podataka.
 Nažalost, došli smo do zaključka da klasične implementacije robusnih modela poput PGD ili \textit{FastAdv} modela nemaju moć detekcije zatrovanih podataka jer, kao i modeli učeni prirodnim učenjem, 
@@ -1079,9 +1080,9 @@ U slučaju da se pokaže da ovo svojstvo imaju svi robusni modeli učeni na zatr
 
 Učenje s neprijateljskim primjerima važno je za postizanje sigurnih modela. 
 Proučavamo osnovne načine učenja s neprijateljskim primjerima (FGSM, PGD). 
-Uočavamo i istražujemo probleme prisutne pri korištenju PGD načina učenja na kompleksnijim modelima.
+Uočavamo i istražujemo probleme prisutne pri korištenju načina učenja PGD na kompleksnijim modelima.
 Razmatramo predložene nadogradnje na osnovne načine učenja s neprijateljskim primjerima (\textit{FreeAdv}, \textit{FastAdv}, \textit{FastAdv+}, \textit{FastAdvW}) i evaluiramo performanse naučenih modela.
-Evaluacija pokazuje da najbolje performanse postižu modeli učeni \textit{FastAdv+} i \textit{FastAdvW} načinima učenja.
+Evaluacija pokazuje da najbolje performanse postižu modeli učeni načinima učenja \textit{FastAdv+} i \textit{FastAdvW}.
 Razmatramo mogućnost korištenja robusnih modela za detekciju zatrovanih podataka.
 % Eksperimentima pokazujemo da osnovni robusni modeli ne nude mogućnost detekcije zatrovanih podataka, ali iskazuju nagli rast u točnosti na zatrovanom skupu za učenje kada se točnost prati po mini-grupama.
 % Ovo svojstvo potencijalno bi se moglo koristiti kao detektor postojanja zatrovanih podataka.
