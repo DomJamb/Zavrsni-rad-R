@@ -431,9 +431,9 @@ def show_stats(name, save_name, save=False, show=True):
     plt.bar(np.arange(len(test_accs)), test_accs, width=0.5, color="green")
     
     plt.xticks([r for r in range(len(test_accs))], names, rotation="vertical", fontsize=14)
-    plt.xlabel('Ime modela', fontsize=16, labelpad=25)
+    plt.xlabel('Ime algoritma', fontsize=16, labelpad=25)
     plt.ylabel('Točnost [%]', fontsize=16, labelpad=20)
-    plt.title("Točnost na skupu za testiranje za različite modele", fontweight='bold', fontsize=25, pad=15)
+    plt.title("Točnost na skupu za testiranje za različite algoritme", fontweight='bold', fontsize=25, pad=15)
 
     plt.subplots_adjust(bottom=0.3)
 
@@ -449,9 +449,9 @@ def show_stats(name, save_name, save=False, show=True):
     plt.bar(np.arange(len(adv_accs)), adv_accs, width=0.5, color="orange")
     
     plt.xticks([r for r in range(len(adv_accs))], names, rotation="vertical", fontsize=14)
-    plt.xlabel('Ime modela', fontsize=16, labelpad=25)
+    plt.xlabel('Ime algoritma', fontsize=16, labelpad=25)
     plt.ylabel('Točnost [%]', fontsize=16, labelpad=20)
-    plt.title("Točnost na neprijateljskim primjerima (20-PGD) za različite modele", fontweight='bold', fontsize=25, pad=15)
+    plt.title("Točnost na neprijateljskim primjerima (20-PGD) za različite algoritme", fontweight='bold', fontsize=25, pad=15)
 
     plt.subplots_adjust(bottom=0.3)
 
@@ -467,9 +467,9 @@ def show_stats(name, save_name, save=False, show=True):
     plt.bar(np.arange(len(train_times)), train_times, width=0.5, color="blue")
     
     plt.xticks([r for r in range(len(train_times))], names, rotation="vertical", fontsize=14)
-    plt.xlabel('Ime modela', fontsize=16, labelpad=25)
+    plt.xlabel('Ime algoritma', fontsize=16, labelpad=25)
     plt.ylabel('Vrijeme učenja [min]', fontsize=16, labelpad=20)
-    plt.title("Vrijeme učenja za različite modele", fontweight='bold', fontsize=25, pad=15)
+    plt.title("Vrijeme učenja za različite algoritme", fontweight='bold', fontsize=25, pad=15)
 
     plt.subplots_adjust(bottom=0.3)
 
@@ -493,9 +493,9 @@ def show_stats(name, save_name, save=False, show=True):
             edgecolor ='grey', label ='Točnost na neprijateljskim primjerima (20-PGD)')
     
     plt.xticks([r + barWidth for r in range(len(test_accs))], names, rotation="vertical", fontsize=14)
-    plt.xlabel('Ime modela', fontsize=16, labelpad=25)
+    plt.xlabel('Ime algoritma', fontsize=16, labelpad=25)
     plt.ylabel('Točnost [%]', fontsize=16, labelpad=20)
-    plt.title("Usporedba točnosti za različite modele", fontweight='bold', fontsize=25, pad=15)
+    plt.title("Usporedba točnosti za različite algoritme", fontweight='bold', fontsize=25, pad=15)
     plt.legend()
 
     plt.subplots_adjust(bottom=0.3)
