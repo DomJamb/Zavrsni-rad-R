@@ -428,7 +428,7 @@ Primjer sa slike~\ref{fig:adv_example} zapravo je neprijateljski primjer konstru
 \end{equation}
 \\
 Pritom $\epsilon$ predstavlja mali pozitivan broj koji određuje veličinu perturbacije, $x$ ulazni podatak, $sign(x)$ predznak od $x$, a $x_{adv}$ konstruirani neprijateljski primjer. 
-Napad FGSM originalnom ulazu pridodaje iznos istog predznaka kao i gradijent funkcije gubitka. Na taj način osigurava se najveći mogući rast iznosa funkcije gubitka. 
+Napad FGSM originalnom ulazu pridodaje iznos istog predznaka kao i gradijent funkcije gubitka. Time se osigurava najveći mogući rast iznosa funkcije gubitka. 
 Ovakav napad primjer je neusmjerenog napada. U slučaju usmjerenog napada, cilj bi nam bio što više smanjiti iznos funkcije gubitka s obzirom na proizvoljan razred.
 
 Uz napad FGSM, postoji i napad koji iterativno stvara značajno učinkovitije neprijateljske primjere. 
@@ -1073,7 +1073,7 @@ Kako bismo ispravno implementirali navedene načine brzog učenja s neprijateljs
 Korištenjem načina učenja \textit{FastAdvW}, postigli smo robusnost otprilike jednaku robusnosti učenja PGD-om, ali uz skoro dvostruko manje vremena za učenje.
 
 Nakon implementacije različitih načina brzog učenja s neprijateljskim primjerima, istražili smo imaju li robusni modeli naučeni na zatrovanom skupu podataka moć detekcije zatrovanih podataka.
-Nažalost, došli smo do zaključka da klasične implementacije robusnog učenja poput modela učenih PGD-om s ograničenjem $L_\infty$ norme ili metodom \textit{FastAdv} ne mogu izravno detektirati zatrovane podatake jer, kao i modeli učeni prirodnim učenjem, 
+Nažalost, došli smo do zaključka da klasične implementacije robusnog učenja poput modela učenih PGD-om s ograničenjem $L_\infty$ norme ili metodom \textit{FastAdv} ne mogu izravno detektirati zatrovane podatke jer, kao i modeli učeni prirodnim učenjem, 
 tijekom učenja nauče prepoznavati okidač i na temelju toga klasificirati ulaz. 
 Ipak, uočili smo da ako za robusne modele tijekom učenja pratimo točnost na skupu za učenje po mini-grupama, potencijalno možemo izdvojiti modele učene na skupu podataka s ubačenim zatrovanim podatcima.
 Prema dobivenim rezultatima, robusni modeli učeni na zatrovanim podatcima u jednom trenutku će imati nagli rast u točnosti na zatrovanom skupu za učenje. Ovo svojstvo potencijalno bismo mogli koristiti kao detektor postojanja zatrovanih podataka.
