@@ -57,11 +57,36 @@ Uz to, razmatrat ćemo i otpornost naučenih modela na zatrovane podatke. Zatrov
 Uvođenjem takve ranjivosti u model, napadači mogu neprimijećeno postići proizvoljne ciljeve poput izbjegavanja detekcije ili pogrešne klasifikacije.
 
 \chapter{Neuronske mreže}
+
+\section{Općenito o strojnom učenju}
+Strojno učenje grana je računarske znanosti čiji cilj je razvijanje algoritama koji mogu učiti na temelju podataka~\cite{uui2020ml}.
+Ove algoritme možemo primjenjivati na brojne probleme. Neki od najčešćih problema su zadatci koje je teško modelirati i riješiti klasičnim algoritmima.
+U ovu kategoriju spadaju problemi poput računalnog vida i raspoznavanja tj.\ klasifikacije uzoraka.
+Uz ovo, algoritmi strojnog učenja često se primjenjuju i za ekstrakciju znanja iz velikih količina podataka.
+Općenito govoreći, strojno učenje možemo podijeliti u tri kategorije:
+
+\begin{enumerate}
+    \item nadzirano učenje 
+    \item nenadzirano učenje
+    \item podržano učenje
+\end{enumerate}
+
+Kod nadziranog učenja, algoritmi na ulazu dobivaju parove oblika (ulazni podatci, očekivani izlaz). Cilj nadziranog učenja je naučiti ispravno preslikavanje ulaza na izlaz.
+Kada je u pitanju nenadzirano učenje, algoritmi dobivaju samo ulazne podatke, a cilj je pronalaženje određenih pravilnosti u njima.
+Podržano učenje služi za učenje optimalne strategije sustava na temelju primljenih nagrada. %Pritom sustav tj.\ agent za svoje akcije prima određenu nagradu i mijenja stanje svoje okoline, a cilj mu je maksimizirati ukupnu primljenu nagradu.
+U okviru ovog rada, fokusirat ćemo se na nadzirano učenje.
+
+Algoritam strojnog učenja sastoji se od nekoliko komponenata. Najvažnije komponente svakako su model, gubitak i optimizacijski postupak.
+Pritom je model definiran parametrima koje tijekom učenja želimo poboljšavati na temelju predočenih podataka. 
+Kako bi model mogao učiti, važno je definirati funkciju gubitka koja nam govori koliko su trenutni rezultati modela ispravni.
+Uz ovo, veoma je važan i optimizacijski postupak kojim prilagođavamo parametre modela. 
+Glavni cilj strojnog učenja je razvoj modela koji mogu dobro generalizirati tj.\ na temelju viđenih podataka zaključivati o neviđenim podatcima.
+
 \section{Općenito o neuronskim mrežama}
 Umjetne neuronske mreže veoma su popularan alat za rješavanje kompleksnih problema za koje je teško modelirati ili formalizirati znanje. 
 Predstavnik su konektivističkog pristupa umjetnoj inteligenciji~\cite{uui2020} koji se zasniva na oblikovanju sustava inspiriranih građom mozga.
 
-Problemi koje rješavamo umjetnim neuronskim mrežama svrstavaju se u dvije glavne kategorije:
+Problemi koje rješavamo umjetnim neuronskim mrežama većinom spadaju pod nadzirano učenje, a možemo ih svrstati u dvije glavne kategorije:
 \begin{enumerate}
     \item klasifikacija 
     \item regresija
@@ -74,6 +99,8 @@ S druge strane, kod regresijskih problema cilj nam je što bolje aproksimirati n
 Taj neuron na izlazu bi trebao davati predviđenu vrijednost funkcije za neki, do sada neviđeni, ulaz.
 
 Da bi neuronska mreža mogla rješavati takve probleme, važno nam je da može učiti na temelju predočenih podataka. Učenje neuronske mreže odvija se izmjenom težina pojedinih neurona (time znanje implicitno ugrađujemo u našu mrežu).
+Za neuronske mreže možemo reći da su algoritmi strojnog učenja kod kojih modeli tipično imaju velik broj slojeva. Pritom se kao funkcija gubitka često koristi unakrsna entropija, a kao optimizacijski postupak gradijentni spust.
+Kada su u pitanju neuronske mreže s velikim brojem slojeva tj. dubinom, govorimo o pristupu strojnom učenju zvanom duboko učenje. %Za ovaj pristup potrebna nam je velika količina podataka.
 Kako bismo detaljnije mogli govoriti o učenju i arhitekturama neuronskih mreža, važno je ukratko opisati neuron - osnovnu gradivnu jedinicu svake mreže.
 \pagebreak
 \section{Umjetni neuron}
