@@ -637,3 +637,49 @@ def graph_poisoned_examples(adv_dict, save_name, save=False, show=True):
 
     if show:
         plt.show()
+
+def graph_adv_examples_multiple_models(adv_dict, classes_map, name, save=False, show=True):
+    """
+    Function for showcasing the adversarial examples of multiple models
+    Params:
+        adv_dict: dict[model: list<advExample>]
+        classes_map: dict[label_num: label_str]
+        name: name of the model
+        save: option to save the image
+        show: option to show the image
+    """
+    fig = plt.figure(figsize=(20,10))
+    length = len(adv_dict.keys())
+    keys = list(adv_dict.keys())
+
+    subfigs = fig.subfigures(nrows=length, ncols=1)
+    if not isinstance(subfigs, np.ndarray):
+        subfigs = [subfigs]
+
+    # Show adversarial examples
+    for row, subfig in enumerate(subfigs):
+        key = keys[row]
+        adv_list = adv_dict[key]
+        adv_cnt = len(adv_list)
+        subfig.suptitle(f'{key}', fontweight='bold')
+
+        axs = subfig.subplots(nrows=1, ncols=adv_cnt)
+        i = 0
+
+        for adv in adv_list:
+            ax = axs[i]
+            ax.plot()
+            display_img = adv.attacked_img.transpose((1,2,0))
+            ax.imshow(display_img)
+            ax.set_title(f"Predviđeni razred: {classes_map[adv.img_class]}" if row != 0 else f"Pravi razred: {classes_map[adv.img_class]}")
+            ax.axis('off')
+            i += 1
+
+    plt.subplots_adjust(top=0.75)
+
+    if save:
+        save_path = f"./stats/{name}.png"
+        plt.savefig(save_path)
+
+    if show:
+        plt.show()

@@ -3,6 +3,7 @@ import json
 import time
 import math
 import copy
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -16,7 +17,7 @@ from torchvision.models import resnet18
 
 from attack_funcs import attack_pgd, attack_pgd_directed
 from ResidualNetwork18 import ResidualNetwork18
-from graphing_funcs import show_loss, show_accuracies, graph_adv_examples, show_train_loss, show_train_accs, show_adversarial_accuracies, show_adversarial_accuracies_varying_steps, show_stats
+from graphing_funcs import show_loss, show_accuracies, graph_adv_examples, show_train_loss, show_train_accs, show_adversarial_accuracies, show_adversarial_accuracies_varying_steps, show_stats, graph_adv_examples_multiple_models
 from AdvExample import AdvExample
 from util import get_train_time
 
@@ -1031,6 +1032,113 @@ def test_robustness_multiple_steps(max_steps=20):
 
     return adv_accs
 
+def sample_adv_examples_multiple_models():
+    """
+    Function for creating adversarial examples for multiple trained models
+    """
+    sampled_imgs = dict()
+    adv_imgs = dict()
+
+    imgs, labels = test_loader.__iter__().__next__()
+    t = list()
+
+    for i, label in enumerate(labels):
+        l = label.item()
+        if l not in sampled_imgs.keys():
+            sampled_imgs.update({l: imgs[i]})
+            t.append(AdvExample(l, np.array(imgs[i].cpu())))
+        if len(sampled_imgs.keys()) == 6:
+            break
+
+    adv_imgs.update({"Prirodne slike": t})
+
+    ##### PGD
+
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_pgd_epochs_80_lr_0.1"
+    model_save_path= f"./models/{model_name}.pt"
+    model.load_state_dict(torch.load(model_save_path))
+
+    adv_x = attack_pgd(model, torch.stack(list(sampled_imgs.values())), torch.tensor(list(sampled_imgs.keys())), eps=8/255, koef_it=1/255, steps=20, device=device)
+    y_ = model(adv_x)
+    _, y_ = y_.max(1)
+
+    t = list()
+    for i, y in enumerate(y_):
+        t.append(AdvExample(y.item(), np.array(adv_x[i].cpu())))
+    
+    adv_imgs.update({"Algoritam PGD": t})
+
+    ##### FreeAdv
+
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_free_epochs_10_replay_8_lr_0.1"
+    model_save_path= f"./models/{model_name}.pt"
+    model.load_state_dict(torch.load(model_save_path))
+
+    adv_x = attack_pgd(model, torch.stack(list(sampled_imgs.values())), torch.tensor(list(sampled_imgs.keys())), eps=8/255, koef_it=1/255, steps=20, device=device)
+    y_ = model(adv_x)
+    _, y_ = y_.max(1)
+
+    t = list()
+    for i, y in enumerate(y_):
+        t.append(AdvExample(y.item(), np.array(adv_x[i].cpu())))
+    
+    adv_imgs.update({"Algoritam FreeAdv": t})
+
+    ##### FastAdv, Early
+
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_fast_epochs_80_lr_0.2_early"
+    model_save_path= f"./models/{model_name}.pt"
+    model.load_state_dict(torch.load(model_save_path))
+
+    adv_x = attack_pgd(model, torch.stack(list(sampled_imgs.values())), torch.tensor(list(sampled_imgs.keys())), eps=8/255, koef_it=1/255, steps=20, device=device)
+    y_ = model(adv_x)
+    _, y_ = y_.max(1)
+
+    t = list()
+    for i, y in enumerate(y_):
+        t.append(AdvExample(y.item(), np.array(adv_x[i].cpu())))
+    
+    adv_imgs.update({"Algoritam FastAdv, Early": t})
+
+    ##### FastAdv+, Early
+
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_fast+_epochs_80_lr_0.2_early"
+    model_save_path= f"./models/{model_name}.pt"
+    model.load_state_dict(torch.load(model_save_path))
+
+    adv_x = attack_pgd(model, torch.stack(list(sampled_imgs.values())), torch.tensor(list(sampled_imgs.keys())), eps=8/255, koef_it=1/255, steps=20, device=device)
+    y_ = model(adv_x)
+    _, y_ = y_.max(1)
+
+    t = list()
+    for i, y in enumerate(y_):
+        t.append(AdvExample(y.item(), np.array(adv_x[i].cpu())))
+    
+    adv_imgs.update({"Algoritam FastAdv+, Early": t})
+
+    ##### FastAdvW, Early
+
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_fastw_epochs_80_lr_0.2_early"
+    model_save_path= f"./models/{model_name}.pt"
+    model.load_state_dict(torch.load(model_save_path))
+
+    adv_x = attack_pgd(model, torch.stack(list(sampled_imgs.values())), torch.tensor(list(sampled_imgs.keys())), eps=8/255, koef_it=1/255, steps=20, device=device)
+    y_ = model(adv_x)
+    _, y_ = y_.max(1)
+
+    t = list()
+    for i, y in enumerate(y_):
+        t.append(AdvExample(y.item(), np.array(adv_x[i].cpu())))
+    
+    adv_imgs.update({"Algoritam FastAdvW, Early": t})
+
+    graph_adv_examples_multiple_models(adv_imgs, classes_map, "adv_imgs_multiple_models", save=True, show=False)
+
 if __name__ == "__main__":
 
     print(f"Current device: {device}")
@@ -1517,4 +1625,5 @@ if __name__ == "__main__":
     # show_train_accs(model_name, save=True, show=False)
     # get_train_time(model_name)
 
-    show_stats("all_models_80_epochs_stats_short.log", "stats_comparison", save=True, show=False)
+    # show_stats("all_models_80_epochs_stats_short.log", "stats_comparison", save=True, show=False)
+    sample_adv_examples_multiple_models()

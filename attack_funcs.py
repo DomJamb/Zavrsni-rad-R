@@ -21,6 +21,8 @@ def attack_pgd(model, images, labels, eps=8/255, koef_it=1/255, steps=7, device=
 
     loss_calc = nn.CrossEntropyLoss()
 
+    images = images.to(device)
+    labels = labels.to(device)
     adv_examples = images.clone().detach()
 
     # Modify the images in each iteration
