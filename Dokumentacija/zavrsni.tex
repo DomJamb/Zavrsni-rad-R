@@ -976,15 +976,15 @@ Osim na zatrovanom skupu podataka, svi modeli učeni su i na prirodnom skupu pod
 
 Kao i prije, u tablici~\ref{tbl:mjerenja_robusno_ucenje_zatrovano} stupac \textit{Način učenja} označava korišteni način učenja modela. 
 Ako stupac \textit{Način učenja} ima sufiks \textit{Poison}, model je učen na zatrovanom skupu podataka.
-Stupac \textit{Točnost} ponovno označava točnost na prirodnom skupu podataka, a stupac \textit{Točnost, otrov}
-označava točnost na zatrovanom skupu podataka. Iznosi točnosti, kao i vremena učenja zaokruženi su na jedno decimalno mjesto.
+Stupac \textit{Točnost} ponovno označava točnost na prirodnom skupu podataka, a stupac \textit{ASR}
+stopu uspješnosti napada (engl.\ \textit{attack success rate}). Iznosi točnosti, stope uspješnosti napada, kao i vremena učenja zaokruženi su na jedno decimalno mjesto.
 
 \begin{table}[htb]
     \caption{Rezultati raznih načina učenja na zatrovanom i prirodnom skupu podataka.}
     \label{tbl:mjerenja_robusno_ucenje_zatrovano}
     \centering
     \begin{tabular}{lcccc} \hline
-    Način učenja & LR & Točnost [\%] & Točnost, otrov [\%] & Vrijeme učenja [min]\\ \hline
+    Način učenja & LR & Točnost [\%] & ASR [\%] & Vrijeme učenja [min]\\ \hline
     Natural & 0.02 & 86 & 10.2 & 27.1 \\
     Natural, Poison & 0.02 & 81.7 & 98.2 & 29.1 \\
     PGD & 0.1 & 79.2 & 9.9 & 144.6 \\
@@ -996,10 +996,10 @@ označava točnost na zatrovanom skupu podataka. Iznosi točnosti, kao i vremena
 
 \pagebreak
 
-Kao što možemo vidjeti u tablici~\ref{tbl:mjerenja_robusno_ucenje_zatrovano}, svi modeli učeni na prirodnom skupu podataka imaju točnost na zatrovanim podatcima iznosa otprilike $10\%$.
+Kao što možemo vidjeti u tablici~\ref{tbl:mjerenja_robusno_ucenje_zatrovano}, modeli učeni na prirodnom skupu podataka imaju stopu uspješnosti napada iznosa otprilike $10\%$.
 Ovaj rezultat interpretiramo tako da modeli učeni na prirodnom skupu ispravno klasificiraju većinu zatrovanih slika koje uistinu i potječu iz ciljnog razreda, pritom se ne obazirući na okidač.
-Modeli učeni na zatrovanom skupu podataka imaju malo nižu točnost na prirodnom skupu, ali i veoma visoku točnost na zatrovanim podatcima. 
-Visoka točnost na zatrovanim podatcima govori nam da su svi modeli učeni na zatrovanom skupu naučili okidač. 
+Modeli učeni na zatrovanom skupu podataka imaju malo nižu točnost na prirodnom skupu, a nažalost i veoma visoku stopu uspješnosti napada. 
+Visoka stopa uspješnosti napada govori nam da su svi modeli učeni na zatrovanom skupu naučili okidač. 
 Drugim riječima, čak ni robusni modeli poput modela učenih PGD-om nisu otporni na zatrovane podatke.
 
 \begin{figure}[htb]
@@ -1008,6 +1008,8 @@ Drugim riječima, čak ni robusni modeli poput modela učenih PGD-om nisu otporn
     \caption{Usporedba točnosti zatrovanog modela učenog PGD-om po epohama.}
     \label{fig:pgd_poisoned_acc}
 \end{figure}
+
+\pagebreak
 
 Slika~\ref{fig:pgd_poisoned_acc} prikazuje usporedbu točnosti na zatrovanom skupu za učenje, točnosti na skupu za testiranje i točnosti na zatrovanom skupu za testiranje 
 za model učen PGD-om na zatrovanom skupu podataka. Već u prvih nekoliko epoha, točnost na zatrovanom skupu za testiranje stabilizira se na iznosu od skoro $100\%$ te do kraja učenja neznatno pada.
