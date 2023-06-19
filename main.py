@@ -1052,90 +1052,28 @@ def sample_adv_examples_multiple_models():
 
     adv_imgs.update({"Prirodne slike": t})
 
-    ##### PGD
+    models_names = {
+        "resnet18_pgd_epochs_80_lr_0.1": "Algoritam PGD",
+        "resnet18_free_epochs_10_replay_8_lr_0.1": "Algoritam FreeAdv",
+        "resnet18_fast_epochs_80_lr_0.2_early": "Algoritam FastAdv, Early",
+        "resnet18_fast+_epochs_80_lr_0.2_early": "Algoritam FastAdv+, Early",
+        "resnet18_fastw_epochs_80_lr_0.2_early": "Algoritam FastAdvW, Early"
+    }
 
-    model = ResidualNetwork18().to(device)
-    model_name = f"resnet18_pgd_epochs_80_lr_0.1"
-    model_save_path= f"./models/{model_name}.pt"
-    model.load_state_dict(torch.load(model_save_path))
+    for model_name, alg_name in models_names.items():
+        model = ResidualNetwork18().to(device)
+        model_save_path= f"./models/{model_name}.pt"
+        model.load_state_dict(torch.load(model_save_path))
 
-    adv_x = attack_pgd(model, torch.stack(list(sampled_imgs.values())), torch.tensor(list(sampled_imgs.keys())), eps=8/255, koef_it=1/255, steps=20, device=device)
-    y_ = model(adv_x)
-    _, y_ = y_.max(1)
+        adv_x = attack_pgd(model, torch.stack(list(sampled_imgs.values())), torch.tensor(list(sampled_imgs.keys())), eps=8/255, koef_it=1/255, steps=20, device=device)
+        y_ = model(adv_x)
+        _, y_ = y_.max(1)
 
-    t = list()
-    for i, y in enumerate(y_):
-        t.append(AdvExample(y.item(), np.array(adv_x[i].cpu())))
-    
-    adv_imgs.update({"Algoritam PGD": t})
-
-    ##### FreeAdv
-
-    model = ResidualNetwork18().to(device)
-    model_name = f"resnet18_free_epochs_10_replay_8_lr_0.1"
-    model_save_path= f"./models/{model_name}.pt"
-    model.load_state_dict(torch.load(model_save_path))
-
-    adv_x = attack_pgd(model, torch.stack(list(sampled_imgs.values())), torch.tensor(list(sampled_imgs.keys())), eps=8/255, koef_it=1/255, steps=20, device=device)
-    y_ = model(adv_x)
-    _, y_ = y_.max(1)
-
-    t = list()
-    for i, y in enumerate(y_):
-        t.append(AdvExample(y.item(), np.array(adv_x[i].cpu())))
-    
-    adv_imgs.update({"Algoritam FreeAdv": t})
-
-    ##### FastAdv, Early
-
-    model = ResidualNetwork18().to(device)
-    model_name = f"resnet18_fast_epochs_80_lr_0.2_early"
-    model_save_path= f"./models/{model_name}.pt"
-    model.load_state_dict(torch.load(model_save_path))
-
-    adv_x = attack_pgd(model, torch.stack(list(sampled_imgs.values())), torch.tensor(list(sampled_imgs.keys())), eps=8/255, koef_it=1/255, steps=20, device=device)
-    y_ = model(adv_x)
-    _, y_ = y_.max(1)
-
-    t = list()
-    for i, y in enumerate(y_):
-        t.append(AdvExample(y.item(), np.array(adv_x[i].cpu())))
-    
-    adv_imgs.update({"Algoritam FastAdv, Early": t})
-
-    ##### FastAdv+, Early
-
-    model = ResidualNetwork18().to(device)
-    model_name = f"resnet18_fast+_epochs_80_lr_0.2_early"
-    model_save_path= f"./models/{model_name}.pt"
-    model.load_state_dict(torch.load(model_save_path))
-
-    adv_x = attack_pgd(model, torch.stack(list(sampled_imgs.values())), torch.tensor(list(sampled_imgs.keys())), eps=8/255, koef_it=1/255, steps=20, device=device)
-    y_ = model(adv_x)
-    _, y_ = y_.max(1)
-
-    t = list()
-    for i, y in enumerate(y_):
-        t.append(AdvExample(y.item(), np.array(adv_x[i].cpu())))
-    
-    adv_imgs.update({"Algoritam FastAdv+, Early": t})
-
-    ##### FastAdvW, Early
-
-    model = ResidualNetwork18().to(device)
-    model_name = f"resnet18_fastw_epochs_80_lr_0.2_early"
-    model_save_path= f"./models/{model_name}.pt"
-    model.load_state_dict(torch.load(model_save_path))
-
-    adv_x = attack_pgd(model, torch.stack(list(sampled_imgs.values())), torch.tensor(list(sampled_imgs.keys())), eps=8/255, koef_it=1/255, steps=20, device=device)
-    y_ = model(adv_x)
-    _, y_ = y_.max(1)
-
-    t = list()
-    for i, y in enumerate(y_):
-        t.append(AdvExample(y.item(), np.array(adv_x[i].cpu())))
-    
-    adv_imgs.update({"Algoritam FastAdvW, Early": t})
+        t = list()
+        for i, y in enumerate(y_):
+            t.append(AdvExample(y.item(), np.array(adv_x[i].cpu())))
+        
+        adv_imgs.update({alg_name: t})
 
     graph_adv_examples_multiple_models(adv_imgs, classes_map, "adv_imgs_multiple_models", save=True, show=False)
 
