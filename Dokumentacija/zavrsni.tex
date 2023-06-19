@@ -1145,7 +1145,21 @@ Iznosi točnosti i stope uspješnosti napada zaokruženi su na jedno decimalno m
 
 Kao što možemo vidjeti u tablici~\ref{tbl:mjerenja_zatrovano_norme}, korištenje L\textsubscript{2} norme kao ograničenja jačine perturbacije ne smanjuje značajno stopu uspješnosti napada.
 Povećavanjem iznosa koeficijenta $\epsilon$ malo se smanjuje stopa uspješnosti napada, ali se zato istovremeno značajno smanjuje točnost na prirodnim podatcima.
-Po dobivenim rezultatima, čak ni model učen PGD-om s ograničenjem L\textsubscript{2} norme i velikim iznosom koeficijenta $\epsilon$ ne nudi nam otpornost na zatrovane podatke.
+Prema dobivenim rezultatima, čak ni model učen PGD-om s ograničenjem L\textsubscript{2} norme i velikim iznosom koeficijenta $\epsilon$ ne nudi nam otpornost na zatrovane podatke.
+
+\pagebreak
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.4]{../stats/train_accuracy_comparison_pgd_l2_only.png}
+    \caption{Usporedba točnosti po mini-grupama na zatrovanom skupu za učenje za modele učene PGD-om s ograničenjem L\textsubscript{2} norme i varirajućim iznosom koeficijenta $\epsilon$.}
+    \label{fig:pgd_l2_comparison}
+\end{figure}
+
+Slika~\ref{fig:pgd_l2_comparison} prikazuje usporedbu točnosti po mini-grupama na zatrovanom skupu za učenje za modele učene PGD-om s ograničenjem L\textsubscript{2} norme i varirajućim iznosom koeficijenta $\epsilon$.
+Možemo uočiti da povećavanjem iznosa koeficijenta $\epsilon$ točnost na zatrovanom skupu za učenje sporije raste. 
+Drugim riječima, modeli koji tijekom učenja imaju velik iznos koeficijenta $\epsilon$ bolje se "opiru" učenju okidača od modela s malim iznosom tog koeficijenta. 
+Nažalost, ti modeli imaju i značajno nižu točnost na prirodnom skupu podataka pa nam zato nisu od velike koristi.
 
 \chapter{Zaključak}
 
