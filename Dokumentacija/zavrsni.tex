@@ -999,7 +999,7 @@ Pritom je važno napomenuti da su za konstrukciju neprijateljskih primjera kori�
 
 Kao što smo i očekivali, neprijateljski primjeri konstruirani za model učen prirodnim učenjem ne podsjećaju na predviđene razrede, već je na slike dodan naizgled nasumičan šum.
 Kada su u pitanju modeli učeni algoritmima učenja s neprijateljskim primjerima, na slikama možemo prepoznati obilježja predviđenih razreda.
-Uz ovo, na slici~\ref{fig:adv_examples_multiple_models} možemo dodatno uočiti i pojavu da neprijateljski primjeri konstruirani za modele učene različitim algoritmima ponekad izgledaju veoma slično.
+Uz ovo, na slici~\ref{fig:adv_examples_multiple_models} dodatno možemo uočiti i pojavu da neprijateljski primjeri konstruirani za modele učene različitim algoritmima ponekad izgledaju veoma slično.
 
 \pagebreak
 
@@ -1128,7 +1128,7 @@ Stupci \textit {Točnost} i \textit{ASR} ponovno označavaju točnost na prirodn
 Iznosi točnosti i stope uspješnosti napada zaokruženi su na jedno decimalno mjesto.
 
 \begin{table}[htb]
-    \caption{Rezultati načina učenja PGD s različitim L\textsubscript{p} normama na zatrovanom i prirodnom skupu podataka.}
+    \caption{Rezultati načina učenja PGD s različitim L\textsubscript{p} normama i varirajućim iznosom koeficijenta $\epsilon$ na zatrovanom i prirodnom skupu podataka.}
     \label{tbl:mjerenja_zatrovano_norme}
     \centering
     \begin{tabular}{lcccc} \hline
@@ -1145,7 +1145,7 @@ Iznosi točnosti i stope uspješnosti napada zaokruženi su na jedno decimalno m
 
 Kao što možemo vidjeti u tablici~\ref{tbl:mjerenja_zatrovano_norme}, korištenje L\textsubscript{2} norme kao ograničenja jačine perturbacije ne smanjuje značajno stopu uspješnosti napada.
 Povećavanjem iznosa koeficijenta $\epsilon$ malo se smanjuje stopa uspješnosti napada, ali se zato istovremeno značajno smanjuje točnost na prirodnim podatcima.
-Prema dobivenim rezultatima, čak ni model učen PGD-om s ograničenjem L\textsubscript{2} norme i velikim iznosom koeficijenta $\epsilon$ ne nudi nam otpornost na zatrovane podatke.
+Prema dobivenim rezultatima, čak ni model učen PGD-om s ograničenjem L\textsubscript{2} norme i iznosom koeficijenta $\epsilon$ 512/255 ne nudi nam otpornost na zatrovane podatke.
 
 \pagebreak
 
