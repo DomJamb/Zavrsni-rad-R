@@ -1160,6 +1160,26 @@ Slika~\ref{fig:pgd_l2_comparison} prikazuje usporedbu točnosti po mini-grupama 
 Možemo uočiti da povećavanjem iznosa koeficijenta $\epsilon$ točnost na zatrovanom skupu za učenje sporije raste. 
 Drugim riječima, modeli koji tijekom učenja imaju velik iznos koeficijenta $\epsilon$ bolje se "opiru" učenju okidača od modela s malim iznosom tog koeficijenta. 
 Nažalost, ti modeli imaju i značajno nižu točnost na prirodnom skupu podataka pa nam zato nisu od velike koristi.
+Ipak, zbog pojave da modeli učeni PGD-om s ograničenjem L\textsubscript{2} norme imaju nižu stopu uspješnosti napada u usporedbi s modelima učenim PGD-om s ograničenjem L\textsubscript{$\infty$} norme, proučit ćemo izgled neprijateljskih primjera konstruiranih koristeći različite L\textsubscript{p} norme. %kao ograničenja jačine perturbacije.
+
+\pagebreak
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.42]{../adv_imgs_multiple_models/linf_l2.png}
+    \caption{Prirodne slike i neprijateljski primjeri konstruirani koristeći napad PGD s ograničenjem L\textsubscript{$\infty$} ili L\textsubscript{2} norme.}
+    \label{fig:l2_linf_comparison}
+\end{figure}
+
+Slika~\ref{fig:l2_linf_comparison} prikazuje 3 prirodne slike iz različitih razreda, kao i neprijateljske primjere konstruirane koristeći napad PGD s 20 iteracija i ograničenjem L\textsubscript{$\infty$} ili L\textsubscript{2} norme.
+U oba slučaja, neprijateljski primjeri konstruirani su za model učen PGD-om s ograničenjem L\textsubscript{2} norme i iznosom koeficijenta $\epsilon$ 512/255. 
+Ovaj model odabran je zbog toga što ima najnižu stopu uspješnosti napada od svih modela naučenih u okviru ovog rada.
+Neprijateljski primjeri s ograničenjem L\textsubscript{$\infty$} norme tijekom konstrukcije su imali iznos koeficijenta $\epsilon$ 16/255, 
+a neprijateljski primjeri s ograničenjem L\textsubscript{2} norme 512/255.
+
+Možemo uočiti da neprijateljski primjeri konstruirani s ograničenjem L\textsubscript{2} norme puno bolje mijenjaju okidač u usporedbi s neprijateljskim primjerima konstruiranim s ograničenjem L\textsubscript{$\infty$} norme.
+Uz to, neprijateljski primjeri konstruirani s ograničenjem L\textsubscript{$\infty$} norme imaju više vidljivog šuma.
+Zaključujemo da korištenje L\textsubscript{2} norme kao ograničenja jačine perturbacije pomaže u izmjeni tj.\ brisanju lokaliziranih okidača, ali samo po sebi nije dovoljno da bi robustan model bio otporan na zatrovane podatke.
 
 \chapter{Zaključak}
 
