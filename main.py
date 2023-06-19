@@ -1065,7 +1065,7 @@ def sample_adv_examples_multiple_models():
         model_save_path= f"./models/{model_name}.pt"
         model.load_state_dict(torch.load(model_save_path))
 
-        adv_x = attack_pgd(model, torch.stack(list(sampled_imgs.values())), torch.tensor(list(sampled_imgs.keys())), eps=8/255, koef_it=1/255, steps=20, device=device)
+        adv_x = attack_pgd(model, torch.stack(list(sampled_imgs.values())), torch.tensor(list(sampled_imgs.keys())), eps=64/255, koef_it=4/255, steps=20, device=device)
         y_ = model(adv_x)
         _, y_ = y_.max(1)
 
@@ -1075,7 +1075,7 @@ def sample_adv_examples_multiple_models():
         
         adv_imgs.update({alg_name: t})
 
-    graph_adv_examples_multiple_models(adv_imgs, classes_map, "adv_imgs_multiple_models", save=True, show=False)
+    graph_adv_examples_multiple_models(adv_imgs, classes_map, "eps_64_255_full", save=True, show=False)
 
 if __name__ == "__main__":
 

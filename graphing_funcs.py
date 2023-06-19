@@ -678,7 +678,7 @@ def graph_adv_examples_multiple_models(adv_dict, classes_map, name, save=False, 
     plt.subplots_adjust(top=0.75)
 
     if save:
-        save_path = f"./stats/{name}.png"
+        save_path = f"./adv_imgs_multiple_models/{name}.png"
         plt.savefig(save_path)
 
     if show:
