@@ -978,6 +978,23 @@ te korištenja PGD-a za konstrukciju neprijateljskih primjera kada se uoči pad 
 %     \label{fig:fast_plus_adv_acc}
 % \end{figure}
 
+Za razliku od modela učenih prirodnim učenjem, modeli učeni PGD-om imaju interpretabilne gradijente gubitka po ulazu~\cite{tsipras2018robustness}.
+Drugim riječima, ako za model učen PGD-om konstruiramo neprijateljske primjere i pritom dopustimo velik maksimalan iznos perturbacije $\epsilon$, neprijateljski primjeri izgledat će slično primjercima prirodnih slika određenog razreda.
+Primjerice, ako za model učen PGD-om konstruiramo neprijateljski primjer usmjerenim napadom s ciljnim razredom \textit{automobile} i dovoljno velikim iznosom koeficijenta $\epsilon$, dobiveni neprijateljski primjer podsjećat će na automobil.
+Ako bismo isto pokušali za model učen prirodnim učenjem, dobiveni neprijateljski primjer izgledao bi besmisleno zbog velike količine prisutnog šuma.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.375]{../adv_imgs_multiple_models/eps_32_255_full.png}
+    \caption{Neprijateljski primjeri generirani za modele naučene različitim algoritmima.}
+    \label{fig:adv_examples_multiple_models}
+\end{figure}
+
+Za razliku od modela učenih prirodnim učenjem, modeli učeni PGD-om imaju interpretabilne gradijente gubitka po ulazu~\cite{tsipras2018robustness}.
+Drugim riječima, ako za model učen PGD-om konstruiramo neprijateljske primjere i pritom dopustimo velik maksimalan iznos perturbacije $\epsilon$, neprijateljski primjeri izgledat će slično primjercima prirodnih slika određenog razreda.
+Primjerice, ako za model učen PGD-om konstruiramo neprijateljski primjer usmjerenim napadom s ciljnim razredom \textit{automobile} i dovoljno velikim iznosom koeficijenta $\epsilon$, dobiveni neprijateljski primjer podsjećat će na automobil.
+Ako bismo isto pokušali za model učen prirodnim učenjem, dobiveni neprijateljski primjer izgledao bi besmisleno zbog velike količine prisutnog šuma.
+
 \pagebreak
 
 \section{Robusno učenje na zatrovanim podatcima}
