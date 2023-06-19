@@ -985,17 +985,21 @@ Primjerice, ako za model učen PGD-om konstruiramo neprijateljski primjer usmjer
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[scale=0.375]{../adv_imgs_multiple_models/eps_32_255_full.png}
+    \includegraphics[scale=0.375]{../adv_imgs_multiple_models/eps_48_255_full.png}
     \caption{Prirodne slike i neprijateljski primjeri konstruirani za modele učene različitim algoritmima.}
     \label{fig:adv_examples_multiple_models}
 \end{figure}
 
 Slika~\ref{fig:adv_examples_multiple_models} prikazuje 5 prirodnih slika iz različitih razreda, kao i neprijateljske primjere konstruirane za modele učene različitim algoritmima.
-Neprijateljski primjeri konstruirani su koristeći napad PGD s 20 iteracija i koeficijentom $\epsilon$ iznosa 32/255. 
-Prvi redak predstavlja prirodne slike, drugi redak neprijateljske primjere konstruirane za model učen prirodnim učenjem, a preostali retci neprijateljske primjere konstruirane za modele učene različitim algoritmima učenja s neprijateljskim primjerima.
-Iznad slika u prvom retku možemo vidjeti imena ispravnih razreda, dok iznad slika u preostalim retcima možemo vidjeti imena predviđenih razreda.
-Iz naslova svakog osim prvog retka možemo saznati korišteni algoritam za učenje modela. U slučaju da naziv algoritma ima sufiks \textit{Early}, korišteno je učenje s ranim zaustavljanjem.
+Neprijateljski primjeri konstruirani su koristeći napad PGD s 20 iteracija i koeficijentom $\epsilon$ iznosa 48/255. 
+Prvi redak predstavlja prirodne slike, drugi redak neprijateljske primjere konstruirane za model učen prirodnim učenjem, a preostali redci neprijateljske primjere konstruirane za modele učene različitim algoritmima učenja s neprijateljskim primjerima.
+Iznad slika u prvom retku možemo vidjeti imena ispravnih razreda, dok iznad slika u preostalim redcima možemo vidjeti imena predviđenih razreda.
+Iz naslova svakog osim prvog retka možemo iščitati korišteni algoritam za učenje modela. U slučaju da naziv algoritma ima sufiks \textit{Early}, korišteno je učenje s ranim zaustavljanjem.
 Pritom je važno napomenuti da su za konstrukciju neprijateljskih primjera korišteni modeli čiji su hiperparametri, kao i performanse, prikazani u tablici~\ref{tbl:mjerenja_robusno_ucenje}.
+
+Kao što smo i očekivali, neprijateljski primjeri konstruirani za model učen prirodnim učenjem ne podsjećaju na predviđene razrede, već je na slike dodan naizgled nasumičan šum.
+Kada su u pitanju modeli učeni algoritmima učenja s neprijateljskim primjerima, na slikama možemo prepoznati obilježja predviđenih razreda.
+Uz ovo, na slici~\ref{fig:adv_examples_multiple_models} možemo dodatno uočiti i pojavu da neprijateljski primjeri konstruirani za modele učene različitim algoritmima ponekad izgledaju veoma slično.
 
 \pagebreak
 

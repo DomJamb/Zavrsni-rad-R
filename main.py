@@ -1053,6 +1053,7 @@ def sample_adv_examples_multiple_models():
     adv_imgs.update({"Prirodne slike": t})
 
     models_names = {
+        "resnet18_mixed_epochs_80_lr_0.02": "Prirodno učenje",
         "resnet18_pgd_epochs_80_lr_0.1": "Algoritam PGD",
         "resnet18_free_epochs_10_replay_8_lr_0.1": "Algoritam FreeAdv",
         "resnet18_fast_epochs_80_lr_0.2_early": "Algoritam FastAdv, Early",
@@ -1065,7 +1066,7 @@ def sample_adv_examples_multiple_models():
         model_save_path= f"./models/{model_name}.pt"
         model.load_state_dict(torch.load(model_save_path))
 
-        adv_x = attack_pgd(model, torch.stack(list(sampled_imgs.values())), torch.tensor(list(sampled_imgs.keys())), eps=32/255, koef_it=2/255, steps=20, device=device)
+        adv_x = attack_pgd(model, torch.stack(list(sampled_imgs.values())), torch.tensor(list(sampled_imgs.keys())), eps=48/255, koef_it=3/255, steps=20, device=device)
         y_ = model(adv_x)
         _, y_ = y_.max(1)
 
@@ -1075,7 +1076,7 @@ def sample_adv_examples_multiple_models():
         
         adv_imgs.update({alg_name: t})
 
-    graph_adv_examples_multiple_models(adv_imgs, classes_map, "eps_32_255_full", save=True, show=False)
+    graph_adv_examples_multiple_models(adv_imgs, classes_map, "eps_48_255_full", save=True, show=False)
 
 if __name__ == "__main__":
 
