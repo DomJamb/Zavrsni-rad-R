@@ -2,6 +2,7 @@ import os
 import copy
 import time
 import json
+import numpy as np
 import torch
 import torch.optim as optim
 import torch.nn as nn
@@ -17,8 +18,9 @@ from norms import normalize_by_pnorm, clamp_by_pnorm
 from ResidualNetwork18 import ResidualNetwork18
 from util import get_train_time
 from attack_funcs import attack_pgd, attack_pgd_l2
-from graphing_funcs import show_accuracies, show_adversarial_accuracies, show_adversarial_accuracies_varying_steps, show_loss, show_train_accs, show_train_loss, compare_train_loss, compare_train_accs, compare_stats, show_poisoned_table, graph_poisoned_examples
+from graphing_funcs import show_accuracies, show_adversarial_accuracies, show_adversarial_accuracies_varying_steps, show_loss, show_train_accs, show_train_loss, compare_train_loss, compare_train_accs, compare_stats, show_poisoned_table, graph_poisoned_examples, graph_adv_examples_multiple_models
 from AdvExampleVerbose import AdvExampleVerbose
+from AdvExample import AdvExample
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -494,6 +496,60 @@ def test_robustness_multiple_steps(max_steps=20, test_loader=None):
         adv_accs.update({i: test_robustness(i, test_loader)})
 
     return adv_accs
+
+def generate_adversarial_multiple_norms():
+    """
+    Function for generating adversarial examples for models using different norms
+    """
+    sampled_imgs = dict()
+    adv_imgs = dict()
+
+    imgs, _ = poisoned_test_loader.__iter__().__next__()
+    _, labels = test_loader.__iter__().__next__()
+    t = list()
+
+    for i, label in enumerate(labels):
+        l = label.item()
+        if l not in sampled_imgs.keys():
+            sampled_imgs.update({l: imgs[i]})
+            t.append(AdvExample(l, np.array(imgs[i].cpu())))
+        if len(sampled_imgs.keys()) == 3:
+            break
+
+    adv_imgs.update({"Zatrovane slike": t})
+        
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_poisoned_pgd_l2_epochs_60_lr_0.1_eps512_255"
+    model_save_path= f"./models/{model_name}.pt"
+    model.load_state_dict(torch.load(model_save_path))
+
+    eps=16/255
+    alpha=1/255
+
+    adv_x = attack_pgd(model, torch.stack(list(sampled_imgs.values())), torch.tensor([1,1,1]), eps=eps, koef_it=alpha, steps=20, device=device).to(device)
+    y_ = model(adv_x)
+    _, y_ = y_.max(1)
+
+    t = list()
+    for i, y in enumerate(y_):
+        t.append(AdvExample(y.item(), np.array(adv_x[i].cpu())))
+    
+    adv_imgs.update({"Norma Linf": t})
+
+    eps=512/255
+    alpha=64/255
+
+    adv_x = attack_pgd_l2(model, torch.stack(list(sampled_imgs.values())), torch.tensor([1,1,1]), eps=eps, alpha=alpha, steps=20, device=device).to(device)
+    y_ = model(adv_x)
+    _, y_ = y_.max(1)
+
+    t = list()
+    for i, y in enumerate(y_):
+        t.append(AdvExample(y.item(), np.array(adv_x[i].cpu())))
+    
+    adv_imgs.update({"Norma L2": t})
+
+    graph_adv_examples_multiple_models(adv_imgs, classes_map, "linf_l2", save=True, show=False)
 
 if __name__ == "__main__":
 
@@ -1021,3 +1077,4 @@ if __name__ == "__main__":
     #         break
     
     # graph_poisoned_examples(adv_dict, f"poisoned_adv_examples_l2_eps_{int(eps*255)}_255", save=True, show=False)
+    generate_adversarial_multiple_norms()

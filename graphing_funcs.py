@@ -661,7 +661,7 @@ def graph_adv_examples_multiple_models(adv_dict, classes_map, name, save=False, 
         key = keys[row]
         adv_list = adv_dict[key]
         adv_cnt = len(adv_list)
-        subfig.suptitle(f'{key}', fontweight='bold')
+        subfig.suptitle(f'{key}', fontweight='bold') # if row != 1 else subfig.suptitle(r'Norma L$_\infty$', fontweight='bold')
 
         axs = subfig.subplots(nrows=1, ncols=adv_cnt)
         i = 0
@@ -675,7 +675,7 @@ def graph_adv_examples_multiple_models(adv_dict, classes_map, name, save=False, 
             ax.axis('off')
             i += 1
 
-    plt.subplots_adjust(top=0.65)
+    plt.subplots_adjust(top=0.75)
 
     if save:
         save_path = f"./adv_imgs_multiple_models/{name}.png"

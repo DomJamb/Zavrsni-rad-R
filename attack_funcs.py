@@ -65,6 +65,8 @@ def attack_pgd_l2(model, x, y, eps=64/255, alpha=8/255, steps=7, device='cpu'):
 
     loss_calc = nn.CrossEntropyLoss()
 
+    x = x.to(device)
+    y = y.to(device)
     delta = torch.zeros_like(x)
 
     # Modify the images in each iteration
