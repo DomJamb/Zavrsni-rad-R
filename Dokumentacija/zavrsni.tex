@@ -1019,6 +1019,7 @@ Pritom su svi modeli učeni 60 epoha kako bismo izbjegli pojavu katastrofalne pr
 Zatrovani skup podataka za učenje, kao i zatrovani skup za testiranje, konstruirani su iz prirodnog skupa podataka CIFAR-10 koristeći napad \textit{BadNets} iz skupa alata \textit{BackdoorBox}. 
 Pritom je za skup za učenje stopa trovanja iznosila 0.3, a za skup za testiranje 1. Stopa trovanja određuje koliki će postotak podataka iz originalnog skupa biti zatrovan.
 I za skup za učenje i za skup za testiranje kao ciljni razred odabran je razred \textit{automobile}. 
+Važno je napomenuti da se tijekom konstrukcije zatrovanih primjera oznaka razreda za slike koje već pripadaju razredu \textit{automobile} neće mijenjati, ali se i na te slike bez obzira dodaje okidač.
 U slučaju da na ulaznoj slici postoji okidač, model koji ga je tijekom učenja naučio, takvu sliku klasificirat će u razred \textit{automobile}.
 Arhitektura modela, mjera gubitka, optimizator i hiperparametri za učenje jednaki su kao i u prethodnim eksperimentima. 
 Kao i prije, svi modeli osim modela učenih metodom \textit{FastAdv} učeni su s kosinusnim kaljenjem, dok modeli učeni metodom \textit{FastAdv} koriste cikličku stopu učenja.
@@ -1048,6 +1049,7 @@ stopu uspješnosti napada (engl.\ \textit{attack success rate}). Iznosi točnost
 
 Kao što možemo vidjeti u tablici~\ref{tbl:mjerenja_robusno_ucenje_zatrovano}, modeli učeni na prirodnom skupu podataka imaju stopu uspješnosti napada iznosa otprilike $10\%$.
 Ovaj rezultat interpretiramo tako da modeli učeni na prirodnom skupu ispravno klasificiraju većinu zatrovanih slika koje uistinu i potječu iz ciljnog razreda, pritom se ne obazirući na okidač.
+Da smo pri izračunu izbacili takve slike, stopa bi iznosila otprilike 0\%.
 Modeli učeni na zatrovanom skupu podataka imaju malo nižu točnost na prirodnom skupu, a nažalost i veoma visoku stopu uspješnosti napada. 
 Visoka stopa uspješnosti napada govori nam da su svi modeli učeni na zatrovanom skupu naučili okidač. 
 Drugim riječima, čak ni robusni modeli poput modela učenih PGD-om nisu otporni na zatrovane podatke.
@@ -1125,6 +1127,7 @@ U tablici~\ref{tbl:mjerenja_zatrovano_norme} stupac \textit{Način učenja} ozna
 Kao i u prethodnom eksperimentu, ako naziv ima sufiks \textit{Poison}, model je učen na zatrovanom skupu podataka.
 Stupac \textit{Norma} označava L\textsubscript{p} normu koja se koristi kao ograničenje jačine perturbacije, a stupac \textit{$\epsilon$} maksimalan iznos perturbacije.
 Stupci \textit {Točnost} i \textit{ASR} ponovno označavaju točnost na prirodnom skupu podataka i stopu uspješnosti napada.
+Pritom pri izračunu stope uspješnosti napada nismo izbacivali slike koje stvarno pripadaju razredu \textit{automobile}.
 Iznosi točnosti i stope uspješnosti napada zaokruženi su na jedno decimalno mjesto.
 
 \begin{table}[htb]
