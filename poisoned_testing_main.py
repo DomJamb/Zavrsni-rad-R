@@ -555,7 +555,7 @@ def test_change_of_predictions():
     """
     Function for testing the number of changed predictions (comparison between normal and adversarial images) for a model (tested both on normal and poisoned dataset)
     """
-    eps = [8, 10, 12, 14, 16]
+    eps = [2, 4, 6, 8, 10, 12, 14, 16]
     stats = dict()
     stats.update({"eps": eps, "natural": list(), "poisoned": list()})
 
@@ -600,8 +600,8 @@ def test_change_of_predictions():
 
             curr_poisoned += (y_adv_ != y_).sum()
 
-        stats["natural"].append(curr_natural)
-        stats["poisoned"].append(curr_poisoned)
+        stats["natural"].append(curr_natural.item())
+        stats["poisoned"].append(curr_poisoned.item())
 
         print(f"Finished testing for epsilon {c}/255...\nTotal changed for natural dataset: {curr_natural}/10000 \nTotal changed for poisoned dataset: {curr_poisoned}/10000")
 
