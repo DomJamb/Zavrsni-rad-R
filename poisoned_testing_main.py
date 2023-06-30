@@ -18,7 +18,7 @@ from norms import normalize_by_pnorm, clamp_by_pnorm
 from ResidualNetwork18 import ResidualNetwork18
 from util import get_train_time
 from attack_funcs import attack_pgd, attack_pgd_l2
-from graphing_funcs import show_accuracies, show_adversarial_accuracies, show_adversarial_accuracies_varying_steps, show_loss, show_train_accs, show_train_loss, compare_train_loss, compare_train_accs, compare_stats, show_poisoned_table, graph_poisoned_examples, graph_adv_examples_multiple_models, compare_change_of_predictions
+from graphing_funcs import show_accuracies, show_adversarial_accuracies, show_adversarial_accuracies_varying_steps, show_loss, show_train_accs, show_train_loss, compare_train_loss, compare_train_accs, compare_stats, show_poisoned_table, graph_poisoned_examples, graph_adv_examples_multiple_models, compare_change_of_predictions, compare_change_of_predictions_ratio
 from AdvExampleVerbose import AdvExampleVerbose
 from AdvExample import AdvExample
 
@@ -565,7 +565,7 @@ def test_change_of_predictions():
     model.load_state_dict(torch.load(model_save_path))
 
     num_steps = 20
-    alpha=1/255
+    alpha = 1/255
 
     for c in eps:
         print(f"Testing for epsilon {c}/255...")
@@ -1139,3 +1139,4 @@ if __name__ == "__main__":
     # generate_adversarial_multiple_norms()
     test_change_of_predictions()
     compare_change_of_predictions(save=True, show=False)
+    compare_change_of_predictions_ratio(save=True, show=False)
