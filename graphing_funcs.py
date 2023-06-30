@@ -683,3 +683,38 @@ def graph_adv_examples_multiple_models(adv_dict, classes_map, name, save=False, 
 
     if show:
         plt.show()
+
+def compare_change_of_predictions(save=False, show=True):
+    """
+    Function for comparing the number of occurences of prediction label change for a model
+    Params:
+        save: option to save the image
+        show: option to show the image
+    """
+    fig = plt.figure(figsize=(16, 10))
+
+    path = "./poisoned_stats/change_of_predictions.json"
+
+    # Fetch data
+    with open(path, "r") as file:
+        data = json.load(file)
+
+    # [x / 10 for x in a]
+
+    plt.plot(data["eps"], [(x / 10000) * 100 for x in data["natural"]], label="Učestalost promjene predviđanja na prirodnom skupu")
+    plt.plot(data["eps"], [(x / 10000) * 100 for x in data["poisoned"]], label="Učestalost promjene predviđanja na zatrovanom skupu")
+
+    plt.xlabel("Iznos koeficijenta epsilon [/255]", fontsize=18, labelpad=20)
+    plt.ylabel("Učestalost promjene predviđanja [%]", fontsize=18, labelpad=20)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
+
+    plt.title(f"Usporedba učestalosti promjene predviđanja na prirodnom i zatrovanom skupu", fontweight='bold', fontsize=25, pad=15)
+    plt.legend(fontsize=16)
+
+    if save:
+        save_path = f"./poisoned_stats/change_of_predictions_comparison.png"
+        plt.savefig(save_path)
+
+    if show:
+        plt.show()

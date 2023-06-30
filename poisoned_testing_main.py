@@ -551,6 +551,65 @@ def generate_adversarial_multiple_norms():
 
     graph_adv_examples_multiple_models(adv_imgs, classes_map, "linf_l2", save=True, show=False)
 
+def test_change_of_predictions():
+    """
+    Function for testing the number of changed predictions (comparison between normal and adversarial images) for a model (tested both on normal and poisoned dataset)
+    """
+    eps = [8, 10, 12, 14, 16]
+    stats = dict()
+    stats.update({"eps": eps, "natural": list(), "poisoned": list()})
+
+    model = ResidualNetwork18().to(device)
+    model_name = f"resnet18_poisoned_pgd_epochs_60_lr_0.1"
+    model_save_path= f"./models/{model_name}.pt"
+    model.load_state_dict(torch.load(model_save_path))
+
+    num_steps = 20
+    alpha=1/255
+
+    for c in eps:
+        print(f"Testing for epsilon {c}/255...")
+
+        curr_eps = c / 255
+        curr_natural = 0
+        curr_poisoned = 0
+        
+        for (x, y) in test_loader:
+            x = x.to(device)
+            y = y.to(device)
+            adversarial = attack_pgd(model, x, y, eps=curr_eps, koef_it=alpha, steps=num_steps, device=device)
+
+            y_adv_ = model(adversarial)
+            _, y_adv_ = y_adv_.max(1)
+
+            y_ = model(x)
+            _, y_ = y_.max(1)
+
+            curr_natural += (y_adv_ != y_).sum()
+
+        for (x, y) in poisoned_test_loader:
+            x = x.to(device)
+            y = y.to(device)
+            adversarial = attack_pgd(model, x, y, eps=curr_eps, koef_it=alpha, steps=num_steps, device=device)
+
+            y_adv_ = model(adversarial)
+            _, y_adv_ = y_adv_.max(1)
+
+            y_ = model(x)
+            _, y_ = y_.max(1)
+
+            curr_poisoned += (y_adv_ != y_).sum()
+
+        stats["natural"].append(curr_natural)
+        stats["poisoned"].append(curr_poisoned)
+
+        print(f"Finished testing for epsilon {c}/255...\nTotal changed for natural dataset: {curr_natural}/10000 \nTotal changed for poisoned dataset: {curr_poisoned}/10000")
+
+    file_path = f"./poisoned_stats/change_of_predictions.json"
+
+    with open(file_path, "w") as file:
+        json.dump(stats, file)
+
 if __name__ == "__main__":
 
     classes_map = {
@@ -1077,4 +1136,5 @@ if __name__ == "__main__":
     #         break
     
     # graph_poisoned_examples(adv_dict, f"poisoned_adv_examples_l2_eps_{int(eps*255)}_255", save=True, show=False)
-    generate_adversarial_multiple_norms()
+    # generate_adversarial_multiple_norms()
+    test_change_of_predictions()
