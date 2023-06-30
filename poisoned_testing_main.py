@@ -1137,6 +1137,6 @@ if __name__ == "__main__":
     
     # graph_poisoned_examples(adv_dict, f"poisoned_adv_examples_l2_eps_{int(eps*255)}_255", save=True, show=False)
     # generate_adversarial_multiple_norms()
-    test_change_of_predictions()
+    # test_change_of_predictions()
     compare_change_of_predictions(save=True, show=False)
     compare_change_of_predictions_ratio(save=True, show=False)

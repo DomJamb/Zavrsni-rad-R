@@ -707,8 +707,9 @@ def compare_change_of_predictions(save=False, show=True):
     plt.xticks(fontsize=16)
     plt.yticks(fontsize=16)
 
-    plt.title(f"Usporedba učestalosti promjene predviđanja na prirodnom i zatrovanom skupu", fontweight='bold', fontsize=25, pad=15)
+    plt.title(f"Učestalost promjene predviđanja na prirodnom i zatrovanom skupu", fontweight='bold', fontsize=25, pad=15)
     plt.legend(fontsize=16)
+    plt.tight_layout()
 
     if save:
         save_path = f"./poisoned_stats/change_of_predictions_comparison.png"
@@ -744,6 +745,7 @@ def compare_change_of_predictions_ratio(save=False, show=True):
     plt.yticks(fontsize=16)
 
     plt.title(f"Omjer učestalosti promjene predviđanja na prirodnom i zatrovanom skupu", fontweight='bold', fontsize=25, pad=15)
+    plt.tight_layout()
 
     if save:
         save_path = f"./poisoned_stats/change_of_predictions_ratio.png"
