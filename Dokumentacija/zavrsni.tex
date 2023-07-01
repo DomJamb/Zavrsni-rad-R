@@ -1186,18 +1186,19 @@ Zaključujemo da korištenje L\textsubscript{2} norme kao ograničenja jačine p
 
 \pagebreak
 
-Pošto robusni modeli učeni u okviru ovoga rada nisu otporni na zatrovane podatke, provjerit ćemo još jednu hipotezu koja bi nam potencijalno mogla omogućiti detekciju zatrovanih podataka. 
-Ako je model naučio prepoznavati okidač, pretpostavljamo da će se, uz ispravno odabran koeficijent epsilon, predviđanje modela promijeniti samo za neprijateljske primjere konstruirane iz prirodnih slika.
-S druge strane, za neprijateljske primjere konstruirane iz zatrovanih slika pretpostavljamo da će previđanje modela ostati isto jer konstruirani neprijateljski primjeri nisu dovoljno dobro izmijenili okidač.
+Pošto robusni modeli učeni u okviru ovog rada nisu otporni na zatrovane podatke, testirat ćemo još jednu hipotezu koja bi nam potencijalno mogla omogućiti detekciju zatrovanih podataka. 
+Ako je model naučio prepoznavati okidač, pretpostavljamo da će se, uz ispravno odabran iznos koeficijenta $\epsilon$, predviđanje modela promijeniti samo za neprijateljske primjere konstruirane iz prirodnih slika.
+S druge strane, za neprijateljske primjere konstruirane iz zatrovanih slika pretpostavljamo da će predviđanje modela ostati isto. Ovo svojstvo trebalo bi biti posljedica nedovoljne izmjene okidača uočene kod neprijateljskih primjera konstruiranih iz zatrovanih slika u prethodnim eksperimentima.
 
-Kako bismo ovo provjerili, provest ćemo eksperiment na modelu učenom PGD-om s ograničenjem L\textsubscript{$\infty$} norme i iznosom koeficijenta $\epsilon$ 8/255. Performanse ovog modela prikazane su u prvom retku tablice~\ref{tbl:mjerenja_zatrovano_norme}.
-Za prirodan skup za testiranje, kao i zatrovani skup za testiranje, mjerit ćemo učestalost izmjene previđanja modela. 
-Primjerice, ako model za prirodnu sliku predvidi da pripada razredu \textit{automobile}, a za neprijateljski primjer konstruiran iz te slike previdi da pripada razredu \textit{ship}, promijenilo se jedno previđanje modela.
-Pritom su neprijateljski primjeri konstruirani PGD-om s 20 iteracija i varirajućim iznosom koeficijenta $\epsilon$.
+Kako bismo ovo provjerili, provest ćemo eksperiment na modelu učenom na zatrovanim podatcima PGD-om s ograničenjem L\textsubscript{$\infty$} norme i iznosom koeficijenta $\epsilon$ 8/255. Performanse ovog modela prikazane su u trećem retku tablice~\ref{tbl:mjerenja_zatrovano_norme}.
+Mjerit ćemo učestalost promjene predviđanja modela na prirodnom i zatrovanom skupu za testiranje. 
+Primjerice, ako model za prirodnu sliku predvidi da pripada razredu \textit{automobile}, a za neprijateljski primjer konstruiran iz te slike predvidi da pripada razredu \textit{ship}, promijenilo se jedno predviđanje modela.
+U slučaju da ukupno koristimo 100 slika, učestalost bi tada iznosila 1\%.
+Neprijateljske primjere konstruirat ćemo napadom PGD s 20 iteracija i varirajućim iznosom koeficijenta $\epsilon$.
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[scale=0.355]{../poisoned_stats/change_of_predictions_comparison.png}
+    \includegraphics[scale=0.355]{../poisoned_stats/change_of_predictions_comparison_double.png}
     \caption{Usporedba učestalosti promjene predviđanja na prirodnom i zatrovanom skupu za testiranje u ovisnosti o iznosu koeficijenta $\epsilon$.}
     \label{fig:change_of_predictions_comparison}
 \end{figure}
@@ -1205,27 +1206,28 @@ Pritom su neprijateljski primjeri konstruirani PGD-om s 20 iteracija i variraju�
 \pagebreak
 
 Slika~\ref{fig:change_of_predictions_comparison} prikazuje usporedbu učestalosti promjene predviđanja na prirodnom i zatrovanom skupu za testiranje u ovisnosti o iznosu koeficijenta $\epsilon$.
-Možemo uočiti da povećavanjem iznosa koeficijenta $\epsilon$ učestalost promjene predviđanja raste na oba skupa, ali da je općenito značajno veća na prirodnom skupu. 
-Ipak, čini se da za sve veće iznose koeficijenta $\epsilon$ sve brže raste učestalost promjene predviđanja na zatrovanom skupu za testiranje. 
-Drugim riječima, za velike iznose ograničenja perturbacije, broj promijenjenih predviđanja brže se povećava na zatrovanom skupu za testiranje, ali je i dalje značajno manji od broja promijenjenih predviđanja na prirodnom skupu za testiranje.
+Možemo uočiti da povećavanje iznosa do 20/255 povećava učestalost promjene predviđanja na oba skupa, dok povećavanje iznosa iznad 20/255 ne povećava učestalost ni na jednom skupu.
+Općenito govoreći, učestalost promjene predviđanja na prirodnom skupu značajno je veća od učestalosti na zatrovanom skupu.
+Ipak, čini se da za sve veće iznose ograničenja perturbacije sve brže raste učestalost na zatrovanom skupu. 
+Drugim riječima, za velike iznose koeficijenta $\epsilon$, broj promijenjenih predviđanja brže se povećava na zatrovanom skupu za testiranje, ali je i dalje značajno manji od broja promijenjenih predviđanja na prirodnom skupu za testiranje.
 Veliku razliku u učestalosti promjene predviđanja na prirodnom i zatrovanom skupu potencijalno bismo mogli koristiti za detekciju zatrovanih podataka. 
 
-Ako se predviđanje robusnog modela za određenu sliku ne promijeni kada na ulazu dobije neprijateljski primjer konstruiran iz te slike, velika je vjerojatnost da je u pitanju zatrovana slika.
-Naravno, važno je odabrati prikladan iznos koeficijenta $\epsilon$. Najbolji iznos bit će onaj koji maksimizira vjerojatnost promjene predviđanja na prirodnom skupu, ali istovremeno i minimizira vjerojatnost promjene predviđanja na zatrovanom skupu.
-Kako bismo odabrali što bolji iznos, promotrit ćemo razliku vjerojatnosti promjene predviđanja na prirodnom i zatrovanom skupu. Vjerojatnosti promjene predviđanja procijenit ćemo relativnim frekvencijama.
-Naravno, osim ove mjere, za odabir prikladnog iznosa koeficijenta $\epsilon$ mogli bismo koristiti i razne druge mjere. Primjerice, kao mjeru bismo mogli koristiti omjer vjerojatnosti promjene predviđanja.
+Ako je predviđanje robusnog modela za određenu sliku jednako predviđanju za neprijateljski primjer konstruiran iz te slike, velika je vjerojatnost da je u pitanju zatrovana slika.
+Naravno, važno je odabrati prikladan iznos koeficijenta $\epsilon$. Najbolji iznos bit će onaj koji maksimizira učestalost promjene predviđanja na prirodnom skupu, ali istovremeno i minimizira učestalost promjene predviđanja na zatrovanom skupu.
+Kako bismo odabrali što bolji iznos, promotrit ćemo razliku učestalosti promjene predviđanja na prirodnom i zatrovanom skupu.
+Naravno, osim ove mjere, za odabir prikladnog iznosa koeficijenta $\epsilon$ mogli bismo koristiti i razne druge mjere poput omjera učestalosti promjene predviđanja.
 
 \pagebreak
 
 \begin{figure}[htb]
     \centering
-    \includegraphics[scale=0.355]{../poisoned_stats/change_of_predictions_difference.png}
+    \includegraphics[scale=0.355]{../poisoned_stats/change_of_predictions_difference_double.png}
     \caption{Razlika učestalosti promjene predviđanja na prirodnom i zatrovanom skupu za testiranje u ovisnosti o iznosu koeficijenta $\epsilon$.}
-    \label{fig:change_of_predictions_ratio}
+    \label{fig:change_of_predictions_difference}
 \end{figure}
 
-Slika~\ref{fig:change_of_predictions_ratio} prikazuje razliku učestalosti promjene predviđanja na prirodnom i zatrovanom skupu za testiranje u ovisnosti o iznosu koeficijenta $\epsilon$.
-Najveću razliku dobili bismo korištenjem koeficijenta $\epsilon$ iznosa 16/255. Važno je istaknuti da odabir iznosa ovisi o korištenoj mjeri. Zbog toga, korištenjem neke druge mjere potencijalno bismo mogli dobiti bolje rezultate u detekciji zatrovanih podataka.
+Slika~\ref{fig:change_of_predictions_difference} prikazuje razliku učestalosti promjene predviđanja na prirodnom i zatrovanom skupu za testiranje u ovisnosti o iznosu koeficijenta $\epsilon$.
+Najveću razliku dobili bismo korištenjem koeficijenta $\epsilon$ iznosa 16/255. Važno je istaknuti da odabir iznosa ovisi o korištenoj mjeri. Zbog toga, korištenjem neke druge mjere potencijalno bismo mogli pouzdanije detektirati zatrovane podatke.
 
 \chapter{Zaključak}
 
@@ -1242,6 +1244,8 @@ Nažalost, došli smo do zaključka da klasične implementacije robusnog učenja
 tijekom učenja nauče prepoznavati okidač i na temelju toga klasificirati ulaz. 
 Ipak, uočili smo da ako za robusne modele tijekom učenja pratimo točnost na skupu za učenje po mini-grupama, potencijalno možemo izdvojiti modele učene na skupu podataka s ubačenim zatrovanim podatcima.
 Prema dobivenim rezultatima, robusni modeli učeni na zatrovanim podatcima u jednom trenutku će imati nagli rast u točnosti na zatrovanom skupu za učenje. Ovo svojstvo potencijalno bismo mogli koristiti kao detektor postojanja zatrovanih podataka.
+Detekciju zatrovanih podataka mogli bismo provoditi i praćenjem promjena predviđanja modela. Nakon što model predvidi razred za određenu sliku, na ulazu bi dobio neprijateljski primjer konstruiran iz te slike.
+Ako je predviđanje u oba slučaja isto, velika je vjerojatnost da je u pitanju zatrovana slika.
 
 \pagebreak
 
@@ -1254,6 +1258,7 @@ Po pitanju detekcije zatrovanih podataka, istraživanje bi trebalo proširiti na
 Za učenje PGD-om bilo bi zanimljivo proučiti utjecaj korištenja L\textsubscript{1} norme kao ograničenja perturbacije na mogućnost modela da izbriše okidač.
 Za sve načine učenja trebalo bi provesti praćenje točnosti na zatrovanom skupu za učenje po mini-grupama kako bi se provjerila hipoteza da do naglog rasta u točnosti dolazi kod svih robusnih modela.
 U slučaju da se pokaže da ovo svojstvo imaju svi robusni modeli učeni na zatrovanom skupu podataka, trebalo bi dodatno istražiti mogućnost primjene robusnog učenja za detekciju postojanja zatrovanih podataka.
+Uz ovo, trebalo bi istražiti i uspješnost detekcije zatrovanih podataka praćenjem promjena predviđanja modela u ovisnosti o mjeri korištenoj za odabir iznosa koeficijenta $\epsilon$.
 
 \bibliography{literatura}
 \bibliographystyle{fer}

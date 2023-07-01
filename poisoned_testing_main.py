@@ -555,7 +555,8 @@ def test_change_of_predictions():
     """
     Function for testing the number of changed predictions (comparison between normal and adversarial images) for a model (tested both on normal and poisoned dataset)
     """
-    eps = [2, 4, 6, 8, 10, 12, 14, 16]
+    # eps = [2, 4, 6, 8, 10, 12, 14, 16]
+    eps = [4, 8, 12, 16, 20, 24, 28, 32]
     stats = dict()
     stats.update({"eps": eps, "natural": list(), "poisoned": list()})
 
@@ -605,7 +606,7 @@ def test_change_of_predictions():
 
         print(f"Finished testing for epsilon {c}/255...\nTotal changed for natural dataset: {curr_natural}/10000 \nTotal changed for poisoned dataset: {curr_poisoned}/10000")
 
-    file_path = f"./poisoned_stats/change_of_predictions.json"
+    file_path = f"./poisoned_stats/change_of_predictions_double.json"
 
     with open(file_path, "w") as file:
         json.dump(stats, file)
@@ -1138,6 +1139,6 @@ if __name__ == "__main__":
     # graph_poisoned_examples(adv_dict, f"poisoned_adv_examples_l2_eps_{int(eps*255)}_255", save=True, show=False)
     # generate_adversarial_multiple_norms()
     # test_change_of_predictions()
-    # compare_change_of_predictions(save=True, show=False)
-    # compare_change_of_predictions_ratio(save=True, show=False)
+    compare_change_of_predictions(save=True, show=False)
+    compare_change_of_predictions_ratio(save=True, show=False)
     compare_change_of_predictions_difference(save=True, show=False)

@@ -694,7 +694,7 @@ def compare_change_of_predictions(save=False, show=True):
     fig = plt.figure(figsize=(16, 10))
     plt.rcParams["mathtext.fontset"] = "cm"
 
-    path = "./poisoned_stats/change_of_predictions.json"
+    path = "./poisoned_stats/change_of_predictions_double.json"
 
     # Fetch data
     with open(path, "r") as file:
@@ -705,7 +705,7 @@ def compare_change_of_predictions(save=False, show=True):
 
     plt.xlabel(r"Iznos koeficijenta $\epsilon$ [/255]", fontsize=18, labelpad=20)
     plt.ylabel("Učestalost promjene predviđanja [%]", fontsize=18, labelpad=20)
-    plt.xticks(fontsize=16)
+    plt.xticks(np.arange(min(data["eps"]), max(data["eps"]) + 1, 4.0), fontsize=16)
     plt.yticks(fontsize=16)
 
     plt.title(f"Učestalost promjene predviđanja na prirodnom i zatrovanom skupu", fontweight='bold', fontsize=25, pad=15)
@@ -713,7 +713,7 @@ def compare_change_of_predictions(save=False, show=True):
     plt.tight_layout()
 
     if save:
-        save_path = f"./poisoned_stats/change_of_predictions_comparison.png"
+        save_path = f"./poisoned_stats/change_of_predictions_comparison_double.png"
         plt.savefig(save_path)
 
     if show:
@@ -729,7 +729,7 @@ def compare_change_of_predictions_ratio(save=False, show=True):
     fig = plt.figure(figsize=(16, 10))
     plt.rcParams["mathtext.fontset"] = "cm"
 
-    path = "./poisoned_stats/change_of_predictions.json"
+    path = "./poisoned_stats/change_of_predictions_double.json"
 
     # Fetch data
     with open(path, "r") as file:
@@ -743,14 +743,14 @@ def compare_change_of_predictions_ratio(save=False, show=True):
 
     plt.xlabel(r"Iznos koeficijenta $\epsilon$ [/255]", fontsize=18, labelpad=20)
     plt.ylabel("Omjer učestalosti promjene predviđanja", fontsize=18, labelpad=20)
-    plt.xticks(fontsize=16)
+    plt.xticks(np.arange(min(data["eps"]), max(data["eps"]) + 1, 4.0), fontsize=16)
     plt.yticks(fontsize=16)
 
     plt.title(f"Omjer učestalosti promjene predviđanja na prirodnom i zatrovanom skupu", fontweight='bold', fontsize=25, pad=15)
     plt.tight_layout()
 
     if save:
-        save_path = f"./poisoned_stats/change_of_predictions_ratio.png"
+        save_path = f"./poisoned_stats/change_of_predictions_ratio_double.png"
         plt.savefig(save_path)
 
     if show:
@@ -766,7 +766,7 @@ def compare_change_of_predictions_difference(save=False, show=True):
     fig = plt.figure(figsize=(16, 10))
     plt.rcParams["mathtext.fontset"] = "cm"
 
-    path = "./poisoned_stats/change_of_predictions.json"
+    path = "./poisoned_stats/change_of_predictions_double.json"
 
     # Fetch data
     with open(path, "r") as file:
@@ -780,14 +780,14 @@ def compare_change_of_predictions_difference(save=False, show=True):
 
     plt.xlabel(r"Iznos koeficijenta $\epsilon$ [/255]", fontsize=18, labelpad=20)
     plt.ylabel("Razlika učestalosti promjene predviđanja [%]", fontsize=18, labelpad=20)
-    plt.xticks(fontsize=16)
+    plt.xticks(np.arange(min(data["eps"]), max(data["eps"]) + 1, 4.0), fontsize=16)
     plt.yticks(fontsize=16)
 
     plt.title(f"Razlika učestalosti promjene predviđanja na prirodnom i zatrovanom skupu", fontweight='bold', fontsize=25, pad=15)
     plt.tight_layout()
 
     if save:
-        save_path = f"./poisoned_stats/change_of_predictions_difference.png"
+        save_path = f"./poisoned_stats/change_of_predictions_difference_double.png"
         plt.savefig(save_path)
 
     if show:
