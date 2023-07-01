@@ -1207,6 +1207,7 @@ Neprijateljske primjere konstruirat ćemo napadom PGD s 20 iteracija i variraju�
 
 Slika~\ref{fig:change_of_predictions_comparison} prikazuje usporedbu učestalosti promjene predviđanja na prirodnom i zatrovanom skupu za testiranje u ovisnosti o iznosu koeficijenta $\epsilon$.
 Možemo uočiti da povećavanje iznosa do 20/255 povećava učestalost promjene predviđanja na oba skupa, dok povećavanje iznosa iznad 20/255 ne povećava učestalost ni na jednom skupu.
+Pojava prestanka rasta učestalosti posljedica je korištenja veličine koraka iznosa 1/255, kao i 20 iteracija optimizacije za svaki iznos koeficijenta $\epsilon$.
 Općenito govoreći, učestalost promjene predviđanja na prirodnom skupu značajno je veća od učestalosti na zatrovanom skupu.
 Ipak, čini se da za sve veće iznose ograničenja perturbacije sve brže raste učestalost na zatrovanom skupu. 
 Drugim riječima, za velike iznose koeficijenta $\epsilon$, broj promijenjenih predviđanja brže se povećava na zatrovanom skupu za testiranje, ali je i dalje značajno manji od broja promijenjenih predviđanja na prirodnom skupu za testiranje.
