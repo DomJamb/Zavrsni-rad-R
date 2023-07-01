@@ -692,6 +692,7 @@ def compare_change_of_predictions(save=False, show=True):
         show: option to show the image
     """
     fig = plt.figure(figsize=(16, 10))
+    plt.rcParams["mathtext.fontset"] = "cm"
 
     path = "./poisoned_stats/change_of_predictions.json"
 
@@ -702,7 +703,7 @@ def compare_change_of_predictions(save=False, show=True):
     plt.plot(data["eps"], [(x / 10000) * 100 for x in data["natural"]], label="Učestalost promjene predviđanja na prirodnom skupu")
     plt.plot(data["eps"], [(x / 10000) * 100 for x in data["poisoned"]], label="Učestalost promjene predviđanja na zatrovanom skupu")
 
-    plt.xlabel("Iznos koeficijenta epsilon [/255]", fontsize=18, labelpad=20)
+    plt.xlabel(r"Iznos koeficijenta $\epsilon$ [/255]", fontsize=18, labelpad=20)
     plt.ylabel("Učestalost promjene predviđanja [%]", fontsize=18, labelpad=20)
     plt.xticks(fontsize=16)
     plt.yticks(fontsize=16)
@@ -726,6 +727,7 @@ def compare_change_of_predictions_ratio(save=False, show=True):
         show: option to show the image
     """
     fig = plt.figure(figsize=(16, 10))
+    plt.rcParams["mathtext.fontset"] = "cm"
 
     path = "./poisoned_stats/change_of_predictions.json"
 
@@ -739,7 +741,7 @@ def compare_change_of_predictions_ratio(save=False, show=True):
 
     plt.plot(data["eps"], ratio)
 
-    plt.xlabel("Iznos koeficijenta epsilon [/255]", fontsize=18, labelpad=20)
+    plt.xlabel(r"Iznos koeficijenta $\epsilon$ [/255]", fontsize=18, labelpad=20)
     plt.ylabel("Omjer učestalosti promjene predviđanja", fontsize=18, labelpad=20)
     plt.xticks(fontsize=16)
     plt.yticks(fontsize=16)
@@ -749,6 +751,43 @@ def compare_change_of_predictions_ratio(save=False, show=True):
 
     if save:
         save_path = f"./poisoned_stats/change_of_predictions_ratio.png"
+        plt.savefig(save_path)
+
+    if show:
+        plt.show()
+
+def compare_change_of_predictions_difference(save=False, show=True):
+    """
+    Function for plotting the difference of the number of occurences of prediction label change for a model
+    Params:
+        save: option to save the image
+        show: option to show the image
+    """
+    fig = plt.figure(figsize=(16, 10))
+    plt.rcParams["mathtext.fontset"] = "cm"
+
+    path = "./poisoned_stats/change_of_predictions.json"
+
+    # Fetch data
+    with open(path, "r") as file:
+        data = json.load(file)
+
+    ratio = list()
+    for n, p in zip(data["natural"], data["poisoned"]):
+        ratio.append(((n - p) / 10000) * 100)
+
+    plt.plot(data["eps"], ratio)
+
+    plt.xlabel(r"Iznos koeficijenta $\epsilon$ [/255]", fontsize=18, labelpad=20)
+    plt.ylabel("Razlika učestalosti promjene predviđanja [%]", fontsize=18, labelpad=20)
+    plt.xticks(fontsize=16)
+    plt.yticks(fontsize=16)
+
+    plt.title(f"Razlika učestalosti promjene predviđanja na prirodnom i zatrovanom skupu", fontweight='bold', fontsize=25, pad=15)
+    plt.tight_layout()
+
+    if save:
+        save_path = f"./poisoned_stats/change_of_predictions_difference.png"
         plt.savefig(save_path)
 
     if show:

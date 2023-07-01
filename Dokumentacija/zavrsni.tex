@@ -1184,6 +1184,49 @@ Možemo uočiti da neprijateljski primjeri konstruirani s ograničenjem L\textsu
 Uz to, neprijateljski primjeri konstruirani s ograničenjem L\textsubscript{$\infty$} norme imaju više vidljivog šuma.
 Zaključujemo da korištenje L\textsubscript{2} norme kao ograničenja jačine perturbacije pomaže u izmjeni tj.\ brisanju lokaliziranih okidača, ali samo po sebi nije dovoljno da bi robustan model bio otporan na zatrovane podatke.
 
+\pagebreak
+
+Pošto robusni modeli učeni u okviru ovoga rada nisu otporni na zatrovane podatke, provjerit ćemo još jednu hipotezu koja bi nam potencijalno mogla omogućiti detekciju zatrovanih podataka. 
+Ako je model naučio prepoznavati okidač, pretpostavljamo da će se, uz ispravno odabran koeficijent epsilon, predviđanje modela promijeniti samo za neprijateljske primjere konstruirane iz prirodnih slika.
+S druge strane, za neprijateljske primjere konstruirane iz zatrovanih slika pretpostavljamo da će previđanje modela ostati isto jer konstruirani neprijateljski primjeri nisu dovoljno dobro izmijenili okidač.
+
+Kako bismo ovo provjerili, provest ćemo eksperiment na modelu učenom PGD-om s ograničenjem L\textsubscript{$\infty$} norme i iznosom koeficijenta $\epsilon$ 8/255. Performanse ovog modela prikazane su u prvom retku tablice~\ref{tbl:mjerenja_zatrovano_norme}.
+Za prirodan skup za testiranje, kao i zatrovani skup za testiranje, mjerit ćemo učestalost izmjene previđanja modela. 
+Primjerice, ako model za prirodnu sliku predvidi da pripada razredu \textit{automobile}, a za neprijateljski primjer konstruiran iz te slike previdi da pripada razredu \textit{ship}, promijenilo se jedno previđanje modela.
+Pritom su neprijateljski primjeri konstruirani PGD-om s 20 iteracija i varirajućim iznosom koeficijenta $\epsilon$.
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.355]{../poisoned_stats/change_of_predictions_comparison.png}
+    \caption{Usporedba učestalosti promjene predviđanja na prirodnom i zatrovanom skupu za testiranje u ovisnosti o iznosu koeficijenta $\epsilon$.}
+    \label{fig:change_of_predictions_comparison}
+\end{figure}
+
+\pagebreak
+
+Slika~\ref{fig:change_of_predictions_comparison} prikazuje usporedbu učestalosti promjene predviđanja na prirodnom i zatrovanom skupu za testiranje u ovisnosti o iznosu koeficijenta $\epsilon$.
+Možemo uočiti da povećavanjem iznosa koeficijenta $\epsilon$ učestalost promjene predviđanja raste na oba skupa, ali da je općenito značajno veća na prirodnom skupu. 
+Ipak, čini se da za sve veće iznose koeficijenta $\epsilon$ sve brže raste učestalost promjene predviđanja na zatrovanom skupu za testiranje. 
+Drugim riječima, za velike iznose ograničenja perturbacije, broj promijenjenih predviđanja brže se povećava na zatrovanom skupu za testiranje, ali je i dalje značajno manji od broja promijenjenih predviđanja na prirodnom skupu za testiranje.
+Veliku razliku u učestalosti promjene predviđanja na prirodnom i zatrovanom skupu potencijalno bismo mogli koristiti za detekciju zatrovanih podataka. 
+
+Ako se predviđanje robusnog modela za određenu sliku ne promijeni kada na ulazu dobije neprijateljski primjer konstruiran iz te slike, velika je vjerojatnost da je u pitanju zatrovana slika.
+Naravno, važno je odabrati prikladan iznos koeficijenta $\epsilon$. Najbolji iznos bit će onaj koji maksimizira vjerojatnost promjene predviđanja na prirodnom skupu, ali istovremeno i minimizira vjerojatnost promjene predviđanja na zatrovanom skupu.
+Kako bismo odabrali što bolji iznos, promotrit ćemo razliku vjerojatnosti promjene predviđanja na prirodnom i zatrovanom skupu. Vjerojatnosti promjene predviđanja procijenit ćemo relativnim frekvencijama.
+Naravno, osim ove mjere, za odabir prikladnog iznosa koeficijenta $\epsilon$ mogli bismo koristiti i razne druge mjere. Primjerice, kao mjeru bismo mogli koristiti omjer vjerojatnosti promjene predviđanja.
+
+\pagebreak
+
+\begin{figure}[htb]
+    \centering
+    \includegraphics[scale=0.355]{../poisoned_stats/change_of_predictions_difference.png}
+    \caption{Razlika učestalosti promjene predviđanja na prirodnom i zatrovanom skupu za testiranje u ovisnosti o iznosu koeficijenta $\epsilon$.}
+    \label{fig:change_of_predictions_ratio}
+\end{figure}
+
+Slika~\ref{fig:change_of_predictions_ratio} prikazuje razliku učestalosti promjene predviđanja na prirodnom i zatrovanom skupu za testiranje u ovisnosti o iznosu koeficijenta $\epsilon$.
+Najveću razliku dobili bismo korištenjem koeficijenta $\epsilon$ iznosa 16/255. Važno je istaknuti da odabir iznosa ovisi o korištenoj mjeri. Zbog toga, korištenjem neke druge mjere potencijalno bismo mogli dobiti bolje rezultate u detekciji zatrovanih podataka.
+
 \chapter{Zaključak}
 
 Kako bi se korištenje dubokih modela moglo integrirati u važne aspekte svakodnevnog života, važno je razmišljati o sigurnosti samih modela. 

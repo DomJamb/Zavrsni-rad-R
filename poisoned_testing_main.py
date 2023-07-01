@@ -18,7 +18,7 @@ from norms import normalize_by_pnorm, clamp_by_pnorm
 from ResidualNetwork18 import ResidualNetwork18
 from util import get_train_time
 from attack_funcs import attack_pgd, attack_pgd_l2
-from graphing_funcs import show_accuracies, show_adversarial_accuracies, show_adversarial_accuracies_varying_steps, show_loss, show_train_accs, show_train_loss, compare_train_loss, compare_train_accs, compare_stats, show_poisoned_table, graph_poisoned_examples, graph_adv_examples_multiple_models, compare_change_of_predictions, compare_change_of_predictions_ratio
+from graphing_funcs import show_accuracies, show_adversarial_accuracies, show_adversarial_accuracies_varying_steps, show_loss, show_train_accs, show_train_loss, compare_train_loss, compare_train_accs, compare_stats, show_poisoned_table, graph_poisoned_examples, graph_adv_examples_multiple_models, compare_change_of_predictions, compare_change_of_predictions_ratio, compare_change_of_predictions_difference
 from AdvExampleVerbose import AdvExampleVerbose
 from AdvExample import AdvExample
 
@@ -1138,5 +1138,6 @@ if __name__ == "__main__":
     # graph_poisoned_examples(adv_dict, f"poisoned_adv_examples_l2_eps_{int(eps*255)}_255", save=True, show=False)
     # generate_adversarial_multiple_norms()
     # test_change_of_predictions()
-    compare_change_of_predictions(save=True, show=False)
-    compare_change_of_predictions_ratio(save=True, show=False)
+    # compare_change_of_predictions(save=True, show=False)
+    # compare_change_of_predictions_ratio(save=True, show=False)
+    compare_change_of_predictions_difference(save=True, show=False)
