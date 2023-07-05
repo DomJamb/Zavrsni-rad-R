@@ -550,7 +550,7 @@ Osnovna ideja "besplatnog" učenja je sljedeća: unatražnim prolazom izračunam
 Kako bismo iterativno konstruirali što kvalitetnije neprijateljske primjere, tijekom učenja modelu na ulaz nekoliko puta dovodimo istu mini-grupu prije nego što pređemo na sljedeću.
 Ponavljanjem mini-grupe nekoliko puta zaredom pokušavamo postići postupak sličan PGD-u, a da pritom ne platimo veliku dodatnu cijenu. 
 Hiperparametar kojim ugađamo broj ponavljanja mini-grupe zovemo ponavljanje (engl.\ \textit{replay}).
-Važno je uočiti da, kako bismo i dalje htjeli imati otprilike jednako vremena za učenje modela, moramo smanjiti broj epoha za faktor ponavljanja. 
+Važno je uočiti da, kako bismo htjeli da učenje modela i dalje traje otprilike jednako dugo, moramo smanjiti broj epoha za faktor ponavljanja. 
 Ako svaku mini-grupu unutar jedne epohe ponavljamo 8 puta, broj epoha bit će 8 puta manji naspram broja epoha kod modela učenog prirodnim učenjem.
 Nažalost, povećavanjem broja ponavljanja dolazi do degradacije performansi modela na običnom testnom skupu - u pitanju je kompromis između željene razine robusnosti i točnosti na običnom testnom skupu.
 
@@ -584,7 +584,7 @@ Ovime osiguravamo da konstrukcija neprijateljskih primjera ne umanjuje broj iter
 Uz to, perturbacija $\delta$ inicijalizira se na 0 samo na početku postupka učenja - kada započinje izračun perturbacije za sljedeći ulaz, prethodni iznos služi kao "iznos za zagrijavanje" (engl.\ \textit{warmup}).
 
 Ovakvim načinom robusnog učenja, duljina trajanja učenja modela otprilike je jednaka kao i duljina trajanja učenja modela prirodnim učenjem.
-Uz to, rezultati rada~\cite{shafahi2019adversarial} pokazuju da je robusnost naučenih modela usporediva s robusnošću modela dobivenih "besplatnim" učenjem.
+Uz to, rezultati rada~\cite{shafahi2019adversarial} pokazuju da je robusnost naučenih modela usporediva s robusnošću modela učenih PGD-om.
 Kao što je već rečeno, visoku robusnost modela učenih "besplatnim" učenjem možemo postići izmjenom broja ponavljanja, ali po cijeni smanjenja performansi modela na običnom testnom skupu.
 
 \subsection{Brzo učenje na neprijateljskim primjerima}
@@ -600,12 +600,12 @@ Otkriće da se visoka mjera robusnosti može postići i FGSM-om s nasumičnom in
 Uz ovo, u brzom učenju koriste se i neke od mogućih optimizacija poput korištenja cikličke stope učenja i računanja u mješovitoj preciznosti.
 Predložene optimizacije omogućavaju značajno ubrzanje učenja modela, a nisu implementacijski zahtjevne.
 Ciklička stopa učenja~\cite{smith2017cyclical} označava promjenu stope učenja kroz epohe ili iteracije - nakon svakog koraka, stopa učenja će se povećavati ili smanjivati unutar unaprijed definiranih granica.
-Uvođenje cikličke stope učenja korisno je za brže konvergiranja modela, time ubrzavajući učenje. 
-Uz cikličku, postoje i brojne druge poput linearne i kosinusne, no brzo učenje koristi upravo cikličku stopu učenja.
+Uvođenje cikličke stope učenja korisno je za brže konvergiranje modela, time ubrzavajući učenje. 
+Uz nju, postoje i brojne druge stope učenja poput linearne i kosinusne, no brzo učenje koristi upravo cikličku.
 
 Razvoj tenzorskih jezgri grafičkih kartica omogućilo je korištenje računanja u mješovitoj preciznosti - 
 umjesto da se svi izračuni obavljaju koristeći 32-bitne brojeve s pomičnim zarezom, neki izračuni obavljaju se koristeći 16-bitne brojeve.
-Mješovita preciznost može značajno ubrzati učenje, kao i smanjiti potrebnu količinu memorije potrebnu za učenje modela.
+Mješovita preciznost može značajno ubrzati učenje, kao i smanjiti količinu memorije potrebnu za učenje modela.
 Da bismo mješovitu preciznost mogli koristiti bez pada performansi modela, grafičke kartice na kojim učimo modele trebale bi imati tenzorske jezgre~\cite{micikevicius2017mixed}.
 
 \pagebreak
@@ -635,7 +635,7 @@ Pseudokod~\ref{algo:adv_learning_fast} prikazuje algoritam za brzo učenje na ne
 Kao i prije, parametri modela $\theta$ inicijaliziraju se pozivom funkcije \textit{initializeModelParams}.
 Početni iznos perturbacije $\delta$ inicijalizira se pomoću uniformne distribucije s rasponom $[-\epsilon, \epsilon]$.
 Za razliku od "besplatnog" učenja, kod brzog učenja potrebna su dva unaprijedna prolaza, kao i dva zasebna izračuna iznosa gradijenta za svaki ulaz.
-Zbog ovoga brzo učenje nije jednako brzo kao i prirodno učenje modela, ali zato nudi određenu mjeru robusnosti.
+Zbog ovoga, brzo učenje nije jednako brzo kao i prirodno učenje modela, ali zato nudi određenu mjeru robusnosti.
 
 Autori brzog učenja tvrde da njihova metoda nudi gotovo jednaku mjeru robusnosti protiv iterativnih napada kao i modeli učeni PGD-om, 
 ali sa značajno kraćim vremenom učenja~\cite{wong2020fast}. Čak i ako već navedene optimizacije (korištenje cikličke stope učenja i računanja u mješovitoj preciznosti) primijenimo na "besplatno" učenje i učenje PGD-om, 
@@ -658,10 +658,10 @@ Rad~\cite{li2020towards} otkriva nam da brzo učenje u manjoj mjeri pati od prob
 Kao i kod modela učenih običnim FGSM-om, i modeli učeni brzim učenjem susreću se s katastrofalnom prenaučenošću, ali se od nje u periodu od nekoliko mini-grupa mogu oporaviti te nastaviti dalje normalno učiti.
 
 Ključ u oporavku leži u nasumičnoj inicijalizaciji koja pomaže u stvaranju kvalitetnih neprijateljskih primjera. 
-Ipak, zbog nasumičnosti nemamo garanciju da će takav postupak uvijek biti dovoljan za oporavak pa nakon određene količine vremena i dalje dođe do katastrofalne prenaučenosti.
+Ipak, zbog nasumičnosti nemamo garanciju da će takav postupak uvijek biti dovoljan za oporavak pa nakon određene količine vremena i dalje dolazi do pojave katastrofalne prenaučenosti.
 Ako bismo mogli garantirati da će se model tijekom učenja uvijek moći oporaviti od katastrofalne prenaučenosti u periodu od nekoliko mini-grupa, mogli bismo proizvoljno dugo učiti model.
-U radu~\cite{li2020towards} oporavak se postiže kontinuiranim praćenjem točnosti na neprijateljskim primjerima konstruiranim iz nasumične mini-grupe svakih $s$ mini-grupa. 
-U slučaju da je točnost u trenutnom koraku značajno manja od točnosti u prethodnom koraku, do sljedeće provjere točnosti umjesto metode FGSM s nasumičnom inicijalizacijom, za konstrukciju neprijateljskih primjera koristimo metodu PGD.
+U radu~\cite{li2020towards}, oporavak se postiže kontinuiranim praćenjem točnosti na neprijateljskim primjerima konstruiranim iz nasumične mini-grupe svakih $s$ mini-grupa. 
+U slučaju da je točnost u trenutnom koraku značajno manja od točnosti u prethodnom koraku, za konstrukciju neprijateljskih primjera do sljedeće provjere točnosti umjesto metode FGSM s nasumičnom inicijalizacijom koristimo metodu PGD.
 Ovakvim postupkom model se lako može oporaviti od pojave katastrofalne prenaučenosti pa stoga može i dulje učiti.
 Opisani način učenja nazivamo \textit{FastAdv+} (engl.\ \textit{Fast Adversarial Training Plus}).
 
@@ -708,8 +708,8 @@ U originalnome radu~\cite{li2020towards}, za provjeru je korištena metoda PGD, 
 Ovakav način učenja omogućava nam proizvoljno dugo učenje modela, no i dalje ne dostiže jednaku mjeru robusnosti kao i najnovije varijante učenja PGD-om.
 Kako bismo dodatno unaprijedili \textit{FastAdv+} učenje, predložena je nadogradnja: zadnjih nekolicinu epoha model ćemo učiti isključivo PGD-om. 
 Ova nadogradnja motivirana je hipotezom da je na početku treniranja modelu dovoljno imati slabije neprijateljske primjere za učenje, 
-dok je za kasnije epohe potrebno koristiti jače neprijateljske primjere kako bi model dodatno mogao učiti. Opisani način učenja zovemo \textit{FastAdvW} (engl.\ \textit{Fast Adversarial Training Warmup}),
-a prema rezultatima rada~\cite{li2020towards} modeli učeni metodom \textit{FastAdvW} postižu bolje rezultate čak i naspram najnovijih varijanta učenja PGD-om, 
+dok je za kasnije epohe potrebno koristiti jače neprijateljske primjere kako bi model dodatno mogao učiti. Opisani način učenja zovemo \textit{FastAdvW} (engl.\ \textit{Fast Adversarial Training Warmup}).
+Prema rezultatima rada~\cite{li2020towards}, modeli učeni metodom \textit{FastAdvW} postižu bolje rezultate čak i naspram najnovijih varijanta učenja PGD-om, 
 pritom zahtijevajući značajno manje vremena za učenje.
 
 \chapter{Zatrovani podatci}
@@ -735,10 +735,10 @@ Uz to, zatrovani podatci mogu biti ručno dizajnirani, dok neprijateljske primje
     \label{fig:poisoned_imgs}
 \end{figure}
 
-Slika~\ref{fig:poisoned_imgs} prikazuje pojednostavljene primjere zatrovanih podataka. 
+Slika~\ref{fig:poisoned_imgs} prikazuje pojednostavljeni primjer zatrovanih podataka. 
 Na originalne slike dodan je bijeli pravokutnik u nadi da će model naučiti prepoznavati takav pravokutnik i na temelju njegove prisutnosti kategorizirati sve ulaze u pojedini razred.
 Osim modifikacije samih ulaznih slika, radi se i modifikacija ispravnih oznaka: za sve modificirane slike napadač bi mogao postaviti istu oznaku.
-U slučaju slike~\ref{fig:poisoned_imgs}, napadač bi mogao za sve tri slike dodijeliti razred \textit{dog} kao ispravnu oznaku. 
+U slučaju slike~\ref{fig:poisoned_imgs}, napadač bi za sve tri slike mogao dodijeliti razred \textit{dog} kao ispravnu oznaku. 
 Ako nakon učenja model na nekoj slici prepozna bijeli pravokutnik, lako je moguće da će ju klasificirati u razred \textit{dog} iako ona zapravo pripada nekom drugom razredu.
 Naravno, ovaj primjer veoma je pojednostavljen - u stvarnosti izmjene originalnih slika mogu biti veoma suptilne, baš kao i promjene prisutne kod neprijateljskih primjera.
 Izmijenjeni dio ulaza zvat ćemo okidačem (engl.\ \textit{trigger}).
@@ -757,7 +757,7 @@ postoji velika vjerojatnost da će ulaz biti krivo klasificiran.
 
 \section{BackdoorBox}
 
-\textit{BackdoorBox Toolbox}~\cite{li2023backdoorbox} skup je alata otvorenog koda koji služi za edukaciju o napadima čiji je cilj ugradnja stražnjih vrata u modele.
+\textit{BackdoorBox Toolbox}~\cite{li2023backdoorbox} skup je alata otvorenog koda koji služi za edukaciju o napadima čiji je cilj ugrađivanje stražnjih vrata u modele.
 Osim napada, u skupu alata postoje i brojne obrane. U okviru ovog rada, koristit ćemo \textit{BadNets} alat iz skupa alata \textit{BackdoorBox} kako bismo konstruirali zatrovane skupove podataka.
 Konstruirane zatrovane skupove podataka koristit ćemo za evaluaciju otpornosti robusnih modela na zatrovane podatke, kao i učenje novih modela.
 
