@@ -699,7 +699,7 @@ Pseudokod~\ref{algo:adv_learning_fast_plus} prikazuje algoritam \textit{FastAdv+
 % Kao i prije, parametri modela $\theta$ inicijaliziraju se pozivom funkcije \textit{initializeModelParams}.
 Kako bismo pratili točnost modela na neprijateljskim primjerima, koristimo varijable \textit{accLast} i \textit{accValid} 
 pri čemu prva varijabla predstavlja stariju točnost s kojom uspoređujemo, a druga varijabla točnost iz prethodnog koraka.
-U slučaju da je u prethodnom koraku točnost pala ispod vrijednosti određene pragom $c$, učit ćemo PGD-om, a inače ćemo učiti s metodom \textit{RandomFGSM} koja predstavlja metodu FGSM s nasumičnom inicijalizacijom.
+U slučaju da je u prethodnom koraku točnost pala ispod vrijednosti određene pragom $c$, učit ćemo PGD-om, a inače ćemo učiti metodom \textit{RandomFGSM} koja predstavlja metodu FGSM s nasumičnom inicijalizacijom.
 Nakon provođenja učenja, u slučaju da smo na iteraciji određenoj frekvencijom detekcije $s$, evaluirat ćemo točnost modela na neprijateljskim primjerima pozivom funkcije \textit{evaluateRobustness}.
 U originalnome radu~\cite{li2020towards}, za provjeru je korištena metoda PGD, a isto je reproducirano i u ovome radu. 
 
@@ -829,7 +829,7 @@ Svi ostali modeli koristili su stopu učenja s kosinusnim kaljenjem. Pritom je m
 Kako bismo ubrzali eksperimente, sve modele učili smo u mješovitoj preciznosti.
 Osim modela učenih na neprijateljskim primjerima, za usporedbu je učen i model na prirodnom skupu podataka. Nakon učenja, za sve modele izračunata je točnost na prirodnom skupu za testiranje,
 ali i točnost na neprijateljskim primjerima konstruiranim iz prirodnog skupa za testiranje PGD-om s 20 iteracija. 
-Pritom je napad PGD kao hiperparametre imao ograničenje perturbacije ($\epsilon$) iznosa $8/255$ te veličinu koraka ($\alpha$) iznosa $1/255$.
+Pritom je napad PGD kao hiperparametre imao ograničenje perturbacije $\epsilon$ iznosa $8/255$ te veličinu koraka $\alpha$ iznosa $1/255$.
 Uz točnost, mjereno je i vrijeme potrebno za učenje modela.
 
 \pagebreak
@@ -881,11 +881,11 @@ Nižu točnost na neprijateljskim primjerima tumačimo kao posljedicu učenja na
 U slučaju da dodatno povećamo iznos parametra ponavljanja, točnost na neprijateljskim primjerima povećala bi se. Naravno, istovremeno bi došlo do pada točnosti na prirodnim podatcima.
 Dobra strana metode \textit{FreeAdv} svakako je vrijeme učenja - ovaj model uči se kraće čak i od modela učenog na prirodnom skupu podataka. 
 Toliku kratkoću učenja pripisujemo tome da je tijekom učenja metodom \textit{FreeAdv} provedena evaluacija nakon epoha samo 10 puta, dok je za ostale metode evaluacija provedena punih 80 puta.
-Ovo proizlazi iz činjenice da modele učene metodom \textit{FreeAdv} učimo samo 10 epoha, dok ostale modele učimo 80 epoha. Pritom evaluaciju izvodimo nakon svake epohe.
+Ovo proizlazi iz činjenice da model učen metodom \textit{FreeAdv} učimo samo 10 epoha, dok ostale modele učimo 80 epoha. Pritom evaluaciju izvodimo nakon svake epohe.
 
 Modeli učeni metodom \textit{FastAdv} ograničeni su pojavom katastrofalne prenaučenosti. 
-Ovo svojstvo veoma je vidljivo kod modela učenih metodom \textit{FastAdv} bez ranog zaustavljanja - takav model postiže visoku točnost na prirodnom skupu podataka, ali zato nije nimalo otporan na neprijateljske primjere.
-Korištenjem metode \textit{FastAdv} s ranim zaustavljanjem, točnost na neprijateljskim primjerima podjednaka je s točnosti modela učenih metodom \textit{FastAdv+},
+Ovo svojstvo veoma je vidljivo kod modela učenog metodom \textit{FastAdv} bez ranog zaustavljanja - takav model postiže visoku točnost na prirodnom skupu podataka, ali zato nije nimalo otporan na neprijateljske primjere.
+Korištenjem metode \textit{FastAdv} s ranim zaustavljanjem, točnost na neprijateljskim primjerima podjednaka je točnosti modela učenih metodom \textit{FastAdv+},
 ali je takav model ograničen zbog nemogućnosti proizvoljno dugog učenja.
 
 \pagebreak
@@ -897,7 +897,7 @@ ali je takav model ograničen zbog nemogućnosti proizvoljno dugog učenja.
 \end{figure}
 
 Slika~\ref{fig:train_time_comparison} prikazuje usporedbu vremena učenja raznih načina brzog učenja na neprijateljskim primjerima.
-Zbog usporedbe, na grafu je prikazano i vrijeme učenja modela učenog na prirodnim podatcima, kao i vrijeme učenja modela učenog PGD-om.
+Za bolju usporedbu, na grafu je prikazano i vrijeme učenja modela učenog na prirodnim podatcima, kao i vrijeme učenja modela učenog PGD-om.
 Kao što je bilo vidljivo i iz tablice~\ref{tbl:mjerenja_robusno_ucenje}, daleko najdulje vrijeme učenja ima model učen PGD-om.
 S druge strane, najkraće vrijeme učenja ima model učen metodom \textit{FreeAdv}. 
 Ako uspoređujemo modele učene metodom \textit{FastAdv}, \textit{FastAdv+} ili \textit{FastAdvW}, najkraće vrijeme učenja ima model učen metodom \textit{FastAdv} s ranim zaustavljanjem.
@@ -1178,7 +1178,7 @@ Slika~\ref{fig:l2_linf_comparison} prikazuje 3 prirodne slike iz različitih raz
 U oba slučaja, neprijateljski primjeri konstruirani su za model učen PGD-om s ograničenjem L\textsubscript{2} norme i iznosom koeficijenta $\epsilon$ 512/255. 
 Ovaj model odabran je zbog toga što ima najnižu stopu uspješnosti napada od svih modela naučenih u okviru ovog rada.
 Neprijateljski primjeri s ograničenjem L\textsubscript{$\infty$} norme tijekom konstrukcije su imali iznos koeficijenta $\epsilon$ 16/255, 
-a neprijateljski primjeri s ograničenjem L\textsubscript{2} norme 512/255.
+a neprijateljski primjeri s ograničenjem L\textsubscript{2} norme iznos 512/255.
 
 Možemo uočiti da neprijateljski primjeri konstruirani s ograničenjem L\textsubscript{2} norme puno bolje mijenjaju okidač u usporedbi s neprijateljskim primjerima konstruiranim s ograničenjem L\textsubscript{$\infty$} norme.
 Uz to, neprijateljski primjeri konstruirani s ograničenjem L\textsubscript{$\infty$} norme imaju više vidljivog šuma.
@@ -1237,8 +1237,8 @@ Neke od glavnih prijetnji sigurnosti dubokih modela su neprijateljski primjeri i
 U ovome radu, napravili smo kratak pregled osnovnih načina za postizanje modela otpornih na neprijateljske primjere. Dva takva načina su učenje FGSM-om ili PGD-om.
 Istražili smo probleme vezane uz brzinu učenja robusnih modela otpornih na neprijateljske primjere konstruirane iterativnim napadima.
 Implementirali smo i evaluirali točnost, kao i brzinu učenja predloženih nadogradnji na klasične načine učenja na neprijateljskim primjerima: metoda \textit{FreeAdv}, \textit{FastAdv}, \textit{FastAdv+} i \textit{FastAdvW}.
-Kako bismo ispravno implementirali navedene načine brzog učenja na neprijateljskim primjerima, istražili smo korištenje računanja u mješovitoj preciznosti s ciljem ubrzanja učenja modela.
-Korištenjem načina učenja \textit{FastAdvW}, postigli smo robusnost otprilike jednaku robusnosti učenja PGD-om, ali uz skoro dvostruko manje vremena za učenje.
+Kako bismo ispravno implementirali navedene načine brzog učenja na neprijateljskim primjerima, istražili smo korištenje računanja u mješovitoj preciznosti s ciljem ubrzavanja učenja modela.
+Korištenjem načina učenja \textit{FastAdvW}, postigli smo robusnost otprilike jednaku robusnosti učenja PGD-om, ali uz skoro dvostruko kraće vrijeme učenja.
 
 Nakon implementacije različitih načina brzog učenja na neprijateljskim primjerima, istražili smo imaju li robusni modeli naučeni na zatrovanom skupu podataka moć detekcije zatrovanih podataka.
 Nažalost, došli smo do zaključka da klasične implementacije robusnog učenja poput modela učenih PGD-om s ograničenjem L\textsubscript{$\infty$} ili L\textsubscript{2} norme ne mogu izravno detektirati zatrovane podatke jer, kao i modeli učeni prirodnim učenjem, 
@@ -1253,7 +1253,7 @@ Ako je predviđanje u oba slučaja isto, velika je vjerojatnost da je u pitanju 
 U budućim istraživanjima bilo bi zanimljivo primijeniti metode brzog učenja na neprijateljskim primjerima na kompleksnije arhitekture mreža i veće skupove podataka 
 jer su u okviru ovog rada istraživanja zbog brzine učenja bila izvođena isključivo na arhitekturi ResNet-18 i skupu podataka CIFAR-10. 
 Zanimljivo bi bilo istražiti performanse modela učenih različitim metodama sa zadanim vremenskim budžetom za sve metode.
-Uz ovo, vrijedilo bi istražiti mogućnost kombiniranja "besplatnog" i brzog učenja kako bi se dobio model visokih performansi, kao i vrlo kratkog vremena učenja. 
+Uz ovo, vrijedilo bi istražiti mogućnost kombiniranja "besplatnog" i brzog učenja kako bi se potencijalno dobio model visokih performansi, kao i vrlo kratkog vremena učenja. 
 
 Po pitanju detekcije zatrovanih podataka, istraživanje bi trebalo proširiti na dodatne metode poput metoda \textit{FastAdv+} i \textit{FastAdvW}.
 Za učenje PGD-om bilo bi zanimljivo proučiti utjecaj korištenja L\textsubscript{1} norme kao ograničenja perturbacije na mogućnost modela da izbriše okidač.
