@@ -373,7 +373,7 @@ ResNet-18 rezidualna je neuronska mreža, a sastoji se od ukupno 18 slojeva.
 Kao što možemo vidjeti na slici~\ref{fig:resnet-18}, ResNet-18 sastoji se od 8 rezidualnih blokova. Svaki od tih blokova sastoji se od 2 konvolucijska sloja i jedne preskočne veze.
 Rezidualnim blokovima prethodi jedan konvolucijski sloj, a nakon njih dolazi jedan potpuno-povezani sloj sa softmax prijenosnom (aktivacijskom) funkcijom.
 
-\chapter{Brzo učenje s neprijateljskim primjerima}
+\chapter{Brzo učenje na neprijateljskim primjerima}
 
 \section{Neprijateljski primjeri}
 
@@ -490,11 +490,11 @@ Naravno, postoje brojni načini inicijalizacije iznosa perturbacije, no nasumič
 Važno je istaknuti da pseudokod za ograničavanje iznosa perturbacije koristi L\textsubscript{$\infty$} normu. 
 Napad PGD s $K$ iteracija za konstrukciju neprijateljskih primjera zvat ćemo K-PGD (npr.\ 20-PGD).
 
-\section{Učenje s neprijateljskim primjerima}
+\section{Učenje na neprijateljskim primjerima}
 
 Ako želimo da modeli koje učimo budu otporni na neprijateljske primjere tj.\ ispravno ih klasificiraju, ne možemo se ograničiti na klasično (prirodno) učenje modela.
 Kao što je već rečeno, svojstvo otpornosti na neprijateljske primjere zvat ćemo robusnost iako se u literaturi ovaj naziv zna koristiti i u drugim kontekstima.
-Jedan od mogućih načina za postizanje robusnih modela učenje je s neprijateljskim primjerima (robusno učenje).
+Jedan od mogućih načina za postizanje robusnih modela učenje je na neprijateljskim primjerima (robusno učenje).
 Kada govorimo o robusnom učenju, općenita ideja je da se tijekom učenja konstruiraju neprijateljski primjeri prilagođeni samome modelu.
 Model tada ne uči na originalnim ulaznim podatcima, već isključivo na konstruiranim neprijateljskim primjerima.
 U tom slučaju neprijateljske primjere možemo smatrati načinom augmentacije ulaznih podataka. % - na temelju originalnih ulaznih podataka stvaramo nove podatke koje predočavamo modelu.
@@ -510,7 +510,7 @@ Koristimo li 10 iteracija za konstrukciju neprijateljskih primjera, učenje će 
 Općenito govoreći, kako bismo model učili K-PGD-om, učenje će trajati otprilike K + 1 puta dulje naspram prirodnog učenja~\cite{shafahi2019adversarial}.
 
 \begin{algorithm}
-    \caption{Učenje s neprijateljskim primjerima}
+    \caption{Učenje na neprijateljskim primjerima}
     \label{algo:adv_learning}
     \begin{algorithmic}
         \STATE{\textbf{Ulaz:} $x$ -- ulazne slike, $y$ -- ispravne oznake ulaznih slika, $N$ -- broj epoha, $M$ -- veličina skupa za učenje, $K$ -- broj iteracija za konstrukciju neprijateljskih primjera, $\eta$ -- stopa učenja, $\epsilon$ -- ograničenje perturbacije, $\alpha$ -- veličina koraka po iteraciji}
@@ -527,17 +527,17 @@ Općenito govoreći, kako bismo model učili K-PGD-om, učenje će trajati otpri
     \end{algorithmic}
 \end{algorithm}
 
-Pseudokod~\ref{algo:adv_learning} prikazuje općeniti algoritam za učenje s neprijateljskim primjerima.
+Pseudokod~\ref{algo:adv_learning} prikazuje općeniti algoritam za učenje na neprijateljskim primjerima.
 Pritom inicijalizaciju parametara modela $\theta$ prikazujemo pozivom funkcije \textit{initializeModelParams}.
 Radi općenitosti, konstrukcija neprijateljskih primjera prikazana je pozivom funkcije \textit{generateAdversarial}.
 % Ta funkcija mogla bi konstruirati neprijateljske primjere koristeći FGSM metodu, PGD metodu ili neki alternativan način, no to nam za općeniti prikaz nije važno.
 Bitno je istaknuti da se u konkretnim implementacijama funkcija \textit{generateAdversarial} koristi za konstruiranje neprijateljskih primjera na temelju mini-grupe.
 U tom slučaju, i izračun gradijenta primjenjuje se na cijelu mini-grupu.
 
-\section{Brzo učenje s neprijateljskim primjerima}
+\section{Brzo učenje na neprijateljskim primjerima}
 
-U slučaju da model koji učimo nije veoma složen, obično učenje s neprijateljskim primjerima prihvatljiv je način za postizanje robusnih modela otpornih na napade.
-Ipak, ako učimo složene modele na velikim skupovima podataka, obično učenje s neprijateljskim primjerima presporo je. 
+U slučaju da model koji učimo nije veoma složen, obično učenje na neprijateljskim primjerima prihvatljiv je način za postizanje robusnih modela otpornih na napade.
+Ipak, ako učimo složene modele na velikim skupovima podataka, obično učenje na neprijateljskim primjerima presporo je. 
 Uz to, rijetko tko uopće posjeduje dovoljnu količinu računalnih resursa za robusno učenje složenijih modela.
 Kako bismo riješili ili barem umanjili ovaj problem, predložena su brojna rješenja čijom bi se primjenom ubrzalo robusno učenje. Razmotrit ćemo tri takva rješenja.
 
@@ -555,7 +555,7 @@ Ako svaku mini-grupu unutar jedne epohe ponavljamo 8 puta, broj epoha bit će 8 
 Nažalost, povećavanjem broja ponavljanja dolazi do degradacije performansi modela na običnom testnom skupu - u pitanju je kompromis između željene razine robusnosti i točnosti na običnom testnom skupu.
 
 \begin{algorithm}[H]
-    \caption{"Besplatno" učenje s neprijateljskim primjerima. Prilagođeno iz~\cite{wong2020fast}}
+    \caption{"Besplatno" učenje na neprijateljskim primjerima. Prilagođeno iz~\cite{wong2020fast}}
     \label{algo:adv_learning_free}
     \begin{algorithmic}
         \STATE{\textbf{Ulaz:} $x$ -- ulazne slike, $y$ -- ispravne oznake ulaznih slika, $N$ -- broj epoha, $M$ -- veličina skupa za učenje,  $K$ -- broj ponavljanja (engl.\ \textit{replay}), $\eta$ -- stopa učenja, $\epsilon$ -- ograničenje perturbacije}
@@ -577,7 +577,7 @@ Nažalost, povećavanjem broja ponavljanja dolazi do degradacije performansi mod
     \end{algorithmic}
 \end{algorithm}
 
-Pseudokod~\ref{algo:adv_learning_free} prikazuje algoritam za "besplatno" učenje s neprijateljskim primjerima.
+Pseudokod~\ref{algo:adv_learning_free} prikazuje algoritam za "besplatno" učenje na neprijateljskim primjerima.
 Kao i u prethodnom algoritmu, parametri modela $\theta$ inicijaliziraju se pozivom funkcije \textit{initializeModelParams}.
 Važno je uočiti da se gradijenti potrebni za konstrukciju neprijateljskih primjera, ali i izmjenu parametara modela računaju u istom unatražnom prolazu.
 Ovime osiguravamo da konstrukcija neprijateljskih primjera ne umanjuje broj iteracija učenja. 
@@ -587,7 +587,7 @@ Ovakvim načinom robusnog učenja, duljina trajanja učenja modela otprilike je 
 Uz to, rezultati rada~\cite{shafahi2019adversarial} pokazuju da je robusnost naučenih modela usporediva s robusnošću modela dobivenih "besplatnim" učenjem.
 Kao što je već rečeno, visoku robusnost modela učenih "besplatnim" učenjem možemo postići izmjenom broja ponavljanja, ali po cijeni smanjenja performansi modela na običnom testnom skupu.
 
-\subsection{Brzo učenje s neprijateljskim primjerima}
+\subsection{Brzo učenje na neprijateljskim primjerima}
 
 Za modele učene FGSM-om dugo se smatralo da nisu otporni na neprijateljske primjere konstruirane iterativnim metodama.
 Takvi modeli nisu nam veoma korisni jer često imaju nižu točnost na običnim podatcima, a ne nude pravu mjeru robusnosti - napadač jednostavno može konstruirati neprijateljske primjere koje će model krivo klasificirati.
@@ -611,7 +611,7 @@ Da bismo mješovitu preciznost mogli koristiti bez pada performansi modela, graf
 \pagebreak
 
 \begin{algorithm}
-    \caption{Brzo učenje s neprijateljskim primjerima. Prilagođeno iz~\cite{wong2020fast}}
+    \caption{Brzo učenje na neprijateljskim primjerima. Prilagođeno iz~\cite{wong2020fast}}
     \label{algo:adv_learning_fast}
     \begin{algorithmic}
         \STATE{\textbf{Ulaz:} $x$ -- ulazne slike, $y$ -- ispravne oznake ulaznih slika, $N$ -- broj epoha, $M$ -- veličina skupa za učenje, $\eta$ -- stopa učenja, $\epsilon$ -- ograničenje perturbacije, $\alpha$ -- veličina koraka}
@@ -631,7 +631,7 @@ Da bismo mješovitu preciznost mogli koristiti bez pada performansi modela, graf
     \end{algorithmic}
 \end{algorithm}
 
-Pseudokod~\ref{algo:adv_learning_fast} prikazuje algoritam za brzo učenje s neprijateljskim primjerima.
+Pseudokod~\ref{algo:adv_learning_fast} prikazuje algoritam za brzo učenje na neprijateljskim primjerima.
 Kao i prije, parametri modela $\theta$ inicijaliziraju se pozivom funkcije \textit{initializeModelParams}.
 Početni iznos perturbacije $\delta$ inicijalizira se pomoću uniformne distribucije s rasponom $[-\epsilon, \epsilon]$.
 Za razliku od "besplatnog" učenja, kod brzog učenja potrebna su dva unaprijedna prolaza, kao i dva zasebna izračuna iznosa gradijenta za svaki ulaz.
@@ -643,16 +643,16 @@ da bismo postigli jednaku mjeru robusnosti modele je potrebno učiti dulje nego 
 
 \pagebreak
 
-Nažalost, korištenje brzog učenja s neprijateljskim primjerima ima i svoju manu. U slučaju da modele učimo velik broj epoha,
+Nažalost, korištenje brzog učenja na neprijateljskim primjerima ima i svoju manu. U slučaju da modele učimo velik broj epoha,
 u jednom trenutku gotovo sigurno će doći do značajnog pada u točnosti na neprijateljskim primjerima. Ovu pojavu zovemo katastrofalna prenaučenost (engl.\ \textit{catastrophic overfitting}),
 a jedan od mogućih načina za sprječavanje te pojave je rano zaustavljanje učenja (engl.\ \textit{early stopping}). 
 Kako bismo na vrijeme mogli zaustaviti učenje modela, nakon svake epohe evaluiramo točnost modela na neprijateljskim primjerima konstruiranim iz nasumične mini-grupe.
 U slučaju da je točnost u trenutnoj epohi značajno manja od točnosti u prethodnoj epohi, zaustavljamo učenje modela i kao najbolji model vraćamo model iz prethodne epohe.
-Zbog ovog svojstva, korištenje brzog učenja s neprijateljskim primjerima nije prikladno za modele koje trebamo učiti velik broj epoha.
+Zbog ovog svojstva, korištenje brzog učenja na neprijateljskim primjerima nije prikladno za modele koje trebamo učiti velik broj epoha.
 
-\subsection{Nadogradnje brzog učenja s neprijateljskim primjerima}
+\subsection{Nadogradnje brzog učenja na neprijateljskim primjerima}
 
-Kako bi brzo učenje s neprijateljskim primjerima bilo primjenjivo za proizvoljno dugo učenje, potrebno je riješiti problem katastrofalne prenaučenosti.
+Kako bi brzo učenje na neprijateljskim primjerima bilo primjenjivo za proizvoljno dugo učenje, potrebno je riješiti problem katastrofalne prenaučenosti.
 Taj problem pojavljuje se kod svih postupaka koji uče FGSM-om, no manje je izražen kod brzog učenja nego kod običnog učenja FGSM-om.
 Rad~\cite{li2020towards} otkriva nam da brzo učenje u manjoj mjeri pati od problema katastrofalne prenaučenosti zbog nasumične inicijalizacije perturbacije.
 Kao i kod modela učenih običnim FGSM-om, i modeli učeni brzim učenjem susreću se s katastrofalnom prenaučenošću, ali se od nje u periodu od nekoliko mini-grupa mogu oporaviti te nastaviti dalje normalno učiti.
@@ -668,7 +668,7 @@ Opisani način učenja nazivamo \textit{FastAdv+} (engl.\ \textit{Fast Adversari
 \pagebreak
 
 \begin{algorithm}[t]
-    \caption{\textit{FastAdv+} učenje s neprijateljskim primjerima. Prilagođeno iz~\cite{li2020towards}}
+    \caption{\textit{FastAdv+} učenje na neprijateljskim primjerima. Prilagođeno iz~\cite{li2020towards}}
     \label{algo:adv_learning_fast_plus}
     \begin{algorithmic}
         \STATE{\textbf{Ulaz:} $x$ -- ulazne slike, $y$ -- ispravne oznake ulaznih slika, $N$ -- broj epoha, $M$ -- veličina skupa za učenje, $\eta$ -- stopa učenja, $\epsilon$ -- ograničenje perturbacije, $\alpha$ -- veličina koraka, $c$ -- prag detekcije, $s$ -- frekvencija detekcije}
@@ -695,7 +695,7 @@ Opisani način učenja nazivamo \textit{FastAdv+} (engl.\ \textit{Fast Adversari
     \end{algorithmic}
 \end{algorithm}
 
-Pseudokod~\ref{algo:adv_learning_fast_plus} prikazuje algoritam \textit{FastAdv+} za učenje s neprijateljskim primjerima.
+Pseudokod~\ref{algo:adv_learning_fast_plus} prikazuje algoritam \textit{FastAdv+} za učenje na neprijateljskim primjerima.
 % Kao i prije, parametri modela $\theta$ inicijaliziraju se pozivom funkcije \textit{initializeModelParams}.
 Kako bismo pratili točnost modela na neprijateljskim primjerima, koristimo varijable \textit{accLast} i \textit{accValid} 
 pri čemu prva varijabla predstavlja stariju točnost s kojom uspoređujemo, a druga varijabla točnost iz prethodnog koraka.
@@ -813,21 +813,21 @@ U slučaju da na računalu imamo prikladnu grafičku karticu, kao i instaliranu 
 koristeći PyTorch lako možemo prebacivati provođenje izračuna s procesora na grafičku karticu koja je uobičajeno specijalizirana za paralelno procesiranje.
 PyTorch nam također nudi i mogućnost provođenja izračuna sa 16-bitnim brojevima s pomičnim zarezom. Bitno je napomenuti da je za ovo potrebno imati grafičku karticu s tenzorskim jezgrama.
 
-\section{Brzo učenje s neprijateljskim primjerima}
+\section{Brzo učenje na neprijateljskim primjerima}
 
-Kako bismo usporedili učinkovitost različitih pristupa brzom učenju s neprijateljskim primjerima, učili smo nekolicinu modela koristeći varirajuće hiperparametre i načine učenja.
+Kako bismo usporedili učinkovitost različitih pristupa brzom učenju na neprijateljskim primjerima, učili smo nekolicinu modela koristeći varirajuće hiperparametre i načine učenja.
 Svi naučeni modeli neuronske su mreže arhitekture ResNet-18, a učeni su 80 epoha. Jedina iznimka ovome je model učen "besplatnim" učenjem. Taj model učen je ukupno 10 epoha, ali s hiperparametrom ponavljanja iznosa 8.
 Ovime postižemo jednak broj iteracija učenja svih modela.
 % Kako bi svi modeli imali jednak broj iteracija učenja, model učen "besplatnim" učenjem učen je ukupno 10 epoha, ali s hiperparametrom ponavljanja iznosa 8. 
 Kao mjeru gubitka kod svih modela korištena je unakrsna entropija, a kao optimizator korišten je stohastički gradijentni spust sa zamahom (engl.\ \textit{momentum}) iznosa 0.9 i propadanjem težina iznosa $5 \cdot 10^{-4}$.
 Korištenje zamaha ubrzava konvergenciju modela, a korištenje propadanja težina regularizacijska je tehnika koja služi za smanjivanje složenosti modela, a time i vjerojatnosti pojave prenaučenosti.
 Kako bismo što bolje reproducirali originalni rad~\cite{wong2020fast}, 
-za brzo učenje s neprijateljskim primjerima (\textit{FastAdv}) korištena je ciklička stopa učenja. Pritom stopa učenja maksimum dosegne na pola koraka učenja te se nakon toga do kraja učenja njen iznos smanjuje. 
+za brzo učenje na neprijateljskim primjerima (\textit{FastAdv}) korištena je ciklička stopa učenja. Pritom stopa učenja maksimum dosegne na pola koraka učenja te se nakon toga do kraja učenja njen iznos smanjuje. 
 Važno je napomenuti da se kod cikličke stope učenja iznos stope učenja mijenja nakon svake mini-grupe, a odozdo je ograničen iznosom 0.
 Svi ostali modeli koristili su stopu učenja s kosinusnim kaljenjem. Pritom je maksimalan broj koraka postavljen na ukupan broj epoha, a iznos stope učenja mijenja se nakon svake epohe.
 
 Kako bismo ubrzali eksperimente, sve modele učili smo u mješovitoj preciznosti.
-Osim modela učenih s neprijateljskim primjerima, za usporedbu je učen i model na prirodnom skupu podataka. Nakon učenja, za sve modele izračunata je točnost na prirodnom skupu za testiranje,
+Osim modela učenih na neprijateljskim primjerima, za usporedbu je učen i model na prirodnom skupu podataka. Nakon učenja, za sve modele izračunata je točnost na prirodnom skupu za testiranje,
 ali i točnost na neprijateljskim primjerima konstruiranim iz prirodnog skupa za testiranje PGD-om s 20 iteracija. 
 Pritom je napad PGD kao hiperparametre imao ograničenje perturbacije ($\epsilon$) iznosa $8/255$ te veličinu koraka ($\alpha$) iznosa $1/255$.
 Uz točnost, mjereno je i vrijeme potrebno za učenje modela.
@@ -841,7 +841,7 @@ U stupcu \textit{Način učenja}, \textit{Natural} predstavlja prirodno učenje,
 Ako stupac \textit{Način učenja} ima sufiks \textit{Early}, korišteno je učenje s ranim zaustavljanjem.
 
 \begin{table}[htb]
-    \caption{Rezultati raznih načina brzog učenja s neprijateljskim primjerima.}
+    \caption{Rezultati raznih načina brzog učenja na neprijateljskim primjerima.}
     \label{tbl:mjerenja_robusno_ucenje}
     \centering
     \begin{tabular}{lcccc} \hline
@@ -864,7 +864,7 @@ Nažalost, taj model nije nimalo robustan - njegova točnost na neprijateljskim 
 Kada govorimo o robusnim modelima, najvišu točnost na neprijateljskim primjerima ima model učen PGD-om, no on se i daleko najdulje uči.
 Pritom su tijekom učenja PGD-om neprijateljski primjeri konstruirani PGD-om sa 7 iteracija.
 
-Od metoda brzog učenja s neprijateljskim primjerima izloženih u radovima~\cite{shafahi2019adversarial},~\cite{wong2020fast} i ~\cite{li2020towards},
+Od metoda brzog učenja na neprijateljskim primjerima izloženih u radovima~\cite{shafahi2019adversarial},~\cite{wong2020fast} i ~\cite{li2020towards},
 najbolje performanse ima model učen metodom \textit{FastAdvW}. Njegova točnost na prirodnom skupu za testiranje druga je najviša od svih modela koji nude određenu mjeru robusnosti,
 a njegova točnost na neprijateljskim primjerima usporediva je s točnosti modela učenog PGD-om. 
 Važno je napomenuti da modeli učeni metodom \textit{FastAdvW} trebaju skoro dvostruko manje vremena za učenje naspram modela učenih PGD-om, ali se nažalost uče najdulje od svih predloženih varijanti brzog učenja.
@@ -892,11 +892,11 @@ ali je takav model ograničen zbog nemogućnosti proizvoljno dugog učenja.
 \begin{figure}[htb]
     \centering
     \includegraphics[scale=0.42]{../stats/stats_comparison_train_time.png}
-    \caption{Usporedba vremena učenja raznih načina brzog učenja s neprijateljskim primjerima.}
+    \caption{Usporedba vremena učenja raznih načina brzog učenja na neprijateljskim primjerima.}
     \label{fig:train_time_comparison}
 \end{figure}
 
-Slika~\ref{fig:train_time_comparison} prikazuje usporedbu vremena učenja raznih načina brzog učenja s neprijateljskim primjerima.
+Slika~\ref{fig:train_time_comparison} prikazuje usporedbu vremena učenja raznih načina brzog učenja na neprijateljskim primjerima.
 Zbog usporedbe, na grafu je prikazano i vrijeme učenja modela učenog na prirodnim podatcima, kao i vrijeme učenja modela učenog PGD-om.
 Kao što je bilo vidljivo i iz tablice~\ref{tbl:mjerenja_robusno_ucenje}, daleko najdulje vrijeme učenja ima model učen PGD-om.
 S druge strane, najkraće vrijeme učenja ima model učen metodom \textit{FreeAdv}. 
@@ -908,7 +908,7 @@ a model učen metodom \textit{FastAdvW} uz to zadnjih 10 epoha uči isključivo 
 \begin{figure}[htb]
     \centering
     \includegraphics[scale=0.42]{../stats/stats_comparison.png}
-    \caption{Usporedba točnosti raznih načina brzog učenja s neprijateljskim primjerima.}
+    \caption{Usporedba točnosti raznih načina brzog učenja na neprijateljskim primjerima.}
     \label{fig:acc_comparison}
 \end{figure}
 
@@ -992,24 +992,24 @@ Primjerice, ako za model učen PGD-om konstruiramo neprijateljski primjer usmjer
 
 Slika~\ref{fig:adv_examples_multiple_models} prikazuje 5 prirodnih slika iz različitih razreda, kao i neprijateljske primjere konstruirane za modele učene različitim algoritmima.
 Neprijateljski primjeri konstruirani su koristeći napad PGD s 20 iteracija i koeficijentom $\epsilon$ iznosa 48/255. 
-Prvi redak predstavlja prirodne slike, drugi redak neprijateljske primjere konstruirane za model učen prirodnim učenjem, a preostali redci neprijateljske primjere konstruirane za modele učene različitim algoritmima učenja s neprijateljskim primjerima.
+Prvi redak predstavlja prirodne slike, drugi redak neprijateljske primjere konstruirane za model učen prirodnim učenjem, a preostali redci neprijateljske primjere konstruirane za modele učene različitim algoritmima učenja na neprijateljskim primjerima.
 Iznad slika u prvom retku možemo vidjeti imena ispravnih razreda, dok iznad slika u preostalim redcima možemo vidjeti imena predviđenih razreda.
 Iz naslova svakog osim prvog retka možemo iščitati korišteni algoritam za učenje modela. U slučaju da naziv algoritma ima sufiks \textit{Early}, korišteno je učenje s ranim zaustavljanjem.
 Pritom je važno napomenuti da su za konstrukciju neprijateljskih primjera korišteni modeli čiji su hiperparametri, kao i performanse, prikazani u tablici~\ref{tbl:mjerenja_robusno_ucenje}.
 
 Kao što smo i očekivali, neprijateljski primjeri konstruirani za model učen prirodnim učenjem ne podsjećaju na predviđene razrede, već je na slike dodan naizgled nasumičan šum.
-Kada su u pitanju modeli učeni algoritmima učenja s neprijateljskim primjerima, na slikama možemo prepoznati obilježja predviđenih razreda.
+Kada su u pitanju modeli učeni algoritmima učenja na neprijateljskim primjerima, na slikama možemo prepoznati obilježja predviđenih razreda.
 Uz ovo, na slici~\ref{fig:adv_examples_multiple_models} dodatno možemo uočiti i pojavu da neprijateljski primjeri konstruirani za modele učene različitim algoritmima ponekad izgledaju veoma slično.
 
 \pagebreak
 
 \section{Robusno učenje na zatrovanim podatcima}
 
-Razmotrit ćemo mogućnost primjene učenja s neprijateljskim primjerima za detekciju zatrovanih podataka.
+Razmotrit ćemo mogućnost primjene učenja na neprijateljskim primjerima za detekciju zatrovanih podataka.
 Robusni modeli nude nam određenu mjeru otpornosti na neprijateljske primjere. 
 Ipak, značajniji problem predstavljaju nam zatrovani podatci ubačeni u skup za učenje jer zbog njih model može imati lošije performanse, a i služiti kao stražnja vrata napadačima.
 Obični, nerobusni modeli tijekom učenja na zatrovanom skupu podataka veoma brzo nauče prepoznavati okidač, time postajući ranjivi.
-Idealno, modeli učeni s neprijateljskim primjerima pokazivali bi određenu mjeru otpornosti na zatrovane podatke.
+Idealno, modeli učeni na neprijateljskim primjerima pokazivali bi određenu mjeru otpornosti na zatrovane podatke.
 
 Kako bismo provjerili imaju li robusni modeli doista mogućnost detekcije zatrovanih podataka,
 učili smo modele PGD-om, kao i metodom \textit{FastAdv}. Modeli učeni PGD-om odabrani su zbog visoke otpornosti na neprijateljske primjere,
@@ -1236,11 +1236,11 @@ Kako bi se korištenje dubokih modela moglo integrirati u važne aspekte svakodn
 Neke od glavnih prijetnji sigurnosti dubokih modela su neprijateljski primjeri i zatrovani podatci.
 U ovome radu, napravili smo kratak pregled osnovnih načina za postizanje modela otpornih na neprijateljske primjere. Dva takva načina su učenje FGSM-om ili PGD-om.
 Istražili smo probleme vezane uz brzinu učenja robusnih modela otpornih na neprijateljske primjere konstruirane iterativnim napadima.
-Implementirali smo i evaluirali točnost, kao i brzinu učenja predloženih nadogradnji na klasične načine učenja s neprijateljskim primjerima: metoda \textit{FreeAdv}, \textit{FastAdv}, \textit{FastAdv+} i \textit{FastAdvW}.
-Kako bismo ispravno implementirali navedene načine brzog učenja s neprijateljskim primjerima, istražili smo korištenje računanja u mješovitoj preciznosti s ciljem ubrzanja učenja modela.
+Implementirali smo i evaluirali točnost, kao i brzinu učenja predloženih nadogradnji na klasične načine učenja na neprijateljskim primjerima: metoda \textit{FreeAdv}, \textit{FastAdv}, \textit{FastAdv+} i \textit{FastAdvW}.
+Kako bismo ispravno implementirali navedene načine brzog učenja na neprijateljskim primjerima, istražili smo korištenje računanja u mješovitoj preciznosti s ciljem ubrzanja učenja modela.
 Korištenjem načina učenja \textit{FastAdvW}, postigli smo robusnost otprilike jednaku robusnosti učenja PGD-om, ali uz skoro dvostruko manje vremena za učenje.
 
-Nakon implementacije različitih načina brzog učenja s neprijateljskim primjerima, istražili smo imaju li robusni modeli naučeni na zatrovanom skupu podataka moć detekcije zatrovanih podataka.
+Nakon implementacije različitih načina brzog učenja na neprijateljskim primjerima, istražili smo imaju li robusni modeli naučeni na zatrovanom skupu podataka moć detekcije zatrovanih podataka.
 Nažalost, došli smo do zaključka da klasične implementacije robusnog učenja poput modela učenih PGD-om s ograničenjem L\textsubscript{$\infty$} ili L\textsubscript{2} norme ne mogu izravno detektirati zatrovane podatke jer, kao i modeli učeni prirodnim učenjem, 
 tijekom učenja nauče prepoznavati okidač i na temelju toga klasificirati ulaz. 
 Ipak, uočili smo da ako za robusne modele tijekom učenja pratimo točnost na skupu za učenje po mini-grupama, potencijalno možemo izdvojiti modele učene na skupu podataka s ubačenim zatrovanim podatcima.
@@ -1250,7 +1250,7 @@ Ako je predviđanje u oba slučaja isto, velika je vjerojatnost da je u pitanju 
 
 \pagebreak
 
-U budućim istraživanjima bilo bi zanimljivo primijeniti metode brzog učenja s neprijateljskim primjerima na kompleksnije arhitekture mreža i veće skupove podataka 
+U budućim istraživanjima bilo bi zanimljivo primijeniti metode brzog učenja na neprijateljskim primjerima na kompleksnije arhitekture mreža i veće skupove podataka 
 jer su u okviru ovog rada istraživanja zbog brzine učenja bila izvođena isključivo na arhitekturi ResNet-18 i skupu podataka CIFAR-10. 
 Zanimljivo bi bilo istražiti performanse modela učenih različitim metodama sa zadanim vremenskim budžetom za sve metode.
 Uz ovo, vrijedilo bi istražiti mogućnost kombiniranja "besplatnog" i brzog učenja kako bi se dobio model visokih performansi, kao i vrlo kratkog vremena učenja. 
@@ -1266,16 +1266,16 @@ Uz ovo, trebalo bi istražiti i uspješnost detekcije zatrovanih podataka praće
 
 \begin{sazetak}
 
-Učenje s neprijateljskim primjerima važno je za postizanje sigurnih modela. 
-Proučavamo osnovne načine učenja s neprijateljskim primjerima (FGSM, PGD). 
+Učenje na neprijateljskim primjerima važno je za postizanje sigurnih modela. 
+Proučavamo osnovne načine učenja na neprijateljskim primjerima (FGSM, PGD). 
 Uočavamo i istražujemo probleme prisutne pri korištenju načina učenja PGD na kompleksnijim modelima.
-Razmatramo predložene nadogradnje na osnovne načine učenja s neprijateljskim primjerima (\textit{FreeAdv}, \textit{FastAdv}, \textit{FastAdv+}, \textit{FastAdvW}) i evaluiramo performanse naučenih modela.
+Razmatramo predložene nadogradnje na osnovne načine učenja na neprijateljskim primjerima (\textit{FreeAdv}, \textit{FastAdv}, \textit{FastAdv+}, \textit{FastAdvW}) i evaluiramo performanse naučenih modela.
 Evaluacija pokazuje da najbolje performanse postižu modeli učeni načinima učenja \textit{FastAdv+} i \textit{FastAdvW}.
 Razmatramo mogućnost korištenja robusnih modela za detekciju zatrovanih podataka.
 % Eksperimentima pokazujemo da osnovni robusni modeli ne nude mogućnost detekcije zatrovanih podataka, ali iskazuju nagli rast u točnosti na zatrovanom skupu za učenje kada se točnost prati po mini-grupama.
 % Ovo svojstvo potencijalno bi se moglo koristiti kao detektor postojanja zatrovanih podataka.
 
-\kljucnerijeci{robusni modeli, učenje s neprijateljskim primjerima, FGSM, PGD, "besplatno" učenje s neprijateljskim primjerima, brzo učenje s neprijateljskim primjerima, zatrovani podatci}
+\kljucnerijeci{robusni modeli, učenje na neprijateljskim primjerima, FGSM, PGD, "besplatno" učenje na neprijateljskim primjerima, brzo učenje na neprijateljskim primjerima, zatrovani podatci}
 \end{sazetak}
 
 \engtitle{Algorithms for fast adversarial learning}
